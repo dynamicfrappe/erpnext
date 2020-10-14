@@ -1,0 +1,52 @@
+######################## Peter 2020-10-13 ########################
+create Report that return the item in Purchase Invoice with its Price in Purchase Order and Purchase Invoice
+Module : Accounts
+
+Report Name : Purchase Comparison 
+
+DocType : 1- Purchase Invoide Order
+          2- Purchase Order Order
+
+With Filters  1- Purchase Order
+              2- Purchase Invoice
+Code :              
+        "filters": [
+                {
+                    "fieldname":"Invoice_No",
+                    "label": __("Invoice No"),
+                    "fieldtype": "Link",
+                    "options": "Purchase Invoice"
+                },
+                {
+                    "fieldname":"Purchase_Order",
+                    "label": __("Purchase Order"),
+                    "fieldtype": "Link",
+                    "options": "Purchase Order"
+                }
+            ]
+
+
+        # Main Method to Execute Query
+        def get_Invoices_with_purchase_order(filters):
+
+            conditions = ""
+            
+            if filters.get("Invoice_No"):
+                conditions += " and PI.parent =%(Invoice_No)s"
+
+            if filters.get("Purchase_Order"):
+                conditions += " and PO.parent =%(Purchase_Order)s"
+
+
+            results = frappe.db.sql("""
+
+                    select  PI.parent as purchase_invoice, PO.parent as purchase_order ,PI.item_name , PI.Rate as PI_Rate , PO.Rate as PO_Rate   from `tabPurchase Invoice Item`  PI 
+                    inner JOIN `tabPurchase Order Item`  PO On PI.purchase_order = PO.parent And  PI.item_code = PO.item_code 
+                        where  ISNULL( PI.purchase_order ) = 0
+                {conditions}
+                
+                """.format(conditions=conditions), filters, as_dict=1)
+            return results
+
+
+######################################################################################################################################            
