@@ -475,6 +475,13 @@ def get_list_context(context=None):
 
 	return list_context
 
+def Update_Created_to_Rejected_after_7Days():
+
+	frappe.db.sql("""update `tabSales Order`   set workflow_state = 'Sales Audit Rejection'
+					 where DATE_SUB( CURDATE(), INTERVAL -(select IFNULL(reject_request_after_days,7) from tabCompany where tabCompany.`name` = `tabSales Order`.company  ) DAY) > CONVERT(modified, DATE) and  `workflow_state` = 'Created' """)
+
+
+
 @frappe.whitelist()
 def close_or_unclose_sales_orders(names, status):
 	if not frappe.has_permission("Sales Order", "write"):

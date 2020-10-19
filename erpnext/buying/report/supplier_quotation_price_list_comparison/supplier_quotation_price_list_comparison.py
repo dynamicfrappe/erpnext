@@ -88,17 +88,16 @@ def get_columns(filters):
 		
 	]
 
-	conditions = "where 1 =2 "
+	conditions = "HAVING 1 =2 "
 	if filters.get("RFQ_No"):
-		conditions = " where  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
+		conditions = " HAVING  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
 
 	results = frappe.db.sql("""
 
 	 SELECT
-	`tabSupplier Quotation`.name as Sup_Q_Link, 
 	`tabSupplier Quotation`.supplier_name, 
-	`tabSupplier Quotation`.supplier, 
-	`tabSupplier Quotation Item`.rate 
+	`tabSupplier Quotation`.supplier,
+	`tabRequest for Quotation Item`.parent
 	
 	FROM
 	`tabRequest for Quotation Item`
@@ -111,6 +110,8 @@ def get_columns(filters):
 	`tabSupplier Quotation`
 	ON 
 		`tabSupplier Quotation Item`.parent = `tabSupplier Quotation`.`name`
+		
+		GROUP BY 	`tabSupplier Quotation`.supplier
 		
 			{conditions}
 
@@ -179,26 +180,26 @@ def get_Invoices_with_purchase_order(filters):
 (select SQ.supplier from `tabSupplier Quotation Item` SQI 
 		INNER JOIN `tabSupplier Quotation` SQ on SQI.parent = SQ.`name`  
 		where SQI.request_for_quotation_item =  tab.`name` and SQI.Rate = 
-		 (select MIN(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) )
+		 (select MIN(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) LIMIT 1 )
 			as min_supplier 
 ,
 (select SQ.`name` from `tabSupplier Quotation Item` SQI 
 		INNER JOIN `tabSupplier Quotation` SQ on SQI.parent = SQ.`name`  
 		where SQI.request_for_quotation_item =  tab.`name` and SQI.Rate = 
-		 (select MIN(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) )
+		 (select MIN(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) LIMIT 1 )
 			as min_supplier_Q 
 ,
 
 (select SQ.supplier from `tabSupplier Quotation Item` SQI 
 		INNER JOIN `tabSupplier Quotation` SQ on SQI.parent = SQ.`name`  
 		where SQI.request_for_quotation_item =  tab.`name` and SQI.Rate = 
-		 (select MAX(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) )
+		 (select MAX(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  )  LIMIT 1 )
 			as max_supplier 
 ,
 (select SQ.`name` from `tabSupplier Quotation Item` SQI 
 		INNER JOIN `tabSupplier Quotation` SQ on SQI.parent = SQ.`name`  
 		where SQI.request_for_quotation_item =  tab.`name` and SQI.Rate = 
-		 (select MAX(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) )
+		 (select MAX(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) LIMIT 1 )
 			as max_supplier_Q 
 
 
