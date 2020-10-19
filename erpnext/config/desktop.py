@@ -6,17 +6,7 @@ from frappe import _
 def get_data():
 	return [
 		# Modules
-		{
-			"module_name": "Getting Started",
-			"category": "Modules",
-			"label": _("Getting Started"),
-			"color": "#1abc9c",
-			"icon": "fa fa-check-square-o",
-			"type": "module",
-			"disable_after_onboard": 1,
-			"description": "Dive into the basics for your organisation's needs.",
-			"onboard_present": 1
-		},
+		
 		{
 			"module_name": "Accounts",
 			"category": "Modules",
@@ -197,15 +187,5 @@ def get_data():
 			"is_help": True,
 			"description": "Explore Help Articles and Videos."
 		},
-		{
-			"module_name": 'Marketplace',
-			"category": "Places",
-			"label": _('Marketplace'),
-			"icon": "octicon octicon-star",
-			"type": 'link',
-			"link": '#marketplace/home',
-			"color": '#FF4136',
-			'standard': 1,
-			"description": "Publish items to other ERPNext users."
-		},
+		
 	]
