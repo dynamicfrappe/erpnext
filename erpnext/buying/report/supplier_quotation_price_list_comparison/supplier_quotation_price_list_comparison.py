@@ -88,16 +88,15 @@ def get_columns(filters):
 		
 	]
 
-	conditions = "HAVING 1 =2 "
+	conditions = " where 1 =2 "
 	if filters.get("RFQ_No"):
-		conditions = " HAVING  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
+		conditions = " where  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
 
 	results = frappe.db.sql("""
 
-	 SELECT
+	 SELECT DISTINCT
 	`tabSupplier Quotation`.supplier_name, 
-	`tabSupplier Quotation`.supplier,
-	`tabRequest for Quotation Item`.parent
+	`tabSupplier Quotation`.supplier
 	
 	FROM
 	`tabRequest for Quotation Item`
@@ -110,8 +109,6 @@ def get_columns(filters):
 	`tabSupplier Quotation`
 	ON 
 		`tabSupplier Quotation Item`.parent = `tabSupplier Quotation`.`name`
-		
-		GROUP BY 	`tabSupplier Quotation`.supplier
 		
 			{conditions}
 
