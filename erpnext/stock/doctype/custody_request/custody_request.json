@@ -11,6 +11,7 @@
   "employee_name",
   "column_break_3",
   "required_date",
+  "company",
   "section_break_7",
   "custody_request_item",
   "amended_from"
@@ -73,10 +74,16 @@
    "fieldtype": "Dynamic Link",
    "label": "Reference Document Name",
    "options": "reference_document_type"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-18 11:21:13.560231",
+ "modified": "2020-10-19 16:02:05.731317",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Custody request",

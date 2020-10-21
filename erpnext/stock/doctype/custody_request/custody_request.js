@@ -24,6 +24,13 @@ frappe.ui.form.on('Custody request', {
 			frm.events.create_asset_movement(frm)
 				
 			}).addClass("btn-primary");
+
+
+
+		frm.add_custom_button(__("Employee Current Cutodies"), function() {
+			frm.events.get_employee_custodies(frm)
+				
+			}).addClass("btn-primary");	
 	},
 
 
@@ -44,6 +51,20 @@ frappe.ui.form.on('Custody request', {
 		
 
 	},
+	get_employee_custodies:(frm)=>{
+		frappe.model.open_mapped_doc({
+			
+			method : "erpnext.stock.doctype.custody_request.custody_request.create_asset_movement",
+
+						'frm' :frm,
+						'name' : frm.doc.name,
+						
+
+		})
+		
+
+	},
+
    onload:function(frm){
 
    	 frm.fields_dict.custody_request_item.grid.get_field('item').get_query =
