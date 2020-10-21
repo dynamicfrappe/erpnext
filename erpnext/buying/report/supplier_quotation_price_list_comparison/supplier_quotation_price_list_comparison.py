@@ -6,16 +6,28 @@ import frappe
 from frappe import _
 
 suppliers = []
+totals = []
 case_when = ""
+global_filters = [] 
 
 
 def execute(filters=None):
-	columns, data = [], []
+	global global_filters
+	global_filters = filters
+	columns, data  = [], []
 	columns = get_columns(filters)
 	data    = get_data(filters)
-	return columns, data
+	message = "Here is a message"
+	chart = get_chart(data, columns, filters)
+	return columns, data ,message, chart
 
 
+@frappe.whitelist() 
+def get_items(filters = None):
+	items = ['123465']
+	if filters != None:
+		items = frappe.db.sql( "select  item_code from `tabRequest for Quotation Item` where parent = '"+filters+"'", as_dict = 1)
+	return items
 
 
 
@@ -88,15 +100,19 @@ def get_columns(filters):
 		
 	]
 
-	conditions = " where 1 =2 "
+	conditions = " 	WHERE `tabSupplier Quotation`.docstatus = 1 AND `tabSupplier Quotation`.docstatus = 1 "
 	if filters.get("RFQ_No"):
-		conditions = " where  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
+		conditions += " AND  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
+	else : 
+
+		conditions += 	" AND 1=2 "	
 
 	results = frappe.db.sql("""
 
 	 SELECT DISTINCT
 	`tabSupplier Quotation`.supplier_name, 
-	`tabSupplier Quotation`.supplier
+	`tabSupplier Quotation`.supplier,
+	`tabSupplier Quotation`.grand_total
 	
 	FROM
 	`tabRequest for Quotation Item`
@@ -117,18 +133,16 @@ def get_columns(filters):
 	""".format(conditions=conditions), filters, as_dict=1)
 
 	global suppliers
+	global totals
 	global case_when
 	suppliers = []
 	case_when = ""
-
+	totals = []
 	for row in results:
 
 			case_when += ", SUM(case  `tabSupplier Quotation`.supplier when '"+row.supplier_name+"' then  `tabSupplier Quotation Item`.rate else 0 End) As 'rate_"+row.supplier_name+"'" 
 			
 			temp = [
-				
-				
-				
 				
 				{
 					"label": _("Rate Per Unit " + row.supplier_name ),
@@ -140,8 +154,8 @@ def get_columns(filters):
 			]
 
 			columns.extend(temp)
-			suppliers.append(row)
-
+			suppliers.append(row.supplier_name)
+			totals.append(row.grand_total)
 
 	return columns
 
@@ -157,13 +171,9 @@ def get_Invoices_with_purchase_order(filters):
 	
 	global suppliers
 	global case_when
-
 	conditions = "HAVING 1 = 2"
-
-	
 	if filters.get("RFQ_No"):
 		conditions = " HAVING  tab.parent =%(RFQ_No)s"
-
 
 	results = frappe.db.sql("""
 
@@ -198,10 +208,7 @@ def get_Invoices_with_purchase_order(filters):
 		where SQI.request_for_quotation_item =  tab.`name` and SQI.Rate = 
 		 (select MAX(TT.rate)  from `tabSupplier Quotation Item` TT  where TT.request_for_quotation_item =  tab.`name`  ) LIMIT 1 )
 			as max_supplier_Q 
-
-
 	{case_when}
-	
 	FROM
 	`tabRequest for Quotation Item` tab
 	INNER JOIN
@@ -213,18 +220,84 @@ def get_Invoices_with_purchase_order(filters):
 	`tabSupplier Quotation`
 	ON 
 		`tabSupplier Quotation Item`.parent = `tabSupplier Quotation`.`name`
-	
-	
-	 
+		WHERE `tabSupplier Quotation`.docstatus = 1 AND tab.docstatus = 1 
 	Group By 	tab.parent,tab.item_code , tab.item_name , tab.uom 
 		
 	{conditions}
-
-
-		
+	
 	""".format(conditions=conditions , case_when = case_when), filters, as_dict=1)
-
-
 
 	return results
 
+
+
+
+def get_chart(data, columns, fltr):
+
+	global suppliers
+	global totals
+
+	if fltr.get("RFQ_No") :
+		if fltr.get("item_code"):
+
+				conditions = "where  tab.parent = %(RFQ_No)s and tab.`name` = %(item_code)s "
+				results = frappe.db.sql("""
+
+			SELECT
+			tab.parent,
+			tab.`name` ,
+			tab.item_code, 
+			tab.uom ,
+			temp.supplier,
+			temp.`name`,
+			IFNULL(( select DISTINCT IFNULL(`tabSupplier Quotation Item`.rate,0) from  `tabSupplier Quotation Item` 
+			
+			where item_code = tab.item_code and parent = temp.`name`
+			
+			LIMIT 1 ),0) as rate
+			FROM
+			`tabRequest for Quotation Item` tab
+		CROSS join 
+		(  SELECT DISTINCT
+		`tabRequest for Quotation Item`.parent,
+			`tabSupplier Quotation`.supplier_name, 
+			`tabSupplier Quotation`.supplier,
+			`tabSupplier Quotation`.`name`
+			
+			FROM
+			`tabRequest for Quotation Item`
+			INNER JOIN
+			`tabSupplier Quotation Item`
+			ON 
+				`tabRequest for Quotation Item`.parent = `tabSupplier Quotation Item`.request_for_quotation AND
+				`tabRequest for Quotation Item`.`name` = `tabSupplier Quotation Item`.request_for_quotation_item
+			INNER JOIN
+			`tabSupplier Quotation`
+			ON 
+				`tabSupplier Quotation Item`.parent = `tabSupplier Quotation`.`name`  ) temp
+				
+			ON  	
+		temp.parent = tab.parent
+			{conditions}
+
+			""".format(conditions=conditions ), fltr, as_dict=1)
+
+				totals = []
+				for row in results:
+					totals.append(row.rate)
+
+	chart = {
+		'data': {
+		'labels': suppliers,
+		'datasets': [
+			{
+			'name': 'Grand Total',
+			'values': totals
+			}
+		]
+		},
+		'isNavigable': 1,
+		'type': 'bar'
+	}
+
+	return chart
