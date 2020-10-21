@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "creation": "2013-02-05 11:48:26",
@@ -20,7 +19,8 @@
   "expense_approvers",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "location"
  ],
  "fields": [
   {
@@ -120,13 +120,18 @@
    "ignore_user_permissions": 1,
    "label": "Old Parent",
    "print_hide": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location"
   }
  ],
  "icon": "fa fa-sitemap",
  "idx": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2020-03-18 18:26:05.966022",
+ "modified": "2020-10-20 16:24:38.880481",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Department",

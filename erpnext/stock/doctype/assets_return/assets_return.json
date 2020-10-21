@@ -1,17 +1,16 @@
 {
- "autoname": "employee_name.-.###",
- "creation": "2020-10-17 16:16:36.085564",
+ "autoname": "Req-employee_name.-.###",
+ "creation": "2020-10-20 09:53:09.478133",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "date",
   "reference_document_type",
   "reference_document_name",
   "employee_name",
-  "column_break_3",
+  "col1",
   "company",
-  "required_date",
+  "date",
   "section_break_7",
   "custody_request_item",
   "amended_from"
@@ -27,43 +26,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "required_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Required Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_break_7",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "custody_request_item",
-   "fieldtype": "Table",
-   "label": "Custody Request Item",
-   "options": "Custody Request Item",
-   "reqd": 1
-  },
-  {
-   "fieldname": "employee_name",
-   "fieldtype": "Data",
-   "label": "Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Custody request",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
    "fieldname": "reference_document_type",
    "fieldtype": "Link",
    "label": "Reference Document Type",
@@ -76,6 +38,45 @@
    "options": "reference_document_type"
   },
   {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "custody_request_item",
+   "fieldtype": "Table",
+   "label": "Assets",
+   "options": "custtoreturn assets",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Custody request",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Custody request",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "col1",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "company",
    "fieldtype": "Link",
    "label": "Company",
@@ -83,10 +84,10 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-20 17:42:33.784947",
+ "modified": "2020-10-20 17:42:43.030780",
  "modified_by": "Administrator",
  "module": "Stock",
- "name": "Custody request",
+ "name": "Assets Return",
  "owner": "Administrator",
  "permissions": [
   {
@@ -99,6 +100,22 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
+   "set_user_permissions": 1,
+   "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

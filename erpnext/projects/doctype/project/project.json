@@ -10,6 +10,7 @@
   "project_name",
   "status",
   "project_type",
+  "location",
   "is_active",
   "percent_complete_method",
   "percent_complete",
@@ -439,12 +440,18 @@
    "fieldname": "message",
    "fieldtype": "Text",
    "label": "Message"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location"
   }
  ],
  "icon": "fa fa-puzzle-piece",
  "idx": 29,
  "max_attachments": 4,
- "modified": "2020-04-09 14:17:15.524529",
+ "modified": "2020-10-20 16:25:28.938764",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",

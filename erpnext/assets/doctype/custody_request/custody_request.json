@@ -27,8 +27,32 @@
    "reqd": 1
   },
   {
+   "fieldname": "reference_document_type",
+   "fieldtype": "Link",
+   "label": "Reference Document Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_document_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Document Name",
+   "options": "reference_document_type"
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "read_only": 1
+  },
+  {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   },
   {
    "fieldname": "required_date",
@@ -49,12 +73,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "employee_name",
-   "fieldtype": "Data",
-   "label": "Name",
-   "read_only": 1
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -62,30 +80,12 @@
    "options": "Custody request",
    "print_hide": 1,
    "read_only": 1
-  },
-  {
-   "fieldname": "reference_document_type",
-   "fieldtype": "Link",
-   "label": "Reference Document Type",
-   "options": "DocType"
-  },
-  {
-   "fieldname": "reference_document_name",
-   "fieldtype": "Dynamic Link",
-   "label": "Reference Document Name",
-   "options": "reference_document_type"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "label": "Company",
-   "options": "Company"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-20 17:42:33.784947",
+ "modified": "2020-10-20 17:40:57.498794",
  "modified_by": "Administrator",
- "module": "Stock",
+ "module": "Assets",
  "name": "Custody request",
  "owner": "Administrator",
  "permissions": [
