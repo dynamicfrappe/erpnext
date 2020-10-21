@@ -100,7 +100,8 @@
   "delete_company_transactions",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "reject_request_after_days"
  ],
  "fields": [
   {
@@ -729,13 +730,19 @@
    "fieldtype": "Link",
    "label": "Default Asset location",
    "options": "Location"
+  },
+  {
+   "default": "7.00",
+   "fieldname": "reject_request_after_days",
+   "fieldtype": "Float",
+   "label": "No of Days to Reject Requests"
   }
  ],
  "icon": "fa fa-building",
  "idx": 1,
  "image_field": "company_logo",
  "is_tree": 1,
- "modified": "2020-10-17 15:55:03.532631",
+ "modified": "2020-10-19 15:55:33.671827",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Company",
