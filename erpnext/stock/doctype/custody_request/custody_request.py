@@ -48,3 +48,13 @@ def create_asset_movement(name , *args,**kwargs):
 		
 
 		return (doc)
+
+
+@frappe.whitelist() 
+def get_asset_costudian(name , *args ,**kwargs):
+	data = frappe.db.sql("""  SELECT asset_name ,value_after_depreciation FROM `tabAsset` WHERE custodian = '%s'""" %name)
+	return data
+
+
+
+

@@ -6,7 +6,6 @@ frappe.ui.form.on('Custody request', {
 		frm.set_query("reference_document_type", function()  {
 			return {
 				filters: {
-					name: ["in", ["Employee", "Department","Customer","Project"]]
 				}
 			};
 		})
@@ -18,19 +17,18 @@ frappe.ui.form.on('Custody request', {
 	refresh: function(frm) {
 
 
-
-
-		frm.add_custom_button(__("Create Asset Movement"), function() {
-			frm.events.create_asset_movement(frm)
+		if(frm.doc.workflow_state == "Stock Audit Agreement"){
+		
+				frm.add_custom_button(__("Create Asset Movement"), function() {
+					frm.events.create_asset_movement(frm)
+						
+					}).addClass("btn-primary");
+		}
+		if(frm.doc.workflow_state == "Created"){
+		frm.add_custom_button(__("Get Employee Custody"), function() {
+			frm.events.get_employee_custody(frm)
 				
-			}).addClass("btn-primary");
-
-
-
-		frm.add_custom_button(__("Employee Current Cutodies"), function() {
-			frm.events.get_employee_custodies(frm)
-				
-			}).addClass("btn-primary");	
+			}).addClass("btn-secondary");}
 	},
 
 
@@ -51,21 +49,46 @@ frappe.ui.form.on('Custody request', {
 		
 
 	},
-	get_employee_custodies:(frm)=>{
-		frappe.model.open_mapped_doc({
-			
-			method : "erpnext.stock.doctype.custody_request.custody_request.create_asset_movement",
 
-						'frm' :frm,
-						'name' : frm.doc.name,
-						
 
-		})
+	get_employee_custody:function(frm){
+		var text = "<b>Employee Custody </b>"+"<hr>"+"<ul>"
+		frappe.call({
+        method: "erpnext.stock.doctype.custody_request.custody_request.get_asset_costudian",
+        args: {
+           
+            "name": frm.doc.reference_document_name,
+        },
+        callback(r) {
+
+            if(r.message) {
+            	var text = "<b>Employee Custody </b>"+"<hr>"+"<ul>"
+                var task = r.message;
+                var totall_custody = 0
+                var i =0 
+                for (i =0 ; i < r.message.length ; i++){
+                	var price = r.message[i][1]
+                	text += "<li><b> Asst : - " + r.message[i][0].toString() + "</b>  <b>" +" | Asset Value :"+ price.toString() + "</b></li>"}
+                	totall_custody += price
+
+                text+= "<hr><b>" + "Employee total custody :" +  totall_custody.toString() + "</b> "
+                msgprint(text)
+                
+                
+            
+        }
+    }
+
+
+    
+
 		
-
+	} )
 	},
 
+
    onload:function(frm){
+   
 
    	 frm.fields_dict.custody_request_item.grid.get_field('item').get_query =
 			function() {
