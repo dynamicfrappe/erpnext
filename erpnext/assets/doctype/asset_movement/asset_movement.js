@@ -163,7 +163,8 @@ frappe.ui.form.on('Asset Movement Item', {
 					return {
 						filters: {
 							item_code:["in" , r.message[0].toString()],
-							location :locat
+							location :locat,
+							status: ["not in", ["Draft" ,"Cancelled"]]
 						}
 					}
 				})
