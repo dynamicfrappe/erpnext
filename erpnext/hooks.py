@@ -285,6 +285,7 @@ scheduler_events = {
 		"erpnext.projects.doctype.project.project.collect_project_status",
 		"erpnext.hr.doctype.shift_type.shift_type.process_auto_attendance_for_all_shifts",
 		"erpnext.support.doctype.issue.issue.set_service_level_agreement_variance",
+		"erpnext.selling.doctype.sales_order.sales_order.Update_Created_to_Rejected_after_7Days",
 	],
 	"daily": [
 		"erpnext.stock.reorder_item.reorder_item",

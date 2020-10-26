@@ -75,6 +75,7 @@ frappe.query_reports["Sales Analytics"] = {
 			checkboxColumn: true,
 			events: {
 				onCheckRow: function(data) {
+					debugger;
 					row_name = data[2].content;
 					length = data.length;
 
