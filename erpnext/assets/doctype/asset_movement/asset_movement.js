@@ -28,7 +28,7 @@ frappe.ui.form.on('Asset Movement', {
 		frm.set_query("reference_doctype", () => {
 			return {
 				filters: {
-					name: ["in", ["Purchase Receipt", "Purchase Invoice"]]
+					name: ["in", ["Purchase Receipt", "Purchase Invoice","Custody request"]]
 				}
 			};
 		}),
@@ -39,6 +39,9 @@ frappe.ui.form.on('Asset Movement', {
 				}
 			}
 		})
+
+
+		
 	},
 
 	onload: (frm) => {
@@ -83,10 +86,34 @@ frappe.ui.form.on('Asset Movement', {
 			});
 		});
 		frm.refresh_field('assets');
-	}
+	},
+	reference_doctype:(frm)=>{
+		if (frm.doc.reference_doctype ==='Custody request'){
+			var ref = frappe.db.get_doc('Custody request' , frm.doc.reference_name)
+			frm.set_query("assets",'to_employee', () => {
+			return {
+				filters: {
+					name: ref.name
+				}
+			}
+		})
+
+
+
+
+		}
+	},
+
+
 });
 
 frappe.ui.form.on('Asset Movement Item', {
+
+
+
+
+
+
 	asset: function(frm, cdt, cdn) {
 		// on manual entry of an asset auto sets their source location / employee
 		const asset_name = locals[cdt][cdn].asset;
@@ -97,6 +124,75 @@ frappe.ui.form.on('Asset Movement Item', {
 			}).catch((err) => {
 				console.log(err); // eslint-disable-line
 			});
+
+
 		}
-	}
+	
+
+
+},
+	
+	
+	assets_add:function(frm,cdt,cdn){
+		
+		if (frm.doc.reference_doctype ==='Custody request' && frm.doc.reference_name != null)
+
+
+		{
+			frappe.call({
+		        method: "frappe.client.get",
+		        args: {
+		            doctype: "Company",
+		            name: frm.doc.company,
+		        },
+        callback(r) {
+            if(r.message) {
+           
+                var com = r.message;
+     			var locat = com.default_asset_location
+     		
+     			
+     			frappe.call({
+				method:"erpnext.assets.doctype.asset_movement.asset_movement.get_items_from_custody_request",
+				args:{
+					"request":frm.doc.reference_name
+				},
+				callback:function(r){
+					frm.set_query("to_employee" , "assets" ,() => { return {filters :{name:r.message[1].toString() }}})
+					frm.set_query("asset","assets", () => {
+					return {
+						filters: {
+							item_code:["in" , r.message[0].toString()],
+							location :locat,
+							status: ["not in", ["Draft" ,"Cancelled"]]
+						}
+					}
+				})
+
+
+				}
+
+			})
+
+
+
+     			if(!locat){
+     				frappe.throw(_("Company Has No default asset location"))
+     			}              
+            }
+        }
+    });
+
+
+		
+
+
+
+			
+
+			}
+	},
+
+
+
 });

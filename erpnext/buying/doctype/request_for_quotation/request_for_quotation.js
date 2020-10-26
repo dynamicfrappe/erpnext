@@ -38,6 +38,26 @@ frappe.ui.form.on("Request for Quotation",{
 				function(){ frappe.set_route('List', 'Supplier Quotation',
 					{'request_for_quotation': frm.doc.name}) }, __("Supplier Quotation"));
 
+
+
+			frm.add_custom_button(__("Compare Quotation Request"), function() {
+			
+				frappe.route_options = {
+					"RFQ_No": frm.doc.name
+				};
+				frappe.set_route("query-report", "Supplier Quotation Price List Comparison");
+
+			}, __('View'));		
+/*
+refresh: function(frm) {
+		if (frm.doc.docstatus==1) {
+			frm.add_custom_button(__("Make Asset Movment"), function() {
+				frm.trigger("make_Asset_Movment");
+			}, __('Create'));
+		}
+
+
+*/
 			frm.add_custom_button(__("Send Supplier Emails"), function() {
 				frappe.call({
 					method: 'erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails',

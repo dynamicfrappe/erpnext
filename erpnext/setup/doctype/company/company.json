@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:company_name",
@@ -33,6 +32,7 @@
   "existing_company",
   "tax_id",
   "date_of_establishment",
+  "default_asset_location",
   "sales_settings",
   "monthly_sales_target",
   "sales_monthly_history",
@@ -723,14 +723,19 @@
    "fieldtype": "Link",
    "label": "Default Buying Terms",
    "options": "Terms and Conditions"
+  },
+  {
+   "fieldname": "default_asset_location",
+   "fieldtype": "Link",
+   "label": "Default Asset location",
+   "options": "Location"
   }
  ],
  "icon": "fa fa-building",
  "idx": 1,
  "image_field": "company_logo",
  "is_tree": 1,
- "links": [],
- "modified": "2020-03-22 18:26:03.145312",
+ "modified": "2020-10-17 15:55:03.532631",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Company",

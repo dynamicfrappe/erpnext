@@ -1,0 +1,35 @@
+{
+ "add_total_row": 0,
+ "creation": "2020-10-13 16:01:01.606013",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{}",
+ "modified": "2020-10-14 10:01:37.384425",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Purchase Comparison Query",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "select  PI.parent as purchase_invoice, PO.parent as purchase_order ,PI.item_name , PI.Rate as PI_Rate , PO.Rate as PO_Rate   from `tabPurchase Invoice Item`  PI \n\t\t\t   inner JOIN `tabPurchase Order Item`  PO On PI.purchase_order = PO.parent And  PI.item_code = PO.item_code \n\t\t\t\twhere  ISNULL( PI.purchase_order ) = 0",
+ "ref_doctype": "Purchase Invoice",
+ "report_name": "Purchase Comparison Query",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Auditor"
+  }
+ ]
+}

@@ -145,3 +145,18 @@ class AssetMovement(Document):
 
 			frappe.db.set_value('Asset', d.asset, 'location', current_location)
 			frappe.db.set_value('Asset', d.asset, 'custodian', current_employee)
+
+
+
+@frappe.whitelist() 
+def get_items_from_custody_request(request,*args,**kwargs):
+	doc = frappe.db.sql("""  
+
+		SELECT item FROM `tabCustody Request Item` WHERE parent ='%s'
+		"""%request)
+	employee = frappe.db.sql("SELECT reference_document_name FROM `tabCustody request` WHERE name ='%s'"%request)
+
+	data = []
+	data.append([doc])
+	data.append([employee])
+	return data
