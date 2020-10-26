@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2013-05-24 19:29:09",
@@ -272,8 +271,7 @@
    "fieldtype": "Check",
    "label": "Is Return",
    "no_copy": 1,
-   "print_hide": 1,
-   "read_only": 1
+   "print_hide": 1
   },
   {
    "default": "0",
@@ -289,8 +287,7 @@
    "label": "Return Against Delivery Note",
    "no_copy": 1,
    "options": "Delivery Note",
-   "print_hide": 1,
-   "read_only": 1
+   "print_hide": 1
   },
   {
    "collapsible": 1,
@@ -1236,8 +1233,7 @@
  "icon": "fa fa-truck",
  "idx": 146,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-05-19 17:03:45.880106",
+ "modified": "2020-10-24 16:40:30.392574",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Delivery Note",
