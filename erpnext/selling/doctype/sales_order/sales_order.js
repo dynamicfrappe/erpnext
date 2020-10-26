@@ -36,6 +36,17 @@ frappe.ui.form.on("Sales Order", {
 		})
 	},
 	refresh: function(frm) {
+		 if (frm.doc.docstatus ===0) {
+		 	frm.add_custom_button(__("Check customer credit"), function() {
+                frm.events.check_customer_credit(frm)
+                
+
+        }).addClass("btn-primary");
+		 frm.add_custom_button(__("Items stock in hand"), function() {
+                frm.events.Items_stock_in_hand(frm)
+
+            }).addClass("btn-primary");
+		 }
 		if(frm.doc.docstatus === 1 && frm.doc.status !== 'Closed'
 			&& flt(frm.doc.per_delivered, 6) < 100 && flt(frm.doc.per_billed, 6) < 100) {
 			frm.add_custom_button(__('Update Items'), () => {
@@ -47,7 +58,63 @@ frappe.ui.form.on("Sales Order", {
 				})
 			});
 		}
+
 	},
+	check_customer_credit: function(frm) {
+        var text = ""
+        frappe.call({
+            method: "erpnext.selling.doctype.sales_order.sales_order.get_customer_credit",
+            args: {
+
+                "name": frm.doc.customer,
+            },
+            callback(r) {
+                
+                if (r.message) {
+                	  var total = 0;
+                	  r.message.forEach(credit=>total+= parseInt(credit))
+                	  console.log(r.message)
+
+                    
+
+                    text += "<hr>" + "customer credit :" +total + "</b> "
+                    msgprint(text)
+
+                    
+
+                }
+            }
+        })
+    },
+
+    Items_stock_in_hand: function(frm) {
+        var text = "item name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp Quantity"
+        frappe.call({
+            method: "erpnext.selling.doctype.sales_order.sales_order.Items_stock_in_hand",
+            args: {
+
+                "name": frm.doc.name
+            },
+            callback(r) {
+              
+                if (r.message) {
+
+                	var key =0 
+                	for( key = 0 ; key< r.message.length ; key++){
+                		//console.log(r.message[key].name)
+                	
+
+                		text +="<hr>"+r.message[key].name +"  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp &emsp; &emsp;"+r.message[key].data +"<br>" 
+                	//console.log(text)
+                	}
+                	msgprint(text)
+                }
+
+                }
+            })
+        
+    },
+
 	onload: function(frm) {
 		if (!frm.doc.transaction_date){
 			frm.set_value('transaction_date', frappe.datetime.get_today())
