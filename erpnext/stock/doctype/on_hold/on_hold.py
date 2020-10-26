@@ -19,7 +19,7 @@ def get_item_wharehouse(item,qtyy,*args,**kwargs):
 	if sql :
 		check = "one"
 	if not sql :
-	    try:
+	    # try:
 
 			chech_all_available_stock = frappe.db.sql("""SELECT SUM(actual_qty) FROM `tabStock Ledger Entry` WHERE item_code = '%s'"""%str(item))
 			num = str(chech_all_available_stock[0][0])
@@ -46,8 +46,8 @@ def get_item_wharehouse(item,qtyy,*args,**kwargs):
 				sql= ["home"]
 			
 
-		except :
-			qty = 0
+		# except :
+			# qty = 0
 		
 
 	return({"item_code":item ,"qty":qty , "data":sql ,"check":check})
