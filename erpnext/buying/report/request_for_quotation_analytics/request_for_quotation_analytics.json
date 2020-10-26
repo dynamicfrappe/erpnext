@@ -1,0 +1,21 @@
+{
+ "add_total_row": 0,
+ "creation": "2020-10-20 10:23:54.491636",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "\u062a/15485223",
+ "modified": "2020-10-20 10:23:54.491636",
+ "modified_by": "Administrator",
+ "module": "Buying",
+ "name": "Request for Quotation Analytics",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Request for Quotation Supplier",
+ "report_name": "Request for Quotation Analytics",
+ "report_type": "Script Report",
+ "roles": []
+}

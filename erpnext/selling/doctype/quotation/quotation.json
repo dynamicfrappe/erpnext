@@ -13,6 +13,7 @@
   "quotation_to",
   "party_name",
   "customer_name",
+  "customer_rfq",
   "column_break1",
   "amended_from",
   "company",
@@ -922,13 +923,21 @@
    "label": "Lost Reasons",
    "options": "Quotation Lost Reason Detail",
    "read_only": 1
+  },
+  {
+   "depends_on": "customer_name",
+   "fieldname": "customer_rfq",
+   "fieldtype": "Link",
+   "label": "Customer RFQ",
+   "options": "Customer Request for Quotation",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-shopping-cart",
  "idx": 82,
  "is_submittable": 1,
  "max_attachments": 1,
- "modified": "2020-08-12 23:35:13.621823",
+ "modified": "2020-10-25 12:07:48.248509",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Quotation",
@@ -1023,5 +1032,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "timeline_field": "party_name",
- "title_field": "title"
+ "title_field": "title",
+ "track_changes": 1
 }

@@ -251,15 +251,15 @@
   }
  ],
  "istable": 1,
- "modified": "2020-10-20 17:34:04.783356",
+ "modified": "2020-10-21 10:13:42.658650",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Request for Quotation Item",
  "owner": "Administrator",
  "permissions": [],
+ "search_fields": "item_name",
  "sort_field": "modified",
  "sort_order": "DESC",
- "timeline_field": "item_code",
- "title_field": "item_code",
+ "title_field": "item_name",
  "track_changes": 1
 }
