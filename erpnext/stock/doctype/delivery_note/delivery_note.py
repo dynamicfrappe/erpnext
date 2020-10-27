@@ -115,6 +115,7 @@ class DeliveryNote(SellingController):
 		self.validate_uom_is_integer("stock_uom", "stock_qty")
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_with_previous_doc()
+		self.validate_holding_qty()
 
 		if self._action != 'submit' and not self.is_return:
 			set_batch_nos(self, 'warehouse', True)
@@ -125,6 +126,39 @@ class DeliveryNote(SellingController):
 		self.update_current_stock()
 
 		if not self.installation_status: self.installation_status = 'Not Installed'
+
+
+
+	def validate_holding_qty(self):
+		for item in self.get("items"):
+			allowed_qty = frappe.db.sql("""
+			SELECT 
+		(
+			SELECT IFNULL(qty_after_transaction,0) as qty_after_transaction  from `tabStock Ledger Entry`  
+				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
+				ORDER BY `name` DESC Limit 1		
+		)
+	 -  (	SELECT
+				IFNULL(SUM(HRI.qty),0) as total_hold_qty
+			FROM
+				`tabOb Hold Items` HRI
+				INNER JOIN
+					`tabOn Hold` HR
+				ON 
+					HR.`name` = HRI.parent
+					WHERE HR.`status` = 'Open' AND HR.docstatus =1
+					GROUP BY HRI.item_code , HRI.warehouse
+					HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
+					LIMIT 1
+		)
+					 as total_qty
+			""".format (item_code = item.item_code , warehouse = self.set_warehouse) , as_dict = 1)
+			if not allowed_qty[0].total_qty:
+						allowed_qty[0].total_qty = 0
+			if item.qty > allowed_qty[0].total_qty:
+				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = self.set_warehouse)));
+				frappe.validated=false;
+				return false
 
 	def validate_with_previous_doc(self):
 		super(DeliveryNote, self).validate_with_previous_doc({
