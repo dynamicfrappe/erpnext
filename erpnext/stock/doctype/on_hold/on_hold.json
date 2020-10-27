@@ -1,4 +1,5 @@
 {
+ "autoname": "YYYY-HOLD-ITEM-.######",
  "creation": "2020-10-25 13:31:05.002902",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -86,7 +87,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-27 15:58:38.646386",
+ "modified": "2020-10-27 17:30:21.369644",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "On Hold",
