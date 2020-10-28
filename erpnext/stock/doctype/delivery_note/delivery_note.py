@@ -147,7 +147,30 @@ class DeliveryNote(SellingController):
 						frappe.db.sql("""update `tabOb Hold Items` set qty = {qty} where `name` = '{name}' """.format(qty = hold_request_item.qty , name = hold_request_item.name))
 
 
+	def get_holding_qty_in_warehouse( item , warehouse ):
+				total_hold_qty = 0
+				total_hold_qty_result = frappe.db.sql("""
+												SELECT
+												IFNULL(SUM(HRI.qty),0) as total_hold_qty
+												FROM
+												`tabOb Hold Items` HRI
+												INNER JOIN
+													`tabOn Hold` HR
+												ON 
+													HR.`name` = HRI.parent
+													WHERE HR.`status` = 'Open' and HR.docstatus =1 
+													GROUP BY HRI.item_code , HRI.warehouse
+													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
 
+											     LIMIT 1
+												""".format(item_code = item , warehouse = warehouse),as_dict=1)
+				if not total_hold_qty_result:
+					total_hold_qty = 0
+				else :
+					total_hold_qty = total_hold_qty_result[0].total_hold_qty
+					if not total_hold_qty :
+						total_hold_qty = 0
+				return total_hold_qty
 
 
 	def validate_holding_qty(self):
@@ -157,30 +180,15 @@ class DeliveryNote(SellingController):
 				warehouse = item.warehouse
 
 			allowed_qty = frappe.db.sql("""
-			SELECT 
-		(
-			SELECT IFNULL(qty_after_transaction,0) as qty_after_transaction  from `tabStock Ledger Entry`  
+			SELECT IFNULL(qty_after_transaction,0) as total_qty  from `tabStock Ledger Entry`  
 				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
 				ORDER BY `name` DESC Limit 1		
-		)
-	 -  (	SELECT
-				IFNULL(SUM(HRI.qty),0) as total_hold_qty
-			FROM
-				`tabOb Hold Items` HRI
-				INNER JOIN
-					`tabOn Hold` HR
-				ON 
-					HR.`name` = HRI.parent
-					WHERE HR.`status` = 'Open' AND HR.docstatus =1
-					GROUP BY HRI.item_code , HRI.warehouse
-					HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
-					LIMIT 1
-		)
-					 as total_qty
-			""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1)
+		
+					""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1)
 			if not allowed_qty[0].total_qty:
 						allowed_qty[0].total_qty = 0
-			if item.qty > allowed_qty[0].total_qty:
+			total_hold_qty = self.get_holding_qty_in_warehouse(item = item.item_code , warehouse = warehouse )
+			if item.qty > (allowed_qty[0].total_qty - total_hold_qty):
 				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = allowed_qty[0].total_qty)));
 				frappe.validated=false;
 				return false
