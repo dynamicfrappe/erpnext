@@ -53,12 +53,13 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 				if (record.qty_after_transaction-total_hold_qty) >= qty :
 						item_data = {
 						'item_code' : str(item),
-						'warehouse' : sql[0].warehouse,
+						'warehouse' : record.warehouse,
 						'qty' : float(qtyy)
 						}
 						items.append(item_data)
 						break
 		if len(items)==0:
+			frappe('Line 65')
 			items=get_Multiple_qty_from_warehouses(item,qtyy,name)
 
 	if not sql :
@@ -81,14 +82,14 @@ def get_Multiple_qty_from_warehouses(item  , qty,name):
 
 																	GROUP BY item_code  """%str(item) , as_dict = 1)
 			if chech_all_available_stock :
-				total_qty =  (chech_all_available_stock[0].total_qty) or 0
+				total_qty =  (chech_all_available_stock[0].total_qty) 
 			else : total_qty = 0	
 			total_hold_qty = get_holding_qty_in_all_warehouse (item,name)
 
 			if not total_qty:
 					total_qty = 0
-
 			if (total_qty-total_hold_qty) >= float(qty):
+					
 
 
 					sql = frappe.db.sql(""" SELECT   warehouse  , qty_after_transaction as qty
