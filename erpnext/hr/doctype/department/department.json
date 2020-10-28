@@ -9,6 +9,7 @@
   "department_name",
   "parent_department",
   "company",
+  "location",
   "is_group",
   "disabled",
   "section_break_4",
@@ -19,8 +20,7 @@
   "expense_approvers",
   "lft",
   "rgt",
-  "old_parent",
-  "location"
+  "old_parent"
  ],
  "fields": [
   {
@@ -124,14 +124,16 @@
   {
    "fieldname": "location",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Location",
-   "options": "Location"
+   "options": "Location",
+   "unique": 1
   }
  ],
  "icon": "fa fa-sitemap",
  "idx": 1,
  "is_tree": 1,
- "modified": "2020-10-20 16:24:38.880481",
+ "modified": "2020-10-27 13:24:30.314524",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Department",

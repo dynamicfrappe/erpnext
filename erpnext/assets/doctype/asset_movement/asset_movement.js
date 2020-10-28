@@ -134,8 +134,10 @@ frappe.ui.form.on('Asset Movement Item', {
 	
 	
 	assets_add:function(frm,cdt,cdn){
+		var docyment_type =''
+
 		
-		if (frm.doc.reference_doctype ==='Custody request' && frm.doc.reference_name != null)
+		if (frm.doc.reference_doctype ==='Custody request' && frm.doc.reference_name != null )
 
 
 		{
@@ -158,7 +160,17 @@ frappe.ui.form.on('Asset Movement Item', {
 					"request":frm.doc.reference_name
 				},
 				callback:function(r){
-					frm.set_query("to_employee" , "assets" ,() => { return {filters :{name:r.message[1].toString() }}})
+					if (frm.doc.purpose=='Issue'){
+										if (r.message[2][0] == "Employee"){
+																				frm.set_query("to_employee" , "assets" ,() => { return {filters :{name:r.message[1].toString() }}})}}
+					if (frm.doc.purpose=='Transfer'){
+					
+						frm.set_query("target_location" , "assets" ,() =>{
+						
+							return{
+								filters: {name:r.message[3][0].toString()} }
+						} )
+					}			
 					frm.set_query("asset","assets", () => {
 					return {
 						filters: {

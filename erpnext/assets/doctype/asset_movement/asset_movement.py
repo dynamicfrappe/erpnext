@@ -86,6 +86,22 @@ class AssetMovement(Document):
 							format(d.to_employee, self.company))
 
 	def on_submit(self):
+		if self.reference_doctype == "Custody request" and self.reference_name != None :
+			request_custody = frappe.get_doc("Custody request" ,self.reference_name)
+			if request_custody.reference_document_type == "Department"  :
+				
+				for d in self.assets :
+					# frappe.throw(request_custody.reference_document_name)
+					data = frappe.db.sql("UPDATE `tabAsset` SET  department = '%s' WHERE name ='%s'"%(request_custody.reference_document_name, d.asset))
+					frappe.db.commit()
+			if request_custody.reference_document_type == "Project"  :
+				for d in self.assets :
+					# frappe.throw(request_custody.reference_document_name)
+					data = frappe.db.sql("UPDATE `tabAsset` SET  project = '%s' WHERE name ='%s'"%(request_custody.reference_document_name, d.asset))
+					frappe.db.commit()
+
+			final = frappe.db.sql("UPDATE `tabCustody request` SET workflow_state = 'Completed' , docstatus = 1 WHERE name = '%s' "%self.reference_name)
+			frappe.db.commit()
 		self.set_latest_location_in_asset()
 	
 	def before_cancel(self):
@@ -150,13 +166,28 @@ class AssetMovement(Document):
 
 @frappe.whitelist() 
 def get_items_from_custody_request(request,*args,**kwargs):
+	frm =  frappe.get_doc("Custody request" , request)
 	doc = frappe.db.sql("""  
 
 		SELECT item FROM `tabCustody Request Item` WHERE parent ='%s'
 		"""%request)
-	employee = frappe.db.sql("SELECT reference_document_name FROM `tabCustody request` WHERE name ='%s'"%request)
+	employee = frappe.db.sql("SELECT reference_document_name ,reference_document_type,location FROM `tabCustody request` WHERE name ='%s'"%request)
 
 	data = []
 	data.append([doc])
-	data.append([employee])
+	if frm.reference_document_type  in ["Employee" , "Department"]:
+
+		data.append([employee[0][0]])
+	if frm.reference_document_type == "Project":
+		data.append(frm.employee)
+	data.append([employee[0][1]])
+	if len(employee[0] )> 2 :
+		data.append([employee[0][2]])
+	
+
 	return data
+
+
+@frappe.whitelist()
+def get_department_location(request ,*args ,**kwargs):
+	pass
