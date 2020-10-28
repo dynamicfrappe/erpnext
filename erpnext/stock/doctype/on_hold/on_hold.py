@@ -16,8 +16,9 @@ class OnHold(Document):
 				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
 				ORDER BY `name` DESC Limit 1
 			""".format(item_code = item.item_code , warehouse = item.warehouse) , as_dict=1)
-			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse)
-			if data[0].qty_after_transaction:
+			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse , self.name)
+
+			if not data[0].qty_after_transaction:
 				data[0].qty_after_transaction = 0
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
@@ -30,7 +31,9 @@ class OnHold(Document):
 
 
 @frappe.whitelist()
-def get_item_wharehouse(item,qtyy,*args,**kwargs):
+def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
+	if not name :
+				name = '#'
 	items = []
 	sql = frappe.db.sql("""
 							SELECT   warehouse , qty_after_transaction
@@ -43,34 +46,31 @@ def get_item_wharehouse(item,qtyy,*args,**kwargs):
 
 							GROUP BY item_code , warehouse  """ %(str(item) ,int(qtyy)) , as_dict = 1)
 	qty = float(qtyy)
-	frappe.msgprint ("Sql 28 qtyy - "+ qtyy+" \n"+str(sql))
 	if sql:
 		# case when  one multi warehouse has qty > required qty take first warehouse
 		for record in sql :
-				total_hold_qty = get_holding_qty_in_warehouse(item,record.warehouse)
-				frappe.msgprint("total_hold_qty 32 " + str(total_hold_qty) +"\n warehouse : "+ str(record.warehouse )+ "\ntotal_qty : " + str(record.qty_after_transaction))
+				total_hold_qty = get_holding_qty_in_warehouse(item,record.warehouse , name)
 				if (record.qty_after_transaction-total_hold_qty) >= qty :
 						item_data = {
 						'item_code' : str(item),
 						'warehouse' : sql[0].warehouse,
 						'qty' : float(qtyy)
 						}
-						frappe.msgprint("39 warehouse " + str (record.warehouse) + "  " + str((record.qty_after_transaction-total_hold_qty) ) )
 						items.append(item_data)
 						break
 		if len(items)==0:
-			items=get_Multiple_qty_from_warehouses(item,qtyy)
+			items=get_Multiple_qty_from_warehouses(item,qtyy,name)
 
 	if not sql :
 	    # try:
 		# case when  multi warehouse has qty > required qty
-		items=get_Multiple_qty_from_warehouses(item,qtyy)
+		items=get_Multiple_qty_from_warehouses(item,qtyy,name)
 			
 
 
 	return items
 
-def get_Multiple_qty_from_warehouses(item  , qty):
+def get_Multiple_qty_from_warehouses(item  , qty,name):
 			items = []
 			chech_all_available_stock = frappe.db.sql("""  			SELECT   Sum(qty_after_transaction) as total_qty 
 																	from `tabStock Ledger Entry`  
@@ -80,16 +80,13 @@ def get_Multiple_qty_from_warehouses(item  , qty):
 																	and qty_after_transaction <>0 and item_code = '%s' 	
 
 																	GROUP BY item_code  """%str(item) , as_dict = 1)
-			frappe.msgprint ("chech_all_available_stock 62 \n"+str(chech_all_available_stock))
 			if chech_all_available_stock :
 				total_qty =  (chech_all_available_stock[0].total_qty) or 0
 			else : total_qty = 0	
-			total_hold_qty = get_holding_qty_in_all_warehouse (item)
+			total_hold_qty = get_holding_qty_in_all_warehouse (item,name)
 
 			if not total_qty:
 					total_qty = 0
-
-			frappe.msgprint ("total_qty 85 \n"+str(total_qty))
 
 			if (total_qty-total_hold_qty) >= float(qty):
 
@@ -102,20 +99,18 @@ def get_Multiple_qty_from_warehouses(item  , qty):
 											and qty_after_transaction <>0 and item_code = '%s' AND  qty_after_transaction > 0
 											order by qty_after_transaction desc
 											"""%(str(item)), as_dict = 1 )
-					frappe.msgprint ("sql 67 \n"+str(sql))
 
 					if len(sql) > 0:
 						required_QTY = float(qty)
 
 						for record in sql :
-								total_hold_qty_in_warehouse = get_holding_qty_in_warehouse(item,record.warehouse)
+								total_hold_qty_in_warehouse = get_holding_qty_in_warehouse(item,record.warehouse,name)
 								if (record.qty - total_hold_qty_in_warehouse) >= required_QTY:
 									item_data = {
 													'item_code' : str(item),
 													'warehouse' : record.warehouse,
 													'qty' : float(required_QTY)
 												}
-									frappe.msgprint("108 warehouse " + str (record.warehouse) + "  " + str((record.qty- total_hold_qty_in_warehouse) ) )
 									items.append(item_data)
 									required_QTY = 0
 									break
@@ -126,7 +121,6 @@ def get_Multiple_qty_from_warehouses(item  , qty):
 													'warehouse' : record.warehouse,
 													'qty' : float(record.qty - total_hold_qty_in_warehouse)
 												}
-									frappe.msgprint("108 warehouse " + str (record.warehouse) + "  " + str((record.qty- total_hold_qty_in_warehouse) ) )
 									items.append(item_data)
 									required_QTY -= float((record.qty - total_hold_qty_in_warehouse))
 
@@ -134,7 +128,7 @@ def get_Multiple_qty_from_warehouses(item  , qty):
 							items = []
 			return items
 
-def get_holding_qty_in_warehouse( item , warehouse):
+def get_holding_qty_in_warehouse( item , warehouse , name = '#'):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
 												SELECT
@@ -145,12 +139,12 @@ def get_holding_qty_in_warehouse( item , warehouse):
 													`tabOn Hold` HR
 												ON 
 													HR.`name` = HRI.parent
-													WHERE HR.`status` = 'Open' and HR.docstatus =1
+													WHERE HR.`status` = 'Open' and HR.docstatus =1 and HRI.`parent` != '{name}'
 													GROUP BY HRI.item_code , HRI.warehouse
 													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
 
 											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse),as_dict=1)
+												""".format(item_code = item , warehouse = warehouse , name = name),as_dict=1)
 				if not total_hold_qty_result:
 					total_hold_qty = 0
 				else :
@@ -159,7 +153,7 @@ def get_holding_qty_in_warehouse( item , warehouse):
 						total_hold_qty = 0
 				return total_hold_qty
 
-def get_holding_qty_in_all_warehouse( item ):
+def get_holding_qty_in_all_warehouse( item , name = '#' ):
 
 
 				total_hold_qty = 0
@@ -172,12 +166,12 @@ def get_holding_qty_in_all_warehouse( item ):
 																`tabOn Hold` HR
 															ON 
 																HR.`name` = HRI.parent
-																WHERE HR.`status` = 'Open' and HR.docstatus =1
+																WHERE HR.`status` = 'Open' and HR.docstatus =1 and HRI.`parent` != '{name}'
 																GROUP BY HRI.item_code , HRI.warehouse
 																HAVING 	 HRI.item_code = '{item_code}' 
 
 														     LIMIT 1
-															""".format(item_code = item ),as_dict=1)
+															""".format(item_code = item ,name = name),as_dict=1)
 				if not total_hold_qty_result:
 					total_hold_qty = 0
 				else :

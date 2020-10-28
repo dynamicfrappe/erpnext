@@ -8,7 +8,6 @@ frappe.ui.form.on('On Hold', {
 	onload:(frm) =>{
 			if (frm.doc.docstatus == 0 && !(frm.doc.end_date) )
 			{
-				alert (frm.doc.end_date);
 					frappe.db.get_single_value("Stock Settings", "item_holding_duration").then(duration => {
 						debugger;
 						if (duration == null){ 
@@ -41,7 +40,8 @@ frappe.ui.form.on('On Hold', {
 										method:"erpnext.stock.doctype.on_hold.on_hold.get_item_wharehouse",
 										args:{
 											item :  r.message.items[i].item_code ,
-											qtyy : r.message.items[i].stock_qty
+											qtyy : r.message.items[i].stock_qty ,
+											name : frm.doc.name
 											
 										},
 										callback:function(r){

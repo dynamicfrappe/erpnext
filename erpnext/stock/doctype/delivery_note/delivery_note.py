@@ -115,7 +115,7 @@ class DeliveryNote(SellingController):
 		self.validate_uom_is_integer("stock_uom", "stock_qty")
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_with_previous_doc()
-		self.validate_holding_qty()
+		#self.validate_holding_qty()
 
 		if self._action != 'submit' and not self.is_return:
 			set_batch_nos(self, 'warehouse', True)
@@ -127,10 +127,35 @@ class DeliveryNote(SellingController):
 
 		if not self.installation_status: self.installation_status = 'Not Installed'
 
+	def check_hold_request(self):
+		for item in self.get("items"):
+			warehouse = self.set_warehouse
+			if not warehouse:
+				warehouse = item.warehouse
+			if item.against_sales_order: 
+				hold_request = frappe.db.get_value('On Hold', {'sales_order': item.against_sales_order , 'status' : 'Open'} , ['name'], as_dict=1)
+				frappe.msgprint(str(hold_request.name))
+				if hold_request:
+					hold_request_item = frappe.db.get_value('Ob Hold Items', {'parent':hold_request.name,'item_code': item.item_code , 'warehouse' : warehouse},['name' , 'qty'], as_dict=1)
+					frappe.msgprint(str(hold_request_item.name))
+					if hold_request_item :
+						if item.qty >= hold_request_item.qty :
+							hold_request_item.qty = 0
+						else :
+						    hold_request_item.qty -= item.qty
+						frappe.msgprint(str(hold_request_item))    
+						frappe.db.sql("""update `tabOb Hold Items` set qty = {qty} where `name` = '{name}' """.format(qty = hold_request_item.qty , name = hold_request_item.name))
+
+
+
 
 
 	def validate_holding_qty(self):
 		for item in self.get("items"):
+			warehouse = self.set_warehouse
+			if not warehouse:
+				warehouse = item.warehouse
+
 			allowed_qty = frappe.db.sql("""
 			SELECT 
 		(
@@ -152,11 +177,11 @@ class DeliveryNote(SellingController):
 					LIMIT 1
 		)
 					 as total_qty
-			""".format (item_code = item.item_code , warehouse = self.set_warehouse) , as_dict = 1)
+			""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1)
 			if not allowed_qty[0].total_qty:
 						allowed_qty[0].total_qty = 0
 			if item.qty > allowed_qty[0].total_qty:
-				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = self.set_warehouse)));
+				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = allowed_qty[0].total_qty)));
 				frappe.validated=false;
 				return false
 
@@ -238,6 +263,8 @@ class DeliveryNote(SellingController):
 		# because updating reserved qty in bin depends upon updated delivered qty in SO
 		self.update_stock_ledger()
 		self.make_gl_entries()
+		self.validate_holding_qty()
+		self.check_hold_request()
 
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
