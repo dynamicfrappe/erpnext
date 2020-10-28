@@ -13,7 +13,7 @@ from erpnext.accounts.doctype.sales_invoice.sales_invoice import get_bank_cash_a
 from erpnext.controllers.accounts_controller import AccountsController
 from frappe.utils.csvutils import getlink
 from erpnext.accounts.utils import get_account_currency
-
+from frappe.model.mapper import get_mapped_doc
 class InvalidExpenseApproverError(frappe.ValidationError): pass
 class ExpenseApproverIdentityError(frappe.ValidationError): pass
 
@@ -62,6 +62,10 @@ class ExpenseClaim(AccountsController):
 			self.cost_center = frappe.get_cached_value('Company', self.company, 'cost_center')
 
 	def on_submit(self):
+		if self.reference_name:
+			frappe.db.sql(""" update `tabRequest for expence claim` set status='close' where name='%s' """%str(self.reference_name))
+			
+		
 		if self.approval_status=="Draft":
 			frappe.throw(_("""Approval Status must be 'Approved' or 'Rejected'"""))
 
@@ -259,6 +263,17 @@ class ExpenseClaim(AccountsController):
 			if not expense.default_account or not validate:
 				expense.default_account = get_expense_claim_account(expense.expense_type, self.company)["account"]
 
+
+	
+				
+
+
+
+
+
+
+
+
 def update_reimbursed_amount(doc):
 	amt = frappe.db.sql("""select ifnull(sum(debit_in_account_currency), 0) as amt
 		from `tabGL Entry` where against_voucher_type = 'Expense Claim' and against_voucher = %s
@@ -362,3 +377,44 @@ def get_expense_claim(
 	)
 
 	return expense_claim
+
+@frappe.whitelist()
+def make_expence_claim(source_name, target_doc=None):
+	
+	def update_item(source, target, source_parent):
+		target.expense_date=source.expense_date
+		target.description=source.description
+		target.amount=source.amount
+
+	frm = frappe.get_doc("Request for expence claim" , source_name)
+	expence=frm.expence
+	doc = get_mapped_doc("Request for expence claim", source_name, {
+	"Request for expence claim": {
+	"doctype": "Expense Claim",
+	"validation": {
+	"docstatus": ["=", 1]
+	}
+	},
+	"Request for Expense claim Item": {
+	"doctype": "Expense Claim Detail",
+	"field_map": {
+	"name": "expence",
+	"parent": "request_for_expense_claim_item"
+	},
+	 		
+	"postprocess": update_item
+	}
+	}, target_doc)
+	doc.reference_doctype = "Request for expence claim"
+	doc.reference_name = source_name
+	doc.employee=frm.employee
+  
+	return doc
+
+
+
+
+	
+	
+	
+	
