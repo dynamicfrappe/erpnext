@@ -1,16 +1,17 @@
 {
+ "autoname": "YYYY-HOLD-ITEM-.######",
  "creation": "2020-10-25 13:31:05.002902",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "posting_date",
+  "company",
+  "start_date",
+  "end_date",
   "sales_order",
   "customer",
   "column_break_4",
   "sales_team",
-  "start_date",
-  "end_date",
   "status",
   "data_10",
   "ob_hold_items",
@@ -18,17 +19,13 @@
  ],
  "fields": [
   {
-   "fieldname": "posting_date",
-   "fieldtype": "Date",
-   "label": "posting Date"
-  },
-  {
    "fieldname": "sales_order",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Sales Order",
    "options": "Sales Order",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fetch_from": "sales_order.customer",
@@ -58,15 +55,18 @@
    "options": "Sales Person"
   },
   {
+   "default": "Today",
    "fieldname": "start_date",
    "fieldtype": "Date",
    "label": "Start Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
    "label": "End Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -76,7 +76,7 @@
   {
    "fieldname": "ob_hold_items",
    "fieldtype": "Table",
-   "label": "Ob Hold Items",
+   "label": "Hold Items",
    "options": "Ob Hold Items"
   },
   {
@@ -86,10 +86,17 @@
    "label": "Status",
    "options": "Open\nClose",
    "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-25 14:57:34.706324",
+ "modified": "2020-10-28 11:41:44.840172",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "On Hold",
