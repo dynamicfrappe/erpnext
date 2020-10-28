@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-
+from frappe import _ 
 class Custodyrequest(Document):
 
 
@@ -35,10 +35,10 @@ def create_asset_movement(name , *args,**kwargs):
 		doc = frappe.new_doc('Asset Movement')
 		doc.company = frm.company
 		# doc.purpose = ''
-		if frm.reference_document_type == "Employee" :
-			doc.purpose = 'Issue'
-		else :
+		if frm.reference_document_type == "Department" :
 			doc.purpose = 'Transfer'
+		else :
+			doc.purpose = 'Issue'
 
 		doc.reference_doctype = "Custody request"
 		doc.reference_name = name
