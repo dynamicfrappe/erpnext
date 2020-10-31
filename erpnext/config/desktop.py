@@ -11,7 +11,7 @@ def get_data():
 			"module_name": "Accounts",
 			"category": "Modules",
 			"label": _("Accounting"),
-			"color": "#3498db",
+			"color": "#0e4194",
 			"icon": "octicon octicon-repo",
 			"type": "module",
 			"description": "Accounts, billing, payments, cost center and budgeting."
@@ -20,7 +20,7 @@ def get_data():
 			"module_name": "Selling",
 			"category": "Modules",
 			"label": _("Selling"),
-			"color": "#1abc9c",
+			"color": "#0e4194",
 			"icon": "octicon octicon-tag",
 			"type": "module",
 			"description": "Sales orders, quotations, customers and items."
@@ -29,7 +29,7 @@ def get_data():
 			"module_name": "Buying",
 			"category": "Modules",
 			"label": _("Buying"),
-			"color": "#c0392b",
+			"color": "#0e4194",
 			"icon": "octicon octicon-briefcase",
 			"type": "module",
 			"description": "Purchasing, suppliers, material requests, and items."
@@ -38,7 +38,7 @@ def get_data():
 			"module_name": "Stock",
 			"category": "Modules",
 			"label": _("Stock"),
-			"color": "#f39c12",
+			"color": "#0e4194",
 			"icon": "octicon octicon-package",
 			"type": "module",
 			"description": "Stock transactions, reports, serial numbers and batches."
@@ -47,7 +47,7 @@ def get_data():
 			"module_name": "Assets",
 			"category": "Modules",
 			"label": _("Assets"),
-			"color": "#4286f4",
+			"color": "#0e4194",
 			"icon": "octicon octicon-database",
 			"type": "module",
 			"description": "Asset movement, maintainance and tools."
@@ -56,7 +56,7 @@ def get_data():
 			"module_name": "Projects",
 			"category": "Modules",
 			"label": _("Projects"),
-			"color": "#8e44ad",
+			"color": "#0e4194",
 			"icon": "octicon octicon-rocket",
 			"type": "module",
 			"description": "Updates, Timesheets and Activities."
@@ -65,7 +65,7 @@ def get_data():
 			"module_name": "CRM",
 			"category": "Modules",
 			"label": _("CRM"),
-			"color": "#EF4DB6",
+			"color": "#0e4194",
 			"icon": "octicon octicon-broadcast",
 			"type": "module",
 			"description": "Sales pipeline, leads, opportunities and customers."
@@ -74,7 +74,7 @@ def get_data():
 			"module_name": "Support",
 			"category": "Modules",
 			"label": _("Support"),
-			"color": "#1abc9c",
+			"color": "#0e4194",
 			"icon": "fa fa-check-square-o",
 			"type": "module",
 			"description": "User interactions, support issues and knowledge base."
@@ -83,7 +83,7 @@ def get_data():
 			"module_name": "HR",
 			"category": "Modules",
 			"label": _("Human Resources"),
-			"color": "#2ecc71",
+			"color": "#0e4194",
 			"icon": "octicon octicon-organization",
 			"type": "module",
 			"description": "Employees, attendance, payroll, leaves and shifts."
@@ -92,7 +92,7 @@ def get_data():
 			"module_name": "Quality Management",
 			"category": "Modules",
 			"label": _("Quality"),
-			"color": "#1abc9c",
+			"color": "#0e4194",
 			"icon": "fa fa-check-square-o",
 			"type": "module",
 			"description": "Quality goals, procedures, reviews and action."
@@ -104,7 +104,7 @@ def get_data():
 			"module_name": "Manufacturing",
 			"category": "Domains",
 			"label": _("Manufacturing"),
-			"color": "#7f8c8d",
+			"color": "#0e4194",
 			"icon": "octicon octicon-tools",
 			"type": "module",
 			"description": "BOMS, work orders, operations, and timesheets."
@@ -113,7 +113,7 @@ def get_data():
 			"module_name": "Retail",
 			"category": "Domains",
 			"label": _("Retail"),
-			"color": "#7f8c8d",
+			"color": "#0e4194",
 			"icon": "octicon octicon-credit-card",
 			"type": "module",
 			"description": "Point of Sale and cashier closing."
@@ -122,7 +122,7 @@ def get_data():
 			"module_name": "Education",
 			"category": "Domains",
 			"label": _("Education"),
-			"color": "#428B46",
+			"color": "#0e4194",
 			"icon": "octicon octicon-mortar-board",
 			"type": "module",
 			"description": "Student admissions, fees, courses and scores."
@@ -132,7 +132,7 @@ def get_data():
 			"module_name": "Healthcare",
 			"category": "Domains",
 			"label": _("Healthcare"),
-			"color": "#FF888B",
+			"color": "#0e4194",
 			"icon": "fa fa-heartbeat",
 			"type": "module",
 			"description": "Patient appointments, procedures and tests."
@@ -141,7 +141,7 @@ def get_data():
 			"module_name": "Agriculture",
 			"category": "Domains",
 			"label": _("Agriculture"),
-			"color": "#8BC34A",
+			"color": "#0e4194",
 			"icon": "octicon octicon-globe",
 			"type": "module",
 			"description": "Crop cycles, land areas, soil and plant analysis."
@@ -150,7 +150,7 @@ def get_data():
 			"module_name": "Hotels",
 			"category": "Domains",
 			"label": _("Hotels"),
-			"color": "#EA81E8",
+			"color": "#0e4194",
 			"icon": "fa fa-bed",
 			"type": "module",
 			"description": "Hotel rooms, pricing, reservation and amenities."
@@ -160,7 +160,7 @@ def get_data():
 			"module_name": "Non Profit",
 			"category": "Domains",
 			"label": _("Non Profit"),
-			"color": "#DE2B37",
+			"color": "#0e4194",
 			"icon": "octicon octicon-heart",
 			"type": "module",
 			"description": "Volunteers, memberships, grants and chapters."
@@ -169,7 +169,7 @@ def get_data():
 			"module_name": "Restaurant",
 			"category": "Domains",
 			"label": _("Restaurant"),
-			"color": "#EA81E8",
+			"color": "#0e4194",
 			"icon": "fa fa-cutlery",
 			"_doctype": "Restaurant",
 			"type": "module",
@@ -181,7 +181,7 @@ def get_data():
 			"module_name": "Help",
 			"category": "Administration",
 			"label": _("Learn"),
-			"color": "#FF888B",
+			"color": "#0e4194",
 			"icon": "octicon octicon-device-camera-video",
 			"type": "module",
 			"is_help": True,
