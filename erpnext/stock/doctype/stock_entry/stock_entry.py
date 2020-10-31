@@ -124,7 +124,10 @@ class StockEntry(StockController):
 				if not allowed_qty[0].total_qty:
 						allowed_qty[0].total_qty = 0
 
-				total_hold_qty = get_holding_qty_in_warehouse(item=item.item_code ,  warehouse = item.s_warehouse )
+
+				total_hold_qty = self.get_holding_qty_in_warehouse(item=item.item_code ,  warehouse = item.s_warehouse )
+
+
 				if item.qty > (allowed_qty[0].total_qty-total_hold_qty):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.s_warehouse)));
 					frappe.validated=false;
