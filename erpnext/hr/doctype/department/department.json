@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "creation": "2013-02-05 11:48:26",
@@ -10,6 +9,7 @@
   "department_name",
   "parent_department",
   "company",
+  "location",
   "is_group",
   "disabled",
   "section_break_4",
@@ -120,13 +120,20 @@
    "ignore_user_permissions": 1,
    "label": "Old Parent",
    "print_hide": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Location",
+   "options": "Location",
+   "unique": 1
   }
  ],
  "icon": "fa fa-sitemap",
  "idx": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2020-03-18 18:26:05.966022",
+ "modified": "2020-10-27 13:24:30.314524",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Department",

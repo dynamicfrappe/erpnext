@@ -90,5 +90,21 @@ def get_data():
 					"dependencies": ["Asset Maintenance"]
 				},
 			]
+		},
+		{
+			"label":_("Custody"),
+			"icon": "fa fa-table",
+			"items":[
+				{
+					"type": "doctype",
+					"name": "Assets Return",
+					"onboard": 1
+				},
+				{
+					"type": "doctype",
+					"name": "Custody request",
+					"onboard": 1
+				}
+			]
 		}
 	]

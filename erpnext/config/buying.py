@@ -234,6 +234,17 @@ def get_data():
 					"reference_doctype": "Stock Ledger Entry",
 					"onboard": 1
 				},
+
+
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Supplier Quotation Price List Comparison",
+					"reference_doctype": "Request for Quotation",
+					"onboard": 1
+				},
+
+				
 				{
 					"type": "report",
 					"is_query_report": True,

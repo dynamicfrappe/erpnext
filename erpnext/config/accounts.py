@@ -526,6 +526,12 @@ def get_data():
 					"is_query_report": True,
 					"name": "Address And Contacts",
 					"doctype": "Address"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Purchase Comparison",
+					"doctype": "Purchase Invoice"
 				}
 			]
 		},

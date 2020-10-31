@@ -48,7 +48,11 @@
   "status",
   "amended_from",
   "advance_payments",
-  "advances"
+  "advances",
+  "reference",
+  "reference_doctype",
+  "col1",
+  "reference_name"
  ],
  "fields": [
   {
@@ -362,13 +366,33 @@
    "label": "Total Taxes and Charges",
    "options": "Company:company:default_currency",
    "read_only": 1
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Section Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference Document Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "col1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Document Name",
+   "options": "reference_doctype"
   }
  ],
  "icon": "fa fa-money",
  "idx": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-03-16 18:11:07.861985",
+ "modified": "2020-10-27 16:03:38.870142",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Expense Claim",
