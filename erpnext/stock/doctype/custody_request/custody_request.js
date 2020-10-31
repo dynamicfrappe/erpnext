@@ -25,9 +25,23 @@ frappe.ui.form.on('Custody request', {
 						
 					}).addClass("btn-primary");
 		}
-		if(frm.doc.workflow_state == "Created"  && frm.reference_document_type == "Employee"){
+		if(frm.doc.workflow_state == "Created"  && frm.doc.eference_document_type == "Employee"){
 		frm.add_custom_button(__("Get Employee Custody"), function() {
 			frm.events.get_employee_custody(frm)
+				
+			}).addClass("btn-secondary");}
+
+
+
+		if( frm.doc.workflow_state == "Created"  &&frm.doc.reference_document_type == "Department"){
+		frm.add_custom_button(__("Get Department Custody"), function() {
+			frm.events.get_department_custody(frm)
+				
+			}).addClass("btn-secondary");}
+
+			if( frm.doc.workflow_state == "Created"  &&frm.doc.reference_document_type == "Project"){
+		frm.add_custom_button(__("Get Project Custody"), function() {
+			frm.events.get_project_custody(frm)
 				
 			}).addClass("btn-secondary");}
 	},
@@ -48,6 +62,67 @@ frappe.ui.form.on('Custody request', {
 
 		})
 		
+
+	},
+	get_project_custody:function(frm){
+
+
+		frappe.call({
+			 method: "erpnext.stock.doctype.custody_request.custody_request.get_asset_project",
+        args: {
+           
+            "name": frm.doc.reference_document_name,
+        },
+        callback(r) {
+        	var text = "<b>Project Custody : - "+frm.doc.reference_document_name+" </b>"+"<hr>"+"<ul>"
+                var task = r.message;
+                var totall_custody = 0
+                var i =0 
+                for (i =0 ; i < r.message.length ; i++){
+                	var price = r.message[i][1]
+                	text += "<li><b> Asst : - " + r.message[i][0].toString() + "</b>  <b>" +" | Asset Value :"+ price.toString() + "</b></li>"}
+                	totall_custody += price
+
+                text+= "<hr><b>" + "Project total custody :" +  totall_custody.toString() + "</b> "
+                msgprint(text)
+
+
+
+        }
+
+
+		})
+
+	},
+
+	get_department_custody:function(frm){
+
+
+		frappe.call({
+			 method: "erpnext.stock.doctype.custody_request.custody_request.get_asset_department",
+        args: {
+           
+            "name": frm.doc.reference_document_name,
+        },
+        callback(r) {
+        	var text = "<b>Department Custody : - "+frm.doc.reference_document_name+" </b>"+"<hr>"+"<ul>"
+                var task = r.message;
+                var totall_custody = 0
+                var i =0 
+                for (i =0 ; i < r.message.length ; i++){
+                	var price = r.message[i][1]
+                	text += "<li><b> Asst : - " + r.message[i][0].toString() + "</b>  <b>" +" | Asset Value :"+ price.toString() + "</b></li>"}
+                	totall_custody += price
+
+                text+= "<hr><b>" + "Department total custody :" +  totall_custody.toString() + "</b> "
+                msgprint(text)
+
+
+
+        }
+
+
+		})
 
 	},
 
