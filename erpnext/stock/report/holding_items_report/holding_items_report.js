@@ -40,7 +40,7 @@ frappe.query_reports["Holding Items Report"] = {
 			fieldname: "status",
 			label: __("Status"),
 			fieldtype: "Select",
-			options: ['Open','Close'],
+			options: ['Open','Close','Canceled'],
 			default: 'Open'
 		},
 		{

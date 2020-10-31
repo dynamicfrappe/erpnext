@@ -84,7 +84,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Open\nClose",
+   "options": "Open\nClose\nCanceled",
    "read_only": 1
   },
   {
@@ -96,8 +96,9 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-31 15:58:43.485776",
- "modified_by": "ahmed.saeed89@yahoo.com",
+
+ "modified": "2020-10-31 16:24:41.657664",
+ "modified_by": "Administrator",
  "module": "Stock",
  "name": "On Hold",
  "owner": "Administrator",
