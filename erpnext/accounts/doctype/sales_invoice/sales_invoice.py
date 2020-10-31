@@ -91,7 +91,6 @@ class SalesInvoice(SellingController):
 		self.validate_fixed_asset()
 		self.set_income_account_for_fixed_assets()
 		validate_inter_company_party(self.doctype, self.customer, self.company, self.inter_company_invoice_reference)
-
 		if cint(self.is_pos):
 			self.validate_pos()
 
@@ -135,6 +134,53 @@ class SalesInvoice(SellingController):
 
 		if self.redeem_loyalty_points and self.loyalty_program and self.loyalty_points:
 			validate_loyalty_points(self, self.loyalty_points)
+		self.validate_holding_qty()
+
+	def get_holding_qty_in_warehouse(self, item , warehouse ):
+				total_hold_qty = 0
+				total_hold_qty_result = frappe.db.sql("""
+												SELECT
+												IFNULL(SUM(HRI.qty),0) as total_hold_qty
+												FROM
+												`tabOb Hold Items` HRI
+												INNER JOIN
+													`tabOn Hold` HR
+												ON 
+													HR.`name` = HRI.parent
+													WHERE HR.`status` = 'Open' and HR.docstatus =1 
+													GROUP BY HRI.item_code , HRI.warehouse
+													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
+
+											     LIMIT 1
+												""".format(item_code = item , warehouse = warehouse),as_dict=1)
+				if not total_hold_qty_result:
+					total_hold_qty = 0
+				else :
+					total_hold_qty = total_hold_qty_result[0].total_hold_qty
+					if not total_hold_qty :
+						total_hold_qty = 0
+				return total_hold_qty
+
+
+	def validate_holding_qty(self):
+		if self.update_stock:
+			for item in self.get("items"):
+				if self.set_warehouse:
+					item.warehouse = self.set_warehouse
+				allowed_qty = frappe.db.sql("""
+				
+				SELECT IFNULL(qty_after_transaction,0) as total_qty  from `tabStock Ledger Entry`  
+				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
+				ORDER BY `name` DESC Limit 1		
+			
+				""".format (item_code = item.item_code , warehouse = item.warehouse) , as_dict = 1)
+				if not allowed_qty[0].total_qty:
+						allowed_qty[0].total_qty = 0
+				total_hold_qty = self.get_holding_qty_in_warehouse(item = item.item_code , warehouse = item.warehouse)
+				if item.qty >(allowed_qty[0].total_qty - total_hold_qty):
+					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
+					frappe.validated=false;
+					return false
 
 	def validate_fixed_asset(self):
 		for d in self.get("items"):
