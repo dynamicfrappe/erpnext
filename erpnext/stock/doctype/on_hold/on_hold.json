@@ -96,13 +96,14 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-28 11:41:44.840172",
- "modified_by": "Administrator",
+ "modified": "2020-10-31 15:58:43.485776",
+ "modified_by": "ahmed.saeed89@yahoo.com",
  "module": "Stock",
  "name": "On Hold",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -112,6 +113,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
