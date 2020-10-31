@@ -56,5 +56,14 @@ def get_asset_costudian(name , *args ,**kwargs):
 	return data
 
 
+@frappe.whitelist() 
+def get_asset_department(name , *args ,**kwargs):
+	data = frappe.db.sql("""  SELECT asset_name ,value_after_depreciation FROM `tabAsset` WHERE department = '%s'""" %name)
+	return data
 
 
+
+@frappe.whitelist() 
+def get_asset_project(name , *args ,**kwargs):
+	data = frappe.db.sql("""  SELECT asset_name ,value_after_depreciation FROM `tabAsset` WHERE project = '%s'""" %name)
+	return data
