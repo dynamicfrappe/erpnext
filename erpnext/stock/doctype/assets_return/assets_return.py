@@ -14,19 +14,25 @@ def create_asset_movement(name,*args,**kwargs):
 	frm = frappe.get_doc("Assets Return" , name)
 	doc=frappe.new_doc("Asset Movement")
 	doc.company=frm.company
-	doc.purpose="Receipt"
+	if frm.reference_document_type=="Employee":
+		doc.purpose="Receipt"
+	else:
+		doc.purpose="Transfer"
+
 	
 	for a in frm.custody_request_item:
 		row=doc.append("assets", {})
 		row.asset=a.asset
 		row.target_location=frappe.db.get_value("Company",frm.company,"default_asset_location")
 		if(frm.reference_document_type=="Employee"):
-			row.from_employee=frappe.db.get_value(frm.reference_document_type,frm.reference_document_name,"first_name")
+			row.from_employee=frappe.db.get_value(frm.reference_document_type,frm.reference_document_name,"name")
+
+		elif(frm.reference_document_type=="Project"):
+			row.source_location=frappe.db.get_value(frm.reference_document_type,frm.reference_document_name,"location")
 		else:
-			try:
-				row.source_location=frappe.db.get_value(frm.reference_document_type,frm.reference_document_name,"location")
-			except:
-				print("error")
+			row.source_location=frappe.db.get_value(frm.reference_document_type,frm.reference_document_name,"location")
+
+		
 			
         #row.target_location=frappe.db.get_value("Company", "SKY", "default_asset_location")
 	doc.reference_doctype = "Assets Return"

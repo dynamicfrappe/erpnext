@@ -102,6 +102,27 @@ class AssetMovement(Document):
 
 			final = frappe.db.sql("UPDATE `tabCustody request` SET workflow_state = 'Completed' , docstatus = 1 WHERE name = '%s' "%self.reference_name)
 			frappe.db.commit()
+		if self.reference_doctype == "Assets Return" and self.reference_name != None :
+			asset_return = frappe.get_doc("Assets Return" ,self.reference_name)
+			if asset_return.reference_document_type == "Department"  :
+				
+				for d in self.assets :
+					# frappe.throw(request_custody.reference_document_name)
+					data = frappe.db.sql("UPDATE `tabAsset` SET  department = '',custodian = '' WHERE name ='%s'"%(d.asset))
+					frappe.db.commit()
+			if asset_return.reference_document_type == "Project"  :
+				for d in self.assets :
+					# frappe.throw(request_custody.reference_document_name)
+					data = frappe.db.sql("UPDATE `tabAsset` SET  project = '' WHERE name ='%s'"%(d.asset))
+					frappe.db.commit()
+			if asset_return.reference_document_type == "Employee"  :
+				for d in self.assets :
+					# frappe.throw(request_custody.reference_document_name)
+					data = frappe.db.sql("UPDATE `tabAsset` SET  custodian = '' WHERE name ='%s'"%(d.asset))
+					frappe.db.commit()
+
+			final = frappe.db.sql("UPDATE `tabCustody request` SET docstatus = 1 WHERE name = '%s' "%self.reference_name)
+			frappe.db.commit()
 		self.set_latest_location_in_asset()
 	
 	def before_cancel(self):

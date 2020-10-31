@@ -9,6 +9,7 @@ frappe.ui.form.on('Asset Movement', {
 					company: doc.company
 				}
 			};
+
 		})
 		frm.set_query("from_employee", "assets", (doc) => {
 			return {
@@ -44,10 +45,15 @@ frappe.ui.form.on('Asset Movement', {
 		
 	},
 
-	onload: (frm) => {
-		frm.trigger('set_required_fields');
-	},
+	onload: (frm,cdt,cdn) => {
 
+		frm.trigger('set_required_fields');
+		/*if(frm.doc.reference_doctype=="Assets Return"){
+			console.log("hiiiiiiii")
+		  frm.set_df_property("target_location", "read_only", 1,cdn, 'assets');
+		}*/
+	},
+      
 	purpose: (frm) => {
 		frm.trigger('set_required_fields');
 	},
@@ -131,7 +137,20 @@ frappe.ui.form.on('Asset Movement Item', {
 
 
 },
-	
+	onload: (frm,cdt,cdn) => {
+
+		var local = locals[cdt][cdn]
+		console.log("local.target_location")
+		if(frm.doc.reference_doctype=="Assets Return"){
+				frm.set_query("target_location" , "assets" ,() =>{
+						
+							return{
+								filters:local.target_location }
+						} )
+		  
+		}
+	},
+      
 	
 	assets_add:function(frm,cdt,cdn){
 		var docyment_type =''
@@ -208,3 +227,4 @@ frappe.ui.form.on('Asset Movement Item', {
 
 
 });
+
