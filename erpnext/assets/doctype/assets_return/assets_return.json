@@ -60,7 +60,7 @@
   {
    "fieldname": "custody_request_item",
    "fieldtype": "Table",
-   "label": "Assets",
+   "label": "Stock",
    "options": "custtoreturn assets",
    "reqd": 1
   },
