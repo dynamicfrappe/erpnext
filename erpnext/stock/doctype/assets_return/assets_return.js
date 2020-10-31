@@ -15,10 +15,16 @@ frappe.ui.form.on('Assets Return', {
 
     },
     reference_document_type: (frm) => {
-        if (frm.doc.employee_name) {
-            frm.set_value("employee_name", '')
-        }
-        frm.set_value("reference_document_name", '')
+        	if (frm.doc.reference_document_type ==="Project"){
+   	 		frm.set_df_property("employee" ,"hidden" , 0)
+   			frm.set_query("reference_document_name", function()  {
+			return {
+				filters: {
+					status:"Open"
+				}
+			};
+		})
+   	}
 
     },
     reference_document_name: (frm) => {
@@ -49,6 +55,31 @@ frappe.ui.form.on('Assets Return', {
     },
 
     reference_document_name: function(frm) {
+
+    	 	if (frm.doc.reference_document_type ==="Employee" && frm.doc.reference_document_name.length > 0 ){
+
+   		frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Employee",
+            name: frm.doc.reference_document_name,
+        },
+        callback(r) {
+            if(r.message) {
+                var task = r.message;
+                frm.set_value("employee_name" ,task.employee_name )
+   				frm.refresh_field("employee_name")
+              
+            }
+        }
+    });
+
+
+
+   		
+   		
+
+   	}
       
        frm.fields_dict.custody_request_item.grid.get_field('asset').get_query =
             function() {
@@ -63,7 +94,8 @@ frappe.ui.form.on('Assets Return', {
             	if(frm.doc.reference_document_type=="Project"){
             		return {
                         filters: {
-                            "project": frm.doc.reference_document_name
+                            "project": frm.doc.reference_document_name,
+                            "custodian": frm.doc.employee
 
                         }
                     }
@@ -101,6 +133,8 @@ frappe.ui.form.on('Assets Return', {
  onload:function(frm){
  	
  	frm.clear_table("custody_request_item")
+ 	if (frm.doc.reference_document_type != "Project"){  
+	     	frm.set_df_property("employee" ,"hidden" , 1)}
 
  },
 
