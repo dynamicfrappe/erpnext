@@ -1,5 +1,5 @@
 {
- "autoname": "reference_document_name.-.###",
+ "autoname": "employee_name.-.###",
  "creation": "2020-10-17 16:16:36.085564",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -9,13 +9,9 @@
   "reference_document_type",
   "reference_document_name",
   "employee_name",
-  "location",
   "column_break_3",
+  "company",
   "required_date",
-  "department",
-  "employee",
-  "full_nameemployee",
-  "deliver_to",
   "section_break_7",
   "custody_request_item",
   "amended_from"
@@ -71,53 +67,23 @@
    "fieldname": "reference_document_type",
    "fieldtype": "Link",
    "label": "Reference Document Type",
-   "options": "DocType",
-   "reqd": 1
+   "options": "DocType"
   },
   {
-   "depends_on": "reference_document_type",
    "fieldname": "reference_document_name",
    "fieldtype": "Dynamic Link",
    "label": "Reference Document Name",
-   "options": "reference_document_type",
-   "reqd": 1
+   "options": "reference_document_type"
   },
   {
-   "fieldname": "department",
+   "fieldname": "company",
    "fieldtype": "Link",
-   "label": "Department",
-   "options": "Department",
-   "read_only": 1
-  },
-  {
-   "fieldname": "location",
-   "fieldtype": "Link",
-   "label": "Location",
-   "options": "Location",
-   "read_only": 1
-  },
-  {
-   "fieldname": "deliver_to",
-   "fieldtype": "Data",
-   "label": "Deliver To"
-  },
-  {
-   "fieldname": "employee",
-   "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee"
-  },
-  {
-   "depends_on": "employee",
-   "fetch_from": "employee.employee_name",
-   "fieldname": "full_nameemployee",
-   "fieldtype": "Data",
-   "label": "Employee Full Name",
-   "read_only": 1
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-28 11:41:12.353707",
+ "modified": "2020-10-31 10:26:11.629121",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Custody request",
