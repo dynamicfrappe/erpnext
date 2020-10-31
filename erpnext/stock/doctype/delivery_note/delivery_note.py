@@ -147,7 +147,7 @@ class DeliveryNote(SellingController):
 						frappe.db.sql("""update `tabOb Hold Items` set qty = {qty} where `name` = '{name}' """.format(qty = hold_request_item.qty , name = hold_request_item.name))
 
 
-	def get_holding_qty_in_warehouse( item , warehouse ):
+	def get_holding_qty_in_warehouse(self, item , warehouse ):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
 												SELECT
@@ -647,3 +647,4 @@ def make_sales_return(source_name, target_doc=None):
 def update_delivery_note_status(docname, status):
 	dn = frappe.get_doc("Delivery Note", docname)
 	dn.update_status(status)
+
