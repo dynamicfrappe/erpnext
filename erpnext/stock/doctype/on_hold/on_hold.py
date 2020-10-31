@@ -24,6 +24,12 @@ class OnHold(Document):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
 					frappe.validated=false;
 					return false
+
+	def on_cancel(self):
+		self.status = 'Canceled'
+		frappe.db.sql("""	update `tabOn Hold`
+						set `status` = 'Canceled'
+						where `tabOn Hold`.`name` = '{name}'""".format(name=self.name))
 			
 
 
