@@ -194,8 +194,11 @@
    "fieldtype": "Column Break"
   },
   {
+   "columns": 1,
    "fieldname": "uom",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
    "label": "UOM",
    "options": "UOM",
    "reqd": 1
@@ -258,7 +261,7 @@
   },
   {
    "bold": 1,
-   "columns": 3,
+   "columns": 2,
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -778,7 +781,7 @@
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2020-06-30 16:48:01.398356",
+ "modified": "2020-11-02 11:48:22.209609",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Invoice Item",
