@@ -26,8 +26,10 @@ from erpnext.accounts.doctype.loyalty_program.loyalty_program import \
 from erpnext.accounts.deferred_revenue import validate_service_stop_date
 
 from erpnext.healthcare.utils import manage_invoice_submit_cancel
-
+from frappe.social.doctype.energy_point_settings.energy_point_settings import is_energy_point_enabled
 from six import iteritems
+import datetime
+from datetime import datetime, timedelta,date
 
 form_grid_templates = {
 	"items": "templates/form_grid/item_grid.html"
@@ -91,6 +93,7 @@ class SalesInvoice(SellingController):
 		self.validate_fixed_asset()
 		self.set_income_account_for_fixed_assets()
 		validate_inter_company_party(self.doctype, self.customer, self.company, self.inter_company_invoice_reference)
+
 		if cint(self.is_pos):
 			self.validate_pos()
 
@@ -134,55 +137,6 @@ class SalesInvoice(SellingController):
 
 		if self.redeem_loyalty_points and self.loyalty_program and self.loyalty_points:
 			validate_loyalty_points(self, self.loyalty_points)
-		self.validate_holding_qty()
-
-	def get_holding_qty_in_warehouse(self, item , warehouse ):
-				total_hold_qty = 0
-				total_hold_qty_result = frappe.db.sql("""
-												SELECT
-												IFNULL(SUM(HRI.qty),0) as total_hold_qty
-												FROM
-												`tabOb Hold Items` HRI
-												INNER JOIN
-													`tabOn Hold` HR
-												ON 
-													HR.`name` = HRI.parent
-													WHERE HR.`status` = 'Open' and HR.docstatus =1 
-													GROUP BY HRI.item_code , HRI.warehouse
-													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
-
-											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse),as_dict=1)
-				if not total_hold_qty_result:
-					total_hold_qty = 0
-				else :
-					total_hold_qty = total_hold_qty_result[0].total_hold_qty
-					if not total_hold_qty :
-						total_hold_qty = 0
-				return total_hold_qty
-
-
-	def validate_holding_qty(self):
-		if self.update_stock:
-			for item in self.get("items"):
-				if self.set_warehouse:
-					item.warehouse = self.set_warehouse
-				allowed_qty = frappe.db.sql("""
-				
-				SELECT IFNULL(qty_after_transaction,0) as total_qty  from `tabStock Ledger Entry`  
-				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
-				ORDER BY `name` DESC Limit 1		
-			
-				""".format (item_code = item.item_code , warehouse = item.warehouse) , as_dict = 1)
-				if not allowed_qty[0].total_qty:
-						allowed_qty[0].total_qty = 0
-				total_hold_qty = self.get_holding_qty_in_warehouse(item = item.item_code , warehouse = item.warehouse)
-
-
-				if item.qty >(allowed_qty[0].total_qty - total_hold_qty):
-					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
-					frappe.validated=false;
-					return false
 
 	def validate_fixed_asset(self):
 		for d in self.get("items"):
@@ -198,7 +152,32 @@ class SalesInvoice(SellingController):
 	def before_save(self):
 		set_account_for_mode_of_payment(self)
 
+	def check_invoice(self):
+		invoices=frappe.db.sql("""select * from `tabSales Invoice` where status!='Paid'""",as_dict=1)
+		doc=frappe.new_doc("ToDo")
+		doc.description=""""""
+		index=0
+		flag=False
+		while index <len(invoices):
+			if invoices[index]["due_date"]>=( date.today()-timedelta(7)):
+				doc.description+="""sales invoice :{} due date is  {} :\n""".format(str(invoices[index]["name"]),str(invoices[index]["due_date"]))
+				flag=True
+			index+=1
+
+		
+		if flag:
+			doc.role="Sales User"
+			doc.status="Open"
+			doc.priority="High"
+			doc.date=date.today()
+			#doc.docstatus=1
+			doc.save()
+
+
+		
+
 	def on_submit(self):
+		
 		self.validate_pos_paid_amount()
 
 		if not self.auto_repeat:
@@ -987,6 +966,9 @@ class SalesInvoice(SellingController):
 				)
 			else:
 				frappe.throw(_("Select change amount account"), title="Mandatory Field")
+
+
+
 
 	def make_write_off_gl_entry(self, gl_entries):
 		# write off entries, applicable if only pos

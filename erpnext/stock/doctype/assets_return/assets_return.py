@@ -14,8 +14,7 @@ def create_asset_movement(name,*args,**kwargs):
 	frm = frappe.get_doc("Assets Return" , name)
 	doc=frappe.new_doc("Asset Movement")
 	doc.company=frm.company
-	
-	if frm.reference_document_type=="Employee":
+	if frm.reference_document_type == "Employee":
 		doc.purpose="Receipt"
 	
 
