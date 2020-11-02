@@ -134,7 +134,6 @@ class DeliveryNote(SellingController):
 				warehouse = item.warehouse
 			if item.against_sales_order: 
 				hold_request = frappe.db.get_value('On Hold', {'sales_order': item.against_sales_order , 'status' : 'Open'} , ['name'], as_dict=1)
-				frappe.msgprint(str(hold_request.name))
 				if hold_request:
 					hold_request_item = frappe.db.get_value('Ob Hold Items', {'parent':hold_request.name,'item_code': item.item_code , 'warehouse' : warehouse},['name' , 'qty'], as_dict=1)
 					frappe.msgprint(str(hold_request_item.name))
