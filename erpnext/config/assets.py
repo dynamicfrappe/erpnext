@@ -89,6 +89,12 @@ def get_data():
 					"doctype": "Asset Maintenance",
 					"dependencies": ["Asset Maintenance"]
 				},
+				{
+					"type": "report",
+					"name": "Fixed Asset Register",
+					"doctype": "Asset",
+					"is_query_report": True,
+				},
 			]
 		},
 		{
