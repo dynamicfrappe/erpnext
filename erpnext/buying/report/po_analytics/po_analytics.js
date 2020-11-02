@@ -3,7 +3,22 @@
 /* eslint-disable */
 
 frappe.query_reports["po analytics"] = {
-	"filters": [
+    "filters": [
 
-	]
+      {
+			"fieldname":"PurchaseOrder",
+			"label": __("PurchaseOrder"),
+			"fieldtype": "Link",
+			"options":"Purchase Order"
+
+		},
+		{
+			"fieldname":"Date",
+			"label": __("Date"),
+			"fieldtype": "Date"
+			
+
+		},
+
+    ]
 };
