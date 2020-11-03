@@ -121,11 +121,12 @@ frappe.ui.form.on('Assets Return', {
 
 
 
-
+        if(frm.doc.workflow_state == (__("Stock Audit Agreement"))){
         frm.add_custom_button(__("Create Asset Movement"), function() {
             frm.events.create_asset_movement(frm)
 
         }).addClass("btn-primary");
+      }
     },
 
 
