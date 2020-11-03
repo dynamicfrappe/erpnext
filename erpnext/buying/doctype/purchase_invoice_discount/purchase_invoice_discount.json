@@ -1,0 +1,47 @@
+{
+ "creation": "2020-11-03 12:30:47.786259",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "name1",
+  "account",
+  "value"
+ ],
+ "fields": [
+  {
+   "fieldname": "name1",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Name",
+   "options": "Discount Note"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "value"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-11-03 14:43:45.560674",
+ "modified_by": "Administrator",
+ "module": "Buying",
+ "name": "Purchase invoice Discount",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

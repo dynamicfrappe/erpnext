@@ -100,6 +100,9 @@
   "column_break_46",
   "additional_discount_percentage",
   "discount_amount",
+  "discount_note_section",
+  "discount_note_table",
+  "total_discount_from_note",
   "section_break_49",
   "base_grand_total",
   "base_rounding_adjustment",
@@ -111,6 +114,7 @@
   "rounded_total",
   "in_words",
   "total_advance",
+  "total_discount_note",
   "outstanding_amount",
   "disable_rounded_total",
   "payments_section",
@@ -1291,10 +1295,10 @@
    "fieldtype": "Column Break"
   },
   {
-    "fieldname": "project",
-    "fieldtype": "Link",
-    "label": "Project",
-    "options": "Project"
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
   },
   {
    "fieldname": "tax_withholding_category",
@@ -1303,12 +1307,38 @@
    "label": "Tax Withholding Category",
    "options": "Tax Withholding Category",
    "print_hide": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "discount_note_section",
+   "fieldtype": "Section Break",
+   "label": "Discount Note",
+   "read_only": 1
+  },
+  {
+   "fieldname": "discount_note_table",
+   "fieldtype": "Table",
+   "label": "Discount Note Table",
+   "options": "Purchase invoice Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_discount_from_note",
+   "fieldtype": "Currency",
+   "label": "Total Discount from Note",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_discount_note",
+   "fieldtype": "Currency",
+   "label": "Total Discount Note ",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 204,
  "is_submittable": 1,
- "modified": "2020-09-21 12:22:09.164068",
+ "modified": "2020-11-03 18:48:57.057863",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Invoice",
