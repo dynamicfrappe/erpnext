@@ -10,6 +10,7 @@
   "employee_name",
   "col1",
   "company",
+  "employee",
   "date",
   "section_break_7",
   "custody_request_item",
@@ -50,7 +51,7 @@
   {
    "fieldname": "custody_request_item",
    "fieldtype": "Table",
-   "label": "Stock",
+   "label": "Assets",
    "options": "custtoreturn assets",
    "reqd": 1
   },
@@ -59,7 +60,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Custody request",
+   "options": "Assets Return",
    "print_hide": 1,
    "read_only": 1
   },
@@ -68,7 +69,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Custody request",
+   "options": "Assets Return",
    "print_hide": 1,
    "read_only": 1
   },
@@ -81,10 +82,16 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-31 14:07:46.508227",
+ "modified": "2020-11-03 10:50:13.341093",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Assets Return",
