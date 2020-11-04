@@ -13,12 +13,21 @@ frappe.query_reports["po analytics"] = {
 
 		},
 		{
-			"fieldname":"Date",
-			"label": __("Date"),
+			"fieldname":"fromDate",
+			"label": __("From Date"),
 			"fieldtype": "Date"
 			
 
 		},
+
+			{
+			"fieldname":"toDate",
+			"label": __("To Date"),
+			"fieldtype": "Date"
+			
+
+		},
+
 
     ]
 };
