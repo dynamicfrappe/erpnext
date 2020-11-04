@@ -635,13 +635,16 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 @frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
+
 	def postprocess(source, target):
+
 		set_missing_values(source, target)
 		#Get the advance paid Journal Entries in Sales Invoice Advance
 		if target.get("allocate_advances_automatically"):
 			target.set_advances()
 
 	def set_missing_values(source, target):
+		target.revenue_margin = flt(source.revenue_margin)
 		target.ignore_pricing_rule = 1
 		target.flags.ignore_permissions = True
 		target.run_method("set_missing_values")

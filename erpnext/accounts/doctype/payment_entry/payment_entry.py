@@ -15,7 +15,7 @@ from erpnext.hr.doctype.expense_claim.expense_claim import update_reimbursed_amo
 from erpnext.accounts.doctype.bank_account.bank_account import get_party_bank_account, get_bank_account_details
 from erpnext.controllers.accounts_controller import AccountsController, get_supplier_block_status
 from erpnext.accounts.doctype.invoice_discounting.invoice_discounting import get_party_account_based_on_invoice_discounting
-
+from datetime import date
 from six import string_types, iteritems
 
 class InvalidPaymentEntry(ValidationError):
@@ -74,7 +74,10 @@ class PaymentEntry(AccountsController):
 		self.update_expense_claim()
 		self.update_payment_schedule()
 		self.set_status()
-
+		try:
+			self.send_notification_sales_team()
+		except:
+			pass
 	def on_cancel(self):
 		self.setup_party_account_field()
 		self.make_gl_entries(cancel=1)
@@ -85,6 +88,37 @@ class PaymentEntry(AccountsController):
 		self.update_payment_schedule(cancel=1)
 		self.set_payment_req_status()
 		self.set_status(update=True)
+
+	def send_notification_sales_team(self):
+
+		for reference in self.get("references"):
+			if reference.reference_doctype == 'Sales Invoice':
+				#doc=frappe.new_doc("ToDo")
+				#doc.description=_("Sales Invoice No {0} has new Payment entry".format(reference.reference_name))
+				#doc.role="Sales User"
+				#doc.reference_type = reference.reference_doctype
+				#doc.reference_name = reference.reference_name
+				#doc.status="Open"
+				#doc.priority="High"
+				#doc.date=date.today()
+				#doc.docstatus=1
+				#doc.save()
+				sales_team = frappe.db.sql("""
+						select user.`name` , user.email from `tabSales Team` team
+					    inner join `tabSales Person` person on person.name = team.sales_person
+					    inner join `tabEmployee` employee on employee.name = person.employee
+					    inner join `tabUser` user on employee.user_id = user.name
+					    where team.parent = %s
+					""",(reference.reference_name) ,as_dict = 1)
+				for user in sales_team:
+							_doc = frappe.new_doc('Notification Log')
+							_doc.document_type= 'Payment Entry'
+							_doc.document_name = self.name
+							_doc.for_user = user.name
+							_doc.subject = _("Sales Invoice No {0} has new Payment entry".format(reference.reference_name))
+							_doc.insert(ignore_permissions=True)
+
+
 
 	def set_payment_req_status(self):
 		from erpnext.accounts.doctype.payment_request.payment_request import update_payment_req_status
