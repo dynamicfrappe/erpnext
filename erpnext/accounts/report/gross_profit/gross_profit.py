@@ -12,7 +12,6 @@ from frappe.utils import flt, cint
 def execute(filters=None):
 	if not filters: filters = frappe._dict()
 	filters.currency = frappe.get_cached_value('Company',  filters.company,  "default_currency")
-
 	gross_profit_data = GrossProfitGenerator(filters)
 
 	data = []
@@ -91,6 +90,55 @@ def get_columns(group_wise_columns, filters):
 
 	return columns
 
+@frappe.whitelist()
+def get_gross_profit(invoice,company,posting_date):
+	filters_temp = {
+				"company" : company,
+				"sales_invoice": invoice,
+				"from_date":posting_date,
+				"to_date":posting_date,
+				'group_by': 'Invoice',
+				'currency': 'EGP'
+			}
+	filters = frappe._dict(filters_temp)
+	gross_profit_data = GrossProfitGenerator(filters)
+
+	data = []
+
+	group_wise_columns = frappe._dict({
+		"invoice": ["parent", "customer", "customer_group", "posting_date","item_code", "item_name","item_group", "brand", "description", \
+			"warehouse", "qty", "base_rate", "buying_rate", "base_amount",
+			"buying_amount", "gross_profit", "gross_profit_percent", "project"],
+		"item_code": ["item_code", "item_name", "brand", "description", "qty", "base_rate",
+			"buying_rate", "base_amount", "buying_amount", "gross_profit", "gross_profit_percent"],
+		"warehouse": ["warehouse", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"brand": ["brand", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"item_group": ["item_group", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"customer": ["customer", "customer_group", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"customer_group": ["customer_group", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"sales_person": ["sales_person", "allocated_amount", "qty", "base_rate", "buying_rate", "base_amount", "buying_amount",
+			"gross_profit", "gross_profit_percent"],
+		"project": ["project", "base_amount", "buying_amount", "gross_profit", "gross_profit_percent"],
+		"territory": ["territory", "base_amount", "buying_amount", "gross_profit", "gross_profit_percent"]
+	})
+
+
+	for src in gross_profit_data.grouped_data:
+		row = []
+		for col in group_wise_columns.get(scrub(filters.group_by)):
+			row.append(src.get(col))
+
+		row.append(filters.currency)
+		data.append(row)
+	if data :
+			for i in data:
+				return i
+	return data
 class GrossProfitGenerator(object):
 	def __init__(self, filters=None):
 		self.data = []
@@ -361,3 +409,6 @@ class GrossProfitGenerator(object):
 	def load_non_stock_items(self):
 		self.non_stock_items = frappe.db.sql_list("""select name from tabItem
 			where is_stock_item=0""")
+
+
+
