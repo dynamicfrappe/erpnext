@@ -60,7 +60,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Assets Return",
+   "options": "Custody request",
    "print_hide": 1,
    "read_only": 1
   },
@@ -69,7 +69,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Assets Return",
+   "options": "Custody request",
    "print_hide": 1,
    "read_only": 1
   },
@@ -91,11 +91,7 @@
   }
  ],
  "is_submittable": 1,
-<<<<<<< HEAD
- "modified": "2020-11-03 10:50:13.341093",
-=======
  "modified": "2020-10-31 12:26:47.366762",
->>>>>>> 2f0786fc774e2c1f703bbc7b9d4ca1bc021c1eee
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Assets Return",

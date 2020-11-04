@@ -111,7 +111,7 @@ class StockEntry(StockController):
 
 	def validate_holding_qty(self):
 
-		if self.stock_entry_type not in ['Material Receipt','Repack','Receive at Warehouse']:
+		if self.stock_entry_type not in ['Material Receipt','Repack','Receive at Warehouse' ,'Manufacture']:
 			for item in self.get("items"):
 				allowed_qty = frappe.db.sql("""
 				
