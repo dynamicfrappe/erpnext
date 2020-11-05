@@ -32,7 +32,7 @@ def get_columns(filters):
 		},
 			{
 			"label": _("Project"),
-			"fieldname": "Project",
+			"fieldname": "project",
 			"fieldtype": "Link",
 			"options":"Project",
 			"width": 150
