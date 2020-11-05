@@ -62,7 +62,7 @@ frappe.ui.form.on("Sales Order", {
 	},
 	check_customer_credit: function(frm) {
         var text = ""
-       if (frm.customer) {
+       if (frm.doc.customer) {
        	 frappe.call({
             method: "erpnext.selling.doctype.sales_order.sales_order.get_customer_credit",
             args: {
@@ -93,7 +93,7 @@ frappe.ui.form.on("Sales Order", {
 
     Items_stock_in_hand: function(frm) {
         var text = "item name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp Quantity"
-         if(frm.items){
+         if(frm.doc.items){
          	     frappe.call({
         	'doc':frm.doc,
             'method': "Items_stock_in_hand",
