@@ -66,7 +66,7 @@ class StockEntry(StockController):
 		self.validate_difference_account()
 		self.set_job_card_data()
 		self.set_purpose_for_stock_entry()
-		self.validate_holding_qty()
+		#self.validate_holding_qty()
 
 		if not self.from_bom:
 			self.fg_completed_qty = 0.0

@@ -1,0 +1,28 @@
+{
+ "add_total_row": 1,
+ "creation": "2020-11-04 13:49:27.036870",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "CF",
+ "modified": "2020-11-04 13:49:33.742690",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Company Loans Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Company Loans",
+ "report_name": "Company Loans Report",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Administrator"
+  }
+ ]
+}

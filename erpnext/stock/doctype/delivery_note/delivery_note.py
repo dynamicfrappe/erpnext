@@ -270,8 +270,9 @@ class DeliveryNote(SellingController):
 		# because updating reserved qty in bin depends upon updated delivered qty in SO
 		self.update_stock_ledger()
 		self.make_gl_entries()
-		self.validate_holding_qty()
-		self.check_hold_request()
+		#self.validate_holding_qty()
+		#self.check_hold_request()
+
 
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()

@@ -56,8 +56,10 @@ def get_data(filters):
 	condition=""
 	if filters.get("PurchaseOrder"):
 		condition +="AND `tabPurchase Order`.name = '%s'"%filters.get("PurchaseOrder")
-	if filters.get("Date"):
-		condition += " AND `tabPurchase Order`.creation = '%s' "%filters.get("Date")
+	if filters.get("fromDate"):
+		condition += " AND `tabPurchase Order`.schedule_date >= '%s' "%filters.get("fromDate")
+	if filters.get("toDate"):
+		condition += " AND `tabPurchase Order`.schedule_date <= '%s' "%filters.get("toDate")
 	
 	results=frappe.db.sql("""
 	            select `tabPurchase Order`.name as 'PurchaseOrderName',
@@ -69,7 +71,7 @@ def get_data(filters):
                    `tabPurchase Order`
                 inner join
                 `tabPurchase Invoice`
-                on `tabPurchase Order`.name=`tabPurchase Invoice`.parent
+                on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where parent=`tabPurchase Invoice`.name limit 1)
 				where 1=1
                   {condition}
 				
@@ -86,7 +88,7 @@ def get_data(filters):
                    `tabPurchase Order`
                 inner join
                 `tabPurchase Receipt`
-                on `tabPurchase Order`.name=`tabPurchase Receipt`.parent
+                 on `tabPurchase Order`.name=(select `tabPurchase Receipt Item`.purchase_order from `tabPurchase Receipt Item` where parent=`tabPurchase Receipt`.name limit 1)
 				where 1=1
 
                   {condition}
