@@ -115,8 +115,10 @@ class DeliveryNote(SellingController):
 		self.validate_uom_is_integer("stock_uom", "stock_qty")
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_with_previous_doc()
-		#self.validate_holding_qty()
-
+		try:
+			self.validate_holding_qty()
+		except:
+				pass
 		if self._action != 'submit' and not self.is_return:
 			set_batch_nos(self, 'warehouse', True)
 
@@ -162,7 +164,7 @@ class DeliveryNote(SellingController):
 													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
 
 											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse),as_dict=1)
+												""".format(item_code = item , warehouse = warehouse),as_dict=1) or 0
 				if not total_hold_qty_result:
 					total_hold_qty = 0
 				else :
@@ -183,12 +185,15 @@ class DeliveryNote(SellingController):
 				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
 				ORDER BY `name` DESC Limit 1		
 		
-					""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1)
-			if not allowed_qty[0].total_qty:
-						allowed_qty[0].total_qty = 0
+					""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1) or 0
+			qty_warehouse = 0
+			if not allowed_qty:
+					if len(allowed_qty) > 0:
+						if  allowed_qty[0].total_qty:
+							qty_warehouse = allowed_qty[0].total_qty
 			total_hold_qty = self.get_holding_qty_in_warehouse(item = item.item_code , warehouse = warehouse )
-			if item.qty > (allowed_qty[0].total_qty - total_hold_qty):
-				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = allowed_qty[0].total_qty)));
+			if item.qty > (qty_warehouse- total_hold_qty):
+				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
 				frappe.validated=false;
 				return false
 
@@ -270,8 +275,15 @@ class DeliveryNote(SellingController):
 		# because updating reserved qty in bin depends upon updated delivered qty in SO
 		self.update_stock_ledger()
 		self.make_gl_entries()
-		#self.validate_holding_qty()
-		self.check_hold_request()
+		try:
+			self.validate_holding_qty()
+		except:
+			pass
+		try:
+			self.check_hold_request()
+		except:
+			pass
+
 
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
