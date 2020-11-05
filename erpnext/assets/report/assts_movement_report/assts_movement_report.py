@@ -76,22 +76,23 @@ def get_data(filters):
 				SELECT
 			tabAsset.`name` as 'asset_name',
 			tabEmployee.`employee_name` as 'employee',
-			COALESCE(tabAsset.`value_after_depreciation`,tabAsset.`gross_purchase_amount`) as 'value',
+			greatest(tabAsset.`value_after_depreciation`,tabAsset.`gross_purchase_amount`) as 'value',
             tabAsset.project as 'project',
             tabAsset.department as 'department'
 		    FROM
 			tabAsset
             	LEFT JOIN
 			tabEmployee
-         	on
-	        tabAsset.`custodian`=tabEmployee.employee
-		      WHERE (
+	       on
+	       tabAsset.`custodian`=tabEmployee.employee
+		    WHERE (
                       (tabAsset.custodian is not null and tabAsset.custodian !='')
                       or
                      ( tabAsset.project is not null and  tabAsset.project!='')
                       or
                      ( tabAsset.department is not null and tabAsset.department!='')
-                  )
+                  );
+
 
 			{condition}
 	""".format(condition=condition) ,as_dict=1)
