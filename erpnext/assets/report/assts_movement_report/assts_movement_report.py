@@ -75,14 +75,12 @@ def get_data(filters):
 	results=frappe.db.sql("""  
 			SELECT
 			tabAsset.`name` as 'asset_name',
-			tabEmployee.`employee_name` as 'employee',
+			tabEmployee.`custodian` as 'employee',
 			tabAsset.value_after_depreciation as value,
             tabAsset.project as 'project',
             tabAsset.department as 'department'
 		    FROM
 			tabAsset
-			INNER JOIN
-			tabEmployee
 
 		    WHERE (
                       (tabAsset.custodian is not null and tabAsset.custodian !='')
@@ -96,4 +94,5 @@ def get_data(filters):
 	""".format(condition=condition) ,as_dict=1)
 
 	return results
+
 
