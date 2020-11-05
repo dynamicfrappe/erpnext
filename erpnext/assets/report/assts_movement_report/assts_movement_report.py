@@ -24,6 +24,12 @@ def get_columns(filters):
 			"width": 150
 		},
 		{
+			"label": _("serial number"),
+			"fieldname": "serialNumber",
+			"fieldtype": "Data",
+			"width": 150
+		},
+		{
 			"label": _("Employee"),
 			"fieldname": "employee",
 			"fieldtype": "Link",
@@ -75,6 +81,7 @@ def get_data(filters):
 	results=frappe.db.sql("""  
 				SELECT
 			tabAsset.`name` as 'asset_name',
+			tabAsset.`asset_serial_number` as 'serialNumber',
 			tabEmployee.`employee_name` as 'employee',
 			greatest(tabAsset.`value_after_depreciation`,tabAsset.`gross_purchase_amount`) as 'value',
             tabAsset.project as 'project',
