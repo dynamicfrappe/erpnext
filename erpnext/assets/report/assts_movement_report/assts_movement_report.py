@@ -75,7 +75,7 @@ def get_data(filters):
 	results=frappe.db.sql("""  
 			SELECT
 			tabAsset.`name` as 'asset_name',
-			tabEmployee.`custodian` as 'employee',
+			tabAsset.`custodian` as 'employee',
 			tabAsset.value_after_depreciation as value,
             tabAsset.project as 'project',
             tabAsset.department as 'department'
