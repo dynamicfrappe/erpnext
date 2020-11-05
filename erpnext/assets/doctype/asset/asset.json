@@ -22,6 +22,7 @@
   "company",
   "location",
   "custodian",
+  "custdian_name",
   "department",
   "project",
   "purchase_date",
@@ -463,12 +464,20 @@
    "label": "Project",
    "options": "Project",
    "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "custodian.employee_name",
+   "fieldname": "custdian_name",
+   "fieldtype": "Data",
+   "label": "Custdian Name",
+   "read_only": 1
   }
  ],
  "idx": 72,
  "image_field": "image",
  "is_submittable": 1,
- "modified": "2020-10-28 11:58:11.432310",
+ "modified": "2020-11-05 14:46:16.262370",
  "modified_by": "Administrator",
  "module": "Assets",
  "name": "Asset",
