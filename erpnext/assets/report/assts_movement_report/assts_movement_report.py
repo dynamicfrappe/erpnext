@@ -68,7 +68,7 @@ def get_data(filters):
 	if filters.get("Project"):
 		condition += " AND tabAsset.project = '%s' "%filters.get("Project")
 	if filters.get("Department"):
-		condition += " AND tabAsset.department = '%s' "%filters.get("department")
+		condition += " AND tabAsset.department = '%s' "%filters.get("Department")
 
 
 	print(condition)
