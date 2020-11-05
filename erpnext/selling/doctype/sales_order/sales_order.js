@@ -93,7 +93,8 @@ frappe.ui.form.on("Sales Order", {
 
     Items_stock_in_hand: function(frm) {
         var text = "item name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp Quantity"
-        frappe.call({
+         if(frm.items){
+         	     frappe.call({
         	'doc':frm.doc,
             'method': "Items_stock_in_hand",
             args: {
@@ -117,6 +118,9 @@ frappe.ui.form.on("Sales Order", {
 
                 }
             })
+         	 }else{
+         	 	alert("please enter items")
+         	 }
         
     },
 
@@ -760,3 +764,4 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 	}
 });
 $.extend(cur_frm.cscript, new erpnext.selling.SalesOrderController({frm: cur_frm}));
+
