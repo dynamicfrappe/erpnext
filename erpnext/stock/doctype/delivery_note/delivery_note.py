@@ -285,6 +285,7 @@ class DeliveryNote(SellingController):
 			pass
 
 
+
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
 

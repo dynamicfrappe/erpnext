@@ -264,6 +264,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Discount Note",
+					"description": _("Discount Note.")
+				},
+				{
+					"type": "doctype",
 					"name": "Item Tax Template",
 					"description": _("Tax template for item tax rates.")
 				},

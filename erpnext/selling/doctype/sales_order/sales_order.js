@@ -36,7 +36,7 @@ frappe.ui.form.on("Sales Order", {
 		})
 	},
 	refresh: function(frm) {
-		 if (frm.doc.docstatus ===0) {
+		 
 		 	frm.add_custom_button(__("Check customer credit"), function() {
                 frm.events.check_customer_credit(frm)
                 
@@ -46,7 +46,7 @@ frappe.ui.form.on("Sales Order", {
                 frm.events.Items_stock_in_hand(frm)
 
             }).addClass("btn-primary");
-		 }
+
 		if(frm.doc.docstatus === 1 && frm.doc.status !== 'Closed'
 			&& flt(frm.doc.per_delivered, 6) < 100 && flt(frm.doc.per_billed, 6) < 100) {
 			frm.add_custom_button(__('Update Items'), () => {
@@ -62,7 +62,8 @@ frappe.ui.form.on("Sales Order", {
 	},
 	check_customer_credit: function(frm) {
         var text = ""
-        frappe.call({
+       if (frm.doc.customer) {
+       	 frappe.call({
             method: "erpnext.selling.doctype.sales_order.sales_order.get_customer_credit",
             args: {
 
@@ -85,12 +86,17 @@ frappe.ui.form.on("Sales Order", {
                 }
             }
         })
+       	}else{
+       		alert("please enter customer name")
+       	}
     },
 
     Items_stock_in_hand: function(frm) {
         var text = "item name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp Quantity"
-        frappe.call({
-            method: "erpnext.selling.doctype.sales_order.sales_order.Items_stock_in_hand",
+         if(frm.doc.items){
+         	     frappe.call({
+        	'doc':frm.doc,
+            'method': "Items_stock_in_hand",
             args: {
 
                 "name": frm.doc.name
@@ -112,6 +118,9 @@ frappe.ui.form.on("Sales Order", {
 
                 }
             })
+         	 }else{
+         	 	alert("please enter items")
+         	 }
         
     },
 
@@ -755,3 +764,4 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 	}
 });
 $.extend(cur_frm.cscript, new erpnext.selling.SalesOrderController({frm: cur_frm}));
+

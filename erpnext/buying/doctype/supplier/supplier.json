@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
@@ -12,6 +11,7 @@
  "field_order": [
   "basic_info",
   "naming_series",
+  "supplier_code",
   "supplier_name",
   "country",
   "default_bank_account",
@@ -379,13 +379,22 @@
    "fieldname": "allow_purchase_invoice_creation_without_purchase_receipt",
    "fieldtype": "Check",
    "label": "Allow Purchase Invoice Creation Without Purchase Receipt"
+  },
+  {
+   "fieldname": "supplier_code",
+   "fieldtype": "Data",
+   "label": "Supplier Code",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 370,
  "image_field": "image",
- "links": [],
- "modified": "2020-06-17 23:28:30",
+
+ "modified": "2020-11-05 14:13:15.578333",
+
+
+
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier",
