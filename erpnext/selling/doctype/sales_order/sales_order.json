@@ -17,7 +17,6 @@
   "skip_delivery_note",
   "column_break1",
   "amended_from",
-  "brand",
   "company",
   "transaction_date",
   "delivery_date",
@@ -56,7 +55,6 @@
   "pricing_rules",
   "section_break_31",
   "column_break_33a",
-  "revenue_margin",
   "total_qty",
   "base_total",
   "base_net_total",
@@ -1193,23 +1191,12 @@
    "hidden": 1,
    "label": "Skip Delivery Note",
    "print_hide": 1
-  },
-  {
-   "fieldname": "brand",
-   "fieldtype": "Link",
-   "label": "Brand",
-   "options": "Item Group"
-  },
-  {
-   "fieldname": "revenue_margin",
-   "fieldtype": "Float",
-   "label": "Revenue Margin"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "modified": "2020-11-03 17:06:04.850491",
+ "modified": "2020-07-01 12:39:57.698621",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",

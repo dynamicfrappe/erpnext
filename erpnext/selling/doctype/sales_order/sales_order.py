@@ -463,6 +463,14 @@ class SalesOrder(SellingController):
 				Item {0} is added with and without Ensure Delivery by \
 				Serial No.").format(item.item_code))
 
+
+	def Items_stock_in_hand(self,name,*args,**kwargs):
+		dictresult=[]
+		for item in self.items:
+			data=frappe.db.sql(""" SELECT sum(actual_qty) FROM `tabStock Ledger Entry` where item_code= '%s'""" %str(item.item_code))
+			dictresult.append({"data":data,"name":item.item_name})
+		return dictresult
+
 def get_list_context(context=None):
 	from erpnext.controllers.website_list_for_contact import get_list_context
 	list_context = get_list_context(context)
@@ -635,16 +643,13 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 @frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
-
 	def postprocess(source, target):
-
 		set_missing_values(source, target)
 		#Get the advance paid Journal Entries in Sales Invoice Advance
 		if target.get("allocate_advances_automatically"):
 			target.set_advances()
 
 	def set_missing_values(source, target):
-		target.revenue_margin = flt(source.revenue_margin)
 		target.ignore_pricing_rule = 1
 		target.flags.ignore_permissions = True
 		target.run_method("set_missing_values")
@@ -1080,16 +1085,5 @@ def get_customer_credit(name , *args ,**kwargs):
 	data = frappe.db.sql("""  SELECT credit_in_account_currency  FROM `tabGL Entry` WHERE party_type ='customer' and party= '%s'""" %name)
 	return data
 
-@frappe.whitelist()
-def Items_stock_in_hand(name,*args,**kwargs):
-	dictresult=[]
-	frm = frappe.get_doc("Sales Order" , name)
-	child=frappe.get_doc("Sales Order Item",frm.items[0].name)
-	for item in frm.items:
-		
-		data=frappe.db.sql(""" SELECT sum(actual_qty) FROM `tabStock Ledger Entry` where item_code= '%s'""" %str(item.item_code))
-		dictresult.append({"data":data,"name":item.item_name})
-		
-	print(dictresult)
-	return dictresult
+
 
