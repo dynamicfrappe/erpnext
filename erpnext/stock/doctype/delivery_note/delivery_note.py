@@ -273,6 +273,7 @@ class DeliveryNote(SellingController):
 		#self.validate_holding_qty()
 		#self.check_hold_request()
 
+
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
 
