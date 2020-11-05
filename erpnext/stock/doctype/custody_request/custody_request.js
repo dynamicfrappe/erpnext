@@ -25,7 +25,7 @@ frappe.ui.form.on('Custody request', {
 						
 					}).addClass("btn-primary");
 		}
-		if(frm.doc.workflow_state == "Created"  && frm.doc.eference_document_type == "Employee"){
+		if(frm.doc.workflow_state == (__("Created")) && frm.doc.reference_document_type =="Employee"  ){
 		frm.add_custom_button(__("Get Employee Custody"), function() {
 			frm.events.get_employee_custody(frm)
 				
