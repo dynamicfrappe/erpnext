@@ -2,32 +2,28 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["po analytics"] = {
-    "filters": [
-
-      {
-			"fieldname":"PurchaseOrder",
-			"label": __("PurchaseOrder"),
+frappe.query_reports["Company Loans Report"] = {
+	"filters": [
+               {
+			"fieldname":"name",
+			"label": __("Bank Name"),
 			"fieldtype": "Link",
-			"options":"Purchase Order"
+			"options":"Bank"
 
 		},
 		{
-			"fieldname":"fromDate",
+			"fieldname":"due_date",
 			"label": __("From Date"),
 			"fieldtype": "Date"
 			
 
 		},
-
-			{
-			"fieldname":"toDate",
+		{
+			"fieldname":"to_due_date",
 			"label": __("To Date"),
 			"fieldtype": "Date"
 			
 
 		},
-
-
-    ]
+	]
 };

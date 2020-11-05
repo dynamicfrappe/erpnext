@@ -121,7 +121,7 @@ class AssetMovement(Document):
 					data = frappe.db.sql("UPDATE `tabAsset` SET  custodian = '' WHERE name ='%s'"%(d.asset))
 					frappe.db.commit()
 
-			final = frappe.db.sql("UPDATE `tabCustody request` SET docstatus = 1 WHERE name = '%s' "%self.reference_name)
+			final = frappe.db.sql("UPDATE `tabCustody request` SET  workflow_state = 'Completed' ,docstatus = 1 WHERE name = '%s' "%self.reference_name)
 			frappe.db.commit()
 		self.set_latest_location_in_asset()
 	

@@ -18,5 +18,19 @@ frappe.query_reports["Assts Movement Report"] = {
 			"options":"Employee"
 
 		},
+		{
+			"fieldname":"Department",
+			"label": __("Department"),
+			"fieldtype": "Link",
+			"options":"Department"
+
+		},
+		{
+			"fieldname":"Project",
+			"label": __("Project"),
+			"fieldtype": "Link",
+			"options":"Project"
+
+		},
 	]
 };
