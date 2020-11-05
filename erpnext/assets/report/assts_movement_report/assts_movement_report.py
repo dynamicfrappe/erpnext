@@ -32,7 +32,7 @@ def get_columns(filters):
 		},
 			{
 			"label": _("Project"),
-			"fieldname": "project",
+			"fieldname": "Project",
 			"fieldtype": "Link",
 			"options":"Project",
 			"width": 150
@@ -68,21 +68,24 @@ def get_data(filters):
 	if filters.get("Project"):
 		condition += " AND tabAsset.project = '%s' "%filters.get("Project")
 	if filters.get("Department"):
-		condition += " AND tabAsset.department = '%s' "%filters.get("Department")
+		condition += " AND tabAsset.department = '%s' "%filters.get("department")
 
 
 	print(condition)
 	results=frappe.db.sql("""  
-			SELECT
+				SELECT
 			tabAsset.`name` as 'asset_name',
-			tabAsset.`custodian` as 'employee',
-			tabAsset.value_after_depreciation as value,
+			tabEmployee.`employee_name` as 'employee',
+			COALESCE(tabAsset.`value_after_depreciation`,tabAsset.`gross_purchase_amount`) as 'value',
             tabAsset.project as 'project',
             tabAsset.department as 'department'
 		    FROM
 			tabAsset
-
-		    WHERE (
+            	LEFT JOIN
+			tabEmployee
+         	on
+	        tabAsset.`custodian`=tabEmployee.employee
+		      WHERE (
                       (tabAsset.custodian is not null and tabAsset.custodian !='')
                       or
                      ( tabAsset.project is not null and  tabAsset.project!='')
