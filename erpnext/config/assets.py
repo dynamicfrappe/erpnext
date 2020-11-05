@@ -110,7 +110,15 @@ def get_data():
 					"type": "doctype",
 					"name": "Custody request",
 					"onboard": 1
-				}
+				},
+				{
+                                        "type": "report",
+                                        "name": "Assts Movement Report",
+					"label" : "Asset Move",
+                                        "doctype": "Asset",
+                                        "is_query_report": True,
+                                },
+
 			]
 		}
 	]

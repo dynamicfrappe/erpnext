@@ -6,17 +6,7 @@ from frappe import _
 def get_data():
 	return [
 		# Modules
-		{
-			"module_name": "Getting Started",
-			"category": "Modules",
-			"label": _("Getting Started"),
-			"color": "#1abc9c",
-			"icon": "icon start-blue",
-			"type": "module",
-			"disable_after_onboard": 1,
-			"description": "Dive into the basics for your organisation's needs.",
-			"onboard_present": 1
-		},
+		
 		{
 			"module_name": "Accounts",
 			"category": "Modules",
@@ -62,33 +52,8 @@ def get_data():
 			"type": "module",
 			"description": "Asset movement, maintainance and tools."
 		},
-		{
-			"module_name": "Projects",
-			"category": "Modules",
-			"label": _("Projects"),
-			"color": "#8e44ad",
-			"icon": "icon projects-blue",
-			"type": "module",
-			"description": "Updates, Timesheets and Activities."
-		},
-		{
-			"module_name": "CRM",
-			"category": "Modules",
-			"label": _("CRM"),
-			"color": "#EF4DB6",
-			"icon": "icon crm-blue",
-			"type": "module",
-			"description": "Sales pipeline, leads, opportunities and customers."
-		},
-		{
-			"module_name": "Support",
-			"category": "Modules",
-			"label": _("Support"),
-			"color": "#1abc9c",
-			"icon": "icon support-blue",
-			"type": "module",
-			"description": "User interactions, support issues and knowledge base."
-		},
+		
+		
 		{
 			"module_name": "HR",
 			"category": "Modules",
@@ -99,14 +64,24 @@ def get_data():
 			"description": "Employees, attendance, payroll, leaves and shifts."
 		},
 		{
-			"module_name": "Quality Management",
+			"module_name": "Operations",
 			"category": "Modules",
-			"label": _("Quality"),
-			"color": "#1abc9c",
-			"icon": "icon quality-blue",
+			"label": _("Operations"),
+			"color": "#3498db",
+			"icon": "icon accounting-blue",
 			"type": "module",
-			"description": "Quality goals, procedures, reviews and action."
+			"description": "Accounts, billing, payments, cost center and budgeting."
 		},
+		{
+			"module_name": "Manufacturing",
+			"category": "Modules",
+			"label": _("Manufacturing"),
+			"color": "#7f8c8d",
+			"icon": "icon manufacture-blue",
+			"type": "module",
+			"description": "BOMS, work orders, operations, and timesheets."
+		},
+		
 
 
 		# Category: "Domains"
@@ -187,25 +162,5 @@ def get_data():
 			"description": "Menu, Orders and Table Reservations."
 		},
 
-		{
-			"module_name": "Help",
-			"category": "Administration",
-			"label": _("Learn"),
-			"color": "#FF888B",
-			"icon": "icon learn-blue",
-			"type": "module",
-			"is_help": True,
-			"description": "Explore Help Articles and Videos."
-		},
-		{
-			"module_name": 'Marketplace',
-			"category": "Places",
-			"label": _('Marketplace'),
-			"icon": "icon marketplace-blue",
-			"type": 'link',
-			"link": '#marketplace/home',
-			"color": '#FF4136',
-			'standard': 1,
-			"description": "Publish items to other users."
-		},
+		
 	]
