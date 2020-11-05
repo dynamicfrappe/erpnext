@@ -197,15 +197,5 @@ def get_data():
 			"is_help": True,
 			"description": "Explore Help Articles and Videos."
 		},
-		{
-			"module_name": 'Marketplace',
-			"category": "Places",
-			"label": _('Marketplace'),
-			"icon": "icon marketplace-blue",
-			"type": 'link',
-			"link": '#marketplace/home',
-			"color": '#FF4136',
-			'standard': 1,
-			"description": "Publish items to other users."
-		},
+		
 	]
