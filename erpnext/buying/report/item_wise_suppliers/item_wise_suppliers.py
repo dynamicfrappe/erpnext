@@ -20,19 +20,26 @@ def get_columns(filters):
 		{
 			"label": _("Supplier"),
 			"fieldname": "supplier_code",
-			"fieldtype": "Link",
-			"options":"Supplier",
+			"fieldtype": "Data",
 			"width": 150
 		},
 			{
 			"label": _("Supplier Name"),
 			"fieldname": "SupplierName",
-			"fieldtype": "Data",
+			"fieldtype": "Link",
+			"options":"Supplier",
 			"width": 150
 		},
 		{
-			"label": _("Number of Po"),
-			"fieldname": "count",
+			"label": _("po"),
+			"fieldname": "poname",
+			"fieldtype": "Link",
+			"options":"Purchase Order",
+			"width": 150
+		},
+		{
+			"label": _("po Total"),
+			"fieldname": "pograndtotal",
 			"fieldtype": "Data",
 			"width": 150
 		},
@@ -70,16 +77,17 @@ def get_data(filters):
 	print(condition)
 	results=frappe.db.sql("""  
 			select  tabSupplier.`name` as 'SupplierName',
-      		 `tabPurchase Order`.`supplier` as 'supplier_code',
-      		(select count(`tabPurchase Order`.`name`)from `tabPurchase Order` where `tabPurchase Order`.supplier= tabSupplier.`name`) as 'count',
-      		 `tabPurchase Invoice`.`name` as 'purchaseinvoice',
-      		 sum(`tabPurchase Invoice`.`base_grand_total`) as 'total'
-      		 FROM tabSupplier
-       		  left join
-       	    `tabPurchase Order`
-     		  on tabSupplier.name=`tabPurchase Order`.supplier_name
-      		   inner join `tabPurchase Invoice`
-       		  on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
+       `tabSupplier`.`supplier_code` as 'supplier_code',
+       `tabPurchase Order`.name as 'poname',
+       `tabPurchase Order`.`grand_total` as 'pograndtotal',
+       `tabPurchase Invoice`.`name` as 'purchaseinvoice',
+       `tabPurchase Invoice`.`grand_total` as 'total'
+       FROM tabSupplier
+         inner join
+           `tabPurchase Order`
+       on tabSupplier.name=`tabPurchase Order`.supplier_name
+          inner join `tabPurchase Invoice`
+         on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
        		   where 1=1
        		   {condition}
     		 group by `tabPurchase Order`.name,tabSupplier.name
