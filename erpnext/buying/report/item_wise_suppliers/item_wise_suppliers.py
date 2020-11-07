@@ -90,10 +90,9 @@ def get_data(filters):
 
 	print(condition)
 	results=frappe.db.sql("""  
-        select  tabSupplier.`name` as 'SupplierName',
-       `tabSupplier`.`supplier_code` as 'supplier_code',
+          select  tabSupplier.`name` as 'SupplierName',
        `tabPurchase Order`.name as 'poname',
-       `tabPurchase Order`.schedule_date as 'schedule_date',
+       `tabPurchase Order`.schedule_date as 'date',
        `tabPurchase Order`.`grand_total` as 'pograndtotal',
        `tabPurchase Invoice`.`name` as 'purchaseinvoice',
        `tabPurchase Invoice`.due_date as 'due_date',
@@ -103,7 +102,7 @@ def get_data(filters):
            `tabPurchase Order`
        on tabSupplier.name=`tabPurchase Order`.supplier_name
           inner join `tabPurchase Invoice`
-         on `tabPurchase Order`.name in (select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name)
+         on `tabSupplier`.name =`tabPurchase Invoice`.supplier
        		   where 1=1
        		   {condition}
     		 group by `tabPurchase Order`.name,tabSupplier.name

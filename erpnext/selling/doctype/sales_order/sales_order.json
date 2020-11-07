@@ -18,6 +18,7 @@
   "revenue_margin",
   "column_break1",
   "amended_from",
+  "brand",
   "company",
   "transaction_date",
   "delivery_date",
@@ -56,6 +57,7 @@
   "pricing_rules",
   "section_break_31",
   "column_break_33a",
+  "revenue_margin",
   "total_qty",
   "base_total",
   "base_net_total",
@@ -1194,15 +1196,23 @@
    "print_hide": 1
   },
   {
+
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Item Group"
+  },
+  {
    "fieldname": "revenue_margin",
-   "fieldtype": "Data",
-   "label": "Margin"
+   "fieldtype": "Float",
+   "label": "Revenue Margin"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "modified": "2020-11-07 15:23:36.328769",
+
+ "modified": "2020-11-07 16:18:13.083901",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
