@@ -80,12 +80,14 @@ def get_data(filters):
      		  on tabSupplier.name=`tabPurchase Order`.supplier_name
       		   inner join `tabPurchase Invoice`
        		  on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
+       		   where 1=1
+       		   {condition}
     		 group by `tabPurchase Order`.name,tabSupplier.name
     		  order by tabSupplier.name
+             
 
 
-
-			{condition}
+			
 	""".format(condition=condition) ,as_dict=1)
 
 	return results
