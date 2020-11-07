@@ -112,7 +112,7 @@ def get_data(filters):
                      ( tabAsset.project is not null and  tabAsset.project!='')
                       or
                      ( tabAsset.department is not null and tabAsset.department!='')
-                  );
+                  )
 
 
 			{condition}
