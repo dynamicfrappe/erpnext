@@ -71,7 +71,7 @@ def get_data(filters):
 	results=frappe.db.sql("""  
 			select  tabSupplier.`name` as 'SupplierName',
       		 `tabPurchase Order`.`supplier` as 'supplier_code',
-      		 count(`tabPurchase Order`.`name`) as 'count',
+      		(select count(`tabPurchase Order`.`name`)from `tabPurchase Order` where `tabPurchase Order`.supplier= tabSupplier.`name`) as 'count',
       		 `tabPurchase Invoice`.`name` as 'purchaseinvoice',
       		 sum(`tabPurchase Invoice`.`base_grand_total`) as 'total'
       		 FROM tabSupplier
