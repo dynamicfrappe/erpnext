@@ -81,6 +81,7 @@ def get_data(filters):
       		   inner join `tabPurchase Invoice`
        		  on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
     		 group by `tabPurchase Order`.name,tabSupplier.name
+    		  order by tabSupplier.name
 
 
 
