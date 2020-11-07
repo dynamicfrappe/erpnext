@@ -92,7 +92,7 @@ def get_data(filters):
 	results=frappe.db.sql("""  
           select  tabSupplier.`name` as 'SupplierName',
        `tabPurchase Order`.name as 'poname',
-       `tabPurchase Order`.schedule_date as 'date',
+       `tabPurchase Order`.schedule_date as 'schedule_date',
        `tabPurchase Order`.`grand_total` as 'pograndtotal',
        `tabPurchase Invoice`.`name` as 'purchaseinvoice',
        `tabPurchase Invoice`.due_date as 'due_date',
