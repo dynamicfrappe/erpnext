@@ -103,7 +103,7 @@ def get_data(filters):
            `tabPurchase Order`
        on tabSupplier.name=`tabPurchase Order`.supplier_name
           inner join `tabPurchase Invoice`
-         on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
+         on `tabPurchase Order`.name in (select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name)
        		   where 1=1
        		   {condition}
     		 group by `tabPurchase Order`.name,tabSupplier.name
