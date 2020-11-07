@@ -3,7 +3,31 @@
 /* eslint-disable */
 
 frappe.query_reports["Item Wise Suppliers"] = {
-	"filters": [
+	 "filters": [
 
-	]
+      {
+			"fieldname":"Supplier",
+			"label": __("Supplier"),
+			"fieldtype": "Link",
+			"options":"Supplier"
+
+		},
+		{
+			"fieldname":"fromDate",
+			"label": __("From Date"),
+			"fieldtype": "Date"
+			
+
+		},
+
+			{
+			"fieldname":"toDate",
+			"label": __("To Date"),
+			"fieldtype": "Date"
+			
+
+		},
+
+
+    ]
 };
