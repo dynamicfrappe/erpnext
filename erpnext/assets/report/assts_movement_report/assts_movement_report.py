@@ -79,19 +79,18 @@ def get_data(filters):
 
 	print(condition)
 	results=frappe.db.sql("""  
-				SELECT
+			SELECT
 			tabAsset.`name` as 'asset_name',
-			tabAsset.`asset_serial_number` as 'serialNumber',
 			tabEmployee.`employee_name` as 'employee',
-			greatest(tabAsset.`value_after_depreciation`,tabAsset.`gross_purchase_amount`) as 'value',
+	        (case when tabAsset.`value_after_depreciation`=0 then tabAsset.`gross_purchase_amount` else tabAsset.`value_after_depreciation` end) as 'value',
             tabAsset.project as 'project',
             tabAsset.department as 'department'
 		    FROM
 			tabAsset
             	LEFT JOIN
 			tabEmployee
-	       on
-	       tabAsset.`custodian`=tabEmployee.employee
+	        on
+	        tabAsset.`custodian`=tabEmployee.employee
 		    WHERE (
                       (tabAsset.custodian is not null and tabAsset.custodian !='')
                       or
@@ -105,5 +104,4 @@ def get_data(filters):
 	""".format(condition=condition) ,as_dict=1)
 
 	return results
-
 
