@@ -78,7 +78,7 @@ def get_data(filters):
        		  left join
        	    `tabPurchase Order`
      		  on tabSupplier.name=`tabPurchase Order`.supplier_name
-      		   left join `tabPurchase Invoice`
+      		   inner join `tabPurchase Invoice`
        		  on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
        		   where 1=1
        		   {condition}
