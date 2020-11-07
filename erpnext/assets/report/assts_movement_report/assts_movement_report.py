@@ -18,8 +18,15 @@ def execute(filters=None):
 def get_columns(filters):
 	columns = [
 		{
+			"label": _("Asset"),
+			"fieldname": "asset_code",
+			"fieldtype": "Link",
+			"options":"Asset",
+			"width": 150
+		},
+			{
 			"label": _("Asset Name"),
-			"fieldname": "asset_name",
+			"fieldname": "assetName",
 			"fieldtype": "Data",
 			"width": 150
 		},
@@ -32,8 +39,7 @@ def get_columns(filters):
 		{
 			"label": _("Employee"),
 			"fieldname": "employee",
-			"fieldtype": "Link",
-			"options":"Employee",
+			"fieldtype": "Data",
 			"width": 150
 		},
 			{
@@ -80,7 +86,8 @@ def get_data(filters):
 	print(condition)
 	results=frappe.db.sql("""  
 			SELECT
-			tabAsset.`name` as 'asset_name',
+			tabAsset.`name` as 'asset_code',
+			  tabAsset.`asset_name` as 'assetName',
 			tabEmployee.`employee_name` as 'employee',
 	        (case when tabAsset.`value_after_depreciation`=0 then tabAsset.`gross_purchase_amount` else tabAsset.`value_after_depreciation` end) as 'value',
             tabAsset.project as 'project',
