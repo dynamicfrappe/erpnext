@@ -15,6 +15,7 @@
   "customer_name",
   "order_type",
   "skip_delivery_note",
+  "revenue_margin",
   "column_break1",
   "amended_from",
   "company",
@@ -1191,12 +1192,17 @@
    "hidden": 1,
    "label": "Skip Delivery Note",
    "print_hide": 1
+  },
+  {
+   "fieldname": "revenue_margin",
+   "fieldtype": "Data",
+   "label": "Margin"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "modified": "2020-07-01 12:39:57.698621",
+ "modified": "2020-11-07 15:23:36.328769",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
