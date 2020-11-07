@@ -100,7 +100,7 @@ def get_columns(filters):
 		
 	]
 
-	conditions = " 	WHERE `tabSupplier Quotation`.docstatus = 1 AND `tabSupplier Quotation`.docstatus = 1 "
+	conditions = " 	WHERE `tabSupplier Quotation`.docstatus IN (0,1)  "
 	if filters.get("RFQ_No"):
 		conditions += " AND  `tabRequest for Quotation Item`.parent =%(RFQ_No)s"
 	else : 
