@@ -75,10 +75,10 @@ def get_data(filters):
       		 `tabPurchase Invoice`.`name` as 'purchaseinvoice',
       		 sum(`tabPurchase Invoice`.`base_grand_total`) as 'total'
       		 FROM tabSupplier
-       		  inner join
+       		  left join
        	    `tabPurchase Order`
      		  on tabSupplier.name=`tabPurchase Order`.supplier_name
-      		   inner join `tabPurchase Invoice`
+      		   left join `tabPurchase Invoice`
        		  on `tabPurchase Order`.name=(select `tabPurchase Invoice Item`.purchase_order from `tabPurchase Invoice Item` where `tabPurchase Invoice Item`.parent=`tabPurchase Invoice`.name limit 1)
        		   where 1=1
        		   {condition}
