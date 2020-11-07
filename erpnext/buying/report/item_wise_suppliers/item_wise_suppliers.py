@@ -105,7 +105,7 @@ def get_data(filters):
          on `tabSupplier`.name =`tabPurchase Invoice`.supplier
        		   where 1=1
        		   {condition}
-    		 group by `tabPurchase Order`.name,tabSupplier.name
+    		 group by tabSupplier.name,`tabPurchase Invoice`.name
     		  order by tabSupplier.name
              
 
