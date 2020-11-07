@@ -42,6 +42,13 @@ def get_columns(filters):
 			"fieldtype": "Data",
 			"width": 150
 		},
+		{
+			"label": _("Employee Code"),
+			"fieldname": "custodian",
+			"fieldtype": "Link",
+			"options":"Employee",
+			"width": 150
+		},
 			{
 			"label": _("Project"),
 			"fieldname": "Project",
@@ -87,8 +94,9 @@ def get_data(filters):
 	results=frappe.db.sql("""  
 			SELECT
 			tabAsset.`name` as 'asset_code',
-			  tabAsset.`asset_name` as 'assetName',
+			tabAsset.`asset_name` as 'assetName',
 			tabEmployee.`employee_name` as 'employee',
+			tabAsset.`custodian` as 'custodian',
 	        (case when tabAsset.`value_after_depreciation`=0 then tabAsset.`gross_purchase_amount` else tabAsset.`value_after_depreciation` end) as 'value',
             tabAsset.project as 'project',
             tabAsset.department as 'department'
