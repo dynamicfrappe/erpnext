@@ -37,6 +37,12 @@ def get_columns(filters):
 			"options":"Purchase Order",
 			"width": 150
 		},
+			{
+			"label": _("Reqd By Date"),
+			"fieldname": "schedule_date",
+			"fieldtype": "Data",
+			"width": 150
+		},
 		{
 			"label": _("po Total"),
 			"fieldname": "pograndtotal",
@@ -48,6 +54,12 @@ def get_columns(filters):
 			"fieldname": "purchaseinvoice",
 			"fieldtype": "Link",
 			"options":"Purchase Invoice",
+			"width": 150
+		},
+				{
+			"label": _("Due Date"),
+			"fieldname": "due_date",
+			"fieldtype": "Data",
 			"width": 150
 		},
 		{
@@ -67,20 +79,24 @@ def get_columns(filters):
 def get_data(filters):
 	condition=""
 	if filters.get("Supplier"):
-		condition +="AND tabSupplier.`name` = '%s'"%filters.get("Supplier")
+		condition +=" AND tabSupplier.`name` = '%s'"%filters.get("Supplier")
 	if filters.get("fromDate"):
 		condition += " AND `tabPurchase Order`.schedule_date >= '%s' "%filters.get("fromDate")
+		condition +=" AND `tabPurchase Invoice`.due_date >= '%s' "%filters.get("fromDate")
 	if filters.get("toDate"):
 		condition += " AND `tabPurchase Order`.schedule_date <= '%s' "%filters.get("toDate")
+		condition += "AND `tabPurchase Invoice`.due_date >= '%s'"%filters.get("toDate")
 
 
 	print(condition)
 	results=frappe.db.sql("""  
-			select  tabSupplier.`name` as 'SupplierName',
+        select  tabSupplier.`name` as 'SupplierName',
        `tabSupplier`.`supplier_code` as 'supplier_code',
        `tabPurchase Order`.name as 'poname',
+       `tabPurchase Order`.schedule_date as 'schedule_date',
        `tabPurchase Order`.`grand_total` as 'pograndtotal',
        `tabPurchase Invoice`.`name` as 'purchaseinvoice',
+       `tabPurchase Invoice`.due_date as 'due_date',
        `tabPurchase Invoice`.`grand_total` as 'total'
        FROM tabSupplier
          inner join
