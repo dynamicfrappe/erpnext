@@ -80,8 +80,8 @@ def get_data(filters):
 					select `tabPurchase Invoice Item`.item_code,
 					        `tabPurchase Invoice Item`.item_name,
 					        `tabPurchase Invoice Item`.qty,
-					        `tabPurchase Order`.name as 'poname',
-					        `tabPurchase Invoice`.name as 'purchaseinvoice',
+					        (select count(*) from`tabPurchase Order` where `tabPurchase Order`.supplier=tabSupplier.name) as 'poname',
+					        (select count(*) from`tabPurchase Invoice` where `tabPurchase Invoice`.supplier=tabSupplier.name) as 'purchaseinvoice',
 					        tabSupplier.name
 					from `tabPurchase Order`
 					inner join
