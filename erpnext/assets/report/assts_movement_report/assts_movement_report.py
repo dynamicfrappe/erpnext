@@ -18,21 +18,40 @@ def execute(filters=None):
 def get_columns(filters):
 	columns = [
 		{
+			"label": _("Asset"),
+			"fieldname": "asset_code",
+			"fieldtype": "Link",
+			"options":"Asset",
+			"width": 150
+		},
+			{
 			"label": _("Asset Name"),
-			"fieldname": "asset_name",
+			"fieldname": "assetName",
+			"fieldtype": "Data",
+			"width": 150
+		},
+		{
+			"label": _("serial number"),
+			"fieldname": "serialNumber",
 			"fieldtype": "Data",
 			"width": 150
 		},
 		{
 			"label": _("Employee"),
 			"fieldname": "employee",
+			"fieldtype": "Data",
+			"width": 150
+		},
+		{
+			"label": _("Employee Code"),
+			"fieldname": "custodian",
 			"fieldtype": "Link",
 			"options":"Employee",
 			"width": 150
 		},
 			{
 			"label": _("Project"),
-			"fieldname": "project",
+			"fieldname": "Project",
 			"fieldtype": "Link",
 			"options":"Project",
 			"width": 150
@@ -68,20 +87,25 @@ def get_data(filters):
 	if filters.get("Project"):
 		condition += " AND tabAsset.project = '%s' "%filters.get("Project")
 	if filters.get("Department"):
-		condition += " AND tabAsset.department = '%s' "%filters.get("Department")
+		condition += " AND tabAsset.department = '%s' "%filters.get("department")
 
 
 	print(condition)
 	results=frappe.db.sql("""  
 			SELECT
-			tabAsset.`name` as 'asset_name',
-			tabAsset.`custodian` as 'employee',
-			tabAsset.value_after_depreciation as value,
+			tabAsset.`name` as 'asset_code',
+			tabAsset.`asset_name` as 'assetName',
+			tabEmployee.`employee_name` as 'employee',
+			tabAsset.`custodian` as 'custodian',
+	        (case when tabAsset.`value_after_depreciation`=0 then tabAsset.`gross_purchase_amount` else tabAsset.`value_after_depreciation` end) as 'value',
             tabAsset.project as 'project',
             tabAsset.department as 'department'
 		    FROM
 			tabAsset
-
+            	LEFT JOIN
+			tabEmployee
+	        on
+	        tabAsset.`custodian`=tabEmployee.employee
 		    WHERE (
                       (tabAsset.custodian is not null and tabAsset.custodian !='')
                       or
@@ -90,9 +114,9 @@ def get_data(filters):
                      ( tabAsset.department is not null and tabAsset.department!='')
                   )
 
+
 			{condition}
 	""".format(condition=condition) ,as_dict=1)
 
 	return results
-
 

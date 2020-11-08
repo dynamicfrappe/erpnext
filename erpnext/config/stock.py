@@ -38,6 +38,12 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "On Hold",
+					"onboard": 1,
+					
+				},
+				{
+					"type": "doctype",
 					"name": "Delivery Trip"
 				},
 			]
@@ -88,6 +94,13 @@ def get_data():
 					"name": "Item Price Stock",
 					"doctype": "Item",
 					"dependencies": ["Item"],
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Warehouse Transaction items",
+					"doctype": "Stock Ledger Entry",
+					
 				}
 			]
 		},

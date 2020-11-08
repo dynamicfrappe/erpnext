@@ -93,6 +93,22 @@ frappe.ui.form.on("Delivery Note", {
 			frm.page.set_inner_btn_group_as_primary(__('Create'));
 		}
 	}
+
+	
+});
+
+frappe.ui.form.on("Delivery Note Item", "items_add", function(frm){
+        	frappe.call({
+        	'doc':frm.doc,
+			'method':"update_cost_center",
+			args: {
+
+			},
+			callback: function(r){
+				console.log("hello")
+			}
+		
+		})
 });
 
 frappe.ui.form.on("Delivery Note Item", {

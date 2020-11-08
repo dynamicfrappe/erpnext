@@ -46,7 +46,10 @@ class StockEntry(StockController):
 		self.pro_doc = frappe._dict()
 		if self.work_order:
 			self.pro_doc = frappe.get_doc('Work Order', self.work_order)
-
+		try:
+			self.validate_holding_qty()
+		except:
+			pass
 		self.validate_posting_time()
 		self.validate_purpose()
 		self.validate_item()
@@ -66,8 +69,7 @@ class StockEntry(StockController):
 		self.validate_difference_account()
 		self.set_job_card_data()
 		self.set_purpose_for_stock_entry()
-		#self.validate_holding_qty()
-
+		
 		if not self.from_bom:
 			self.fg_completed_qty = 0.0
 
@@ -110,8 +112,9 @@ class StockEntry(StockController):
 
 
 	def validate_holding_qty(self):
+		purpose = frappe.db.get_value('Stock Entry Type', self.stock_entry_type, 'purpose')
 
-		if self.stock_entry_type not in ['Material Receipt','Repack','Receive at Warehouse' ,'Manufacture']:
+		if purpose not in [_('Material Receipt'),_('Repack'),_('Receive at Warehouse') ,_('Manufacture')]:
 			for item in self.get("items"):
 				allowed_qty = frappe.db.sql("""
 				
@@ -120,16 +123,19 @@ class StockEntry(StockController):
 				ORDER BY `name` DESC Limit 1		
 			
 			
-				""".format (item_code = item.item_code , warehouse = item.s_warehouse) , as_dict = 1)
-				if not allowed_qty[0].total_qty:
-						allowed_qty[0].total_qty = 0
+				""".format (item_code = item.item_code , warehouse = item.s_warehouse) , as_dict = 1) or 0
+				qty_warehouse = 0
+				if not allowed_qty:
+					if len(allowed_qty) > 0:
+						if  allowed_qty[0].total_qty:
+							qty_warehouse = allowed_qty[0].total_qty
 
 
 				total_hold_qty = self.get_holding_qty_in_warehouse(item=item.item_code ,  warehouse = item.s_warehouse )
 
 
-				if item.qty > (allowed_qty[0].total_qty-total_hold_qty):
-					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.s_warehouse)));
+				if item.qty > (qty_warehouse-total_hold_qty):
+					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = item.s_warehouse ,qty = qty_warehouse)));
 					frappe.validated=false;
 					return false
 

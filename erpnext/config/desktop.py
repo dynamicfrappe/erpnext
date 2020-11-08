@@ -68,19 +68,11 @@ def get_data():
 			"category": "Modules",
 			"label": _("Operations"),
 			"color": "#3498db",
-			"icon": "icon accounting-blue",
+			"icon": "icon projects-blue",
 			"type": "module",
 			"description": "Accounts, billing, payments, cost center and budgeting."
 		},
-		{
-			"module_name": "Manufacturing",
-			"category": "Modules",
-			"label": _("Manufacturing"),
-			"color": "#7f8c8d",
-			"icon": "icon manufacture-blue",
-			"type": "module",
-			"description": "BOMS, work orders, operations, and timesheets."
-		},
+		
 		
 
 
@@ -163,4 +155,6 @@ def get_data():
 		},
 
 		
+		
 	]
+

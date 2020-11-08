@@ -207,6 +207,7 @@ def get_data():
 					"description": _("Templates of supplier standings."),
 				},
 
+
 			]
 		},
 		{
@@ -218,6 +219,14 @@ def get_data():
 					"is_query_report": True,
 					"name": "Items To Be Requested",
 					"reference_doctype": "Item",
+					"onboard": 1,
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Request for Quotation Analytics",
+					"label":"Quotation Analytics",
+					"reference_doctype": "Request for Quotation Supplier",
 					"onboard": 1,
 				},
 				{
@@ -241,6 +250,21 @@ def get_data():
 					"is_query_report": True,
 					"name": "Supplier Quotation Price List Comparison",
 					"reference_doctype": "Request for Quotation",
+					"onboard": 1
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "po analytics",
+					"label":"Purchase Order Analytics",
+					"reference_doctype": "Purchase Order",
+					"onboard": 1
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Request for Quotation Analytics",
+					"reference_doctype": "Request for Quotation Supplier",
 					"onboard": 1
 				},
 

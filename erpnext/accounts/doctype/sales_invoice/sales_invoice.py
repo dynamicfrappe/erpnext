@@ -1303,6 +1303,11 @@ class SalesInvoice(SellingController):
 
 		if update:
 			self.db_set('status', self.status, update_modified = update_modified)
+		def update_cost_center(self):
+			if self.project:
+				default_cost_center =frappe.db.sql("""select cost_center from tabProject where name='%s'"""%self.project,as_dict=1)
+				for item in self.items:
+					item.cost_center=default_cost_center[0]["cost_center"]
 
 def get_discounting_status(sales_invoice):
 	status = None

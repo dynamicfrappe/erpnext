@@ -61,6 +61,7 @@ frappe.ui.form.on("Sales Order", {
 
 	},
 	check_customer_credit: function(frm) {
+		
         var text = ""
        if (frm.doc.customer) {
        	 frappe.call({
@@ -92,7 +93,8 @@ frappe.ui.form.on("Sales Order", {
     },
 
     Items_stock_in_hand: function(frm) {
-        var text = "item name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp Quantity"
+    	var text ="<table><tr><th>Item Name</th><th>Item Quantity</th><th>Age</th></tr>"
+        
          if(frm.doc.items){
          	     frappe.call({
         	'doc':frm.doc,
@@ -110,9 +112,10 @@ frappe.ui.form.on("Sales Order", {
                 		//console.log(r.message[key].name)
                 	
 
-                		text +="<hr>"+r.message[key].name +"  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp &emsp; &emsp;"+r.message[key].data +"<br>" 
+                		text +="<tr><td style='text-align: center;'>"+r.message[key].name +"</td><td style='text-align: center;'>"+r.message[key].data +"</td></tr>" 
                 	//console.log(text)
                 	}
+                	text +="</table>"
                 	msgprint(text)
                 }
 
