@@ -140,7 +140,7 @@ def get_columns(filters):
 			"label": _(filters.get("based_on")),
 			"fieldtype": "Link",
 			"options": filters.get("based_on"),
-			"width": 300
+			"width": 270
 		},
 		{
 			"fieldname": "currency",
@@ -154,21 +154,21 @@ def get_columns(filters):
 			"label": _("Income"),
 			"fieldtype": "Currency",
 			"options": "currency",
-			"width": 120
+			"width": 270
 		},
 		{
 			"fieldname": "expense",
 			"label": _("Expense"),
 			"fieldtype": "Currency",
 			"options": "currency",
-			"width": 120
+			"width": 270
 		},
 		{
 			"fieldname": "gross_profit_loss",
 			"label": _("Gross Profit / Loss"),
 			"fieldtype": "Currency",
 			"options": "currency",
-			"width": 120
+			"width": 270
 		}
 	]
 

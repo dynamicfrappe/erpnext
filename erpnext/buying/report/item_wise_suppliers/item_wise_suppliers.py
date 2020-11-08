@@ -113,6 +113,8 @@ def get_data(filters):
 			
 	""".format(condition=condition) ,as_dict=1)
 
+	res=[]
+
 	for index in range(0,len(results)):
 		for index2 in range(index+1,len(results)):
 			if results[index]["poname"] == results[index2]["poname"]:
@@ -120,11 +122,19 @@ def get_data(filters):
 			if results[index]["purchaseinvoice"] == results[index2]["purchaseinvoice"]:
 				results[index2]["purchaseinvoice"] =""
 
+	for x in results:
+		if x["poname"] != "" or x["purchaseinvoice"]!="" :	
+			res.append(x)
+		
+
+
+
 
 			
           
 
 
-	return results
+	return res
+
 
 
