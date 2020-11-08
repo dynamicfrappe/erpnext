@@ -113,6 +113,18 @@ def get_data(filters):
 			
 	""".format(condition=condition) ,as_dict=1)
 
+	for index in range(0,len(results)):
+		for key in results[index]:
+			for index2 in range(index+1,len(results)):
+				for key2 in results[index2]:
+					if results[index]["SupplierName"] == results[index2]["SupplierName"] and results[index]["poname"] == results[index2]["poname"]:
+						#results[index2]["SupplierName"]=""
+						results[index2]["poname"] =""
+
+			
+          
+
+
 	return results
 
 
