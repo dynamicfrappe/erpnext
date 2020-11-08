@@ -261,7 +261,7 @@
    "default": "0",
    "fieldname": "is_pos",
    "fieldtype": "Check",
-   "label": "Include Payment (POS)",
+   "label": "Include Payment ",
    "oldfieldname": "is_pos",
    "oldfieldtype": "Check",
    "print_hide": 1
@@ -1599,7 +1599,7 @@
  "icon": "fa fa-file-text",
  "idx": 181,
  "is_submittable": 1,
- "modified": "2020-11-03 18:06:05.554850",
+ "modified": "2020-11-07 14:40:34.632370",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Invoice",

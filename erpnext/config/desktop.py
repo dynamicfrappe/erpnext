@@ -19,7 +19,7 @@ def get_data():
 		{
 			"module_name": "Selling",
 			"category": "Modules",
-			"label": _("Selling"),
+			"label": _("Sales Management"),
 			"color": "#1abc9c",
 			"icon": "icon selling-blue",
 			"type": "module",
@@ -28,7 +28,7 @@ def get_data():
 		{
 			"module_name": "Buying",
 			"category": "Modules",
-			"label": _("Buying"),
+			"label": _("Purchasing Management"),
 			"color": "#c0392b",
 			"icon": "icon buying-blue",
 			"type": "module",
