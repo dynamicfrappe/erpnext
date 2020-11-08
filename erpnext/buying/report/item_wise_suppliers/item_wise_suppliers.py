@@ -105,7 +105,7 @@ def get_data(filters):
          on `tabSupplier`.name =`tabPurchase Invoice`.supplier
        		   where 1=1
        		   {condition}
-    		 group by tabSupplier.name,`tabPurchase Invoice`.name
+    		 group by tabSupplier.name,`tabPurchase Invoice`.name,`tabPurchase Order`.name
     		  order by tabSupplier.name
              
 
@@ -114,12 +114,12 @@ def get_data(filters):
 	""".format(condition=condition) ,as_dict=1)
 
 	for index in range(0,len(results)):
-		for key in results[index]:
-			for index2 in range(index+1,len(results)):
-				for key2 in results[index2]:
-					if results[index]["SupplierName"] == results[index2]["SupplierName"] and results[index]["poname"] == results[index2]["poname"]:
-						#results[index2]["SupplierName"]=""
-						results[index2]["poname"] =""
+		for index2 in range(index+1,len(results)):
+			if results[index]["poname"] == results[index2]["poname"]:
+				results[index2]["poname"] =""
+			if results[index]["purchaseinvoice"] == results[index2]["purchaseinvoice"]:
+				results[index2]["purchaseinvoice"] =""
+
 
 			
           
