@@ -71,6 +71,7 @@ def get_data():
 					"doctype": "Sales Person",
 					"dependencies": ["Sales Person"],
 				},
+
 			]
 		},
 		{
@@ -255,6 +256,12 @@ def get_data():
 					"is_query_report": True,
 					"name": "Sales Order Trends",
 					"doctype": "Sales Order"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Sales Order Based On Quotation",
+					"doctype": "Quotation"
 				},
 			]
 		},

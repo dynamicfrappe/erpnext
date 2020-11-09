@@ -101,6 +101,13 @@ def get_data():
 					"name": "Warehouse Transaction items",
 					"doctype": "Stock Ledger Entry",
 					
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Holding Items Report",
+					"doctype": "On Hold",
+					
 				}
 			]
 		},

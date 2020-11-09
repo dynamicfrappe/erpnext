@@ -95,6 +95,12 @@ def get_data():
 					"doctype": "Asset",
 					"is_query_report": True,
 				},
+				{
+					"type": "report",
+					"name": "Assts Movement Report",
+					"doctype": "Asset",
+					"is_query_report": True,
+				},
 			]
 		},
 		{
