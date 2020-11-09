@@ -57,7 +57,6 @@
   "pricing_rules",
   "section_break_31",
   "column_break_33a",
-  "revenue_margin",
   "total_qty",
   "base_total",
   "base_net_total",
@@ -1196,7 +1195,6 @@
    "print_hide": 1
   },
   {
-
    "fieldname": "brand",
    "fieldtype": "Link",
    "label": "Brand",
@@ -1211,8 +1209,7 @@
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
-
- "modified": "2020-11-07 16:18:13.083901",
+ "modified": "2020-11-09 00:31:57.614548",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",

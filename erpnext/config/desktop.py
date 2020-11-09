@@ -19,7 +19,7 @@ def get_data():
 		{
 			"module_name": "Selling",
 			"category": "Modules",
-			"label": _("Selling"),
+			"label": _("Sales Management"),
 			"color": "#1abc9c",
 			"icon": "icon selling-blue",
 			"type": "module",
@@ -28,7 +28,7 @@ def get_data():
 		{
 			"module_name": "Buying",
 			"category": "Modules",
-			"label": _("Buying"),
+			"label": _("Purchasing Management"),
 			"color": "#c0392b",
 			"icon": "icon buying-blue",
 			"type": "module",
@@ -68,19 +68,11 @@ def get_data():
 			"category": "Modules",
 			"label": _("Operations"),
 			"color": "#3498db",
-			"icon": "icon accounting-blue",
+			"icon": "icon projects-blue",
 			"type": "module",
 			"description": "Accounts, billing, payments, cost center and budgeting."
 		},
-		{
-			"module_name": "Manufacturing",
-			"category": "Modules",
-			"label": _("Manufacturing"),
-			"color": "#7f8c8d",
-			"icon": "icon manufacture-blue",
-			"type": "module",
-			"description": "BOMS, work orders, operations, and timesheets."
-		},
+		
 		
 
 
