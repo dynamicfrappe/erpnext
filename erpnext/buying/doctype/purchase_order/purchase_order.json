@@ -543,7 +543,7 @@
   {
    "fieldname": "total",
    "fieldtype": "Currency",
-   "label": "Total",
+   "label": "Total Amount",
    "options": "currency",
    "read_only": 1
   },
@@ -1055,8 +1055,7 @@
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-09-14 14:36:12.418690",
+ "modified": "2020-11-10 11:07:14.716701",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Order",
