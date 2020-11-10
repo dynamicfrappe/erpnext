@@ -3,6 +3,7 @@
  "doctype": "DocType",
  "document_type": "Setup",
  "editable_grid": 1,
+ "engine": "InnoDB",
  "field_order": [
   "charge_type",
   "row_id",
@@ -23,8 +24,7 @@
   "base_tax_amount",
   "base_total",
   "base_tax_amount_after_discount_amount",
-  "item_wise_tax_detail",
-  "parenttype"
+  "item_wise_tax_detail"
  ],
  "fields": [
   {
@@ -102,7 +102,7 @@
    "fieldname": "rate",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Rate",
+   "label": "Tax Percentage",
    "oldfieldname": "rate",
    "oldfieldtype": "Currency"
   },
@@ -174,17 +174,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "parenttype",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "in_filter": 1,
-   "label": "Parenttype",
-   "oldfieldname": "parenttype",
-   "oldfieldtype": "Data",
-   "print_hide": 1,
-   "search_index": 1
-  },
-  {
    "fieldname": "accounting_dimensions_section",
    "fieldtype": "Section Break",
    "label": "Accounting Dimensions"
@@ -196,11 +185,12 @@
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2019-05-25 22:59:38.740883",
+ "modified": "2020-11-10 12:06:46.507775",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Taxes and Charges",
  "owner": "Administrator",
  "permissions": [],
+ "sort_field": "modified",
  "sort_order": "ASC"
 }
