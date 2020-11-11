@@ -33,6 +33,7 @@
   "hold_comment",
   "supplier_invoice_details",
   "bill_no",
+  "reference_purachse_order",
   "column_break_15",
   "bill_date",
   "returns",
@@ -1333,12 +1334,18 @@
    "fieldtype": "Currency",
    "label": "Total Discount Note ",
    "read_only": 1
+  },
+  {
+   "fieldname": "reference_purachse_order",
+   "fieldtype": "Link",
+   "label": "Reference Purachse Order",
+   "options": "Purchase Order"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 204,
  "is_submittable": 1,
- "modified": "2020-11-03 18:48:57.057863",
+ "modified": "2020-11-10 11:02:54.668182",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Invoice",

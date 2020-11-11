@@ -168,3 +168,25 @@ class LandedCostVoucher(Document):
 				if serial_nos:
 					frappe.db.sql("update `tabSerial No` set purchase_rate=%s where name in ({0})"
 						.format(", ".join(["%s"]*len(serial_nos))), tuple([item.valuation_rate] + serial_nos))
+
+
+
+@frappe.whitelist()
+def set_frm_query(tpe , refrence ,*args , **kwargs):
+	if tpe =='Purchase Invoice' :
+		invoice = frappe.get_doc("Purchase Invoice" , refrence)
+		accounts = []
+		for item in invoice.items:
+			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,"amount":item.amount}
+			accounts.append(accounts_dic)
+		return(accounts)
+
+	if tpe =='Payment Entry' :
+			invoice = frappe.get_doc("Payment Entry" , refrence)
+			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks , "amount":invoice.paid_amount}]
+			return(accounts)
+
+
+
+
+	return True
