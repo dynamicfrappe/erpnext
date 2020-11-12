@@ -15,6 +15,13 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Customer Request for Quotation",
+					"description": _("Quotes to Leads or Customers."),
+					"onboard": 1,
+					"dependencies": ["Item", "Customer"],
+				},
+				{
+					"type": "doctype",
 					"name": "Quotation",
 					"description": _("Quotes to Leads or Customers."),
 					"onboard": 1,
