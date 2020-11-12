@@ -766,8 +766,9 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 		});
 	}
 });
-/*
+
 $.extend(cur_frm.cscript, new erpnext.selling.SalesOrderController({frm: cur_frm}));
+/*
 window.onbeforeunload = function() {
    return "Do you really want to leave our brilliant application?";
    
