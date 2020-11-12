@@ -182,6 +182,7 @@
    "oldfieldname": "incoming_rate",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1
   },
   {
@@ -189,6 +190,7 @@
    "fieldtype": "Currency",
    "label": "Basic Amount",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -197,6 +199,7 @@
    "fieldtype": "Currency",
    "label": "Additional Cost",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -207,6 +210,7 @@
    "oldfieldname": "amount",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -214,6 +218,7 @@
    "fieldtype": "Currency",
    "label": "Valuation Rate",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -502,7 +507,7 @@
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2020-09-04 12:12:35.668198",
+ "modified": "2020-11-12 12:12:50.404219",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock Entry Detail",

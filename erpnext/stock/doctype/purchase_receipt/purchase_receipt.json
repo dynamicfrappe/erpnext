@@ -334,7 +334,8 @@
    "fieldname": "currency_and_price_list",
    "fieldtype": "Section Break",
    "label": "Currency and Price List",
-   "options": "fa fa-tag"
+   "options": "fa fa-tag",
+   "permlevel": 1
   },
   {
    "fieldname": "currency",
@@ -369,6 +370,7 @@
    "fieldtype": "Link",
    "label": "Price List",
    "options": "Price List",
+   "permlevel": 1,
    "print_hide": 1
   },
   {
@@ -377,6 +379,7 @@
    "fieldtype": "Link",
    "label": "Price List Currency",
    "options": "Currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -385,6 +388,7 @@
    "fieldname": "plc_conversion_rate",
    "fieldtype": "Float",
    "label": "Price List Exchange Rate",
+   "permlevel": 1,
    "precision": "9",
    "print_hide": 1
   },
@@ -520,6 +524,7 @@
    "fieldtype": "Currency",
    "label": "Total (Company Currency)",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -545,6 +550,7 @@
    "fieldtype": "Currency",
    "label": "Total",
    "options": "currency",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -554,6 +560,7 @@
    "oldfieldname": "net_total_import",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -637,6 +644,7 @@
    "oldfieldname": "other_charges_added",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -647,6 +655,7 @@
    "oldfieldname": "other_charges_deducted",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -657,6 +666,7 @@
    "oldfieldname": "total_tax",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -673,6 +683,7 @@
    "oldfieldname": "other_charges_added_import",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -683,6 +694,7 @@
    "oldfieldname": "other_charges_deducted_import",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -691,6 +703,7 @@
    "fieldtype": "Currency",
    "label": "Total Taxes and Charges",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -714,6 +727,7 @@
    "fieldtype": "Currency",
    "label": "Additional Discount Amount (Company Currency)",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -732,6 +746,7 @@
    "fieldtype": "Currency",
    "label": "Additional Discount Amount",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1
   },
   {
@@ -745,6 +760,7 @@
    "oldfieldname": "grand_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -754,6 +770,7 @@
    "label": "Rounding Adjustment (Company Currency)",
    "no_copy": 1,
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -763,6 +780,7 @@
    "label": "In Words (Company Currency)",
    "oldfieldname": "in_words",
    "oldfieldtype": "Data",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -773,6 +791,7 @@
    "oldfieldname": "rounded_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -788,6 +807,7 @@
    "oldfieldname": "grand_total_import",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -796,6 +816,7 @@
    "label": "Rounding Adjustment",
    "no_copy": 1,
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -806,6 +827,7 @@
    "label": "Rounded Total",
    "no_copy": 1,
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -1071,8 +1093,7 @@
  "icon": "fa fa-truck",
  "idx": 261,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-07-15 12:49:42.095297",
+ "modified": "2020-11-12 12:05:58.602314",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Purchase Receipt",
