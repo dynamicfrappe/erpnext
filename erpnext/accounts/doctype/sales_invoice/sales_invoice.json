@@ -940,7 +940,7 @@
   {
    "fieldname": "base_rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total (Company Currency)",
+   "label": "Total (Company Currency)",
    "oldfieldname": "rounded_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
@@ -1569,7 +1569,7 @@
  "icon": "fa fa-file-text",
  "idx": 181,
  "is_submittable": 1,
- "modified": "2020-11-10 10:57:12.291916",
+ "modified": "2020-11-12 11:49:24.203303",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Invoice",

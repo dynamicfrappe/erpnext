@@ -33,7 +33,6 @@
   "hold_comment",
   "supplier_invoice_details",
   "bill_no",
-  "reference_purachse_order",
   "column_break_15",
   "bill_date",
   "returns",
@@ -856,7 +855,7 @@
    "depends_on": "eval:!doc.disable_rounded_total",
    "fieldname": "base_rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total (Company Currency)",
+   "label": " Total (Company Currency)",
    "no_copy": 1,
    "options": "Company:company:default_currency",
    "print_hide": 1,
@@ -1334,22 +1333,12 @@
    "fieldtype": "Currency",
    "label": "Total Discount Note ",
    "read_only": 1
-  },
-  {
-   "fieldname": "reference_purachse_order",
-   "fieldtype": "Link",
-   "label": "Reference Purachse Order",
-   "options": "Purchase Order"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 204,
  "is_submittable": 1,
-
- "modified": "2020-11-10 11:02:54.668182",
-
-
-
+ "modified": "2020-11-12 11:50:55.618284",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Invoice",
