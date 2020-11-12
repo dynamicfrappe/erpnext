@@ -115,10 +115,7 @@ class DeliveryNote(SellingController):
 		self.validate_uom_is_integer("stock_uom", "stock_qty")
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_with_previous_doc()
-		try:
-			self.validate_holding_qty()
-		except:
-				pass
+
 		if self._action != 'submit' and not self.is_return:
 			set_batch_nos(self, 'warehouse', True)
 
@@ -128,74 +125,6 @@ class DeliveryNote(SellingController):
 		self.update_current_stock()
 
 		if not self.installation_status: self.installation_status = 'Not Installed'
-
-	def check_hold_request(self):
-		for item in self.get("items"):
-			warehouse = self.set_warehouse
-			if not warehouse:
-				warehouse = item.warehouse
-			if item.against_sales_order: 
-				hold_request = frappe.db.get_value('On Hold', {'sales_order': item.against_sales_order , 'status' : 'Open'} , ['name'], as_dict=1)
-				if hold_request:
-					hold_request_item = frappe.db.get_value('Ob Hold Items', {'parent':hold_request.name,'item_code': item.item_code , 'warehouse' : warehouse},['name' , 'qty'], as_dict=1)
-					frappe.msgprint(str(hold_request_item.name))
-					if hold_request_item :
-						if item.qty >= hold_request_item.qty :
-							hold_request_item.qty = 0
-						else :
-						    hold_request_item.qty -= item.qty
-						frappe.msgprint(str(hold_request_item))    
-						frappe.db.sql("""update `tabOb Hold Items` set qty = {qty} where `name` = '{name}' """.format(qty = hold_request_item.qty , name = hold_request_item.name))
-
-
-	def get_holding_qty_in_warehouse(self, item , warehouse ):
-				total_hold_qty = 0
-				total_hold_qty_result = frappe.db.sql("""
-												SELECT
-												IFNULL(SUM(HRI.qty),0) as total_hold_qty
-												FROM
-												`tabOb Hold Items` HRI
-												INNER JOIN
-													`tabOn Hold` HR
-												ON 
-													HR.`name` = HRI.parent
-													WHERE HR.`status` = 'Open' and HR.docstatus =1 
-													GROUP BY HRI.item_code , HRI.warehouse
-													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
-
-											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse),as_dict=1) or 0
-				if not total_hold_qty_result:
-					total_hold_qty = 0
-				else :
-					total_hold_qty = total_hold_qty_result[0].total_hold_qty
-					if not total_hold_qty :
-						total_hold_qty = 0
-				return total_hold_qty
-
-
-	def validate_holding_qty(self):
-		for item in self.get("items"):
-			warehouse = self.set_warehouse
-			if not warehouse:
-				warehouse = item.warehouse
-
-			allowed_qty = frappe.db.sql("""
-			SELECT IFNULL(qty_after_transaction,0) as total_qty  from `tabStock Ledger Entry`  
-				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
-				ORDER BY `name` DESC Limit 1		
-		
-					""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1) or 0
-			qty_warehouse = 0
-			if not allowed_qty:
-					if len(allowed_qty) > 0:
-						if  allowed_qty[0].total_qty:
-							qty_warehouse = allowed_qty[0].total_qty
-			total_hold_qty = self.get_holding_qty_in_warehouse(item = item.item_code , warehouse = warehouse )
-			if item.qty > (qty_warehouse- total_hold_qty):
-				frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
-				frappe.validated=false;
-				return false
 
 	def validate_with_previous_doc(self):
 		super(DeliveryNote, self).validate_with_previous_doc({
@@ -275,16 +204,6 @@ class DeliveryNote(SellingController):
 		# because updating reserved qty in bin depends upon updated delivered qty in SO
 		self.update_stock_ledger()
 		self.make_gl_entries()
-		try:
-			self.validate_holding_qty()
-		except:
-			pass
-		try:
-			self.check_hold_request()
-		except:
-			pass
-
-
 
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
@@ -398,6 +317,11 @@ class DeliveryNote(SellingController):
 			frappe.msgprint(_("Credit Note {0} has been created automatically").format(credit_note_link))
 		except:
 			frappe.throw(_("Could not create Credit Note automatically, please uncheck 'Issue Credit Note' and submit again"))
+	def update_cost_center(self):
+		if self.project:
+			default_cost_center =frappe.db.sql("""select cost_center from tabProject where name='%s'"""%self.project,as_dict=1)
+			for item in self.items:
+				item.cost_center=default_cost_center[0]["cost_center"]
 
 def update_billed_amount_based_on_so(so_detail, update_modified=True):
 	# Billed against Sales Order directly
@@ -659,4 +583,3 @@ def make_sales_return(source_name, target_doc=None):
 def update_delivery_note_status(docname, status):
 	dn = frappe.get_doc("Delivery Note", docname)
 	dn.update_status(status)
-

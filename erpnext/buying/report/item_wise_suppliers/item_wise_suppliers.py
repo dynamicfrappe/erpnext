@@ -92,7 +92,7 @@ def get_data(filters):
 	results=frappe.db.sql("""  
           select  tabSupplier.`name` as 'SupplierName',
        `tabPurchase Order`.name as 'poname',
-       `tabPurchase Order`.schedule_date as 'date',
+       `tabPurchase Order`.schedule_date as 'schedule_date',
        `tabPurchase Order`.`grand_total` as 'pograndtotal',
        `tabPurchase Invoice`.`name` as 'purchaseinvoice',
        `tabPurchase Invoice`.due_date as 'due_date',
@@ -105,7 +105,7 @@ def get_data(filters):
          on `tabSupplier`.name =`tabPurchase Invoice`.supplier
        		   where 1=1
        		   {condition}
-    		 group by `tabPurchase Order`.name,tabSupplier.name
+    		 group by tabSupplier.name,`tabPurchase Invoice`.name,`tabPurchase Order`.name
     		  order by tabSupplier.name
              
 
@@ -113,6 +113,28 @@ def get_data(filters):
 			
 	""".format(condition=condition) ,as_dict=1)
 
-	return results
+	res=[]
+
+	for index in range(0,len(results)):
+		for index2 in range(index+1,len(results)):
+			if results[index]["poname"] == results[index2]["poname"]:
+				results[index2]["poname"] =""
+			if results[index]["purchaseinvoice"] == results[index2]["purchaseinvoice"]:
+				results[index2]["purchaseinvoice"] =""
+
+	for x in results:
+		if x["poname"] != "" or x["purchaseinvoice"]!="" :	
+			res.append(x)
+		
+
+
+
+
+			
+          
+
+
+	return res
+
 
 

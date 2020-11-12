@@ -140,7 +140,7 @@ frappe.ui.form.on('Asset Movement Item', {
 	onload: (frm,cdt,cdn) => {
 
 		var local = locals[cdt][cdn]
-		console.log("local.target_location")
+		
 		if(frm.doc.reference_doctype=="Assets Return"){
 				frm.set_query("target_location" , "assets" ,() =>{
 						

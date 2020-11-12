@@ -467,8 +467,12 @@ class SalesOrder(SellingController):
 	def Items_stock_in_hand(self,name,*args,**kwargs):
 		dictresult=[]
 		for item in self.items:
-			data=frappe.db.sql(""" SELECT sum(actual_qty) FROM `tabStock Ledger Entry` where item_code= '%s'""" %str(item.item_code))
-			dictresult.append({"data":data,"name":item.item_name})
+			data=frappe.db.sql(""" SELECT sum(actual_qty) FROM `tabStock Ledger Entry` where item_code= '%s'  """ %str(item.item_code))
+			try:
+				if (int(data[0][0])):
+					dictresult.append({"data":data,"name":item.item_name})
+			except:
+				pass
 		return dictresult
 
 def get_list_context(context=None):

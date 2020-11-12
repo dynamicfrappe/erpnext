@@ -15,6 +15,13 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Customer Request for Quotation",
+					"description": _("Quotes to Leads or Customers."),
+					"onboard": 1,
+					"dependencies": ["Item", "Customer"],
+				},
+				{
+					"type": "doctype",
 					"name": "Quotation",
 					"description": _("Quotes to Leads or Customers."),
 					"onboard": 1,
@@ -71,6 +78,7 @@ def get_data():
 					"doctype": "Sales Person",
 					"dependencies": ["Sales Person"],
 				},
+
 			]
 		},
 		{
@@ -255,6 +263,12 @@ def get_data():
 					"is_query_report": True,
 					"name": "Sales Order Trends",
 					"doctype": "Sales Order"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Sales Order Based On Quotation",
+					"doctype": "Quotation"
 				},
 			]
 		},

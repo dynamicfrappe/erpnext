@@ -60,6 +60,7 @@
    "reqd": 1
   },
   {
+   "default": "Today",
    "fieldname": "transaction_date",
    "fieldtype": "Date",
    "label": "Transaction Date"
@@ -348,7 +349,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-03-28 16:07:31.960798",
+ "modified": "2020-11-12 10:49:38.780028",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Payment Request",

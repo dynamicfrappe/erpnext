@@ -172,6 +172,7 @@ class PaymentRequest(Document):
 		payment_entry.update({
 			"reference_no": self.name,
 			"reference_date": nowdate(),
+			"mode_of_payment":self.mode_of_payment,
 			"remarks": "Payment Entry against {0} {1} via Payment Request {2}".format(self.reference_doctype,
 				self.reference_name, self.name)
 		})

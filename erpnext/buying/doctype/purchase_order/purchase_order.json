@@ -543,7 +543,7 @@
   {
    "fieldname": "total",
    "fieldtype": "Currency",
-   "label": "Total",
+   "label": "Total Amount",
    "options": "currency",
    "read_only": 1
   },
@@ -763,7 +763,7 @@
   {
    "fieldname": "base_rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total (Company Currency)",
+   "label": "Total (Company Currency)",
    "oldfieldname": "rounded_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
@@ -797,7 +797,7 @@
   {
    "fieldname": "rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total",
+   "label": " Total",
    "options": "currency",
    "read_only": 1
   },
@@ -1055,8 +1055,7 @@
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-09-14 14:36:12.418690",
+ "modified": "2020-11-12 12:03:23.507440",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Order",

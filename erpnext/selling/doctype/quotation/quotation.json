@@ -928,6 +928,8 @@
    "depends_on": "customer_name",
    "fieldname": "customer_rfq",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Customer RFQ",
    "options": "Customer Request for Quotation",
    "read_only": 1
@@ -937,7 +939,7 @@
  "idx": 82,
  "is_submittable": 1,
  "max_attachments": 1,
- "modified": "2020-10-25 12:07:48.248509",
+ "modified": "2020-11-11 15:35:34.786928",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Quotation",
@@ -1027,7 +1029,7 @@
    "role": "Maintenance User"
   }
  ],
- "search_fields": "status,transaction_date,party_name,order_type",
+ "search_fields": "status,transaction_date,party_name,order_type,customer_rfq",
  "show_name_in_global_search": 1,
  "sort_field": "modified",
  "sort_order": "DESC",

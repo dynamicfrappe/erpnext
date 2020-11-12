@@ -57,7 +57,6 @@
   "pricing_rules",
   "section_break_31",
   "column_break_33a",
-  "revenue_margin",
   "total_qty",
   "base_total",
   "base_net_total",
@@ -549,7 +548,7 @@
   {
    "fieldname": "total",
    "fieldtype": "Currency",
-   "label": "Total",
+   "label": "Total Amount",
    "options": "currency",
    "read_only": 1
   },
@@ -755,7 +754,7 @@
   {
    "fieldname": "base_rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total (Company Currency)",
+   "label": " Total (Company Currency)",
    "oldfieldname": "rounded_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
@@ -805,7 +804,7 @@
    "bold": 1,
    "fieldname": "rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total",
+   "label": " Total",
    "oldfieldname": "rounded_total_export",
    "oldfieldtype": "Currency",
    "options": "currency",
@@ -1196,7 +1195,6 @@
    "print_hide": 1
   },
   {
-
    "fieldname": "brand",
    "fieldtype": "Link",
    "label": "Brand",
@@ -1211,8 +1209,7 @@
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
-
- "modified": "2020-11-07 16:18:13.083901",
+ "modified": "2020-11-12 12:01:47.913260",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
