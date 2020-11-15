@@ -1,0 +1,88 @@
+{
+ "autoname": "feild:member",
+ "creation": "2020-11-12 16:44:01.674005",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "member",
+  "age",
+  "relation",
+  "company_share_ratio",
+  "employee_share_ratio",
+  "start_date",
+  "document_no"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "member",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Member",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "age",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Age",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "company_share_ratio",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Company Share Ratio",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "employee_share_ratio",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Employee Share Ratio",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Today",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "document_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Document No"
+  },
+  {
+   "fieldname": "relation",
+   "fieldtype": "Link",
+   "label": "Relation",
+   "options": "Employee Family Relation",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-11-15 10:56:31.393477",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Employee Medical Insurance Members",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

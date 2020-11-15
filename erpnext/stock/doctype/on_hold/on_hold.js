@@ -15,7 +15,7 @@ frappe.ui.form.on('On Hold', {
 						}
 						var date = new Date(frm.doc.start_date);
 						date.setDate( date.getDate() +duration);
-							frm.doc.end_date = date.getFullYear()+"-"+  (date.getMonth()+1) +"-"+ date.getDay()  ;
+							frm.doc.end_date = date.getFullYear()+"-"+  (date.getMonth()+1) +"-"+ date.getDate()  ;
 						});
 
 			}
