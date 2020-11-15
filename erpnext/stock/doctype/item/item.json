@@ -15,6 +15,7 @@
   "item_code",
   "variant_of",
   "item_name",
+  "item_catalog_number",
   "item_group",
   "is_item_from_hub",
   "stock_uom",
@@ -1059,6 +1060,13 @@
    "fieldname": "stagnant_duration_days",
    "fieldtype": "Int",
    "label": "Stagnant Duration (in Days)"
+  },
+  {
+   "fieldname": "item_catalog_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Catalog Number"
   }
  ],
  "has_web_view": 1,
@@ -1066,7 +1074,7 @@
  "idx": 2,
  "image_field": "image",
  "max_attachments": 1,
- "modified": "2020-11-07 13:21:48.336660",
+ "modified": "2020-11-15 12:07:06.489657",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Item",
@@ -1121,7 +1129,7 @@
   }
  ],
  "quick_entry": 1,
- "search_fields": "item_name,description,item_group,customer_code",
+ "search_fields": "item_name,description,item_group,customer_code,item_catalog_number",
  "show_name_in_global_search": 1,
  "show_preview_popup": 1,
  "sort_field": "idx desc,modified desc",
