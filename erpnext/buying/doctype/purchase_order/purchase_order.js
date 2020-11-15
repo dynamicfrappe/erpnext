@@ -6,6 +6,23 @@ frappe.provide("erpnext.buying");
 {% include 'erpnext/public/js/controllers/buying.js' %};
 
 frappe.ui.form.on("Purchase Order", {
+
+	currency:function(frm){
+	       frappe.call({
+                method: "erpnext.buying.doctype.purchase_order.purchase_order.check_currency",
+                args :{
+                	'currency':frm.doc.currency,
+                	'company':frm.doc.company
+                	
+                },callback(r){
+                	if(r.message=="True"){
+                		 frm.set_df_property('naming_series', 'options', ['FR-PUR-ORD-.YYYY.-']); 
+                		 frm.refresh_field('naming_series'); 
+                	}
+                }
+            });
+
+      },
 	setup: function(frm) {
 
 		frm.set_query("reserve_warehouse", "supplied_items", function() {
@@ -41,6 +58,8 @@ frappe.ui.form.on("Purchase Order", {
 		});
 	}
 });
+
+
 
 frappe.ui.form.on("Purchase Order Item", {
 	schedule_date: function(frm, cdt, cdn) {
