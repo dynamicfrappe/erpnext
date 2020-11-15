@@ -411,14 +411,16 @@
   {
    "fieldname": "company_address_display",
    "fieldtype": "Small Text",
-   "label": "Company Address"
+   "label": "Company Address",
+   "permlevel": 1
   },
   {
    "collapsible": 1,
    "fieldname": "currency_and_price_list",
    "fieldtype": "Section Break",
    "label": "Currency and Price List",
-   "options": "fa fa-tag"
+   "options": "fa fa-tag",
+   "permlevel": 1
   },
   {
    "fieldname": "currency",
@@ -427,6 +429,7 @@
    "oldfieldname": "currency",
    "oldfieldtype": "Select",
    "options": "Currency",
+   "permlevel": 1,
    "print_hide": 1,
    "reqd": 1
   },
@@ -460,6 +463,7 @@
    "fieldtype": "Link",
    "label": "Price List Currency",
    "options": "Currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1,
    "reqd": 1
@@ -583,6 +587,7 @@
    "fieldtype": "Currency",
    "label": "Total (Company Currency)",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -698,6 +703,7 @@
    "oldfieldname": "other_charges_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "print_width": "150px",
    "read_only": 1,
@@ -712,6 +718,7 @@
    "fieldtype": "Currency",
    "label": "Total Taxes and Charges",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -735,6 +742,7 @@
    "fieldtype": "Currency",
    "label": "Additional Discount Amount (Company Currency)",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -753,6 +761,7 @@
    "fieldtype": "Currency",
    "label": "Additional Discount Amount",
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1
   },
   {
@@ -768,6 +777,7 @@
    "oldfieldname": "grand_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "print_width": "150px",
    "read_only": 1,
@@ -779,6 +789,7 @@
    "label": "Rounding Adjustment (Company Currency)",
    "no_copy": 1,
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -789,6 +800,7 @@
    "oldfieldname": "rounded_total",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "print_width": "150px",
    "read_only": 1,
@@ -819,6 +831,7 @@
    "oldfieldname": "grand_total_export",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "print_width": "150px",
    "read_only": 1,
    "width": "150px"
@@ -829,6 +842,7 @@
    "label": "Rounding Adjustment",
    "no_copy": 1,
    "options": "currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -840,6 +854,7 @@
    "oldfieldname": "rounded_total_export",
    "oldfieldtype": "Currency",
    "options": "currency",
+   "permlevel": 1,
    "print_width": "150px",
    "read_only": 1,
    "width": "150px"
@@ -1200,6 +1215,7 @@
    "oldfieldname": "total_commission",
    "oldfieldtype": "Currency",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1
   },
   {
@@ -1236,6 +1252,7 @@
  "icon": "fa fa-truck",
  "idx": 146,
  "is_submittable": 1,
+ "modified": "2020-11-12 12:09:06.377496",
  "links": [],
  "modified": "2020-05-19 17:03:45.880106",
  "modified_by": "Administrator",

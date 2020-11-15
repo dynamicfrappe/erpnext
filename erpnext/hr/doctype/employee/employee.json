@@ -86,6 +86,7 @@
   "marital_status",
   "blood_group",
   "family_background",
+  "has_disablity",
   "health_details",
   "educational_qualification",
   "education",
@@ -440,10 +441,11 @@
   {
    "depends_on": "eval:doc.salary_mode == 'Bank'",
    "fieldname": "bank_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Bank Name",
    "oldfieldname": "bank_name",
-   "oldfieldtype": "Link"
+   "oldfieldtype": "Link",
+   "options": "Bank"
   },
   {
    "depends_on": "eval:doc.salary_mode == 'Bank'",
@@ -777,12 +779,18 @@
    "fieldtype": "Link",
    "label": "Leave Approver",
    "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_disablity",
+   "fieldtype": "Check",
+   "label": "Has Disablity"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-01-09 04:23:55.611366",
+ "modified": "2020-11-12 15:31:51.534059",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",

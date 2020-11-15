@@ -382,6 +382,7 @@
    "fieldtype": "Currency",
    "label": "Total Incoming Value",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -394,6 +395,7 @@
    "fieldtype": "Currency",
    "label": "Total Outgoing Value",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide": 1,
    "read_only": 1
   },
@@ -402,6 +404,7 @@
    "fieldtype": "Currency",
    "label": "Total Value Difference (Out - In)",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide_if_no_value": 1,
    "read_only": 1
   },
@@ -423,6 +426,7 @@
    "fieldtype": "Currency",
    "label": "Total Additional Costs",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide_if_no_value": 1,
    "read_only": 1
   },
@@ -576,6 +580,7 @@
    "fieldtype": "Currency",
    "label": "Total Amount",
    "options": "Company:company:default_currency",
+   "permlevel": 1,
    "print_hide_if_no_value": 1,
    "read_only": 1
   },
@@ -627,7 +632,7 @@
  "icon": "fa fa-file-text",
  "idx": 1,
  "is_submittable": 1,
- "modified": "2019-09-27 14:38:20.801420",
+ "modified": "2020-11-12 12:06:54.807369",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock Entry",
