@@ -107,7 +107,15 @@
   "feedback",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "family_details_section",
+  "family_members",
+  "medical_insurance_section",
+  "provider",
+  "document",
+  "insurance_start_date",
+  "get_members",
+  "members"
  ],
  "fields": [
   {
@@ -131,7 +139,7 @@
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "HR-EMP-",
+   "options": "HR-EMP-#####",
    "set_only_once": 1
   },
   {
@@ -785,12 +793,62 @@
    "fieldname": "has_disablity",
    "fieldtype": "Check",
    "label": "Has Disablity"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "family_details_section",
+   "fieldtype": "Section Break",
+   "label": "Family Details"
+  },
+  {
+   "fieldname": "family_members",
+   "fieldtype": "Table",
+   "label": "Family Members",
+   "options": "Employee Family Details"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "medical_insurance_section",
+   "fieldtype": "Section Break",
+   "label": "Medical Insurance"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "document",
+   "fieldtype": "Data",
+   "label": "Document"
+  },
+  {
+   "fieldname": "members",
+   "fieldtype": "Table",
+   "label": "Members",
+   "options": "Employee Medical Insurance Members",
+   "read_only": 1
+  },
+  {
+   "fieldname": "get_members",
+   "fieldtype": "Button",
+   "label": "Get Members"
+  },
+  {
+   "fieldname": "insurance_start_date",
+   "fieldtype": "Date",
+   "label": "Insurance Start Date "
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
+
  "modified": "2020-11-15 13:41:09.012116",
+
+
+
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
