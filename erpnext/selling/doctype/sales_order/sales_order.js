@@ -93,7 +93,7 @@ frappe.ui.form.on("Sales Order", {
     },
 
     Items_stock_in_hand: function(frm) {
-    	var text ="<table><tr><th>Item Name</th><th>Item Quantity</th><th>Age</th></tr>"
+    	var text ="<table><tr><th>Item Name</th><th>Item Quantity</th></tr>"
         
          if(frm.doc.items){
          	     frappe.call({

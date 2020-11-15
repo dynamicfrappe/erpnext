@@ -39,6 +39,7 @@ class PurchaseOrder(BuyingController):
 			'percent_join_field': 'material_request'
 		}]
 
+
 	def validate(self):
 		super(PurchaseOrder, self).validate()
 
@@ -315,6 +316,7 @@ class PurchaseOrder(BuyingController):
 		else:
 			self.db_set("per_received", 0, update_modified=False)
 
+
 def item_last_purchase_rate(name, conversion_rate, item_code, conversion_factor= 1.0):
 	"""get last purchase rate for an item"""
 
@@ -546,3 +548,10 @@ def update_status(status, name):
 def make_inter_company_sales_order(source_name, target_doc=None):
 	from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_transaction
 	return make_inter_company_transaction("Purchase Order", source_name, target_doc)
+
+@frappe.whitelist()
+def check_currency(currency,company):
+	company_currency=frappe.db.get_value("Company",company,"default_currency")
+	if(currency!=company_currency):
+		return 'True'
+	return 'False'

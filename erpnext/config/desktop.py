@@ -10,7 +10,7 @@ def get_data():
 		{
 			"module_name": "Accounts",
 			"category": "Modules",
-			"label": _("Accounting"),
+			"label": _("Accounting Management"),
 			"color": "#3498db",
 			"icon": "icon accounting-blue",
 			"type": "module",
