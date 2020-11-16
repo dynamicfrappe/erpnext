@@ -17,7 +17,7 @@ class OnHold(Document):
 				ORDER BY posting_date DESC , posting_time  DESC Limit 1
 			""".format(item_code = item.item_code , warehouse = item.warehouse) , as_dict=1)
 			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse , self.name)
-			frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty_in_warehouse) ,int(data[0].qty_after_transaction) , int (item.qty) ))
+			#frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty_in_warehouse) ,int(data[0].qty_after_transaction) , int (item.qty) ))
 			if not data[0].qty_after_transaction:
 				data[0].qty_after_transaction = 0
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :

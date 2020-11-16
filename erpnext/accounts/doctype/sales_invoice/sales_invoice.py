@@ -153,7 +153,7 @@ class SalesInvoice(SellingController):
 			
 				""".format (item_code = item.item_code , warehouse = warehouse) , as_dict = 1) or 0
 				qty_warehouse = 0
-				if not allowed_qty:
+				if  allowed_qty:
 					if len(allowed_qty) > 0:
 						if  allowed_qty[0].total_qty:
 							qty_warehouse = allowed_qty[0].total_qty
@@ -166,6 +166,30 @@ class SalesInvoice(SellingController):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
 					frappe.validated=false;
 					return false
+	def  get_holding_qty_in_warehouse(self, item , warehouse , name = '#'):
+				total_hold_qty = 0
+				total_hold_qty_result = frappe.db.sql("""
+												SELECT
+												IFNULL(SUM(HRI.qty),0) as total_hold_qty
+												FROM
+												`tabOb Hold Items` HRI
+												INNER JOIN
+													`tabOn Hold` HR
+												ON 
+													HR.`name` = HRI.parent
+													WHERE HR.`status` = 'Open' and HR.docstatus =1 and HRI.`parent` != '{name}'
+													GROUP BY HRI.item_code , HRI.warehouse
+													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
+
+											     LIMIT 1
+												""".format(item_code = item , warehouse = warehouse , name = name),as_dict=1)
+				if not total_hold_qty_result:
+					total_hold_qty = 0
+				else :
+					total_hold_qty = total_hold_qty_result[0].total_hold_qty
+					if not total_hold_qty :
+						total_hold_qty = 0
+				return total_hold_qty
 	def validate_fixed_asset(self):
 		for d in self.get("items"):
 			if d.is_fixed_asset and d.meta.get_field("asset") and d.asset:
