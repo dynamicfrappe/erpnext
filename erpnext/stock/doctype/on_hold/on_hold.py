@@ -13,17 +13,18 @@ class OnHold(Document):
 		for item in self.get("ob_hold_items") :
 			data = frappe.db.sql("""
 				SELECT IFNULL(qty_after_transaction,0) as qty_after_transaction  from `tabStock Ledger Entry`  
-				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
-				ORDER BY `name` DESC Limit 1
+				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}' and docstatus = 1
+				ORDER BY posting_date DESC , posting_time  DESC Limit 1
 			""".format(item_code = item.item_code , warehouse = item.warehouse) , as_dict=1)
 			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse , self.name)
-
+			frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty_in_warehouse) ,int(data[0].qty_after_transaction) , int (item.qty) ))
 			if not data[0].qty_after_transaction:
 				data[0].qty_after_transaction = 0
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
 					frappe.validated=false;
 					return false
+
 
 	def on_cancel(self):
 		self.status = 'Canceled'
@@ -44,10 +45,10 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 	sql = frappe.db.sql("""
 							SELECT   warehouse , qty_after_transaction
 							from `tabStock Ledger Entry`  
-							where `name` IN ( 
-							SELECT MAX(`name`) from  `tabStock Ledger Entry` GROUP BY item_code , warehouse)
+							where concat(posting_date, ' ', posting_time) IN (
+							SELECT max(concat(posting_date, ' ', posting_time)) from  `tabStock Ledger Entry` GROUP BY item_code , warehouse)
 							
-							and qty_after_transaction <>0 and item_code = '%s' AND  qty_after_transaction >= %d
+							and qty_after_transaction <>0 and item_code = '%s' AND  qty_after_transaction >= %d and docstatus = 1
 							
 
 							GROUP BY item_code , warehouse  """ %(str(item) ,int(qtyy)) , as_dict = 1)
@@ -64,8 +65,7 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 						}
 						items.append(item_data)
 						break
-		if len(items)==0:
-			frappe('Line 65')
+		if len(items) :
 			items=get_Multiple_qty_from_warehouses(item,qtyy,name)
 
 	if not sql :
@@ -79,12 +79,12 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 
 def get_Multiple_qty_from_warehouses(item  , qty,name):
 			items = []
-			chech_all_available_stock = frappe.db.sql("""  			SELECT   Sum(qty_after_transaction) as total_qty 
-																	from `tabStock Ledger Entry`  
-																	where `name` IN ( 
-																	SELECT MAX(`name`) from  `tabStock Ledger Entry` GROUP BY item_code , warehouse)
-																	
-																	and qty_after_transaction <>0 and item_code = '%s' 	
+			chech_all_available_stock = frappe.db.sql("""  			SELECT   Sum(qty_after_transaction) as total_qty
+																	from `tabStock Ledger Entry`
+																	where concat(posting_date, ' ', posting_time) IN (
+																	SELECT max(concat(posting_date, ' ', posting_time)) from  `tabStock Ledger Entry`  GROUP BY item_code , warehouse )
+
+																	and qty_after_transaction <>0 and item_code = '%s' and docstatus=1
 
 																	GROUP BY item_code  """%str(item) , as_dict = 1)
 			if chech_all_available_stock :
@@ -100,10 +100,10 @@ def get_Multiple_qty_from_warehouses(item  , qty,name):
 
 					sql = frappe.db.sql(""" SELECT   warehouse  , qty_after_transaction as qty
 											from `tabStock Ledger Entry`  
-											where `name` IN ( 
-											SELECT MAX(`name`) from  `tabStock Ledger Entry` GROUP BY item_code , warehouse)
+											where concat(posting_date, ' ', posting_time) IN (
+											SELECT max(concat(posting_date, ' ', posting_time)) from  `tabStock Ledger Entry` GROUP BY item_code , warehouse)
 											
-											and qty_after_transaction <>0 and item_code = '%s' AND  qty_after_transaction > 0
+											and qty_after_transaction <>0 and item_code = '%s' AND  qty_after_transaction > 0 and docstatus = 1
 											order by qty_after_transaction desc
 											"""%(str(item)), as_dict = 1 )
 

@@ -120,7 +120,7 @@ class StockEntry(StockController):
 				
 				SELECT IFNULL(qty_after_transaction,0) as total_qty  from `tabStock Ledger Entry`  
 				WHERE item_code = '{item_code}' AND warehouse = '{warehouse}'
-				ORDER BY `name` DESC Limit 1		
+				ORDER BY posting_date DESC , posting_time  DESC  Limit 1		
 			
 			
 				""".format (item_code = item.item_code , warehouse = item.s_warehouse) , as_dict = 1) or 0
