@@ -23,6 +23,14 @@ frappe.ui.form.on("Item", {
 			frm.trigger("set_asset_naming_series");
 		}
 	},
+	item_group:function(frm){
+         if (frm.doc.item_group=="Services") {
+         cur_frm.doc.is_stock_item=0;
+         cur_frm.doc.include_item_in_manufacturing=0;
+         cur_frm.refresh_field('is_stock_item');
+         cur_frm.refresh_field('include_item_in_manufacturing');
+         }
+	},
 
 	refresh: function(frm) {
 		if (frm.doc.is_stock_item) {
@@ -777,3 +785,4 @@ frappe.ui.form.on("UOM Conversion Detail", {
 		}
 	}
 })
+
