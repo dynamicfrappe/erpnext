@@ -118,7 +118,7 @@ frappe.ui.form.on('Assets Return', {
 
 
     refresh: function(frm) {
-
+    try {
 
 
         if(frm.doc.workflow_state == (__("Stock Audit Agreement"))){
@@ -126,7 +126,12 @@ frappe.ui.form.on('Assets Return', {
             frm.events.create_asset_movement(frm)
 
         }).addClass("btn-primary");
-      }
+      } }
+
+
+      catch(err) {
+          console.log(err)
+          }
     },
 
 

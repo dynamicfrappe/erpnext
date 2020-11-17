@@ -17,7 +17,7 @@ frappe.ui.form.on('Custody request', {
 	
 	refresh: function(frm) {
 
-
+try{
 		if(frm.doc.workflow_state == (__("Stock Audit Agreement"))){
 		
 				frm.add_custom_button(__("Create Asset Movement"), function() {
@@ -43,7 +43,10 @@ frappe.ui.form.on('Custody request', {
 		frm.add_custom_button(__("Get Project Custody"), function() {
 			frm.events.get_project_custody(frm)
 				
-			}).addClass("btn-secondary");}
+			}).addClass("btn-secondary");} }
+                catch(err) {
+         console.log(err)
+        }
 	},
 
 
