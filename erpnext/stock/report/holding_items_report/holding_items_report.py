@@ -69,15 +69,21 @@ def getColumns (filters):
 	return columns
 def getdata (filters):
 	conditions = ""
+	docstatus = 1
 	if filters.get("Company"):
-		conditions = " where `tabOn Hold`.`company` =%(Company)s"
+		conditions = " where `tabOn Hold`.`company` =%(Company)s "
 	
 		if filters.get("hold_request"):
 			conditions += " and `tabOn Hold`.`name` =%(hold_request)s"	
 		if filters.get("sales_order"):
 			conditions += " and `tabOn Hold`.sales_order =%(sales_order)s"	
 		if filters.get("status"):
-			conditions += " and `tabOn Hold`.`status` =%(status)s"	
+			conditions += " and `tabOn Hold`.`status` =%(status)s"
+			case = filters.get("status")
+			if case == "Canceled":
+				docstatus = 2
+
+
 		if filters.get("item_code"):
 			conditions += " and `tabOb Hold Items`.item_code =%(item_code)s"
 		if filters.get("warehouse"):
@@ -101,6 +107,7 @@ def getdata (filters):
 					ON 
 						`tabOn Hold`.`name` = `tabOb Hold Items`.parent
 					{conditions}
+					and `tabOn Hold`.docstatus = {docstatus}
 			
-			""".format(conditions=conditions), filters, as_dict=1)
+			""".format(conditions=conditions , docstatus = docstatus), filters, as_dict=1)
 		return results
