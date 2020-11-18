@@ -8,7 +8,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "CF",
- "modified": "2020-11-17 14:16:52.839446",
+ "modified": "2020-11-17 16:34:59.691639",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock Reconciliation Report",
@@ -20,6 +20,12 @@
  "roles": [
   {
    "role": "Stock Manager"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "All"
   }
  ]
 }

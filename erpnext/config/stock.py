@@ -114,6 +114,7 @@ def get_data():
 					"is_query_report": True,
 					"name": "Stock Reconciliation Report",
 					"doctype": "Stock Reconciliation",
+					"dependencies": ["Stock Reconciliation"]
 					
 				}
 			]
