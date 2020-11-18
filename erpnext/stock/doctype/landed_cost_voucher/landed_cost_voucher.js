@@ -44,15 +44,13 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 
 			this.frm.set_query("type", "landed_cost_voucher_expenses", (doc) => {
 			return {
-				// filters: {
-				// 	name: ["in", [ "Purchase Invoice","Payment Entry" , "Journal Entry"]]
-				// }
+				
 				query : "erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.get_query_type"
 			};
 
 		})
 
-			console.log(this.frm)
+			
 
 		this.frm.fields_dict.landed_cost_voucher_expenses.grid.get_field('reference').get_query =
 		function(doc,cdt,cdn) {
@@ -190,10 +188,56 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 		this.trigger('set_applicable_charges_for_item');
 	},
 	reference:function(frm){
-		console.log("add5")
+		
 		this.set_total_taxes_and_charges();
 		this.set_applicable_charges_for_item();
+	},
+	landed_cost_voucher_expenses_remove:function(frm){
+		
+		this.frm.clear_table("taxes")
+		this.frm.refresh_field("taxes")
+
+		if (this.frm.doc.landed_cost_voucher_expenses.length > 0){
+			
+			var i = 0 
+			var me = this ;
+			for (i=0 ; i < this.frm.doc.landed_cost_voucher_expenses.length ; i ++){
+						
+
+						frappe.call({
+								method:'erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.set_frm_query',
+								args:{
+								tpe : me.frm.doc.landed_cost_voucher_expenses[i].type ,
+						    	refrence :me.frm.doc.landed_cost_voucher_expenses[i].reference,
+									},				
+				callback:function(r){
+					
+					var e = 0 
+					for (e=0;e < r.message.length ; e++){
+						var child = me.frm.add_child("taxes")
+						
+						child.description = r.message[e].desc
+						child.expense_account = r.message[e].account
+						child.amount = r.message[e].amount	
+						if (r.message[e].party){
+												child.party = r.message[e].party
+												child.party_type= r.message[e].party_type}
+
+							me.frm.refresh_field("taxes")
+						
+					}
+				}
+			
+	
+	})
+
+			}
+
+
+		}
+
 	}
+
 
 
 
@@ -205,9 +249,7 @@ frappe.ui.form.on('Landed Cost Voucher',{
 		frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,1)
 
 	}, 
-	taxes_add :(frm) =>{
-		console.log("add")
-	},
+	
 
 landed_cost_details:function(frm){
 	var num = 1
@@ -239,8 +281,7 @@ reference:function(frm,cdt,cdn){
 						    	refrence :local.reference,
 				},				
 				callback:function(r){
-					// console.log(r.message)
-					console.log(r.message)
+					
 					var i = 0 
 					for (i=0;i < r.message.length ; i++){
 						var child = frm.add_child("taxes")
