@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2013-05-21 16:16:45",
@@ -637,7 +636,7 @@
   {
    "fieldname": "rounded_total",
    "fieldtype": "Currency",
-   "label": "Rounded Total",
+   "label": "Total",
    "read_only": 1
   },
   {
@@ -806,8 +805,7 @@
  "icon": "fa fa-shopping-cart",
  "idx": 29,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-10-01 20:56:17.932007",
+ "modified": "2020-11-18 16:02:28.577650",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier Quotation",
