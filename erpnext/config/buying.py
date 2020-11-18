@@ -259,6 +259,15 @@ def get_data():
 					"reference_doctype": "Request for Quotation",
 					"onboard": 1
 				},
+
+
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Supplier Quotation Comparison",
+					"reference_doctype": "Supplier Quotation",
+					"onboard": 1
+				},
 				{
 					"type": "report",
 					"is_query_report": True,
