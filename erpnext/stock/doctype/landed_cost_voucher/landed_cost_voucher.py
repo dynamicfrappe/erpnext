@@ -179,13 +179,15 @@ def set_frm_query(tpe , refrence ,*args , **kwargs):
 		invoice = frappe.get_doc("Purchase Invoice" , refrence)
 		accounts = []
 		for item in invoice.items:
-			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,"amount":item.amount}
+			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,
+			"amount":item.amount  , "party":None , 'party_type': None}
 			accounts.append(accounts_dic)
 		return(accounts)
 
 	if tpe =='Payment Entry' :
 			invoice = frappe.get_doc("Payment Entry" , refrence)
-			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks , "amount":invoice.paid_amount}]
+			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks ,
+			 "amount":invoice.paid_amount , "party_type":invoice.party_type , "party":invoice.party}]
 			return(accounts)
 
 	if tpe =='Journal Entry' :
@@ -194,7 +196,9 @@ def set_frm_query(tpe , refrence ,*args , **kwargs):
 		 FROM `tabJournal Entry Account` WHERE parent ='%s'  AND debit > 0 
 		 """%str(refrence)) 
 
-		accounts += [{"account": account[0] , "desc": account[1] , "amount":account[3]}for account in pay ]
+		accounts += [{"account": account[0] , "desc": account[1] ,
+					"party":account[2],"party_type":account[1] ,
+					"amount":account[3]}for account in pay ]
 		
 		return accounts
 

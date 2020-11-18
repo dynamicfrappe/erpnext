@@ -188,7 +188,13 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 
 	items_remove: () => {
 		this.trigger('set_applicable_charges_for_item');
+	},
+	reference:function(frm){
+		console.log("add5")
+		this.set_total_taxes_and_charges();
+		this.set_applicable_charges_for_item();
 	}
+
 
 
 });
@@ -199,6 +205,9 @@ frappe.ui.form.on('Landed Cost Voucher',{
 		frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,1)
 
 	}, 
+	taxes_add :(frm) =>{
+		console.log("add")
+	},
 
 landed_cost_details:function(frm){
 	var num = 1
@@ -238,6 +247,9 @@ reference:function(frm,cdt,cdn){
 						child.description = r.message[i].desc
 						child.expense_account = r.message[i].account
 						child.amount = r.message[i].amount	
+						if (r.message[i].party){
+												child.party = r.message[i].party
+												child.party_type= r.message[i].party_type}
 						frm.refresh_field("taxes")
 					}
 				}

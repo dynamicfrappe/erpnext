@@ -78,7 +78,7 @@
   {
    "fieldname": "taxes",
    "fieldtype": "Table",
-   "label": "Taxes and Charges",
+   "label": "Charges",
    "options": "Landed Cost Taxes and Charges",
    "reqd": 1
   },
@@ -142,7 +142,7 @@
  ],
  "icon": "icon-usd",
  "is_submittable": 1,
- "modified": "2020-11-18 13:07:57.620120",
+ "modified": "2020-11-18 14:30:25.164517",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Landed Cost Voucher",
