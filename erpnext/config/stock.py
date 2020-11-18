@@ -108,6 +108,14 @@ def get_data():
 					"name": "Holding Items Report",
 					"doctype": "On Hold",
 					
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Stock Reconciliation Report",
+					"doctype": "Stock Reconciliation",
+					"dependencies": ["Stock Reconciliation"]
+					
 				}
 			]
 		},
