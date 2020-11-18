@@ -44,30 +44,57 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 
 			this.frm.set_query("type", "landed_cost_voucher_expenses", (doc) => {
 			return {
-				filters: {
-					name: ["in", [ "Purchase Invoice","Payment Entry" , "Journal Entry"]]
-				}
+				// filters: {
+				// 	name: ["in", [ "Purchase Invoice","Payment Entry" , "Journal Entry"]]
+				// }
+				query : "erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.get_query_type"
 			};
 
 		})
 
-	},
-	set_form_query:function(frm ,avrg){
-		if (avrg == "Payment Entry"){
-		
-		frm.fields_dict.landed_cost_voucher_expenses.grid.get_field('reference').get_query =
-		function (frm,cdt,cdn) {
-		return {
-				filters: {
-					payment_type: "Receipt",
-					docstatus:1
+			console.log(this.frm)
+
+		this.frm.fields_dict.landed_cost_voucher_expenses.grid.get_field('reference').get_query =
+		function(doc,cdt,cdn) {
+			var d = locals[cdt][cdn]
+
+				
+
+				if (d.type == "Payment Entry") {
+					var filters = [
+					[d.type, 'docstatus', '=', '1'],
+					[d.type, 'company', '=', me.frm.doc.company],
+				]
+					filters.push(["Payment Entry", "payment_type", "=", "Pay"])
 				}
-			};}
+				
+				var filters = [
+					[d.type, 'docstatus', '=', '1'],
+					[d.type, 'company', '=', me.frm.doc.company],
+				]
+				if (d.type == "Purchase Invoice") {
 
+
+
+					return {
+						query : "erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.get_purchase_items"
+					}
+
+					
+				}
+
+				if (!me.frm.doc.company) frappe.msgprint(__("Please enter company first"));
+				return {
+					filters: filters
+				}
+			
+		}
 		
-	}
+
+
 
 	},
+	
 
 	refresh: function(frm) {
 		var help_content =
@@ -184,24 +211,7 @@ landed_cost_details:function(frm){
 
 	})
 
-// set_folrm_query:function(frm ,avrg){
-// 		if (avrg == "Payment Entry"){
-		
-// 		frm.fields_dict.landed_cost_voucher_expenses.grid.get_field('reference').get_query =
-// 		function (frm,cdt,cdn) {
-// 		return {
-// 				filters: {
-// 					payment_type: "Receipt",
-// 					docstatus:1
-// 				}
-// 			};}
 
-		
-// 	}
-
-// 	},
-
-// });
 
 frappe.ui.form.on('Landed Cost Voucher Expenses', {
 
@@ -221,6 +231,7 @@ reference:function(frm,cdt,cdn){
 				},				
 				callback:function(r){
 					// console.log(r.message)
+					console.log(r.message)
 					var i = 0 
 					for (i=0;i < r.message.length ; i++){
 						var child = frm.add_child("taxes")
