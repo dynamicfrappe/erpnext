@@ -171,22 +171,59 @@ class LandedCostVoucher(Document):
 
 
 
+
+
 @frappe.whitelist()
-def set_frm_query(tpe , refrence ,*args , **kwargs):
+def set_frm_query(tpe =None , refrence= None ,*args , **kwargs):
 	if tpe =='Purchase Invoice' :
 		invoice = frappe.get_doc("Purchase Invoice" , refrence)
 		accounts = []
 		for item in invoice.items:
-			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,"amount":item.amount}
+			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,
+			"amount":item.amount  , "party":None , 'party_type': None}
 			accounts.append(accounts_dic)
 		return(accounts)
 
 	if tpe =='Payment Entry' :
 			invoice = frappe.get_doc("Payment Entry" , refrence)
-			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks , "amount":invoice.paid_amount}]
+			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks ,
+			 "amount":invoice.paid_amount , "party_type":invoice.party_type , "party":invoice.party}]
 			return(accounts)
+
+	if tpe =='Journal Entry' :
+		accounts=[]
+		pay = frappe.db.sql(""" SELECT account  ,party_type ,party  ,debit
+		 FROM `tabJournal Entry Account` WHERE parent ='%s'  AND debit > 0 
+		 """%str(refrence)) 
+
+		accounts += [{"account": account[0] , "desc": account[1] ,
+					"party":account[2],"party_type":account[1] ,
+					"amount":account[3]}for account in pay ]
+		
+		return accounts
+
+
 
 
 
 
 	return True
+
+
+@frappe.whitelist()
+def get_purchase_items(invoice=None , *args , **kwargs):
+
+
+	invoices = frappe.db.sql("""SELECT  p.parent  FROM `tabPurchase Invoice Item` AS p
+								inner join   `tabItem` AS a on p.item_code = a.item_code
+								WHERE a.is_stock_item = 0 
+								group by p.parent   """)
+
+ 
+	return invoices
+
+
+
+@frappe.whitelist()
+def get_query_type (*args,**kwargs):
+	return[[ "Purchase Invoice"],["Payment Entry"] , ["Journal Entry"]]

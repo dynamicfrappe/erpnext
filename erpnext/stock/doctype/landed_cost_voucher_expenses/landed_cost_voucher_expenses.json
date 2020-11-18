@@ -12,7 +12,7 @@
    "fieldname": "type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Doctype Name",
+   "label": "Transaction Type ",
    "options": "DocType",
    "reqd": 1
   },
@@ -20,11 +20,11 @@
    "fieldname": "reference",
    "fieldtype": "Dynamic Link",
    "in_list_view": 1,
-   "label": "Reference",
+   "label": "Transaction Number",
    "options": "type"
   }
  ],
- "modified": "2020-11-10 12:22:06.721815",
+ "modified": "2020-11-18 15:44:29.329487",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Landed Cost Voucher Expenses",
