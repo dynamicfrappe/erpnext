@@ -174,7 +174,7 @@ class LandedCostVoucher(Document):
 
 
 @frappe.whitelist()
-def set_frm_query(tpe , refrence ,*args , **kwargs):
+def set_frm_query(tpe =None , refrence= None ,*args , **kwargs):
 	if tpe =='Purchase Invoice' :
 		invoice = frappe.get_doc("Purchase Invoice" , refrence)
 		accounts = []
