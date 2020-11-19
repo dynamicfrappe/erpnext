@@ -102,8 +102,10 @@
   "apply_discount_on",
   "base_discount_amount",
   "column_break_51",
-  "additional_discount_percentage",
   "discount_amount",
+  "additional_discount_percentage",
+  "discount_note_section",
+  "discount_note_table",
   "totals",
   "base_grand_total",
   "base_rounding_adjustment",
@@ -112,6 +114,7 @@
   "column_break5",
   "grand_total",
   "rounding_adjustment",
+  "total_discount_note",
   "rounded_total",
   "in_words",
   "total_advance",
@@ -1564,12 +1567,30 @@
   {
    "fieldname": "dimension_col_break",
    "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "discount_note_section",
+   "fieldtype": "Section Break",
+   "label": "Discount Note"
+  },
+  {
+   "fieldname": "discount_note_table",
+   "fieldtype": "Table",
+   "label": "Discount Note Table",
+   "options": "Purchase invoice Discount"
+  },
+  {
+   "fieldname": "total_discount_note",
+   "fieldtype": "Currency",
+   "label": "Total Discount Note ",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 181,
  "is_submittable": 1,
- "modified": "2020-11-12 12:02:36.626303",
+ "modified": "2020-11-19 12:59:20.873437",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Invoice",
