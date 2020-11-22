@@ -35,6 +35,12 @@ class SalarySlip(TransactionBase):
 		self.name = make_autoname(self.series)
 
 	def validate(self):
+		total=0
+		for e in self.earnings:
+			total+=e.amount
+		net_total=total/(self.total_working_days *8)
+		self.hour_rates=net_total
+		self.total_hours=self.total_working_days *8
 		self.status = self.get_status()
 		self.validate_dates()
 		self.check_existing()
@@ -60,6 +66,7 @@ class SalarySlip(TransactionBase):
 								format(max_working_hours), alert=True)
 
 	def on_submit(self):
+
 		if self.net_pay < 0:
 			frappe.throw(_("Net Pay cannot be less than 0"))
 		else:
