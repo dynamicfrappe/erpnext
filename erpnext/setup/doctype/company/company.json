@@ -20,6 +20,7 @@
   "default_currency",
   "default_letter_head",
   "default_holiday_list",
+  "default_shift",
   "default_finance_book",
   "standard_working_hours",
   "default_selling_terms",
@@ -736,13 +737,19 @@
    "fieldname": "reject_request_after_days",
    "fieldtype": "Float",
    "label": "No of Days to Reject Requests"
+  },
+  {
+   "fieldname": "default_shift",
+   "fieldtype": "Link",
+   "label": "Default Shift",
+   "options": "Shift Type"
   }
  ],
  "icon": "fa fa-building",
  "idx": 1,
  "image_field": "company_logo",
  "is_tree": 1,
- "modified": "2020-10-19 15:55:33.671827",
+ "modified": "2020-11-19 16:29:56.624846",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Company",
