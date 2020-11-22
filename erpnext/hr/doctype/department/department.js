@@ -2,6 +2,15 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Department', {
+	setup:function(frm){
+		frm.set_query("type","department_mngmnt",function(){
+			return{
+					filters: {
+					name: ["in", ["Department Managment Roles", "Role"]]
+				}
+			}
+		})
+	},
 	refresh: function(frm) {
 		// read-only for root department
 		if(!frm.doc.parent_department && !frm.is_new()) {
@@ -15,3 +24,20 @@ frappe.ui.form.on('Department', {
 		}
 	}
 });
+/*
+frappe.ui.form.on('Department Managment',{
+    setup:function(frm){
+		frm.set_query("type", function()  {
+			return {
+				filters: {
+					name: ["in", ["Department Managment Roles", "Role"]]
+				}
+			};
+		})
+
+
+
+	}
+});
+
+*/
