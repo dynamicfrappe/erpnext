@@ -1,0 +1,180 @@
+{
+ "allow_import": 1,
+ "autoname": "EMP-ATT-Log-.MM.-.YYYY.-.######",
+ "creation": "2020-11-19 11:50:46.211868",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "type",
+  "shift",
+  "column_break_4",
+  "date",
+  "time",
+  "device_id",
+  "shift_start",
+  "shift_end",
+  "shift_actual_start",
+  "shift_actual_end",
+  "early_in",
+  "early_out",
+  "late_in",
+  "late_out",
+  "reference_type",
+  "reference_name",
+  "type_number",
+  "is_calculated"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift",
+   "options": "Shift Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Now",
+   "fieldname": "time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Time",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Link",
+   "label": "Location / Device ID",
+   "options": "Device"
+  },
+  {
+   "fieldname": "shift_start",
+   "fieldtype": "Time",
+   "label": "Shift Start"
+  },
+  {
+   "fieldname": "shift_end",
+   "fieldtype": "Time",
+   "label": "Shift End"
+  },
+  {
+   "fieldname": "shift_actual_start",
+   "fieldtype": "Time",
+   "label": "Shift Actual Start"
+  },
+  {
+   "fieldname": "shift_actual_end",
+   "fieldtype": "Time",
+   "label": "Shift Actual End"
+  },
+  {
+   "fieldname": "early_in",
+   "fieldtype": "Data",
+   "label": "Early IN"
+  },
+  {
+   "fieldname": "early_out",
+   "fieldtype": "Data",
+   "label": "Early OUT"
+  },
+  {
+   "fieldname": "late_in",
+   "fieldtype": "Data",
+   "label": "Late IN"
+  },
+  {
+   "fieldname": "late_out",
+   "fieldtype": "Data",
+   "label": "Late Out"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "Present\nAbsent\nLeave\nHoliday"
+  },
+  {
+   "fieldname": "reference_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Reference Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Reference Name",
+   "options": "reference_type"
+  },
+  {
+   "fieldname": "type_number",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Type Number"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_calculated",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "is_calculated"
+  }
+ ],
+ "in_create": 1,
+ "modified": "2020-11-22 12:01:37.802512",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Employee Attendance Logs",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "ASC",
+ "title_field": "employee_name",
+ "track_changes": 1
+}
