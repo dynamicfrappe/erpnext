@@ -16,7 +16,12 @@ frappe.ui.form.on("Purchase Order", {
                 	
                 },callback(r){
                 	if(r.message=="True"){
+                		
                 		 frm.set_df_property('naming_series', 'options', ['FR-PUR-ORD-.YYYY.-']); 
+                		 frm.refresh_field('naming_series'); 
+                	}else{
+                		
+                		frm.set_df_property('naming_series', 'options', ['PUR-ORD-.YYYY.-']); 
                 		 frm.refresh_field('naming_series'); 
                 	}
                 }

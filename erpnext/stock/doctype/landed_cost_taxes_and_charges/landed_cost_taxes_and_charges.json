@@ -7,7 +7,9 @@
   "expense_account",
   "description",
   "col_break3",
-  "amount"
+  "amount",
+  "party_type",
+  "party"
  ],
  "fields": [
   {
@@ -28,7 +30,6 @@
    "in_list_view": 1,
    "label": "Amount",
    "options": "Company:company:default_currency",
-   "permlevel": 1,
    "reqd": 1
   },
   {
@@ -38,10 +39,24 @@
    "label": "Expense Account",
    "options": "Account",
    "reqd": 1
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Party Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "label": "party",
+   "options": "party_type",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2020-11-12 12:24:52.489368",
+ "modified": "2020-11-18 14:11:57.908410",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Landed Cost Taxes and Charges",
