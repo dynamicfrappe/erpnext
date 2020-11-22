@@ -2,23 +2,43 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Attendance Calculation', {
-	 refresh: function(frm) {
+	refresh: function(frm) {
 
 		 	if (!frm.is_new()) {
 			 	if (frm.doc.docstatus == 0){
+
 					frm.add_custom_button(__("Calculate"),
 									function() {
-										frappe.call({
+										frm.events.Calculate_attendance(frm);	
+										frm.clea										
+									}).addClass("btn-primary");
+			 	}
+			}
+			frappe.realtime.on('update_progress', (data) => {
+
+				    frappe.show_progress(__('Calculating Attendance'),  data.progress , data.total,__('Calculating Attendance'))
+			});
+
+
+	},
+
+	Calculate_attendance: function (frm) {
+
+
+		        	    	
+		            
+				
+
+
+								frappe.call({
 											doc: frm.doc,
 											method: "Calculate_attendance",
 											
 											callback: function(r) {
-												frappe.msgprint(__("Done"))
-											}
+												//frappe.msgprint(__("Done"))
+												frappe.hide_progress()
+											},
+											freeze: true
 										});
-									}).addClass("btn-primary");
-			 	}
-			}
-
-	 }
+								}
 });

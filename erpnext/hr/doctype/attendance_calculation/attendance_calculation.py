@@ -7,13 +7,17 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from datetime import datetime,timedelta,time
-from frappe.utils import now, cint, get_datetime, to_timedelta
+from frappe.utils import now, cint, get_datetime, to_timedelta,update_progress_bar
 
 # Type Number Codes : 
 # 	1 => Present
 # 	2 => absens
 # 	3 => Leave
 # 	4 => Holiday
+# 	5 => Business Trip
+#   6 => Mission
+#   7 => Mission All Day
+#   8 => Half Day
 
 class AttendanceCalculation(Document):
 	# attendances = []
@@ -29,12 +33,23 @@ class AttendanceCalculation(Document):
 			""".format(from_date=self.from_date,to_date=self.to_date),as_dict=1)
 		day = datetime.strptime(self.from_date,'%Y-%m-%d').date()
 		self.to_date = datetime.strptime(self.to_date,'%Y-%m-%d').date()
+		self.from_date = datetime.strptime(self.from_date,'%Y-%m-%d').date()
 		self.employees = list(set([x.employee for x in self.attendances]))
+		total_days = (self.to_date - self.from_date).days +1
+		count = 0.5
 		if self.attendances and self.employees:
 			while day <= self.to_date:
-				result = [self.calculate(employee = employee , day = day ) for employee in self.employees]
+				frappe.publish_realtime('update_progress', {
+				    'progress': count,
+				    'total': total_days
+				})
 
+				
+				count +=1
+				result = [self.calculate(employee = employee , day = day ) for employee in self.employees]
+				
 				day += timedelta(days=1)
+		return True
 
 	def calculate(self,employee , day):
 		doc = frappe.new_doc('Employee Attendance Logs')
@@ -79,6 +94,7 @@ class AttendanceCalculation(Document):
 		doc.shift_end = Shift.end_time
 		doc.shift_actual_start = timedelta(minutes=0)
 		doc.shift_actual_end = timedelta(minutes=0)
+		user_records_in_day = [x for x in self.attendances if x.employee == employee and x.Day == day]
 		if Holidays :
 			# Day is Holiday
 			doc.reference_type = "Holiday List"
@@ -93,23 +109,48 @@ class AttendanceCalculation(Document):
 				# In Leave
 				doc.reference_type = "Leave Application"
 				doc.reference_name =  	Leaves[0].name
-				self.In_Leave (doc)
-			else :
-				# Shift = frappe.db.sql("""
-				# 	select * from `tabShift Type` where name = '{}'
-				# 	""".format(default_shift),as_dict=1)
-				# frappe.msgprint(str(Shift))
-				doc.reference_type = "Shift Type"
-				doc.reference_name = default_shift
-				# frappe.msgprint(str(datetime.strptime(x.Day,"%Y-%m-%d") for x in self.attendances) + "  " + str(day))
-				user_records_in_day = [x for x in self.attendances if x.employee == employee and x.Day == day]
-				# frappe.msgprint(str(user_records_in_day))
-				if not user_records_in_day:
-					# Absent
-					self.Absent(doc)
+
+				if  Leaves[0].half_day:
+					if Leaves[0].half_day_date == day :
+						if user_records_in_day :
+							# Present in Half Day
+							self.Present(doc,user_records_in_day[0],Shift ,type =4)
+						else :
+							# half day with no records
+							self.Absent(doc)
 				else:
-					# Present 
-					self.Present(doc,user_records_in_day[0],Shift)
+					self.In_Leave (doc)
+			else :
+				BusinessTrips = frappe.db.sql("""
+					select * from `tabBusiness Trip` where docstatus = 1 and from_date <= '{day}' and to_date >= {day}
+					and employee = '{employee}'
+					""".format(day=day,employee=employee) ,as_dict =1)
+				if BusinessTrips :
+					doc.reference_type = "Business Trip"
+					doc.reference_name =  	BusinessTrips[0].name
+					self.In_BusinessTrip(doc)
+					
+
+				else :
+
+						doc.reference_type = "Shift Type"
+						doc.reference_name = default_shift
+						# frappe.msgprint(str(datetime.strptime(x.Day,"%Y-%m-%d") for x in self.attendances) + "  " + str(day))
+						# frappe.msgprint(str(user_records_in_day))
+						missions = frappe.db.sql("""
+							select * from `tabMission` where docstatus = 1 and tabMission.date = '{day}'  and employee = '{employee}' order by start_time asc ,  end_time asc
+							""".format(day=day,employee=employee),as_dict=1)
+						if missions and user_records_in_day:
+							self.Present(doc,user_records_in_day[0],Shift ,missions=missions,type =2)
+
+						elif missions and not user_records_in_day:
+							self.Present(doc,user_records_in_day[0],Shift ,missions = missions,type =3)
+						elif not user_records_in_day:
+							# Absent
+							self.Absent(doc)
+						elif user_records_in_day:
+							# Present 
+							self.Present(doc,user_records_in_day[0],Shift)
 
 
 
@@ -119,6 +160,11 @@ class AttendanceCalculation(Document):
 	def In_Holiday (self,doc):
 		doc.type = "Holiday"
 		doc.type_number = 4
+		doc.insert()	
+
+	def In_BusinessTrip (self,doc):
+		doc.type = "Business Trip"
+		doc.type_number = 5
 		doc.insert()
 
 	def In_Leave (self,doc):
@@ -131,15 +177,68 @@ class AttendanceCalculation(Document):
 		doc.type_number = 2
 		doc.insert()
 
-	def Present (self,doc , log ,shift):
+	# def Present (self,doc , log ,shift , missions = None , type = 1):
+	# 	doc.type = "Present"
+	# 	doc.type_number = 1
+	# 	doc.shift_actual_start = log.IN.time()
+	# 	doc.shift_actual_end = log.OUT.time()
+	# 	doc.early_in = shift.start_time - to_timedelta(str(log.IN.time()))
+	# 	doc.late_in =  to_timedelta(str(log.IN.time())) - shift.start_time
+	# 	doc.early_out =  shift.end_time  -to_timedelta(str(log.OUT.time()))
+	# 	doc.late_out = to_timedelta(str(log.OUT.time())) - shift.end_time
+	# 	if doc.early_in < timedelta(minutes=0):
+	# 		doc.early_in = timedelta(minutes=0)
+	# 	if doc.early_out < timedelta(minutes=0):
+	# 		doc.early_out = timedelta(minutes=0)
+	# 	if doc.late_out < timedelta(minutes=0):
+	# 		doc.late_out = timedelta(minutes=0)
+	# 	if doc.late_in < timedelta(minutes=0):
+	# 		doc.late_in = timedelta(minutes=0)
+
+
+	# 	doc.insert()
+
+	def Present (self,doc , log ,shift , missions = None , type = 1):
 		doc.type = "Present"
 		doc.type_number = 1
-		doc.shift_actual_start = log.IN.time()
-		doc.shift_actual_end = log.OUT.time()
-		doc.early_in = shift.start_time - to_timedelta(str(log.IN.time()))
-		doc.late_in =  to_timedelta(str(log.IN.time())) - shift.start_time
-		doc.early_out =  shift.end_time  -to_timedelta(str(log.OUT.time()))
-		doc.late_out = to_timedelta(str(log.OUT.time())) - shift.end_time
+		IN = None
+		OUT = None
+		if type == 1 :
+			# Normal Present
+			IN = to_timedelta(str(log.IN.time()))
+			OUT = to_timedelta(str(log.OUT.time()))
+		elif type == 2 :
+			# Present With Missions in day
+			doc.type = "Mission"
+			doc.type_number = 6
+			if missions[0].start_time < to_timedelta(str(log.IN.time())):
+				IN = missions[0].start_time
+			else : 
+				IN = to_timedelta(str(log.IN.time()))
+			if missions[-1].end_time > to_timedelta(str(log.OUT.time())):
+				OUT = missions[-1].end_time
+			else:
+				OUT = to_timedelta(str(log.OUT.time()))
+		elif type == 3 :
+			# Present With missions all the day
+			doc.type = "Mission All Day"
+			doc.type_number = 7
+			IN = missions[0].start_time
+			OUT = missions[-1].end_time
+
+		elif type == 4 :
+			doc.type = "Half Day"
+			doc.type_number = 8
+			IN = to_timedelta(str(log.IN.time()))
+			OUT = to_timedelta(str(log.OUT.time()))
+
+
+		doc.shift_actual_start = IN
+		doc.shift_actual_end = OUT
+		doc.early_in = shift.start_time - IN
+		doc.late_in =  IN - shift.start_time
+		doc.early_out =  shift.end_time  - OUT
+		doc.late_out = OUT - shift.end_time
 		if doc.early_in < timedelta(minutes=0):
 			doc.early_in = timedelta(minutes=0)
 		if doc.early_out < timedelta(minutes=0):

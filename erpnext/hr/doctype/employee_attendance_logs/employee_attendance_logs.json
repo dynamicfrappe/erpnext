@@ -32,6 +32,7 @@
    "fieldtype": "Link",
    "label": "Employee",
    "options": "Employee",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -51,7 +52,7 @@
   },
   {
    "fieldname": "column_break_4",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break"
   },
   {
    "default": "Now",
@@ -59,53 +60,63 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Time",
-   "permlevel": 1
+   "permlevel": 1,
+   "read_only": 1
   },
   {
    "fieldname": "device_id",
    "fieldtype": "Link",
    "label": "Location / Device ID",
-   "options": "Device"
+   "options": "Device",
+   "read_only": 1
   },
   {
    "fieldname": "shift_start",
    "fieldtype": "Time",
-   "label": "Shift Start"
+   "label": "Shift Start",
+   "read_only": 1
   },
   {
    "fieldname": "shift_end",
    "fieldtype": "Time",
-   "label": "Shift End"
+   "label": "Shift End",
+   "read_only": 1
   },
   {
    "fieldname": "shift_actual_start",
    "fieldtype": "Time",
-   "label": "Shift Actual Start"
+   "label": "Shift Actual Start",
+   "read_only": 1
   },
   {
    "fieldname": "shift_actual_end",
    "fieldtype": "Time",
-   "label": "Shift Actual End"
+   "label": "Shift Actual End",
+   "read_only": 1
   },
   {
    "fieldname": "early_in",
    "fieldtype": "Data",
-   "label": "Early IN"
+   "label": "Early IN",
+   "read_only": 1
   },
   {
    "fieldname": "early_out",
    "fieldtype": "Data",
-   "label": "Early OUT"
+   "label": "Early OUT",
+   "read_only": 1
   },
   {
    "fieldname": "late_in",
    "fieldtype": "Data",
-   "label": "Late IN"
+   "label": "Late IN",
+   "read_only": 1
   },
   {
    "fieldname": "late_out",
    "fieldtype": "Data",
-   "label": "Late Out"
+   "label": "Late Out",
+   "read_only": 1
   },
   {
    "fieldname": "date",
@@ -113,6 +124,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -121,7 +133,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Type",
-   "options": "Present\nAbsent\nLeave\nHoliday"
+   "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day",
+   "read_only": 1
   },
   {
    "fieldname": "reference_type",
@@ -129,7 +142,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Reference Type",
-   "options": "DocType"
+   "options": "DocType",
+   "read_only": 1
   },
   {
    "fieldname": "reference_name",
@@ -137,13 +151,15 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Reference Name",
-   "options": "reference_type"
+   "options": "reference_type",
+   "read_only": 1
   },
   {
    "fieldname": "type_number",
    "fieldtype": "Int",
    "hidden": 1,
-   "label": "Type Number"
+   "label": "Type Number",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -154,7 +170,7 @@
   }
  ],
  "in_create": 1,
- "modified": "2020-11-22 12:01:37.802512",
+ "modified": "2020-11-22 14:19:18.161553",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
