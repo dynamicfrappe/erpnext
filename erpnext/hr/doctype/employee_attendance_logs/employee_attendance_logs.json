@@ -1,6 +1,6 @@
 {
  "allow_import": 1,
- "autoname": "EMP-ATT-Log-.MM.-.YYYY.-.######",
+ "autoname": "Prompt",
  "creation": "2020-11-19 11:50:46.211868",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -24,12 +24,15 @@
   "reference_type",
   "reference_name",
   "type_number",
-  "is_calculated"
+  "is_calculated",
+  "company"
  ],
  "fields": [
   {
    "fieldname": "employee",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Employee",
    "options": "Employee",
    "read_only": 1,
@@ -41,6 +44,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Employee Name",
+   "options": "Employee:employee_name",
    "read_only": 1
   },
   {
@@ -167,10 +171,16 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "is_calculated"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "in_create": 1,
- "modified": "2020-11-22 14:19:18.161553",
+ "modified": "2020-11-23 14:12:30.975274",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
