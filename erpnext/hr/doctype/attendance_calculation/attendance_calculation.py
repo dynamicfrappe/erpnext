@@ -11,7 +11,7 @@ from frappe.utils import now, cint, get_datetime, to_timedelta,update_progress_b
 
 # Type Number Codes : 
 # 	1 => Present
-# 	2 => absens
+# 	2 => Absent
 # 	3 => Leave
 # 	4 => Holiday
 # 	5 => Business Trip
@@ -53,12 +53,14 @@ class AttendanceCalculation(Document):
 
 	def calculate(self,employee , day):
 		doc = frappe.new_doc('Employee Attendance Logs')
+		doc.name = "Att-{employee}-{date}".format(employee=str(employee) , date = str(day))
 		doc.employee = employee
 		doc.date = day 
 		doc.early_in = 0
 		doc.early_out = 0
 		doc.late_in = 0
 		doc.late_out = 0
+
 
 		Holidays = None
 		Leaves = None
@@ -84,7 +86,7 @@ class AttendanceCalculation(Document):
 			frappe.throw(_("Please Set Default Holiday List In Company or in Each Employee"))
 		if not default_shift:
 			frappe.throw(_("Please Set Default Shift Type  In Company or in Each Employee"))
-		
+		doc.company = company
 
 		Holidays = frappe.db.sql("""
 			select * from `tabHoliday` where parent = '{holiday_list}' and holiday_date = '{day}'

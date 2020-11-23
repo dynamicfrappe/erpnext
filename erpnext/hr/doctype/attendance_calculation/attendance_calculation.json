@@ -1,5 +1,5 @@
 {
- "autoname": "format:Attendance-{from_date}-{to_date}",
+ "autoname": "format:Attendance-{from_date}:{to_date}",
  "creation": "2020-11-19 14:48:45.783646",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -43,7 +43,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-19 15:11:43.967051",
+ "modified": "2020-11-23 11:45:32.739506",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Calculation",
