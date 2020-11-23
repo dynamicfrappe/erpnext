@@ -147,6 +147,7 @@ def make_quotation(source_name, target_doc=None):
 	doclist = get_mapped_doc("Supplier Quotation", source_name, {
 		"Supplier Quotation": {
 			"doctype": "Quotation",
+			"material_request":  source_name,
 			"field_map": {
 				"name": "supplier_quotation",
 			}
