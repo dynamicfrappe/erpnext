@@ -20,6 +20,7 @@ frappe.ui.form.on("Request for Quotation",{
 			}
 		}
 
+
 		if (frm.doc.material_request){
 			
 			frm.get_field('items').grid.cannot_add_rows = true;
