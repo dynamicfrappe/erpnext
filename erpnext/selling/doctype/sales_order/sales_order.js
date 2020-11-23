@@ -152,7 +152,13 @@ frappe.ui.form.on("Sales Order", {
 			if(!d.delivery_date) d.delivery_date = frm.doc.delivery_date;
 		});
 		refresh_field("items");
-	}
+		if (frm.doc.delivery_date < frm.doc.transaction_date){
+			frm.set_value("delivery_date" , "")
+			frm.refresh_field("delivery_date")
+			frappe.throw(__("Order date can not be in past date"))
+		}
+		}
+	
 });
 
 frappe.ui.form.on("Sales Order Item", {
@@ -166,8 +172,15 @@ frappe.ui.form.on("Sales Order Item", {
 		}
 	},
 	delivery_date: function(frm, cdt, cdn) {
+		var row = locals[cdt][cdn];
 		if(!frm.doc.delivery_date) {
 			erpnext.utils.copy_value_in_all_rows(frm.doc, cdt, cdn, "items", "delivery_date");
+		}
+
+			if (row.delivery_date < frm.doc.delivery_date){
+			
+			row.delivery_date = frm.doc.delivery_date
+			frappe.throw(__("Order date can not be in past date"))
 		}
 	}
 });
