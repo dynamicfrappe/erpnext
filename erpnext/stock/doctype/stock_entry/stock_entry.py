@@ -125,7 +125,7 @@ class StockEntry(StockController):
 			
 				""".format (item_code = item.item_code , warehouse = item.s_warehouse) , as_dict = 1) or 0
 				qty_warehouse = 0
-				if not allowed_qty:
+				if  allowed_qty:
 					if len(allowed_qty) > 0:
 						if  allowed_qty[0].total_qty:
 							qty_warehouse = allowed_qty[0].total_qty
@@ -135,7 +135,7 @@ class StockEntry(StockController):
 
 
 				if item.qty > (qty_warehouse-total_hold_qty):
-					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = item.s_warehouse ,qty = qty_warehouse)));
+					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}  Qty : {qty} " .format(item_code = item.item_code , warehouse = item.s_warehouse ,qty = qty_warehouse)));
 					frappe.validated=false;
 					return false
 
