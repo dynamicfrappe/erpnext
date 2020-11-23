@@ -125,11 +125,21 @@ frappe.ui.form.on("Leave Application", {
 		frm.trigger("make_dashboard");
 		frm.trigger("half_day_datepicker");
 		frm.trigger("calculate_total_days");
+		if (frm.doc.half_day) {
+			if (frm.doc.from_date == frm.doc.to_date) {
+				frm.doc.half_day_date = frm.doc.from_date
+			}
+		}
 	},
 
 	to_date: function(frm) {
 		frm.trigger("half_day_datepicker");
 		frm.trigger("calculate_total_days");
+				if (frm.doc.half_day) {
+			if (frm.doc.from_date == frm.doc.to_date) {
+				frm.doc.half_day_date = frm.doc.from_date
+			}
+		}
 	},
 
 	half_day_date(frm) {
@@ -137,7 +147,7 @@ frappe.ui.form.on("Leave Application", {
 	},
 
 	half_day_datepicker: function(frm) {
-		frm.set_value('half_day_date', '');
+		//frm.set_value('half_day_date', '');
 		var half_day_datepicker = frm.fields_dict.half_day_date.datepicker;
 		half_day_datepicker.update({
 			minDate: frappe.datetime.str_to_obj(frm.doc.from_date),
