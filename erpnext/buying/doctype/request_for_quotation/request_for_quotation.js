@@ -22,8 +22,11 @@ frappe.ui.form.on("Request for Quotation",{
 
 
 		if (frm.doc.material_request){
-			
+			// grid-add-multiple-rows btn btn-xs btn-default
+			// $(".grid-add-multiple-rows").hide();
 			frm.get_field('items').grid.cannot_add_rows = true;
+			// frm.get_field('items').grid.cannot_add_multiple_rows = true;
+			// frm.fields_dict["items"].grid.wrapper.find('.grid-add-multiple-rows btn btn-xs btn-default').hide();
 		}
 	},
 

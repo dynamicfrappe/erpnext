@@ -246,14 +246,13 @@
   {
    "fieldname": "material_request",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Material Request",
    "options": "Material Request"
   }
  ],
  "icon": "fa fa-shopping-cart",
  "is_submittable": 1,
- "modified": "2020-11-23 16:17:26.563299",
+ "modified": "2020-11-23 16:19:24.641340",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Request for Quotation",
