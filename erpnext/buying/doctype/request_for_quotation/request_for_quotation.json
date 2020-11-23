@@ -11,6 +11,7 @@
   "vendor",
   "column_break1",
   "transaction_date",
+  "material_request",
   "suppliers_section",
   "suppliers",
   "get_suppliers_button",
@@ -241,11 +242,18 @@
    "options": "Request for Quotation",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Material Request",
+   "options": "Material Request"
   }
  ],
  "icon": "fa fa-shopping-cart",
  "is_submittable": 1,
- "modified": "2019-09-24 15:08:32.750661",
+ "modified": "2020-11-23 16:06:28.455300",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Request for Quotation",

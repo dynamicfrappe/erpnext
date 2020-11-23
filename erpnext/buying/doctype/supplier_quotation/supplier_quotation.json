@@ -11,6 +11,7 @@
   "naming_series",
   "supplier",
   "material_request",
+  "rfq",
   "supplier_name",
   "column_break1",
   "company",
@@ -810,12 +811,19 @@
    "label": "Material Request",
    "options": "Material Request",
    "read_only": 1
+  },
+  {
+   "fieldname": "rfq",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Request for Quotation",
+   "options": "Request for Quotation"
   }
  ],
  "icon": "fa fa-shopping-cart",
  "idx": 29,
  "is_submittable": 1,
- "modified": "2020-11-23 15:03:15.823647",
+ "modified": "2020-11-23 16:10:18.020622",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier Quotation",

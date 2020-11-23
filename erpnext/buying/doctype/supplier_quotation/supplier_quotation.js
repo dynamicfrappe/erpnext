@@ -15,9 +15,15 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 
 
 		if (this.frm.doc.material_request){
-			console.log("mat")
+			
 			this.frm.get_field('items').grid.cannot_add_rows = true;
 		}
+
+		if (this.frm.doc.rfq){
+			
+			this.frm.get_field('items').grid.cannot_add_rows = true;
+		}
+
 	},
 
 	refresh: function() {
