@@ -51,6 +51,15 @@ frappe.ui.form.on("Purchase Order", {
 		});
 
 	},
+	schedule_date:function(frm){
+		if (frm.doc.schedule_date < frm.doc.transaction_date ){
+			frm.set_value("schedule_date" , "")
+			frm.refresh_field("schedule_date")
+			frappe.throw(__("Order date can not be in past date"))
+		}
+
+
+	},
 
 	onload: function(frm) {
 		set_schedule_date(frm);
@@ -61,6 +70,9 @@ frappe.ui.form.on("Purchase Order", {
 		erpnext.queries.setup_queries(frm, "Warehouse", function() {
 			return erpnext.queries.warehouse(frm.doc);
 		});
+
+
+
 	}
 });
 
@@ -75,6 +87,12 @@ frappe.ui.form.on("Purchase Order Item", {
 			} else {
 				set_schedule_date(frm);
 			}
+		}
+		if (row.schedule_date < frm.doc.schedule_date){
+			// frm.set_value("schedule_date" , "")
+			// frm.refresh_field("schedule_date")
+			row.schedule_date = frm.doc.schedule_date
+			frappe.throw(__("Order date can not be in past date"))
 		}
 	}
 });
