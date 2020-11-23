@@ -12,6 +12,12 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 		}
 
 		this._super();
+
+
+		if (this.frm.doc.material_request){
+			console.log("mat")
+			this.frm.get_field('items').grid.cannot_add_rows = true;
+		}
 	},
 
 	refresh: function() {
@@ -82,6 +88,11 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 			method: "erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_quotation",
 			frm: cur_frm
 		})
+
+	},
+
+	material_request:function(frm){
+		console.log("MAT")
 
 	}
 });

@@ -10,6 +10,7 @@
   "title",
   "naming_series",
   "supplier",
+  "material_request",
   "supplier_name",
   "column_break1",
   "company",
@@ -162,6 +163,7 @@
    "label": "Date",
    "oldfieldname": "transaction_date",
    "oldfieldtype": "Date",
+   "read_only": 1,
    "reqd": 1,
    "search_index": 1
   },
@@ -800,12 +802,20 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Valid Till"
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Material Request",
+   "options": "Material Request",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-shopping-cart",
  "idx": 29,
  "is_submittable": 1,
- "modified": "2020-11-18 16:02:28.577650",
+ "modified": "2020-11-23 15:03:15.823647",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier Quotation",
