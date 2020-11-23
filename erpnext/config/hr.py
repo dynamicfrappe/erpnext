@@ -100,11 +100,18 @@ def get_data():
 					"dependencies": ["Employee Attendance Logs"]
 				},
 				{
-					"label" : "Monthly Attendance Sheet" ,
+					"label" : "Monthly Attendance Sheet Details" ,
 					"type": "report",
 					"is_query_report": True,
 					"name": "Attendance Sheet",
 					"doctype": "Employee Attendance Logs"
+				},
+				{
+					"label" : "Monthly Attendance Sheet" ,
+					"type": "report",
+					"is_query_report": True,
+					"name": "Monthly Attendance Sheet",
+					"doctype": "Attendance"
 				},
 			]
 		},

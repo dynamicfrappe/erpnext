@@ -25,7 +25,7 @@ def execute(filters=None):
 	leave_types = frappe.db.sql("""select name from `tabLeave Type`""", as_list=True)
 	leave_list = [d[0] for d in leave_types]
 	columns.extend(leave_list)
-	columns.extend([_("Total Early Entries") + ":Time:120",_("Total Late Entries") + ":Time:120", _("Total Early Exits") + ":Time:120",_("Total Late Exits") + ":Time:120"])
+	columns.extend([_("Total Early Entries Min") + ":Time:200",_("Total Times Early Entries") + ":Data:200",_("Total Late Entries Min") + ":Time:200",_("Total Times Late Entries") + ":Data:200", _("Total Early Exits Min ") + ":Time:200",_("Total Times Early Exits") + ":Data:200",_("Total Late Exits Min") + ":Time:200",_("Total Times Late Exits") + ":Data:200"])
 
 	for emp in sorted(att_map):
 		emp_det = emp_map.get(emp)
@@ -76,7 +76,12 @@ def execute(filters=None):
 			inner join `tabLeave Application` l on reference_name = l.name and reference_type = 'Leave Application'
 			where leave_type is not NULL %s group by leave_type, type;""" % conditions, filters, as_dict=1)
 		
-		time_default_counts = frappe.db.sql("""select SEC_TO_TIME( SUM( TIME_TO_SEC( early_in) ) ) AS early_in    ,SEC_TO_TIME( SUM( TIME_TO_SEC( early_out) ) ) AS early_out ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_in) ) ) AS late_in ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_out) ) ) AS late_out from `tabEmployee Attendance Logs` where 1=1 %s""" % (conditions), filters , as_dict=1)
+		time_default_counts = frappe.db.sql(""" select SEC_TO_TIME( SUM( TIME_TO_SEC( early_in) ) ) AS early_in    ,SEC_TO_TIME( SUM( TIME_TO_SEC( early_out) ) ) AS early_out ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_in) ) ) AS late_in ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_out) ) ) AS late_out from `tabEmployee Attendance Logs` where 1=1 %s""" % (conditions), filters , as_dict=1)
+		total_counts = frappe.db.sql("""  select (select COUNT(*)  from `tabEmployee Attendance Logs` where early_out > '00:00:00'  %s ) as total_early_out,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where early_in > '00:00:00' %s  ) as total_early_in,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where late_in > '00:00:00'  %s ) as total_late_in,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where late_out > '00:00:00'  %s ) as total_late_out
+"""%(conditions,conditions,conditions,conditions)  , filters,as_dict=1)
 
 		leaves = {}
 		for d in leave_details:
@@ -93,7 +98,7 @@ def execute(filters=None):
 			else:
 				row.append("0.0")
 		
-		row.extend([time_default_counts[0].early_in,time_default_counts[0].late_in,time_default_counts[0].early_out,time_default_counts[0].late_out])
+		row.extend([time_default_counts[0].early_in,total_counts[0].total_early_in,time_default_counts[0].late_in ,total_counts[0].total_late_in,time_default_counts[0].early_out,total_counts[0].total_early_out,time_default_counts[0].late_out,total_counts[0].total_late_out])
 		data.append(row)
 	return columns, data
 
