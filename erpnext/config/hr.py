@@ -76,6 +76,30 @@ def get_data():
 					"dependencies": ["Employee"]
 				},
 				{
+					"type": "doctype",
+					"name": "Device",
+					"hide_count": True,
+					"dependencies": ["Employee"]
+				},
+				{
+					"type": "doctype",
+					"name": "Device Log",
+					"hide_count": True,
+					"dependencies": ["Device"]
+				},
+				{
+					"type": "doctype",
+					"name": "Employee Attendance Logs",
+					"hide_count": True,
+					"dependencies": ["Device Log"]
+				},
+				{
+					"type": "doctype",
+					"name": "Attendance Calculation",
+					"hide_count": True,
+					"dependencies": ["Employee Attendance Logs"]
+				},
+				{
 					"type": "report",
 					"is_query_report": True,
 					"name": "Monthly Attendance Sheet",
@@ -83,6 +107,26 @@ def get_data():
 				},
 			]
 		},
+		{
+		 "label":_("Business Trips And Mission"),
+		 "items": [
+				 {
+					"type": "doctype",
+					"name": "Business Trip"
+				},
+				{
+					"type": "doctype",
+					"name": "Mission",
+					"dependencies": ["Mission Destination"]
+				},
+				{
+					"type": "doctype",
+					"name": "Mission Destination"
+				},
+				
+		 ]
+		}
+		,
 		{
 			"label": _("Leaves"),
 			"items": [
