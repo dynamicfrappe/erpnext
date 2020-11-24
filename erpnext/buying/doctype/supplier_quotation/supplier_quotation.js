@@ -15,12 +15,12 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 
 
 		if (this.frm.doc.material_request){
-			
+			this.frm.get_field("items").grid.set_multiple_add();
 			this.frm.get_field('items').grid.cannot_add_rows = true;
 		}
 
 		if (this.frm.doc.rfq){
-			
+			this.frm.get_field("items").grid.set_multiple_add();
 			this.frm.get_field('items').grid.cannot_add_rows = true;
 		}
 
@@ -28,8 +28,17 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 
 	refresh: function() {
 		var me = this;
-		this._super();
+		if (this.frm.doc.material_request){
+			this.frm.get_field("items").grid.set_multiple_add();
+			this.frm.get_field('items').grid.cannot_add_rows = true;
+		}
 
+		if (this.frm.doc.rfq){
+			this.frm.get_field("items").grid.set_multiple_add();
+			this.frm.get_field('items').grid.cannot_add_rows = true;
+		}
+		this._super();
+		
 		if (this.frm.doc.__islocal && !this.frm.doc.valid_till) {
 			this.frm.set_value('valid_till', frappe.datetime.add_months(this.frm.doc.transaction_date, 1));
 		}
