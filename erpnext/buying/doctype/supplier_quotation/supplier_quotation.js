@@ -24,6 +24,13 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 			this.frm.get_field('items').grid.cannot_add_rows = true;
 		}
 
+
+		var i =0 
+		for (i = 0 ;i < this.frm.doc.items.length ; i++){
+				this.frm.doc.items[i].rate = 0
+
+		}
+
 	},
 
 	refresh: function() {
