@@ -26,10 +26,15 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 
 
 		var i =0 
-		for (i = 0 ;i < this.frm.doc.items.length ; i++){
-				this.frm.doc.items[i].rate = 0
+		try{
+				for (i = 0 ;i < this.frm.doc.items.length ; i++){
+						this.frm.doc.items[i].rate = 0
+						this.frm.doc.items[i].base_price_list_rate=  0}
 
 		}
+		catch(err) {
+ 			console.log("no items")
+			}
 
 	},
 
