@@ -13,6 +13,7 @@
   "get_items_from_open_material_requests",
   "supplier_name",
   "company",
+  "purchase_request",
   "column_break1",
   "transaction_date",
   "schedule_date",
@@ -1051,12 +1052,18 @@
    "fieldtype": "Link",
    "label": "Set Reserve Warehouse",
    "options": "Warehouse"
+  },
+  {
+   "fieldname": "purchase_request",
+   "fieldtype": "Data",
+   "label": "Purchase Request",
+   "options": "Purchase Request"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "modified": "2020-11-23 15:04:06.881306",
+ "modified": "2020-11-24 15:08:39.095581",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Order",

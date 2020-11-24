@@ -31,6 +31,15 @@ frappe.ui.form.on("Request for Quotation",{
 			frm.get_field('items').grid.cannot_add_rows = true;
 			
 		}
+
+
+		if (frm.doc.purchase_request){
+	
+			frm.get_field("items").grid.set_multiple_add();
+		
+			frm.get_field('items').grid.cannot_add_rows = true;
+			
+		}
 	},
 
 	onload: function(frm) {

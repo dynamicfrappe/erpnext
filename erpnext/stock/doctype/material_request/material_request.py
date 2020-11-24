@@ -1,6 +1,5 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: GNU General Public License v3. See license.txt
-
 # ERPNext - web based ERP (http://erpnext.com)
 # For license information, please see license.txt
 
@@ -304,6 +303,8 @@ def make_purchase_order(source_name, target_doc=None):
 	}, target_doc, postprocess)
 
 	return doclist
+
+
 
 @frappe.whitelist()
 def make_request_for_quotation(source_name, target_doc=None):

@@ -562,6 +562,45 @@ def make_material_request(source_name, target_doc=None):
 	return doc
 
 @frappe.whitelist()
+def make_purchase_request(source_name, target_doc=None):
+	requested_item_qty = get_requested_item_qty(source_name)
+
+	def update_item(source, target, source_parent):
+		# qty is for packed items, because packed items don't have stock_qty field
+		qty = source.get("qty")
+		target.project = source_parent.project
+		target.qty = qty - requested_item_qty.get(source.name, 0)
+		target.stock_qty = flt(target.qty) * flt(target.conversion_factor)
+
+	doc = get_mapped_doc("Sales Order", source_name, {
+		"Sales Order": {
+			"doctype": "Purchase Request",
+			"validation": {
+				"docstatus": ["=", 1]
+			}
+		},
+		"Packed Item": {
+			"doctype": "Purchase Request Item",
+			"field_map": {
+				"parent": "sales_order",
+				"uom": "stock_uom"
+			},
+			"postprocess": update_item
+		},
+		"Sales Order Item": {
+			"doctype": "Purchase Request Item",
+			"field_map": {
+				"name": "sales_order_item",
+				"parent": "sales_order"
+			},
+			"condition": lambda doc: not frappe.db.exists('Product Bundle', doc.item_code) and doc.stock_qty > requested_item_qty.get(doc.name, 0),
+			"postprocess": update_item
+		}
+	}, target_doc)
+
+	return doc
+
+@frappe.whitelist()
 def make_project(source_name, target_doc=None):
 	def postprocess(source, doc):
 		doc.project_type = "External"

@@ -12,6 +12,7 @@
   "column_break1",
   "transaction_date",
   "material_request",
+  "purchase_request",
   "suppliers_section",
   "suppliers",
   "get_suppliers_button",
@@ -248,13 +249,23 @@
   {
    "fieldname": "material_request",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Material Request",
-   "options": "Material Request"
+   "options": "Material Request",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_request",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Purchase Request",
+   "options": "Purchase Request",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-shopping-cart",
  "is_submittable": 1,
- "modified": "2020-11-23 17:01:40.302298",
+ "modified": "2020-11-24 15:06:23.110492",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Request for Quotation",
