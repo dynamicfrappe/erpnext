@@ -7,7 +7,10 @@
 cur_frm.add_fetch('contact', 'email_id', 'email_id')
 
 frappe.ui.form.on("Request for Quotation",{
+
 	setup: function(frm) {
+		
+		
 		frm.custom_make_buttons = {
 			'Supplier Quotation': 'Create'
 		}
@@ -22,23 +25,39 @@ frappe.ui.form.on("Request for Quotation",{
 
 
 		if (frm.doc.material_request){
-			// grid-add-multiple-rows btn btn-xs btn-default
-			// $(".grid-add-multiple-rows").hide();
+	
+			frm.get_field("items").grid.set_multiple_add();
+		
 			frm.get_field('items').grid.cannot_add_rows = true;
-			// frm.get_field('items').grid.cannot_add_multiple_rows = true;
-			// frm.fields_dict["items"].grid.wrapper.find('.grid-add-multiple-rows btn btn-xs btn-default').hide();
+			
 		}
 	},
 
 	onload: function(frm) {
+			if (frm.doc.material_request){
+	
+			frm.get_field("items").grid.set_multiple_add();
+		
+			frm.get_field('items').grid.cannot_add_rows = true;
+			
+		}
 		frm.add_fetch('email_template', 'response', 'message_for_supplier');
 
 		if(!frm.doc.message_for_supplier) {
 			frm.set_value("message_for_supplier", __("Please supply the specified items at the best possible rates"))
 		}
+			
 	},
 
 	refresh: function(frm, cdt, cdn) {
+
+		if (frm.doc.material_request){
+	
+			frm.get_field("items").grid.set_multiple_add();
+		
+			frm.get_field('items').grid.cannot_add_rows = true;
+			
+		}
 		if (frm.doc.docstatus === 1) {
 			frm.add_custom_button(__('Create'),
 				function(){ frm.trigger("make_suppplier_quotation") }, __("Supplier Quotation"));
@@ -80,6 +99,7 @@ refresh: function(frm) {
 				});
 			});
 		}
+
 
 	},
 
@@ -370,3 +390,5 @@ erpnext.buying.RequestforQuotationController = erpnext.buying.BuyingController.e
 
 // for backward compatibility: combine new and previous states
 $.extend(cur_frm.cscript, new erpnext.buying.RequestforQuotationController({frm: cur_frm}));
+
+ 

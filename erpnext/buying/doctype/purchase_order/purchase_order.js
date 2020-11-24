@@ -108,6 +108,18 @@ erpnext.buying.PurchaseOrderController = erpnext.buying.BuyingController.extend(
 
 		this._super();
 
+		var i = 0
+		if (this.frm.doc.items.length > 0 ){
+			if (this.frm.doc.items[0].material_request){
+				this.frm.get_field("items").grid.set_multiple_add();
+				this.frm.get_field('items').grid.cannot_add_rows = true;
+			}
+			if (this.frm.doc.items[0].supplier_quotation){
+				this.frm.get_field("items").grid.set_multiple_add();
+				this.frm.get_field('items').grid.cannot_add_rows = true;
+			}
+		}
+
 	},
 
 	refresh: function(doc, cdt, cdn) {
