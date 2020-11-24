@@ -10,7 +10,7 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Material Request",
+					"name": "Purchase Request",
 					"onboard": 1,
 					"dependencies": ["Item"],
 					"description": _("Request for purchase."),
