@@ -335,6 +335,10 @@ frappe.ui.form.on("Purchase Request Item", {
 			} else {
 				set_schedule_date(frm);
 			}
+			if (row.schedule_date < frm.doc.schedule_date) {
+				row.schedule_date =""
+					frappe.throw("error")
+			}
 		}
 	}
 });

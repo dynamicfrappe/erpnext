@@ -26,7 +26,9 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 		if (this.frm.doc.purchase_request){
 			this.frm.get_field("items").grid.set_multiple_add();
 			this.frm.get_field('items').grid.cannot_add_rows = true;
+			this.frm.set_df_property("link_to_mrs", "hidden", "1")
 		}
+
 
 
 		var i =0 

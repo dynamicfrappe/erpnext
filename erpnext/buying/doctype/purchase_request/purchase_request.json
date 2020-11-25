@@ -48,7 +48,7 @@
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "PR-.YYYY.-",
+   "options": "PR-M-.YYYY.-",
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
@@ -56,6 +56,8 @@
   {
    "allow_on_submit": 1,
    "default": "{material_request_type}",
+   "fetch_from": "naming_series",
+   "fetch_if_empty": 1,
    "fieldname": "title",
    "fieldtype": "Data",
    "hidden": 1,
@@ -288,7 +290,7 @@
  ],
  "icon": "fa fa-ticket",
  "is_submittable": 1,
- "modified": "2020-11-24 16:03:19.758185",
+ "modified": "2020-11-25 13:56:53.816342",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Request",
@@ -358,6 +360,5 @@
  "search_fields": "status,transaction_date",
  "show_name_in_global_search": 1,
  "sort_field": "modified",
- "sort_order": "DESC",
- "title_field": "title"
+ "sort_order": "DESC"
 }
