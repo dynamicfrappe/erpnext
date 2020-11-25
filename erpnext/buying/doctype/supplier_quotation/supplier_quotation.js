@@ -12,7 +12,7 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 		}
 
 		this._super();
-
+        
 
 		if (this.frm.doc.material_request){
 			this.frm.get_field("items").grid.set_multiple_add();
@@ -29,18 +29,18 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 			this.frm.set_df_property("link_to_mrs", "hidden", "1")
 		}
 
-
-
-		var i =0 
-		try{
-				for (i = 0 ;i < this.frm.doc.items.length ; i++){
-						this.frm.doc.items[i].rate = 0
-						this.frm.doc.items[i].price_list_rate=  0}
-
-		}
-		catch(err) {
- 			console.log("no items")
-			}
+		 if (this.frm.is_new()){
+		 
+		 		var i =0 
+		 		try{
+		 				for (i = 0 ;i < this.frm.doc.items.length ; i++){
+		 						this.frm.doc.items[i].rate = ""
+		 						this.frm.doc.items[i].price_list_rate=  ""}
+		 
+		 		}
+		 		catch(err) {
+		  			console.log("no items")
+		 			}}
 
 	},
 
