@@ -112,13 +112,13 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Status",
-   "options": "Created\nSuperVisor Approved\nManager Approved\nCompleted",
+   "options": "Created\nSuperVisor Approved\nManager Approved\nHR Approved",
    "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-23 15:13:11.914184",
- "modified_by": "kazemaraby@gmail.com",
+ "modified": "2020-12-02 14:25:04.805298",
+ "modified_by": "Administrator",
  "module": "HR",
  "name": "Mission",
  "owner": "Administrator",
