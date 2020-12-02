@@ -25,13 +25,13 @@
   "reference_name",
   "type_number",
   "is_calculated",
-  "company"
+  "company",
+  "flag"
  ],
  "fields": [
   {
    "fieldname": "employee",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Employee",
    "options": "Employee",
@@ -89,36 +89,42 @@
   {
    "fieldname": "shift_actual_start",
    "fieldtype": "Time",
+   "in_list_view": 1,
    "label": "Shift Actual Start",
    "read_only": 1
   },
   {
    "fieldname": "shift_actual_end",
    "fieldtype": "Time",
+   "in_list_view": 1,
    "label": "Shift Actual End",
    "read_only": 1
   },
   {
    "fieldname": "early_in",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Early IN",
    "read_only": 1
   },
   {
    "fieldname": "early_out",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Early OUT",
    "read_only": 1
   },
   {
    "fieldname": "late_in",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Late IN",
    "read_only": 1
   },
   {
    "fieldname": "late_out",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Late Out",
    "read_only": 1
   },
@@ -133,17 +139,14 @@
   },
   {
    "fieldname": "type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
+   "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Type",
-   "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day",
    "read_only": 1
   },
   {
    "fieldname": "reference_type",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Reference Type",
    "options": "DocType",
@@ -152,7 +155,6 @@
   {
    "fieldname": "reference_name",
    "fieldtype": "Dynamic Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Reference Name",
    "options": "reference_type",
@@ -177,10 +179,17 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company"
+  },
+  {
+   "fieldname": "flag",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "flag",
+   "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day\nWorking On Holiday\nWeek End"
   }
  ],
  "in_create": 1,
- "modified": "2020-11-23 14:12:30.975274",
+ "modified": "2020-11-30 15:05:04.327707",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",

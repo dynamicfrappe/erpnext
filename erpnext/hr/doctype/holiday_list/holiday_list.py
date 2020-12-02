@@ -23,6 +23,7 @@ class HolidayList(Document):
 			ch = self.append('holidays', {})
 			ch.description = self.weekly_off
 			ch.holiday_date = d
+			ch.type = "Week End"
 			ch.idx = last_idx + i + 1
 
 	def validate_values(self):

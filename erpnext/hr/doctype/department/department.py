@@ -18,10 +18,17 @@ class Department(NestedSet):
 			self.name = self.department_name
 
 	def validate(self):
+		for r in self.department_mngmnt:
+			if r.type =="Department Managment Roles":
+				rolerecord=frappe.db.sql("select user from `tabDepartment Managment Roles` where name='{}'".format(r.role),as_dict=1)
+				r.email=rolerecord[0]['user']
+			else:
+				r.email="hr@gmail.com"
 		if not self.parent_department:
 			root = get_root_of("Department")
 			if root:
 				self.parent_department = root
+
 
 	def before_rename(self, old, new, merge=False):
 		# renaming consistency with abbreviation

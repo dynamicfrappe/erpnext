@@ -14,6 +14,11 @@ class HRSettings(Document):
 	def validate(self):
 		self.set_naming_series()
 		self.validate_password_policy()
+		count = 0
+		for i in self.tax_layers:
+			count += 1
+			i.layer_no = count
+
 
 	def set_naming_series(self):
 		from erpnext.setup.doctype.naming_series.naming_series import set_by_naming_series

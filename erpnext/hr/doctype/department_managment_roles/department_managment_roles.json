@@ -1,9 +1,11 @@
 {
+ "autoname": "naming_series:",
  "creation": "2020-11-22 12:11:35.009925",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "role",
   "user",
   "amended_from"
@@ -32,10 +34,16 @@
    "options": "Department Managment Roles",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "HR-Role-"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-22 12:11:35.009925",
+ "modified": "2020-11-23 16:37:33.322237",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Department Managment Roles",

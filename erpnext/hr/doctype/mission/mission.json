@@ -17,7 +17,8 @@
   "project_code",
   "section_break_10",
   "description",
-  "amended_from"
+  "amended_from",
+  "status"
  ],
  "fields": [
   {
@@ -104,11 +105,20 @@
    "no_copy": 1,
    "options": "HR-Mission-",
    "set_only_once": 1
+  },
+  {
+   "default": "Created",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Status",
+   "options": "Created\nSuperVisor Approved\nManager Approved\nCompleted",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-22 13:39:45.720308",
- "modified_by": "Administrator",
+ "modified": "2020-11-23 15:13:11.914184",
+ "modified_by": "kazemaraby@gmail.com",
  "module": "HR",
  "name": "Mission",
  "owner": "Administrator",
@@ -122,6 +132,32 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
    "share": 1,
    "write": 1
   }

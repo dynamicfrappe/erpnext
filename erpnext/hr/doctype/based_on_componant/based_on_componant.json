@@ -1,0 +1,39 @@
+{
+ "creation": "2020-11-26 14:08:24.448284",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "component",
+  "component_short_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "component",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Component",
+   "options": "Salary Component"
+  },
+  {
+   "fetch_from": "component.salary_component_abbr",
+   "fieldname": "component_short_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Component short name"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-11-26 14:11:06.996816",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Based on Componant",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

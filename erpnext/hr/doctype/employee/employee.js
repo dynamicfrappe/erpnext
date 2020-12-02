@@ -13,7 +13,16 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
 		this.frm.fields_dict.reports_to.get_query = function(doc, cdt, cdn) {
 			return { query: "erpnext.controllers.queries.employee_query"} }
 	},
+    designation:function(frm){
+    	         frappe.call({
+    	         doc:frm,
+                 method:'gettemp',
+                callback(r) {
+                  refresh_field("required_document");
+                }
+    });
 
+    },
 	refresh: function() {
 		var me = this;
 		erpnext.toggle_naming_series();
@@ -107,23 +116,52 @@ frappe.ui.form.on('Employee',{
 				        new_row.age = cur_row.age;
 				        new_row.company_share_ratio = 50 ;
 				        new_row.employee_share_ratio = 50 ;
-				        
+
 				        new_row.relation = cur_row.relation;
 
 					}
-					
+
 				}
 			    frm.refresh_field("members");
 
       	}
 	}
+	,
+	company_share_ratio:function (frm){
+		var cur_row = frm.doc ;
+		console.log(cur_row);
+		debugger;
+		if (cur_row.company_share_ratio > 100)
+			cur_row.company_share_ratio = 100 ;
+		if (cur_row.company_share_ratio < 0)
+			cur_row.company_share_ratio = 0 ;
+		cur_row.employee_share_ratio = 100 - cur_row.company_share_ratio ;
+		refresh_field("company_share_ratio");
+		refresh_field("employee_share_ratio");
+	}
+	,
+	employee_share_ratio:function (frm){
+		var cur_row = frm.doc ;
+		if (cur_row.employee_share_ratio > 100)
+			cur_row.employee_share_ratio = 100 ;
+		if (cur_row.employee_share_ratio < 0)
+			cur_row.employee_share_ratio = 0 ;
+		cur_row.company_share_ratio = 100 - cur_row.employee_share_ratio ;
+		refresh_field("company_share_ratio");
+		refresh_field("employee_share_ratio");
+
+	}
 });
+
+
+
+
 frappe.ui.form.on('Employee Medical Insurance Members',"company_share_ratio",function(frm,cdt,cdn){
 		var cur_row = locals [cdt] [cdn] ;
 		console.log(cur_row);
 		debugger;
 		if (cur_row.company_share_ratio > 100)
-			cur_row.company_share_ratio = 100 ;		
+			cur_row.company_share_ratio = 100 ;
 		if (cur_row.company_share_ratio < 0)
 			cur_row.company_share_ratio = 0 ;
 		cur_row.employee_share_ratio = 100 - cur_row.company_share_ratio ;
@@ -145,108 +183,6 @@ frappe.ui.form.on('Employee Medical Insurance Members',"employee_share_ratio",fu
 		refresh_field("employee_share_ratio", cur_row.name, cur_row.parentfield);
 
 	}
+
 );
-/*frappe.ui.form.on('Employee Medical Insurance Members',{
-
-	company_share_ratio:function(frm,cdt,cdn){
-		var cur_row = locals [cdt] [cdn] ;
-		console.log(cur_row);
-		debugger;
-		if (cur_row.company_share_ratio > 100)
-			cur_row.company_share_ratio = 100 ;		
-		if (cur_row.company_share_ratio < 0)
-			cur_row.company_share_ratio = 0 ;
-		cur_row.employee_share_ratio = 100 - cur_row.company_share_ratio ;
-		refresh_field("company_share_ratio", cur_row.name, cur_row.parentfield);
-		refresh_field("employee_share_ratio", cur_row.name, cur_row.parentfield);
-
-
-	},
-	employee_share_ratio:function(frm,cdt,cdn){
-		var cur_row = locals [cdt] [cdn] ;
-		if (cur_row.employee_share_ratio > 100)
-			cur_row.employee_share_ratio = 100 ;
-		if (cur_row.employee_share_ratio < 0)
-			cur_row.employee_share_ratio = 0 ;
-		cur_row.company_share_ratio = 100 - cur_row.employee_share_ratio ;
-		refresh_field("company_share_ratio", cur_row.name, cur_row.parentfield);
-		refresh_field("employee_share_ratio", cur_row.name, cur_row.parentfield);
-
-	}
-});*/
-/*frappe.ui.form.on('Employee Family Details',{
-	include_in_medical_insurance : function(frm,cdt,cdn) {
-      
-      var cur_row = locals[cdt][cdn];
-      debugger;
-
-      if (! (cur_row.name1 && cur_row.age))
-      {
-      	frappe.msgprint(__("Name and Age Is Required"));
-      	cur_row.include_in_medical_insurance = 0;
-      	return false;
-      }
-      if (cur_row.include_in_medical_insurance){
-      	// add new row
-      	var new_row = frm.add_child("members");
-    	new_row.member = cur_row.name1;
-        new_row.age = cur_row.age;
-        new_row.relation = cur_row.relation;
-      }
-      else{
-      		// delete row
-      		if (frm.doc.members){
-			for (var j = 0; j < frm.doc.members.length; j++) {
-									debugger;
-
-				if(frm.doc.members[j].member == cur_row.name1) {
-					frm.get_field("members").grid.grid_rows[j].remove();
-				}
-			}
-
-      		}
-      		
-      }
-         		frm.refresh_field("members");
-
-	},
-	age:function(frm,cdt,cdn){
-	      var cur_row = locals[cdt][cdn];
-	      if(cur_row.age){
-			if (frm.doc.members){
-
-				for (var j = 0; j < frm.doc.members.length; j++) {
-
-					if(frm.doc.members[j].member == cur_row.name1) {
-						frm.doc.members[j].age = cur_row.age;
-					}
-				}
-
-	      	}
-		}
-		frm.refresh_field("members");
-
-	},
-	relation:function(frm,cdt,cdn){
-
-
-
-		var cur_row = locals[cdt][cdn];
-	    if(cur_row.relation){
-			if (frm.doc.members){
-
-				for (var j = 0; j < frm.doc.members.length; j++) {
-
-					if(frm.doc.members[j].member == cur_row.name1) {
-						frm.doc.members[j].relation = cur_row.relation;
-					}
-				}
-
-	      	}
-		}
-		frm.refresh_field("members");
-
-	}
-});*/
-
 cur_frm.cscript = new erpnext.hr.EmployeeController({frm: cur_frm});

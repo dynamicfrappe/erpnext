@@ -7,14 +7,16 @@
   "role_name",
   "type",
   "role",
+  "email",
   "is_submitted"
  ],
  "fields": [
   {
    "fieldname": "role_name",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Role Name"
+   "label": "Role Name",
+   "options": "SuperVisor Approved\nManager Approved\nCompleted"
   },
   {
    "fieldname": "role",
@@ -36,10 +38,17 @@
    "in_list_view": 1,
    "label": "Type",
    "options": "DocType"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2020-11-22 13:30:47.660109",
+ "modified": "2020-12-02 13:25:16.185408",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Department Managment",

@@ -1,5 +1,4 @@
 {
- "actions": [],
  "creation": "2013-08-02 13:45:23",
  "doctype": "DocType",
  "document_type": "Other",
@@ -28,7 +27,29 @@
   "show_leaves_of_all_department_members_in_calendar",
   "auto_leave_encashment",
   "hiring_settings",
-  "check_vacancies"
+  "check_vacancies",
+  "attendance_rules_section",
+  "late_in_rate",
+  "early_out_rate",
+  "late_out_rate",
+  "column_break_27",
+  "early_in_rate",
+  "working_holiday_rate",
+  "absent_rate",
+  "basic_salary_component_section",
+  "additional_days_salary_component",
+  "overtime_salary_component",
+  "column_break_35",
+  "absents_salary_component",
+  "delays_salary_component",
+  "working_time_settings_section",
+  "total_working_days",
+  "total_hours_per_day",
+  "income_tax_configurations_section",
+  "income_tax_salary_component",
+  "personal_exemption_value",
+  "disability_exemption_value",
+  "tax_layers"
  ],
  "fields": [
   {
@@ -169,13 +190,141 @@
    "fieldname": "disable_rounded_total",
    "fieldtype": "Check",
    "label": "Disable Rounded Total"
+  },
+  {
+   "fieldname": "attendance_rules_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Rules"
+  },
+  {
+   "fieldname": "absent_rate",
+   "fieldtype": "Float",
+   "label": "Absent Rate"
+  },
+  {
+   "default": "30",
+   "fieldname": "total_working_days",
+   "fieldtype": "Float",
+   "label": "Total Working Days",
+   "reqd": 1
+  },
+  {
+   "default": "8",
+   "fieldname": "total_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Total Hours per Day",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "early_out_rate",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Early Out"
+  },
+  {
+   "fieldname": "late_out_rate",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Late Out"
+  },
+  {
+   "default": "1",
+   "fieldname": "early_in_rate",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Early IN"
+  },
+  {
+   "fieldname": "working_holiday_rate",
+   "fieldtype": "Float",
+   "label": "Working On Holiday Rate"
+  },
+  {
+   "fieldname": "overtime_salary_component",
+   "fieldtype": "Link",
+   "label": "Overtime Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "delays_salary_component",
+   "fieldtype": "Link",
+   "label": "Delays Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "absents_salary_component",
+   "fieldtype": "Link",
+   "label": "Absents Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "additional_days_salary_component",
+   "fieldtype": "Link",
+   "label": "Additional Days Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "basic_salary_component_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Salary Component"
+  },
+  {
+   "fieldname": "working_time_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Working Time Settings"
+  },
+  {
+   "fieldname": "column_break_27",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_35",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "late_in_rate",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Late IN"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "income_tax_configurations_section",
+   "fieldtype": "Section Break",
+   "label": "Income Tax Configurations"
+  },
+  {
+   "fieldname": "personal_exemption_value",
+   "fieldtype": "Int",
+   "label": "Personal exemption value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "disability_exemption_value",
+   "fieldtype": "Int",
+   "label": "Disability Exemption Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tax_layers",
+   "fieldtype": "Table",
+   "label": "Tax Layers",
+   "options": "Income Tax Layers",
+   "reqd": 1
+  },
+  {
+   "fieldname": "income_tax_salary_component",
+   "fieldtype": "Link",
+   "label": "Income Tax Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "links": [],
- "modified": "2019-12-31 14:28:32.004121",
+ "modified": "2020-12-02 09:23:30.974802",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

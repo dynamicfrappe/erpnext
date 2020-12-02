@@ -11,6 +11,8 @@ frappe.ui.form.on('Department', {
 			}
 		})
 	},
+
+
 	refresh: function(frm) {
 		// read-only for root department
 		if(!frm.doc.parent_department && !frm.is_new()) {
@@ -24,20 +26,4 @@ frappe.ui.form.on('Department', {
 		}
 	}
 });
-/*
-frappe.ui.form.on('Department Managment',{
-    setup:function(frm){
-		frm.set_query("type", function()  {
-			return {
-				filters: {
-					name: ["in", ["Department Managment Roles", "Role"]]
-				}
-			};
-		})
 
-
-
-	}
-});
-
-*/

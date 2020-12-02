@@ -1,0 +1,208 @@
+{
+ "creation": "2020-12-01 13:28:02.019829",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_detail_section",
+  "employee",
+  "employee_name",
+  "column_break_4",
+  "employee_joined_data",
+  "is_owner",
+  "insured",
+  "insurance_detail_section",
+  "insurance_salary",
+  "basic_salary",
+  "column_break_11",
+  "employee_strat_insurance_date",
+  "section_break_11",
+  "form_1_column",
+  "income_date",
+  "income_number",
+  "contrary_number",
+  "form_2_column",
+  "sincome_date",
+  "sincome_number",
+  "contrary_number2",
+  "work_letter_section",
+  "wdate",
+  "wnumber",
+  "employee_document",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Detail"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.date_of_joining",
+   "fieldname": "employee_joined_data",
+   "fieldtype": "Date",
+   "label": "Employee Joined Data",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "insured",
+   "fieldtype": "Check",
+   "label": "insured "
+  },
+  {
+
+   "collapsible_depends_on": "insured==1",
+
+   "fieldname": "insurance_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Insurance Detail"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Social Insurance Data",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_owner",
+   "fieldtype": "Check",
+   "label": "Is Owner"
+  },
+  {
+   "fieldname": "section_break_11",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "form_1_column",
+   "fieldtype": "Column Break",
+   "label": "Form 1"
+  },
+  {
+   "fieldname": "income_date",
+   "fieldtype": "Date",
+   "label": "Income Date"
+  },
+  {
+   "fieldname": "income_number",
+   "fieldtype": "Data",
+   "label": "Income Number "
+  },
+  {
+   "fieldname": "form_2_column",
+   "fieldtype": "Column Break",
+   "label": "Form 2"
+  },
+  {
+   "fieldname": "sincome_date",
+   "fieldtype": "Date",
+   "label": "Income Date"
+  },
+  {
+   "fieldname": "sincome_number",
+   "fieldtype": "Data",
+   "label": "Income Number"
+  },
+  {
+   "fieldname": "work_letter_section",
+   "fieldtype": "Section Break",
+   "label": "Work Letter"
+  },
+  {
+   "fieldname": "wdate",
+   "fieldtype": "Date",
+   "label": "Work Letter Date "
+  },
+  {
+   "fieldname": "wnumber",
+   "fieldtype": "Date",
+   "label": "Work Letter Number"
+  },
+  {
+   "fieldname": "employee_document",
+   "fieldtype": "Link",
+   "label": "Employee Document",
+   "options": "Employee Document"
+  },
+  {
+   "fieldname": "basic_salary",
+   "fieldtype": "Data",
+   "label": "Basic Salary"
+  },
+  {
+   "fieldname": "insurance_salary",
+   "fieldtype": "Data",
+   "label": "Insurance salary"
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_strat_insurance_date",
+   "fieldtype": "Date",
+   "label": "Employee Strat insurance Date"
+  },
+  {
+   "fieldname": "contrary_number",
+   "fieldtype": "Data",
+   "label": "Contrary Number"
+  },
+  {
+   "fieldname": "contrary_number2",
+   "fieldtype": "Data",
+   "label": "Contrary Number"
+  }
+ ],
+ "is_submittable": 1,
+
+ "modified": "2020-12-02 11:27:16.190305",
+
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Employee Social Insurance Data",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

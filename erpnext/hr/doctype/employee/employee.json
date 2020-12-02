@@ -24,6 +24,7 @@
   "employee_number",
   "employment_type",
   "gender",
+  "outsource",
   "date_of_birth",
   "date_of_joining",
   "emergency_contact_details",
@@ -49,6 +50,8 @@
   "column_break_31",
   "grade",
   "branch",
+  "required_document_section",
+  "required_document",
   "attendance_and_leave_details",
   "leave_policy",
   "attendance_device_id",
@@ -79,6 +82,7 @@
   "bio",
   "personal_details",
   "passport_number",
+  "national_id",
   "date_of_issue",
   "valid_upto",
   "place_of_issue",
@@ -86,7 +90,6 @@
   "marital_status",
   "blood_group",
   "family_background",
-  "has_disablity",
   "health_details",
   "educational_qualification",
   "education",
@@ -114,6 +117,12 @@
   "provider",
   "document",
   "insurance_start_date",
+  "medication_card_number",
+  "column_break_109",
+  "medication_card_recieving_date",
+  "company_share_ratio",
+  "employee_share_ratio",
+  "medical__insurance_members_section",
   "get_members",
   "members"
  ],
@@ -285,7 +294,7 @@
    "collapsible": 1,
    "fieldname": "erpnext_user",
    "fieldtype": "Section Break",
-   "label": "ERPNext User"
+   "label": "Related User"
   },
   {
    "description": "System User (login) ID. If set, it will become default for all HR forms.",
@@ -449,11 +458,10 @@
   {
    "depends_on": "eval:doc.salary_mode == 'Bank'",
    "fieldname": "bank_name",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Bank Name",
    "oldfieldname": "bank_name",
-   "oldfieldtype": "Link",
-   "options": "Bank"
+   "oldfieldtype": "Link"
   },
   {
    "depends_on": "eval:doc.salary_mode == 'Bank'",
@@ -790,9 +798,21 @@
   },
   {
    "default": "0",
-   "fieldname": "has_disablity",
+   "fieldname": "outsource",
    "fieldtype": "Check",
-   "label": "Has Disablity"
+   "label": "OutSource"
+  },
+  {
+   "depends_on": "designation",
+   "fieldname": "required_document_section",
+   "fieldtype": "Section Break",
+   "label": "Required Document"
+  },
+  {
+   "fieldname": "required_document",
+   "fieldtype": "Table",
+   "label": "Required Document",
+   "options": "Required Document"
   },
   {
    "collapsible": 1,
@@ -824,30 +844,65 @@
    "label": "Document"
   },
   {
+   "fieldname": "insurance_start_date",
+   "fieldtype": "Date",
+   "label": "Insurance Start Date"
+  },
+  {
    "fieldname": "members",
    "fieldtype": "Table",
    "label": "Members",
    "options": "Employee Medical Insurance Members",
-   "read_only": 1
+   "read_only": 1,
+   "width": "300%  !important"
   },
   {
+   "columns": 2,
    "fieldname": "get_members",
    "fieldtype": "Button",
    "label": "Get Members"
   },
   {
-   "fieldname": "insurance_start_date",
+   "fieldname": "medication_card_number",
+   "fieldtype": "Data",
+   "label": "Medication card number"
+  },
+  {
+   "fieldname": "medication_card_recieving_date",
    "fieldtype": "Date",
-   "label": "Insurance Start Date "
+   "label": "Medication card recieving date"
+  },
+  {
+   "fieldname": "company_share_ratio",
+   "fieldtype": "Float",
+   "label": "Company Share Ratio"
+  },
+  {
+   "fieldname": "employee_share_ratio",
+   "fieldtype": "Float",
+   "label": "Employee Share Ratio"
+  },
+  {
+   "fieldname": "column_break_109",
+   "fieldtype": "Column Break",
+   "width": "1%"
+  },
+  {
+   "fieldname": "national_id",
+   "fieldtype": "Data",
+   "label": "National id"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "medical__insurance_members_section",
+   "fieldtype": "Section Break",
+   "label": "Medical  Insurance Members"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
-
- "modified": "2020-11-15 13:41:09.012116",
-
-
+ "modified": "2020-12-02 13:14:59.058674",
 
  "modified_by": "Administrator",
  "module": "HR",

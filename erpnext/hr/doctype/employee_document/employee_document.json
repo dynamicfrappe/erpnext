@@ -1,0 +1,165 @@
+{
+ "autoname": "format:{document_type}-{employeename}",
+ "creation": "2020-11-30 13:18:35.764279",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "employee",
+  "employeename",
+  "column_break_4",
+  "doc_number",
+  "document_type",
+  "start_date",
+  "end_date",
+  "section_break_9",
+  "document",
+  "recived_by",
+  "is_recived",
+  "status",
+  "docperiod",
+  "notificationperiod",
+  "amended_from",
+  "is_notified"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "is_recived",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "in_filter": 1,
+   "in_standard_filter": 1,
+   "label": "IS Recived",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "doc_number",
+   "fieldtype": "Data",
+   "label": "Document Number"
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Link",
+   "label": "Document Type",
+   "options": "Employee document type"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "document",
+   "fieldtype": "Attach",
+   "label": "Document"
+  },
+  {
+   "fieldname": "recived_by",
+   "fieldtype": "Link",
+   "label": "Recived By",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Status",
+   "options": "Active\nDeactive"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Document",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "document_type.documnt_period",
+   "fieldname": "docperiod",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Document period",
+   "print_hide": 1
+  },
+  {
+   "fetch_from": "document_type.notification_period",
+   "fieldname": "notificationperiod",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Notification Period",
+   "print_hide": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_notified",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Is Notified",
+   "print_hide": 1
+  },
+  {
+   "depends_on": "employee",
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employeename",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-12-02 11:54:46.965704",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Employee Document",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -1,5 +1,5 @@
 {
- "autoname": "format:Device-Log-{employee}-{Date}",
+ "autoname": "format:Log-{employee}-{log_time}-{####}",
  "creation": "2020-11-18 16:59:15.633920",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -16,7 +16,7 @@
   {
    "fieldname": "enroll_no",
    "fieldtype": "Int",
-   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Enroll No",
    "read_only": 1
   },
@@ -53,7 +53,6 @@
   {
    "fieldname": "device",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Device",
    "options": "Device"
@@ -61,13 +60,12 @@
   {
    "fieldname": "log__date",
    "fieldtype": "Date",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Log  Date"
   }
  ],
  "in_create": 1,
- "modified": "2020-11-22 12:00:44.236573",
+ "modified": "2020-11-25 11:10:07.558809",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Device Log",

@@ -16,7 +16,16 @@ frappe.ui.form.on('Device', {
 											device_name: frm.doc.name,
 										},
 										callback: function(r) {
-											
+											frm.refresh(frm)
+										}
+									});
+								}).addClass("btn-primary");
+				frm.add_custom_button(__("Map Employees"),
+								function() {
+									frappe.call({
+										method: "erpnext.hr.doctype.device.device.map_employees",
+										callback: function(r) {
+											frm.refresh(frm)
 										}
 									});
 								}).addClass("btn-primary");

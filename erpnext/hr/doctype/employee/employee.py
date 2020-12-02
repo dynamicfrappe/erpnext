@@ -34,10 +34,50 @@ class Employee(NestedSet):
 				self.name = self.employee_name
 
 		self.employee = self.name
+	def gettemp(self):
+		#frappe.throw(str(self.designation))
+		self.set("required_document",[])
+		templateItem=[]
+		template=frappe.db.sql("""select * from `tabEmployee Designation Templates` where designation='{}'""".format(self.designation),as_dict=1)
+		if template:
+			templateItem=frappe.db.sql("""select * from `tabDesignation Templates` where parent='{}'""".format(template[0]["name"]),as_dict=1)
+		
+		if templateItem:
+			for item in templateItem:
+			
+				self.append("required_document", {"document_type": item.employee_document})
 
 	def validate(self):
 		from erpnext.controllers.status_updater import validate_status
 		validate_status(self.status, ["Active", "Temporary Leave", "Left"])
+		if not frappe.db.exists("Employee",self.name):
+			#frappe.msgprint(str(self.first_name))
+			for document in self.required_document:
+				doc = frappe.new_doc('Employee Document')
+				doc.employee=self.name
+				doc.employeename=str(self.first_name) + str(self.last_name)
+				doc.document_type=document.document_type
+				doc.save()
+		else:
+			employeeDocsfromdb=frappe.db.sql("""select * from `tabRequired Document` where parent='{}'""".format(self.name),as_dict=1)
+			#frappe.msgprint(employeeDocsfromdb)
+			if employeeDocsfromdb:
+				for empdoc in self.required_document:
+					flag=1
+					for dbdoc in employeeDocsfromdb:
+						#frappe.msgprint(dbdoc.name)
+						#frappe.msgprint(empdoc.name)
+						if dbdoc.name==empdoc.name:
+							flag=0
+					if flag==1:
+
+						doc = frappe.new_doc('Employee Document')
+						doc.employee=self.name
+						doc.employeename=str(self.first_name) + str(self.last_name)
+						doc.document_type=empdoc.document_type
+						doc.save()					
+
+
 
 		self.employee = self.name
 		self.set_employee_name()
@@ -51,11 +91,37 @@ class Employee(NestedSet):
 
 		if self.user_id:
 			self.validate_user_details()
+
+
 		else:
 			existing_user_id = frappe.db.get_value("Employee", self.name, "user_id")
 			if existing_user_id:
 				remove_user_permission(
 					"Employee", self.name, existing_user_id)
+		if self.outsource==1:
+			name="Item"+str(self.employee_name)
+			itemCode=frappe.db.sql("""select item_name from tabItem where name='{}'""".format(name),as_dict=1)
+			if itemCode:
+				pass
+			else:
+				existing_outsource = frappe.db.sql("select outsource from tabEmployee where name={}".format(self.name),as_dict=1)
+				if existing_outsource:
+					if existing_outsource[0]["outsource"]==0:
+						self.checkoutsource()
+
+				else:
+					self.checkoutsource()
+
+					
+	def checkoutsource(self):
+		doc = frappe.new_doc('Item')
+		doc.item_group="Services"
+		doc.item_code="Item " + str(self.employee_name)
+		doc.item_name="Item " + str(self.employee_name)
+		doc.is_stock_item=0
+		doc.include_item_in_manufacturing=0
+		doc.save()
+		frappe.db.commit()
 
 	def set_employee_name(self):
 		self.employee_name = ' '.join(filter(lambda x: x, [self.first_name, self.middle_name, self.last_name]))

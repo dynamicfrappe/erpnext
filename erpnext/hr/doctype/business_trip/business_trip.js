@@ -3,6 +3,39 @@
 
 frappe.ui.form.on('Business Trip', {
 
+		refresh:function(frm){
+		if(frm.doc.docstatus =='0' &&frm.doc.employee !=null){	
+		      frm.page.clear_primary_action();
+		        frappe.call({
+                //method: "erpnext.hr.doctype.mission.mission.updateStaus",
+                method:'updateStaus',
+                doc:frm.doc,
+                callback(r) {
+                	console.log(r.message)
+                    if (r.message!="false") {
+                       frm.add_custom_button(__(r.message),function(){
+                       	 //frm.event.updateAction(r.message);
+                         	  frappe.call({
+				                method:'updateAction',
+				                doc:frm.doc,
+				                args:{
+				                   'Action':r.message
+				                },callback(r) {
+				                	
+				                	frm.page.clear_primary_action();
+				                	frm.refresh();
+				                }
+				              
+				            });
+
+                       }).addClass('btn-primary')
+
+                    }
+                }
+            });
+		  }
+	},
+
 	to_date:(frm)=>{
 		if (frm.doc.from_date) {
              var sDate=Date.parse(frm.doc.from_date);

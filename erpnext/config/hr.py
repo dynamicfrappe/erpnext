@@ -33,6 +33,14 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Employee Contract",
+				},
+				{
+					"type": "doctype",
+					"name": "Employee Contract Type",
+				},
+				{
+					"type": "doctype",
 					"name": "Employee Group",
 					"dependencies": ["Employee"]
 				},
@@ -40,6 +48,19 @@ def get_data():
 					"type": "doctype",
 					"name": "Employee Health Insurance"
 				},
+				{
+					"type": "doctype",
+					"name": "Employee Document"
+				},
+				{
+					"type": "doctype",
+					"name": "Employee document type"
+				},
+					{
+					"type": "doctype",
+					"name": "Employee Documents Notification"
+				},
+
 			]
 		},
 		{
@@ -97,7 +118,7 @@ def get_data():
 					"type": "doctype",
 					"name": "Attendance Calculation",
 					"hide_count": True,
-					"dependencies": ["Employee Attendance Logs"]
+					"dependencies": ["Device Log"]
 				},
 				{
 					"label" : "Monthly Attendance Sheet Details" ,
@@ -131,6 +152,42 @@ def get_data():
 					"type": "doctype",
 					"name": "Mission Destination"
 				},
+				{
+					"type": "doctype",
+					"name": "Permission",
+					"dependencies": ["Permission Type"]
+
+				},
+				{
+					"type": "doctype",
+					"name": "Permission Type"
+				}
+				
+		 ]
+		}
+		,
+		{
+		 "label":_("Employee Penalties"),
+		 "items": [
+				 {
+					"type": "doctype",
+					"name": "Employee Penality"
+				},
+				{
+					"type": "doctype",
+					"name": "Warnings",
+					"dependencies": ["Warnings Types"]
+				},
+				{
+					"type": "doctype",
+					"name": "Warnings Types"
+				},
+				{
+					"type": "doctype",
+					"name": "Violations",
+					"dependencies": ["Penality Type"]
+
+				}
 				
 		 ]
 		}
@@ -453,6 +510,35 @@ def get_data():
 				},
 			]
 		},
+			{
+			"label": _("Social Insurance"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Insurance Office",
+				},
+				{
+					"type": "doctype",
+					"name": "Insurance Organization",
+				},
+				{
+					"type": "doctype",
+					"name": "Job insurance codes",
+				},
+				{
+					"type": "doctype",
+					"name": "Employee Social Insurance Data",
+				},
+				{
+					"type": "doctype",
+					"name": "Social Insurance Settings",
+				},
+					{
+					"type": "doctype",
+					"name": "Government",
+				},
+			]
+		},
 		{
 			"label": _("Fleet Management"),
 			"items": [
@@ -479,6 +565,10 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "HR Settings",
+				},
+				{
+					"type": "doctype",
+					"name": "Medical Insurance Dcoument",
 				},
 				{
 					"type": "doctype",

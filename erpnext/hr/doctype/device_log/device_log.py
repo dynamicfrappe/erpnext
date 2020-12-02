@@ -7,4 +7,8 @@ from __future__ import unicode_literals
 from frappe.model.document import Document
 
 class DeviceLog(Document):
-	pass
+	def after_insert (self):
+		self.map_employees()
+	def map_employees(self):
+		frappe.db.sql("""update `tabDevice Log` log set employee = (select name from `tabEmployee` where attendance_device_id = log.enroll_no)
+			where employee is null """)

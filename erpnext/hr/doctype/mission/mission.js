@@ -3,13 +3,48 @@
 
 frappe.ui.form.on('Mission', {
 
+
+
+	refresh:function(frm){
+		if(frm.doc.docstatus =='0' &&frm.doc.date !=null){	
+		      frm.page.clear_primary_action();
+		        frappe.call({
+                //method: "erpnext.hr.doctype.mission.mission.updateStaus",
+                method:'updateStaus',
+                doc:frm.doc,
+                callback(r) {
+                	console.log(r.message)
+                    if (r.message!="false") {
+                       frm.add_custom_button(__(r.message),function(){
+                       	 //frm.event.updateAction(r.message);
+                         	  frappe.call({
+				                method:'updateAction',
+				                doc:frm.doc,
+				                args:{
+				                   'Action':r.message
+				                },callback(r) {
+				                	
+				                	frm.page.clear_primary_action();
+				                	frm.refresh();
+				                }
+				              
+				            });
+
+                       }).addClass('btn-primary')
+
+                    }
+                }
+            });
+		  }
+	},
+
 	end_time:function(frm){
+
 		var sDate=(frm.doc.start_time).split(':')
         var tDate=(frm.doc.end_time).split(':')
         var difInHourse=tDate[0]-sDate[0]
         var difInMinutes=tDate[1]-sDate[1]
         difInMinutes+=difInHourse*60;
-        console.log(difInMinutes);
 		frm.set_value('duration', difInMinutes);
 	}
 

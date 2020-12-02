@@ -1,3 +1,4 @@
+
 {
  "autoname": "feild:member",
  "creation": "2020-11-12 16:44:01.674005",
@@ -7,10 +8,12 @@
  "field_order": [
   "member",
   "age",
+  "medication_card_number",
   "relation",
   "company_share_ratio",
   "employee_share_ratio",
   "start_date",
+  "medication_card_recieving_date",
   "document_no"
  ],
  "fields": [
@@ -72,10 +75,23 @@
    "label": "Relation",
    "options": "Employee Family Relation",
    "read_only": 1
+  },
+  {
+   "fieldname": "medication_card_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Medication card number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "medication_card_recieving_date",
+   "fieldtype": "Date",
+   "label": "Medication card recieving date ",
+   "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2020-11-15 10:56:31.393477",
+ "modified": "2020-12-02 12:00:54.265578",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Members",

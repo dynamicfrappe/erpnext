@@ -519,6 +519,10 @@ def create_salary_slips_for_employees(employees, args, publish_progress=True):
 				"employee": emp
 			})
 			ss = frappe.get_doc(args)
+			# frappe.msgprint('str(args)')
+			# frappe.msgprint(str(args))
+			# frappe.msgprint('str(ss)')
+			# frappe.msgprint(str(ss.employee))
 			ss.insert()
 			count+=1
 			if publish_progress:
@@ -546,13 +550,15 @@ def submit_salary_slips_for_employees(payroll_entry, salary_slips, publish_progr
 	count = 0
 	for ss in salary_slips:
 		ss_obj = frappe.get_doc("Salary Slip",ss[0])
+		frappe.msgprint(str(ss_obj))
 		if ss_obj.net_pay<0:
 			not_submitted_ss.append(ss[0])
 		else:
 			try:
 				ss_obj.submit()
 				submitted_ss.append(ss_obj)
-			except frappe.ValidationError:
+			except frappe.ValidationError as e:
+				frappe.msgprint(str(e))
 				not_submitted_ss.append(ss[0])
 
 		count += 1

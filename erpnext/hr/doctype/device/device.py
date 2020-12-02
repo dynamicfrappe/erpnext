@@ -14,7 +14,10 @@ from datetime import timedelta
 class Device(Document):
 	pass
 
-
+@frappe.whitelist()
+def map_employees():
+	frappe.db.sql("""update `tabDevice Log` log set employee = (select name from `tabEmployee` where attendance_device_id = log.enroll_no)
+	where employee is null """)
 
 @frappe.whitelist()
 def get_attendance (device_name):
@@ -77,6 +80,23 @@ def get_attendance (device_name):
 									log.insert()
 									old_user = user
 									old_timestamp = record['timestamp']
+								else :
+									log = frappe.get_doc({
+									    'doctype': 'Device Log',
+									    'enroll_no': record['user_id'],
+									    'log_time':record['timestamp'],
+									    'log_type':record['status'],
+									    'punch':record['punch'],
+									    'parent':device_name,
+									    'parenttype':'Device',
+									    'parentfield':'device_logs',
+									    'device' : device_name,
+									    'log_date': record['timestamp'].date()
+									})
+									log.insert()
+									old_user = user
+									old_timestamp = record['timestamp']
+
 							last = records[-1]
 							last_log_date = last['timestamp']
 

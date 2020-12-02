@@ -26,7 +26,9 @@ def execute(filters=None):
 	leave_list = [d[0] for d in leave_types]
 	columns.extend(leave_list)
 	columns.extend([_("Total Early Entries Min") + ":Time:200",_("Total Times Early Entries") + ":Data:200",_("Total Late Entries Min") + ":Time:200",_("Total Times Late Entries") + ":Data:200", _("Total Early Exits Min ") + ":Time:200",_("Total Times Early Exits") + ":Data:200",_("Total Late Exits Min") + ":Time:200",_("Total Times Late Exits") + ":Data:200"])
-
+	status_map = {"Week End":"<b style='color : blue'>Off </b>","Working On Holiday":"<b style='color : green'>WH </b>","Present": "<b style='color : green'>P </b>  ", "Absent": "<b style='color : red '>A </b> ", "Half Day": "<b style='color : deeppink '>HD </b> ", "Leave": "<b style='color : deeppink '>L </b> ", "None": "", "Holiday":"<b style='color : blue '>H</b>" , "Business Trip" :"<b style='color : darkblue '>BT </b> " , "Mission":"<b style='color : darkblue '>M </b> ","Mission All Day":"<b style='color : darkblue '>MA </b> "} 
+	leave_dict = get_leaveTypes()
+	status_map.update(leave_dict)
 	for emp in sorted(att_map):
 		emp_det = emp_map.get(emp)
 		if not emp_det:
@@ -38,18 +40,18 @@ def execute(filters=None):
 		total_p = total_a = total_l = total_m = total_ma = total_h   = total_bt=  0.0
 		for day in range(filters["total_days_in_month"]):
 			status = att_map.get(emp).get(day + 1, "None")
-			status_map = {"Present": "<b style='color : green'>P </b>  ", "Absent": "<b style='color : red '>A </b> ", "Half Day": "<b style='color : deeppink '>HD </b> ", "Leave": "<b style='color : deeppink '>L </b> ", "None": "", "Holiday":"<b style='color : blue '>H</b>" , "Business Trip" :"<b style='color : darkblue '>BT </b> " , "Mission":"<b style='color : darkblue '>M </b> ","Mission All Day":"<b style='color : darkblue '>MA </b> "} 
+
 			if status == "None" and holiday_map:
 				emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
 				if emp_holiday_list in holiday_map and (day+1) in holiday_map[emp_holiday_list]:
 					status = "Holiday"
 			row.append(status_map[status])
 
-			if status == "Present":
+			if status == "Present" :
 				total_p += 1
 			elif status == "Absent":
 				total_a += 1
-			elif status == "Leave":
+			elif status in leave_dict:
 				total_l += 1
 			elif status == "Half Day":
 				total_p += 0.5
@@ -63,6 +65,8 @@ def execute(filters=None):
 				total_m += 1
 			elif status == "Mission All Day":
 				total_ma += 1
+			elif status == "Working On Holiday":
+				total_p +=1
 
 		row += [total_p, total_l, total_a , total_h , total_m , total_ma ,total_bt]
 
@@ -112,8 +116,8 @@ def get_columns(filters):
 	for day in range(filters["total_days_in_month"]):
 		columns.append(cstr(day+1) +"::50")
 
-	columns += [_("Total Present") + ":Float:80", _("Total Leaves") + ":Float:80",  _("Total Absent") + ":Float:80"]
-	columns += [_("Total Holidays") + ":Float:80", _("Total Mission while Day") + ":Float:160",  _("Total Mission in All Day") + ":Float:160",  _("Total Business Trips Days") + ":Float:160"]
+	columns += [_("Total Present") + ":Float:120", _("Total Leaves") + ":Float:120",  _("Total Absent") + ":Float:120"]
+	columns += [_("Total Holidays") + ":Float:120", _("Total Mission while Day") + ":Float:160",  _("Total Mission in All Day") + ":Float:160",  _("Total Business Trips Days") + ":Float:160"]
 	return columns
 
 def get_attendance_list(conditions, filters):
@@ -169,3 +173,13 @@ def get_attendance_years():
 		year_list = [getdate().year]
 
 	return "\n".join(str(year) for year in year_list)
+
+
+def get_leaveTypes():
+	leave_types = frappe.db.sql("""select DISTINCT name , CONCAT('<b style = "color:deeppink">' , IFNULL(abbreviation,'L')  ,'</b>') as app from `tabLeave Type` where 1= 1""" , as_dict = 1)
+	leave_dict = {}
+	if  leave_types:
+		for l in leave_types:
+			leave_dict[str(l.name)] = str(l.app)
+
+	return leave_dict

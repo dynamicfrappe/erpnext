@@ -9,14 +9,26 @@ from frappe import _
 from frappe.utils import getdate, date_diff
 
 class AdditionalSalary(Document):
+	def __init__(self, *args, **kwargs) :
+		super().__init__(*args,**kwargs)
+		
 	def before_insert(self):
+		
+			
 		if frappe.db.exists("Additional Salary", {"employee": self.employee, "salary_component": self.salary_component,
 			"amount": self.amount, "payroll_date": self.payroll_date, "company": self.company, "docstatus": 1}):
 
 			frappe.throw(_("Additional Salary Component Exists."))
 
 	def validate(self):
+		
+		if self.amount_based_on_formula  and self.count > 0 :
+		
+			self.amount = self.count * float(self.get_active_salary_structure_component())
+		
 		self.validate_dates()
+		if self.amount_based_on_formula and  self.count < 0 :
+			frappe.throw(_("count should not be less than zero."))
 		if self.amount < 0:
 			frappe.throw(_("Amount should not be less than zero."))
 
@@ -25,6 +37,52 @@ class AdditionalSalary(Document):
 			["date_of_joining", "relieving_date"])
  		if date_of_joining and getdate(self.payroll_date) < getdate(date_of_joining):
  			frappe.throw(_("Payroll date can not be less than employee's joining date"))
+
+	def get_active_salary_structure_component(self):
+		component = frappe.get_doc("Salary Component",self.salary_component) 
+		payroll_date = self.payroll_date
+		if not payroll_date :
+			frappe.throw("validation error in date")
+		salary_structure = frappe.db.sql(""" 
+			SELECT   max(from_date), salary_structure FROM `tabSalary Structure Assignment` WHERE
+			employee = '%s' and docstatus=1 and from_date <= '%s'
+
+			"""%(self.employee ,self.payroll_date))
+		if not salary_structure :
+			frappe.throw("validation error in Salary Structure")
+		data ={}
+		for i in component.based_on_componant :
+			value = frappe.db.sql(""" SELECT amount FROM `tabSalary Detail` WHERE parent ='%s' and
+				abbr = '%s' """ %(str(salary_structure[0][1]) , i.component_short_name))
+			if value :
+				data[str(i.component_short_name)] = float(value[0][0])
+			else :
+				data[str(i.component_short_name)] = 0
+				# frappe.throw("Validation error in component '%s' pleas check if employee have it in his salary struct "%i.component_short_name)
+
+		
+		formula = component.formula
+		if formula :
+			return self.get_amount_pase_on_formula(formula ,data)
+		else :
+			return 0 
+
+	def get_amount_pase_on_formula(self,formula , data):
+		# formula is string 
+		#data is dic
+		func  =formula.strip(" ").replace("\n", " ")
+		d =[i for  i in data.keys() ]
+		for e in range(0,len(d)) :
+			func  = func.replace(str(max(d ,key=len)) , str(data[max(d ,key=len)]))
+			d.remove(max(d ,key=len))
+			
+		try :
+			return (eval(func))
+		except:
+			return("error")
+	
+
+		
 
 	def get_amount(self, sal_start_date, sal_end_date):
 		start_date = getdate(sal_start_date)
@@ -37,6 +95,10 @@ class AdditionalSalary(Document):
 			end_date = getdate(self.to_date)
 		no_of_days = date_diff(getdate(end_date), getdate(start_date)) + 1
 		return amount_per_day * no_of_days
+
+	def set_amount_amount_based_on_formula(self):
+		return 1000
+		
 
 @frappe.whitelist()
 def get_additional_salary_component(employee, start_date, end_date, component_type):

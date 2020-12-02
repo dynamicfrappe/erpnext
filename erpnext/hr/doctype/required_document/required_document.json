@@ -1,0 +1,39 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2020-12-01 10:14:10.460494",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "document_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "HR-Req-Doc-",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Document Type",
+   "options": "Employee document type"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-01 11:07:50.690717",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Required Document",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

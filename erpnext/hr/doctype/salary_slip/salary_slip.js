@@ -43,11 +43,22 @@ frappe.ui.form.on("Salary Slip", {
 			}
 		});
 	},
+	
 
 	start_date: function(frm){
 		if(frm.doc.start_date){
 			frm.trigger("set_end_date");
 		}
+		frappe.call({
+			"method" :'erpnext.hr.doctype.social_insurance_settings.social_insurance_settings.caculate_employee_insurance',
+			"args":{
+				"employee": frm.doc.employee ,
+				"payrol_date":frm.doc.start_date  
+			},
+			callback:function(r){
+				console.log(r.message)
+			}
+		})
 	},
 
 	end_date: function(frm) {
@@ -147,7 +158,6 @@ var total_work_hours = function(frm, dt, dn) {
 	frm.set_value('total_working_hours', total_working_hours);
 
 	var wages_amount = frm.doc.total_working_hours * frm.doc.hour_rate;
-
 	frappe.db.get_value('Salary Structure', {'name': frm.doc.salary_structure}, 'salary_component', (r) => {
 		var gross_pay = 0.0;
 		$.each(frm.doc["earnings"], function(i, earning) {

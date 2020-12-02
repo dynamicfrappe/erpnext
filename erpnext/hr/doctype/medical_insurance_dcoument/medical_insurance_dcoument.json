@@ -1,0 +1,134 @@
+{
+ "creation": "2020-12-02 11:44:05.150870",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "insurance_provider",
+  "column_break_4",
+  "data_3",
+  "status",
+  "dates_section",
+  "document_start_date",
+  "column_break_8",
+  "document_end_date",
+  "payment_terms_section",
+  "payment_terms",
+  "add_time_table_for_payments",
+  "time_table",
+  "notens_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "insurance_provider",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": " Insurance Provider",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "data_3",
+   "fieldtype": "Currency",
+   "label": "Insurance  Value",
+   "reqd": 1
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nActive\nClosed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dates_section",
+   "fieldtype": "Section Break",
+   "label": "Dates"
+  },
+  {
+   "fieldname": "document_start_date",
+   "fieldtype": "Date",
+   "label": "Document Start Date ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "document_end_date",
+   "fieldtype": "Date",
+   "label": "Document End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "notens_section",
+   "fieldtype": "Section Break",
+   "label": "Notens"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_terms_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Terms"
+  },
+  {
+   "fieldname": "payment_terms",
+   "fieldtype": "Int",
+   "label": "Payment terms"
+  },
+  {
+   "default": "0",
+   "fieldname": "add_time_table_for_payments",
+   "fieldtype": "Check",
+   "label": "Add Time Table For Payments"
+  },
+  {
+   "depends_on": "add_time_table_for_payments",
+   "fieldname": "time_table",
+   "fieldtype": "Table",
+   "label": "Time Table",
+   "options": "Medical Insurance Dcoument Payment terms"
+  }
+ ],
+ "modified": "2020-12-02 13:46:13.319207",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Medical Insurance Dcoument",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

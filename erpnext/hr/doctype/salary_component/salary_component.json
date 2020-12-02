@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:salary_component",
@@ -23,6 +22,7 @@
   "statistical_component",
   "do_not_include_in_total",
   "disabled",
+  "consider_in_hour_rate",
   "flexible_benefits",
   "is_flexible_benefit",
   "max_benefit_amount",
@@ -35,10 +35,12 @@
   "condition_and_formula",
   "condition",
   "amount",
+  "based_on_componant",
   "amount_based_on_formula",
   "formula",
   "column_break_28",
-  "help"
+  "help",
+  "amended_from"
  ],
  "fields": [
   {
@@ -231,11 +233,31 @@
    "fieldname": "exempted_from_income_tax",
    "fieldtype": "Check",
    "label": "Exempted from Income Tax"
+  },
+  {
+   "fieldname": "based_on_componant",
+   "fieldtype": "Table",
+   "label": "Based on Componant",
+   "options": "Based on Componant"
+  },
+  {
+   "default": "1",
+   "fieldname": "consider_in_hour_rate",
+   "fieldtype": "Check",
+   "label": "Consider In Hour Rate"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Salary Component",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "icon": "fa fa-flag",
- "links": [],
- "modified": "2020-04-28 15:46:45.252945",
+ "modified": "2020-12-01 14:52:27.896054",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Salary Component",

@@ -18,6 +18,16 @@ from frappe.utils import now, cint, get_datetime, to_timedelta,update_progress_b
 #   6 => Mission
 #   7 => Mission All Day
 #   8 => Half Day
+#   9 => Working On Holiday
+#   10 => Week End
+#   11 => Sick Leave
+#   12 => Privilege Leave
+#   13 => 
+#   14 => 
+#   15 => 
+#   16 => 
+#   17 => 
+#   18 => 
 
 class AttendanceCalculation(Document):
 	# attendances = []
@@ -26,9 +36,10 @@ class AttendanceCalculation(Document):
 	
 	def Calculate_attendance(self):
 		self.attendances = frappe.db.sql("""
-			select employee , Date(log_time) as Day  , MIN(log_time) as 'IN' ,  MAX(log_time) as 'OUT'  from `tabDevice Log`
-	        
-			group by Date(log_time),employee   
+			select emp.name as employee , Date(log_time) as Day  , MIN(log_time) as 'IN' ,  MAX(log_time) as 'OUT'  from `tabDevice Log`
+			inner join `tabEmployee` emp on emp.attendance_device_id = `tabDevice Log`.enroll_no
+			where emp.name is not null
+			group by Date(log_time),emp.name  
 			having  Day between '{from_date}' and '{to_date}'
 			""".format(from_date=self.from_date,to_date=self.to_date),as_dict=1)
 		day = datetime.strptime(self.from_date,'%Y-%m-%d').date()
@@ -65,6 +76,7 @@ class AttendanceCalculation(Document):
 		Holidays = None
 		Leaves = None
 		Shift = None
+		self.Permissions = None
 		doc.is_calculated=0
 		company , holiday_list,default_shift =  frappe.db.get_value('Employee', employee, ['company','holiday_list', 'default_shift'])
 		old_doc =  frappe.db.get_value('Employee Attendance Logs', {'employee':employee , 'date' : day}, ['name' , 'is_calculated'] , as_dict=1)
@@ -97,11 +109,24 @@ class AttendanceCalculation(Document):
 		doc.shift_actual_start = timedelta(minutes=0)
 		doc.shift_actual_end = timedelta(minutes=0)
 		user_records_in_day = [x for x in self.attendances if x.employee == employee and x.Day == day]
+		self.Permissions = frappe.db.sql("""
+		select permission.name , type.code , SUBTIME (permission.to_time,permission.from_time) as Duration
+			from tabPermission permission inner join `tabPermission Type` type on type.name = permission.permission_type where permission.docstatus = 1 and status = "Completed" and date(date) = date('{day}') and employee = '{employee}'
+			group by  permission.name ;
+		""".format(day = day , employee = employee),as_dict=1)
 		if Holidays :
 			# Day is Holiday
-			doc.reference_type = "Holiday List"
-			doc.reference_name =  	holiday_list
-			self.In_Holiday(doc)
+			if not user_records_in_day:
+				
+				doc.reference_type = "Holiday List"
+				doc.reference_name =  	holiday_list
+				if Holidays[0].type == "Official":
+					self.In_Holiday(doc , type = 'Official')
+				else: 
+					self.In_Holiday(doc , type = 'Week End')
+
+			else : 
+				self.Present(doc,user_records_in_day[0],Shift ,type =5)
 		else :
 			# Not Holiday
 			Leaves = frappe.db.sql("""
@@ -121,6 +146,8 @@ class AttendanceCalculation(Document):
 							# half day with no records
 							self.Absent(doc)
 				else:
+					
+					doc.type = Leaves[0].leave_type	
 					self.In_Leave (doc)
 			else :
 				BusinessTrips = frappe.db.sql("""
@@ -159,9 +186,13 @@ class AttendanceCalculation(Document):
 
 		#frappe.msgprint(str(employee) ,str(day))
 		#doc.insert()
-	def In_Holiday (self,doc):
-		doc.type = "Holiday"
-		doc.type_number = 4
+	def In_Holiday (self,doc,type = 'Week End'):
+		if type == 'Week End' :
+			doc.type = "Week End"
+			doc.type_number = 10
+		else :
+			doc.type = "Holiday"
+			doc.type_number = 4
 		doc.insert()	
 
 	def In_BusinessTrip (self,doc):
@@ -170,7 +201,8 @@ class AttendanceCalculation(Document):
 		doc.insert()
 
 	def In_Leave (self,doc):
-		doc.type = "Leave"
+#		doc.type = "Leave"
+
 		doc.type_number = 3
 		doc.insert()	
 
@@ -201,6 +233,18 @@ class AttendanceCalculation(Document):
 	# 	doc.insert()
 
 	def Present (self,doc , log ,shift , missions = None , type = 1):
+		# type document 
+		#	1 => Normal Present 
+		#	2 => Present With Missions in day
+		#	3 => Present With missions all the day
+		#	4 => Half Day
+		#	5 => Working On Holiday
+		#
+		#
+		#
+		#
+		doc.reference_type= "Shift Type"
+		doc.reference_name= shift.name
 		doc.type = "Present"
 		doc.type_number = 1
 		IN = None
@@ -229,8 +273,15 @@ class AttendanceCalculation(Document):
 			OUT = missions[-1].end_time
 
 		elif type == 4 :
+			# Half Day
 			doc.type = "Half Day"
 			doc.type_number = 8
+			IN = to_timedelta(str(log.IN.time()))
+			OUT = to_timedelta(str(log.OUT.time()))
+		elif type == 5 :
+			# Working On Holiday
+			doc.type = "Working On Holiday"
+			doc.type_number = 9
 			IN = to_timedelta(str(log.IN.time()))
 			OUT = to_timedelta(str(log.OUT.time()))
 
@@ -241,6 +292,24 @@ class AttendanceCalculation(Document):
 		doc.late_in =  IN - shift.start_time
 		doc.early_out =  shift.end_time  - OUT
 		doc.late_out = OUT - shift.end_time
+
+		if self.Permissions :
+			for i in self.Permissions:
+				if i.code == 1:
+					# start of the Day
+					doc.late_in -= i.Duration
+					doc.early_in = timedelta(minutes=0)
+					# frappe.msgprint('str(doc.late_in)')
+					# frappe.msgprint(str(doc.late_in))
+				elif i.code == 2:
+					# end of the day
+					doc.late_out = timedelta(minutes=0)
+					doc.early_out -= i.Duration
+					# frappe.msgprint('str(doc.early_out)')
+					# frappe.msgprint(str(doc.early_out))
+				doc.reference_type = "Permission"
+				doc.reference_name = i.name
+
 		if doc.early_in < timedelta(minutes=0):
 			doc.early_in = timedelta(minutes=0)
 		if doc.early_out < timedelta(minutes=0):

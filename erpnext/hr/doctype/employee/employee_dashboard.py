@@ -13,7 +13,7 @@ def get_data():
 			},
 			{
 				'label': _('Lifecycle'),
-				'items': ['Employee Transfer', 'Employee Promotion', 'Employee Separation']
+				'items': ['Employee Contract','Employee Transfer', 'Employee Promotion', 'Employee Separation']
 			},
 			{
 				'label': _('Shift'),
@@ -29,7 +29,7 @@ def get_data():
 			},
 			{
 				'label': _('Evaluation'),
-				'items': ['Appraisal']
+				'items': ['Appraisal' , 'Employee Document']
 			},
 			{
 				'label': _('Payroll'),
