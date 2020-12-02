@@ -10,6 +10,14 @@ frappe.ui.form.on('Employee Penality', {
 				]
 			}
 		});
+		frm.set_query('decision_maker', function(doc) {
+			return {
+				filters: [
+					["Employee","name", "in", [] ]
+				]
+
+			};
+		});
 	},
 	 refresh: function(frm) {
 		frm.trigger("get_pervious_Penalities")
@@ -18,7 +26,47 @@ frappe.ui.form.on('Employee Penality', {
 		frm.trigger("get_pervious_Penalities")
 	 },
 	employee: function(frm) {
-		if (frm.doc.employee && frm.doc.decision_maker)
+
+		frm.set_query('decision_maker', function(doc) {
+			return {
+				filters: [
+					["Employee","name", "in", [""] ]
+				]
+
+			};
+		});
+
+		if (!frm.doc.employee)
+			return;
+
+		frappe.call({
+
+				method: "get_Department_supervisors",
+				doc:frm.doc,
+				callback: function(r) {
+					debugger;
+					if (r.message)
+					{
+						debugger;
+
+						frm.set_query('decision_maker', function(doc) {
+							return {
+								filters: [
+									["Employee","name", "in", [r.message.toString()] ]
+								]
+
+							};
+						});
+					}
+					refresh_field("decision_maker");
+					refresh_field("penality_type");
+					refresh_field("penality_description");
+					refresh_field("penality_factor");
+					refresh_field("article_number");
+
+				}
+			});
+		if (frm.doc.decision_maker)
 		{
 			if (frm.doc.employee == frm.doc.decision_maker)
 			{
@@ -33,6 +81,8 @@ frappe.ui.form.on('Employee Penality', {
 
 	 },
 	decision_maker: function(frm) {
+
+
 		if (frm.doc.employee && frm.doc.decision_maker)
 		{
 			if (frm.doc.employee == frm.doc.decision_maker)
