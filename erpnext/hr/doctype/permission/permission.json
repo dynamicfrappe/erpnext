@@ -101,7 +101,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Created\nSuperVisor Approved\nManager Approved\nCompleted",
+   "options": "Created\nSuperVisor Approved\nManager Approved\nHR Approved",
    "read_only": 1
   },
   {
@@ -173,7 +173,7 @@
  "icon": "fa fa-calendar",
  "is_submittable": 1,
  "max_attachments": 3,
- "modified": "2020-11-30 09:58:26.052097",
+ "modified": "2020-12-02 14:25:28.027073",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Permission",
