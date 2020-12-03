@@ -120,13 +120,12 @@
    "label": "Compnay Fee"
   },
   {
-   "collapsible": 1,
-   "collapsible_depends_on": "include_family_members",
    "fieldname": "section_break_16",
    "fieldtype": "Section Break",
    "label": "Family Members"
   },
   {
+   "depends_on": "include_family_members",
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -153,7 +152,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 13:34:27.030167",
+ "modified": "2020-12-03 14:46:01.731044",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Document",
