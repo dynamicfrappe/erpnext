@@ -12,6 +12,7 @@
   "employee_joined_data",
   "insurance_organization",
   "insurance_office",
+  "insurance_jop",
   "is_owner",
   "insured",
   "insurance_detail_section",
@@ -200,10 +201,17 @@
    "label": "Insurance Office",
    "options": "Insurance Office",
    "reqd": 1
+  },
+  {
+   "fieldname": "insurance_jop",
+   "fieldtype": "Link",
+   "label": "insurance Jop",
+   "options": "Job insurance codes",
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 13:53:41.167498",
+ "modified": "2020-12-03 14:23:56.333073",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
