@@ -1,4 +1,5 @@
 {
+ "autoname": "format:M-{insurance_provider}.-IS",
  "creation": "2020-12-02 11:44:05.150870",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -7,13 +8,17 @@
   "posting_date",
   "insurance_provider",
   "column_break_4",
-  "data_3",
   "status",
+  "total_inclided_insurance",
+  "current_member_count",
   "dates_section",
   "document_start_date",
   "column_break_8",
   "document_end_date",
   "payment_terms_section",
+  "dcoument_category",
+  "payment__table",
+  "data_3",
   "payment_terms",
   "add_time_table_for_payments",
   "time_table",
@@ -37,9 +42,10 @@
    "reqd": 1
   },
   {
+   "default": "0",
    "fieldname": "data_3",
    "fieldtype": "Currency",
-   "label": "Insurance  Value",
+   "label": "Insurance  Totla Value",
    "reqd": 1
   },
   {
@@ -107,9 +113,34 @@
    "fieldtype": "Table",
    "label": "Time Table",
    "options": "Medical Insurance Dcoument Payment terms"
+  },
+  {
+   "fieldname": "dcoument_category",
+   "fieldtype": "Table",
+   "label": "Dcoument Category",
+   "options": "Medical Insurance Dcoument Category Table"
+  },
+  {
+   "fieldname": "payment__table",
+   "fieldtype": "Table",
+   "label": " Payment  Table",
+   "options": "Incurance Payment Terms Table"
+  },
+  {
+   "fieldname": "total_inclided_insurance",
+   "fieldtype": "Int",
+   "label": "Total insurance_provider",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "current_member_count",
+   "fieldtype": "Int",
+   "label": "Current Member Count",
+   "read_only": 1
   }
  ],
- "modified": "2020-12-02 13:46:13.319207",
+ "modified": "2020-12-03 15:39:49.964608",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Medical Insurance Dcoument",

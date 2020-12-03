@@ -1,4 +1,3 @@
-
 {
  "autoname": "feild:member",
  "creation": "2020-11-12 16:44:01.674005",
@@ -7,13 +6,13 @@
  "engine": "InnoDB",
  "field_order": [
   "member",
+  "relation",
   "age",
   "medication_card_number",
-  "relation",
+  "medication_card_recieving_date",
   "company_share_ratio",
   "employee_share_ratio",
   "start_date",
-  "medication_card_recieving_date",
   "document_no"
  ],
  "fields": [
@@ -22,8 +21,7 @@
    "fieldname": "member",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Member",
-   "read_only": 1,
+   "label": "Full name",
    "reqd": 1,
    "unique": 1
   },
@@ -34,14 +32,12 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Age",
-   "read_only": 1,
    "reqd": 1
   },
   {
    "columns": 2,
    "fieldname": "company_share_ratio",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Company Share Ratio",
    "reqd": 1
   },
@@ -49,34 +45,31 @@
    "columns": 2,
    "fieldname": "employee_share_ratio",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Employee Share Ratio",
    "reqd": 1
   },
   {
    "columns": 1,
-   "default": "Today",
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Start Date",
-   "reqd": 1
+   "label": "Start Date"
   },
   {
    "columns": 2,
    "fieldname": "document_no",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Document No"
   },
   {
+   "columns": 1,
    "fieldname": "relation",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Relation",
-   "options": "Employee Family Relation",
-   "read_only": 1
+   "options": "Employee Family Relation"
   },
   {
+   "columns": 2,
    "fieldname": "medication_card_number",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -86,12 +79,13 @@
   {
    "fieldname": "medication_card_recieving_date",
    "fieldtype": "Date",
-   "label": "Medication card recieving date ",
+   "in_list_view": 1,
+   "label": "Card Recieving Date ",
    "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2020-12-02 12:00:54.265578",
+ "modified": "2020-12-03 13:42:39.052775",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Members",

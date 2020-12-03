@@ -10,9 +10,6 @@ from frappe import msgprint, _
 class BusinessTrip(Document):
 
 	def validate(self):
-		department=frappe.db.sql("""select department from tabEmployee where name='{}'""".format(self.name),as_dict=1)
-		if not department:
-			frappe.throw("employee have no department")
 		leaveApplicationResult=frappe.db.sql("""
            select * from `tabLeave Application` where employee='{}' and (from_date between '{}' and '{}' or to_date between '{}' and '{}')
             and docstatus=1

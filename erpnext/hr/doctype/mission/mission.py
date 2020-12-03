@@ -9,9 +9,6 @@ from frappe import msgprint, _
 class Mission(Document):
 
 	def validate(self):
-		department=frappe.db.sql("""select department from tabEmployee where name='{}'""".format(self.name),as_dict=1)
-		if not department:
-			frappe.throw("employee have no department")
 		result=frappe.db.sql("""select * from tabMission where employee='{}' and (start_time between '{}' and '{}' or end_time between '{}' and '{}') and date='{}'""".format(self.employee,self.start_time,self.end_time,self.start_time,self.end_time,self.date),as_dict=1)
 		if(len(result)>0):
 			
