@@ -1,5 +1,5 @@
 {
- "autoname": "naming_series:",
+ "autoname": "format:{permission_name}",
  "creation": "2020-11-29 10:37:51.101580",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -32,7 +32,7 @@
    "reqd": 1
   }
  ],
- "modified": "2020-11-30 10:09:22.278845",
+ "modified": "2020-12-03 15:22:37.066635",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Permission Type",

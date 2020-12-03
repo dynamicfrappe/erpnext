@@ -60,13 +60,14 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-01 12:20:08.497054",
+ "modified": "2020-12-03 15:36:23.067058",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Violations",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -76,6 +77,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
