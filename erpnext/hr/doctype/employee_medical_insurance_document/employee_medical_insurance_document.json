@@ -1,4 +1,5 @@
 {
+ "autoname": "format:M-I-D-{employee_name}",
  "creation": "2020-12-03 13:23:28.009595",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -72,7 +73,8 @@
   {
    "fieldname": "insurance_card_start_date",
    "fieldtype": "Date",
-   "label": "Insurance Card Start Date"
+   "label": "Insurance Card Start Date",
+   "reqd": 1
   },
   {
    "fieldname": "insurance_document",
@@ -152,7 +154,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 14:46:01.731044",
+ "modified": "2020-12-03 16:08:48.795475",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Document",
