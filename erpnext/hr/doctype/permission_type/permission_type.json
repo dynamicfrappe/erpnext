@@ -32,22 +32,12 @@
    "reqd": 1
   }
  ],
- "in_create": 1,
- "modified": "2020-12-02 17:26:31.947046",
+ "modified": "2020-11-30 10:09:22.278845",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Permission Type",
  "owner": "Administrator",
  "permissions": [
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1
-  },
   {
    "create": 1,
    "delete": 1,
@@ -56,7 +46,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Administrator",
+   "role": "System Manager",
    "share": 1,
    "write": 1
   }

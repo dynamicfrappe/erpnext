@@ -128,12 +128,12 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Status",
-   "options": "Created\nSuperVisor Approved\nManager Approved\nHR Approved",
+   "options": "Created\nSuperVisor Approved\nManager Approved\nCompleted",
    "print_hide": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-02 14:24:48.349717",
+ "modified": "2020-12-02 13:14:50.988523",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Business Trip",
