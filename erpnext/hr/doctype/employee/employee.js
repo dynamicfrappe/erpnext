@@ -56,6 +56,18 @@ frappe.ui.form.on('Employee',{
 		});
 	},
 	onload:function(frm) {
+		if (!frm.doc.total_working_hours_per_day){
+			frappe.db.get_single_value("HR Settings", "total_hours_per_day").then(duration => {
+				if (duration) {
+					debugger;
+					frm.doc.total_working_hours_per_day = duration;
+					refresh_field("total_working_hours_per_day");
+				}
+
+			});
+		}
+
+
 		frm.set_query("department", function() {
 			return {
 				"filters": {

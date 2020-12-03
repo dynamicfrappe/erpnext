@@ -58,6 +58,7 @@
   "column_break_44",
   "holiday_list",
   "default_shift",
+  "total_working_hours_per_day",
   "leave_approver",
   "salary_information",
   "salary_mode",
@@ -148,7 +149,7 @@
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "HR-EMP-#####",
+   "options": "HR-EMP-",
    "set_only_once": 1
   },
   {
@@ -897,13 +898,17 @@
    "fieldname": "medical__insurance_members_section",
    "fieldtype": "Section Break",
    "label": "Medical  Insurance Members"
+  },
+  {
+   "fieldname": "total_working_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Total Working Hours Per Day"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-02 13:14:59.058674",
-
+ "modified": "2020-12-03 17:56:10.052842",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
