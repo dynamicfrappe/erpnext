@@ -37,7 +37,7 @@ def execute(filters=None):
 		row = [emp, emp_det.employee_name, emp_det.branch, emp_det.department, emp_det.designation,
 			emp_det.company]
 
-		total_p = total_a = total_l = total_m = total_ma = total_h   = total_bt=  0.0
+		total_p = total_a = total_l = total_m = total_ma = total_h  = total_weekend = total_bt=  0.0
 		for day in range(filters["total_days_in_month"]):
 			status = att_map.get(emp).get(day + 1, "None")
 
@@ -67,8 +67,12 @@ def execute(filters=None):
 				total_ma += 1
 			elif status == "Working On Holiday":
 				total_p +=1
+			elif status == "Week End":
+				total_weekend +=1
+			else :
+				total_l +=1
 
-		row += [total_p, total_l, total_a , total_h , total_m , total_ma ,total_bt]
+		row += [total_p, total_l, total_a , total_h , total_weekend , total_m , total_ma ,total_bt]
 
 		if not filters.get("employee"):
 			filters.update({"employee": emp})
@@ -81,10 +85,11 @@ def execute(filters=None):
 			where leave_type is not NULL %s group by leave_type, type;""" % conditions, filters, as_dict=1)
 		
 		time_default_counts = frappe.db.sql(""" select SEC_TO_TIME( SUM( TIME_TO_SEC( early_in) ) ) AS early_in    ,SEC_TO_TIME( SUM( TIME_TO_SEC( early_out) ) ) AS early_out ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_in) ) ) AS late_in ,SEC_TO_TIME( SUM( TIME_TO_SEC( late_out) ) ) AS late_out from `tabEmployee Attendance Logs` where 1=1 %s""" % (conditions), filters , as_dict=1)
-		total_counts = frappe.db.sql("""  select (select COUNT(*)  from `tabEmployee Attendance Logs` where early_out > '00:00:00'  %s ) as total_early_out,
- (select COUNT(*)  from `tabEmployee Attendance Logs` where early_in > '00:00:00' %s  ) as total_early_in,
- (select COUNT(*)  from `tabEmployee Attendance Logs` where late_in > '00:00:00'  %s ) as total_late_in,
- (select COUNT(*)  from `tabEmployee Attendance Logs` where late_out > '00:00:00'  %s ) as total_late_out
+		total_counts = frappe.db.sql("""  
+select (select COUNT(*)  from `tabEmployee Attendance Logs` where TIME_TO_SEC(early_out) > TIME_TO_SEC('00:00:00')  %s ) as total_early_out,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where TIME_TO_SEC(early_in) > TIME_TO_SEC('00:00:00') %s  ) as total_early_in,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where TIME_TO_SEC(late_in) > TIME_TO_SEC('00:00:00')  %s ) as total_late_in,
+ (select COUNT(*)  from `tabEmployee Attendance Logs` where TIME_TO_SEC(late_out) > TIME_TO_SEC('00:00:00')  %s ) as total_late_out
 """%(conditions,conditions,conditions,conditions)  , filters,as_dict=1)
 
 		leaves = {}
@@ -117,7 +122,7 @@ def get_columns(filters):
 		columns.append(cstr(day+1) +"::50")
 
 	columns += [_("Total Present") + ":Float:120", _("Total Leaves") + ":Float:120",  _("Total Absent") + ":Float:120"]
-	columns += [_("Total Holidays") + ":Float:120", _("Total Mission while Day") + ":Float:160",  _("Total Mission in All Day") + ":Float:160",  _("Total Business Trips Days") + ":Float:160"]
+	columns += [_("Total Holidays") + ":Float:120",_("Total Weekend") + ":Float:120", _("Total Mission while Day") + ":Float:160",  _("Total Mission in All Day") + ":Float:160",  _("Total Business Trips Days") + ":Float:160"]
 	return columns
 
 def get_attendance_list(conditions, filters):
