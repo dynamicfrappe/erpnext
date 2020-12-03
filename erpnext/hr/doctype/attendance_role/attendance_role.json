@@ -12,6 +12,9 @@
   "hour_rate_for_late_out",
   "permission_rule_section",
   "permission_rule",
+  "max_permission_minutes",
+  "max_permissions_count",
+  "section_break_11",
   "hour_rate_for_late_in",
   "hour_rate_for_early_out",
   "absent_rate",
@@ -89,9 +92,23 @@
   {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_permission_minutes",
+   "fieldtype": "Float",
+   "label": "Max Permission minutes"
+  },
+  {
+   "fieldname": "max_permissions_count",
+   "fieldtype": "Float",
+   "label": "Max permissions Count"
+  },
+  {
+   "fieldname": "section_break_11",
+   "fieldtype": "Section Break"
   }
  ],
- "modified": "2020-12-03 17:26:55.272095",
+ "modified": "2020-12-03 18:12:08.724906",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Role",
