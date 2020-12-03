@@ -8,7 +8,13 @@ from frappe.model.document import Document
 
 class Permission(Document):
 
-
+	def validate(self):
+		department=[]
+		department=frappe.db.sql("""select department from tabEmployee where name='{}'""".format(self.employee),as_dict=1)
+		asd=department[0].get('department')
+		frappe.msgprint(asd)
+		if not asd:
+			frappe.throw("employee have no department")
 	def updateStaus(self):
 		EmpDepartment=frappe.db.sql("""
           select department from tabEmployee where name='{}'
