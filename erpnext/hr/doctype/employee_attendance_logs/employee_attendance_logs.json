@@ -189,7 +189,7 @@
   }
  ],
  "in_create": 1,
- "modified": "2020-11-30 15:05:04.327707",
+ "modified": "2020-12-03 17:32:42.406725",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
@@ -197,6 +197,7 @@
  "permissions": [
   {
    "create": 1,
+   "delete": 1,
    "email": 1,
    "export": 1,
    "import": 1,
@@ -204,6 +205,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
    "share": 1,
    "write": 1
   }
