@@ -75,38 +75,6 @@ def getdata (filters):
 		if filters.get("to_date"):
 			conditions += " and invoice.due_date <=%(to_date)s"
 
-		print("""
-					SELECT
-							invoice.`name` ,
-							invoice.due_date,
-							invoice.customer_name ,
-							customer.tax_id , 
-							invoice.total,
-							invoice.net_total,
-							taxes.charge_type ,
-							SUM(taxes.rate) as tax_rate , 
-							SUM(taxes.tax_amount) as tax_amount,	
-							invoice.discount_amount
-							
-						FROM
-							`tabSales Invoice` invoice
-							INNER JOIN
-							`tabSales Taxes and Charges` taxes
-							ON 
-								invoice.`name` = taxes.parent
-							INNER JOIN 
-							  tabCustomer  customer
-							ON 
-							  invoice.customer = customer.`name`  
-
-							{conditions}
-								
-							GROUP BY 
-							invoice.`name` , taxes.charge_type
-	
-			
-			""".format(conditions=conditions))
-
 		results = frappe.db.sql("""
 						SELECT
 			invoice.`name` ,
