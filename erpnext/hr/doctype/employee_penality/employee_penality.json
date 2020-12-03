@@ -96,6 +96,7 @@
   {
    "fieldname": "employee_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Employee Name",
    "read_only": 1
   },
@@ -165,7 +166,6 @@
    "options": "Penality Type",
    "read_only": 1
   },
-
   {
    "default": "#",
    "fieldname": "article_number",
@@ -180,13 +180,14 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-01 14:23:30.745943",
+ "modified": "2020-12-03 15:41:18.270495",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Penality",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -196,6 +197,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
