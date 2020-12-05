@@ -355,7 +355,7 @@ class AttendanceCalculation(Document):
 						doc.late_penality = level_factor * penality.factor
 
 						if penality.add_deduction:
-							if attendance_role.deduction_factor :
+							if penality.deduction_factor :
 								doc.late_factor = penality.deduction_factor
 							else:
 								doc.late_factor = doc.late_in.seconds/60
