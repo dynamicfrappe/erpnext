@@ -9,13 +9,14 @@ from frappe.model.document import Document
 from datetime import datetime,timedelta
 
 class Permission(Document):
-	def validate (self):
-		if self.employee and self.permission_type and self.date:
-			employee = frappe.get_doc("Employee",self.employee)
-			if not employee.attendance_role:
-				frappe.throw(_("Please assign Attendance Role To This Employee {}".format(self.employee)))
-			attendance_role = frappe.get_doc("Attendance Role" , employee.attendance_role)
 
+	def validate(self):
+		department=[]
+		department=frappe.db.sql("""select department from tabEmployee where name='{}'""".format(self.employee),as_dict=1)
+		asd=department[0].get('department')
+		#frappe.msgprint(asd)
+		if not asd:
+			frappe.throw("employee have no department")
 			if not attendance_role.max_permissions_count :
 				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Role \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
 			if not attendance_role.max_permission_minutes:
@@ -85,6 +86,7 @@ class Permission(Document):
 						"Employee {} exceed the max Permission Type Minitues in  This Month \n Please Set Max Permission Count in Attendance role {}".format(
 							self.employee, employee.attendance_role)))
 
+
 	def updateStaus(self):
 		EmpDepartment=frappe.db.sql("""
           select department from tabEmployee where name='{}'
@@ -145,3 +147,39 @@ class Permission(Document):
 		if res1:
 			return 'True'
 		return res1
+
+	def updateAction(self,Action):
+
+		res1=frappe.db.sql("""update `tabMission` set status='{}' where name='{}'""".format(Action,self.name))
+		frappe.db.commit()
+		if(Action=='Completed'):
+			#frappe.msgprint(Action)
+			frappe.db.sql("""update `tabMission` set docstatus=1 where name='{}'""".format(self.name))
+			frappe.db.commit()
+			return "Done"
+		if res1:
+			return 'True'
+		return res1
+			
+	def checkIfHasRoleSubmit(self):
+		EmpDepartment=frappe.db.sql("""
+          select department from tabEmployee where name='{}'
+			""".format(self.employee),as_dict=1)
+		rolelist=frappe.db.sql("""
+          select * from `tabDepartment Managment` where parent='{}'
+			""".format(EmpDepartment[0]['department']),as_dict=1)
+		docstatus=frappe.db.sql("""
+              select status from tabPermission where name='{}'
+			""".format(self.name),as_dict=1)
+		rolee=""
+		mylist=[]
+		for role in rolelist:
+			if role.is_submitted ==1 and role.email==str(frappe.session.user):
+				return 'true'
+		return 'false'
+
+	def Submitdoctype(self,Action):
+		res1=frappe.db.sql("""update `tabPermission` set docstatus=1 where name='{}'""".format(self.name))
+		frappe.db.commit()
+		return "Done"
+

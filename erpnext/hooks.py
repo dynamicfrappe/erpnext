@@ -537,3 +537,14 @@ global_search_doctypes = {
 		{'doctype': 'Hotel Room Type', 'index': 4}
 	]
 }
+
+
+jenv = {
+	"methods": [
+		"get_jinja_data:erpnext.hr.doctype.insurance_organization.insurance_organization.get_jinja_data",
+
+	]
+}
+
+
+
