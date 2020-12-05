@@ -10,7 +10,7 @@ frappe.ui.form.on('Attendance Calculation', {
 					frm.add_custom_button(__("Calculate"),
 									function() {
 										frm.events.Calculate_attendance(frm);	
-										frm.clea										
+
 									}).addClass("btn-primary");
 			 	}
 			}
@@ -24,19 +24,14 @@ frappe.ui.form.on('Attendance Calculation', {
 
 	Calculate_attendance: function (frm) {
 
-
-		        	    	
-		            
-				
-
-
 								frappe.call({
 											doc: frm.doc,
 											method: "Calculate_attendance",
 											
 											callback: function(r) {
-												//frappe.msgprint(__("Done"))
+												frappe.msgprint(__("Done"))
 												frappe.hide_progress()
+												
 											},
 											freeze: true
 										});

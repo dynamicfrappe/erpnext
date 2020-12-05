@@ -52,7 +52,14 @@ def get_attendance (device_name):
 							old_user = ''
 							old_timestamp = None
 							user = '1'
+							total = len(records_groupby_user_id)
+							count = 1
 							for record in records_groupby_user_id:
+								frappe.publish_realtime('update_progress', {
+									'progress': count,
+									'total': total
+								})
+								count += 1
 								user = record['user_id']
 								if user != old_user:
 										employee = frappe.db.get_value('Employee', {'attendance_device_id': record['user_id']}, ['name'] , as_dict=1)
