@@ -1,4 +1,5 @@
 {
+ "autoname": "format:{employee_name}-ins-details",
  "creation": "2020-12-01 13:28:02.019829",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -12,6 +13,7 @@
   "employee_joined_data",
   "is_owner",
   "insured",
+  "insurancenumber",
   "insurance_detail_section",
   "insurance_salary",
   "basic_salary",
@@ -116,7 +118,7 @@
   {
    "fieldname": "form_2_column",
    "fieldtype": "Column Break",
-   "label": "Form 2"
+   "label": "Form 6"
   },
   {
    "fieldname": "sincome_date",
@@ -182,10 +184,16 @@
    "fieldname": "empid",
    "fieldtype": "Data",
    "label": "Employee id"
+  },
+  {
+   "depends_on": "insured",
+   "fieldname": "insurancenumber",
+   "fieldtype": "Data",
+   "label": "Insurance Number"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-05 11:21:09.844824",
+ "modified": "2020-12-05 16:52:08.591258",
  "modified_by": "kazemaraby@gmail.com",
  "module": "HR",
  "name": "Employee Social Insurance Data",
