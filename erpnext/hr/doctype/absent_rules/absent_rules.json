@@ -1,0 +1,68 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2020-12-05 13:44:47.486701",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "ruletemplate",
+  "senario",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "print_hide": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "senario",
+   "fieldtype": "Select",
+   "label": "Senario",
+   "options": "Discount from vacations\nDeduction from salary\notrher"
+  },
+  {
+   "fieldname": "ruletemplate",
+   "fieldtype": "Table",
+   "label": "absent rule ",
+   "options": "absent rule templates"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Absent Rules",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-12-05 13:50:21.847323",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Absent Rules",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
