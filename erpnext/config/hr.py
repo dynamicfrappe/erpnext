@@ -56,6 +56,12 @@ def get_data():
 					"type": "doctype",
 					"name": "Employee document type"
 				},
+				{
+				"label":"Document Designation Templates",
+					"type": "doctype",
+
+					"name": "Employee Designation Templates"
+				},
 					{
 					"type": "doctype",
 					"name": "Employee Documents Notification"
