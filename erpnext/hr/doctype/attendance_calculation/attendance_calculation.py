@@ -323,6 +323,7 @@ class AttendanceCalculation(Document):
 				if attendance_role.type == 'Daily':
 					# frappe.msgprint(str(attendance_role.late_role_table))
 					late_minutes = doc.late_in.seconds /60
+					doc.late_minutes =late_minutes
 					penality = None
 					for i in attendance_role.late_role_table:
 
@@ -331,23 +332,25 @@ class AttendanceCalculation(Document):
 
 
 					if penality :
+						doc.late_componant = penality.late_componant
+
 						perviuos_penality_component = frappe.db.sql("""
 						select count(*) as count from `tabEmployee Attendance Logs` where employee = '{employee}' and date(date) between date('{from_date}') and date('{to_date}') and late_componant = '{component}'
-						""".format(employee=employee , from_date = self.from_date , to_date = doc.date , component = penality.late_componant ))
+						""".format(employee=employee.name , from_date = self.from_date , to_date = doc.date , component = penality.late_componant ))
 						level = perviuos_penality_component [0][0] + 1
 						message = "employee {} ".format(employee.name) + "date {}".format(doc.date) + " Level {}".format(level) + "component {}".format( penality.late_componant)
-						frappe.msgprint(message)
-						frappe.msgprint(str())
+						# frappe.msgprint(message)
+						# frappe.msgprint(str())
 						level_factor = 0
-						if level == 1 and penality.level_onefactor :
+						if level == 1  :
 							level_factor = penality.level_onefactor
-						elif level == 2 and penality.level_towfactor :
+						elif level == 2  :
 							level_factor = penality.level_towfactor
-						elif level == 3 and penality.level__threefactor :
+						elif level == 3 :
 							level_factor = penality.level__threefactor
-						elif level == 4 and penality.level_fourfactor:
+						elif level == 4 :
 							level_factor = penality.level_fourfactor
-						elif level == 5 and penality.leve_five_factor :
+						elif level == 5  :
 							level_factor = penality.leve_five_factor
 						else:
 							level_factor = penality.leve_five_factor or penality.level_fourfactor or penality.level__threefactor or penality.level_towfactor or penality.level_onefactor or 0

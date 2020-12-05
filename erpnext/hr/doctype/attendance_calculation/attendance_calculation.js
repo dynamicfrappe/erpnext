@@ -29,7 +29,7 @@ frappe.ui.form.on('Attendance Calculation', {
 											method: "Calculate_attendance",
 											
 											callback: function(r) {
-												frappe.msgprint(__("Done"))
+												// frappe.msgprint(__("Done"))
 												frappe.hide_progress()
 
 											},

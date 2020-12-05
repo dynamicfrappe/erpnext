@@ -227,7 +227,7 @@ class SalarySlip(TransactionBase):
 
 										late_factor = 0
 										if penality.add_deduction:
-											if deduction_factor:
+											if penality.deduction_factor:
 												late_factor = (penality.deduction_factor * attendance_role.late_penalty_factor_by_date) or 0
 											else:
 												late_factor = ((attendance[0].late_in.seconds / 60)* attendance_role.late_penalty_factor_by_date) or 0
