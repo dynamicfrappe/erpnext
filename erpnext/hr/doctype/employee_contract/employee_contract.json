@@ -6,17 +6,19 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "compnay",
   "employee",
   "employee_name",
   "national_id",
+  "employee_addresse",
   "employee_joined_day",
   "column_break_4",
+  "compnay",
   "posting_date",
   "contract_type",
   "company_representative_name",
   "status",
   "company_representative_jop_title",
+  "company_addresse",
   "date_details_section",
   "contract_duration",
   "contract_start_date",
@@ -245,9 +247,19 @@
    "fieldname": "national_id",
    "fieldtype": "Data",
    "label": "Employee National id"
+  },
+  {
+   "fieldname": "company_addresse",
+   "fieldtype": "Small Text",
+   "label": "Company Addresse"
+  },
+  {
+   "fieldname": "employee_addresse",
+   "fieldtype": "Small Text",
+   "label": "Employee Addresse"
   }
  ],
- "modified": "2020-12-05 16:45:18.499185",
+ "modified": "2020-12-05 17:25:08.778201",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Contract",
