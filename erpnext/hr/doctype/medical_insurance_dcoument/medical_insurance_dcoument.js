@@ -23,5 +23,36 @@ frappe.ui.form.on('Medical Insurance Dcoument', {
 			frm.refresh_field("time_table")
 		}
 
+	},
+	payment__table_add:function(frm){
+		console.log("add")
 	}
 });
+
+
+
+
+
+frappe.ui.form.on('Incurance Payment Terms Table', {
+	amount:function(frm ,cdt,cdn){
+		var local = locals[cdt][cdn]
+		frm.doc.data_3 = 0
+		var i = 0 
+		for (i =0 ; i < frm.doc.payment__table.length ; i ++){
+			frm.doc.data_3 += frm.doc.payment__table[i].amount
+			frm.refresh_field("data_3")
+		}
+
+	},
+	payment__table_remove:function(frm){
+		frm.doc.data_3 = 0
+		var i = 0 
+		for (i =0 ; i < frm.doc.payment__table.length ; i ++){
+			frm.doc.data_3 += frm.doc.payment__table[i].amount
+			frm.refresh_field("data_3")
+		}
+	}
+
+
+
+})

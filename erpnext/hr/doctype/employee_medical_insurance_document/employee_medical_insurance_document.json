@@ -1,0 +1,180 @@
+{
+ "autoname": "format:M-I-D-{employee_name}",
+ "creation": "2020-12-03 13:23:28.009595",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "status",
+  "employee",
+  "employee_name",
+  "employee_national_id",
+  "include_family_members",
+  "column_break_7",
+  "insurance_card_number",
+  "insurance_card_start_date",
+  "insurance_document",
+  "insurance_type",
+  "insurance_document_start_date",
+  "insurance_document_end_date",
+  "payment_terms_section",
+  "employee_fee",
+  "column_break_15",
+  "compnay_fee",
+  "section_break_16",
+  "employee_medical_insurance_members",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nClosed"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee ",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.national_id",
+   "fieldname": "employee_national_id",
+   "fieldtype": "Data",
+   "label": "Employee NationaL ID"
+  },
+  {
+   "fieldname": "insurance_card_number",
+   "fieldtype": "Data",
+   "label": "Insurance Card Number"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurance_card_start_date",
+   "fieldtype": "Date",
+   "label": "Insurance Card Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "insurance_document",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Insurance Document ",
+   "options": "Medical Insurance Dcoument",
+   "reqd": 1
+  },
+  {
+   "fieldname": "insurance_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Insurance Type",
+   "options": "Medical Insurance Dcoument Category",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "insurance_document.document_start_date",
+   "fieldname": "insurance_document_start_date",
+   "fieldtype": "Date",
+   "label": "Insurance Document Start Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "insurance_document.document_end_date",
+   "fieldname": "insurance_document_end_date",
+   "fieldtype": "Date",
+   "label": "Insurance Document End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_terms_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Terms"
+  },
+  {
+   "fieldname": "employee_fee",
+   "fieldtype": "Currency",
+   "label": "Employee Fee"
+  },
+  {
+   "fieldname": "compnay_fee",
+   "fieldtype": "Currency",
+   "label": "Compnay Fee"
+  },
+  {
+   "fieldname": "section_break_16",
+   "fieldtype": "Section Break",
+   "label": "Family Members"
+  },
+  {
+   "depends_on": "include_family_members",
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Medical Insurance Document",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "include_family_members",
+   "fieldtype": "Check",
+   "label": "Include Family Members"
+  },
+  {
+   "fieldname": "employee_medical_insurance_members",
+   "fieldtype": "Table",
+   "label": "Employee Medical Insurance Members",
+   "options": "Employee Medical Insurance Members"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-12-03 16:08:48.795475",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Employee Medical Insurance Document",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

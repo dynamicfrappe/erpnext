@@ -55,6 +55,8 @@
   "attendance_and_leave_details",
   "leave_policy",
   "attendance_device_id",
+  "attendance_role",
+  "total_working_hours_per_day",
   "column_break_44",
   "holiday_list",
   "default_shift",
@@ -148,7 +150,7 @@
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "HR-EMP-#####",
+   "options": "HR-EMP-",
    "set_only_once": 1
   },
   {
@@ -897,13 +899,23 @@
    "fieldname": "medical__insurance_members_section",
    "fieldtype": "Section Break",
    "label": "Medical  Insurance Members"
+  },
+  {
+   "fieldname": "total_working_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Total Working Hours Per Day"
+  },
+  {
+   "fieldname": "attendance_role",
+   "fieldtype": "Link",
+   "label": "Attendance Role",
+   "options": "Attendance Role"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-02 13:14:59.058674",
-
+ "modified": "2020-12-03 18:24:46.595819",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",

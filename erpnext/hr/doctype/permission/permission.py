@@ -4,7 +4,9 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.model.document import Document
+from datetime import datetime,timedelta
 
 class Permission(Document):
 
@@ -15,6 +17,75 @@ class Permission(Document):
 		frappe.msgprint(asd)
 		if not asd:
 			frappe.throw("employee have no department")
+			if not attendance_role.max_permissions_count :
+				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Role \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+			if not attendance_role.max_permission_minutes:
+				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Role \n Please Set Max Permission Minutes in Attendance role {}".format(self.employee,employee.attendance_role)))
+
+			payroll_month = frappe.db.sql("""
+			select * from `tabPayroll Month` where is_closed = 0 and start_date <= '{date}' and end_date >= '{date}'  order by modified desc limit 1
+			""".format(date = self.date),as_dict=1)
+			# frappe.msgprint('str(payroll_month)')
+			# frappe.msgprint(str(payroll_month))
+			# frappe.msgprint(str(self.date))
+			if not payroll_month:
+				frappe.throw(_("Payroll Month is Closed or doesn't Created to this period "))
+			payroll_month = payroll_month [0]
+			# sql= """select Count(*) as total_count ,
+			# 			ifnull(SUM((TIME_TO_SEC(SUBTIME( ifnull(to_time,TIME_TO_SEC('00:00:00')), ifnull(from_time,TIME_TO_SEC('00:00:00')))) /60)),0) as total_min
+			# 			from tabPermission where employee = '{employee}'
+			# 			and date(date) between date('{start_date}')  and date('{end_date}')
+			# 			and docstatus = 1 and status = 'Completed'
+			# 			and name <> '{name}'
+			# 			""".format(name=self.name,employee=self.employee, start_date=payroll_month.start_date , end_date = payroll_month.end_date)
+			# frappe.msgprint(sql)
+			perviuos_permission = frappe.db.sql("""select Count(*) as total_count ,  
+						ifnull(SUM((TIME_TO_SEC(SUBTIME( ifnull(to_time,TIME_TO_SEC('00:00:00')), ifnull(from_time,TIME_TO_SEC('00:00:00')))) /60)),0) as total_min 
+						from tabPermission where employee = '{employee}' 
+						and date(date) between date('{start_date}')  and date('{end_date}') 
+						and docstatus = 1 and status = 'Completed'
+						and name <> '{name}'
+						""".format(name=self.name,employee=self.employee, start_date=payroll_month.start_date , end_date = payroll_month.end_date),as_dict=1)
+			from_time = datetime.strptime(self.from_time , "%H:%M:%S")
+			to_time = datetime.strptime(self.to_time , "%H:%M:%S")
+			duration = float((to_time - from_time).seconds)/60
+			# frappe.msgprint('str(perviuos_permission[0].total_count )')
+			# frappe.msgprint(str(perviuos_permission[0].total_count))
+			# frappe.msgprint('str(attendance_role.max_permissions_count)')
+			# frappe.msgprint(str(attendance_role.max_permissions_count))
+			if perviuos_permission[0].total_count >= attendance_role.max_permissions_count :
+				frappe.throw(_("Employee {} exceed the max Permission Times \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+			# frappe.msgprint('str(perviuos_permission[0].total_min )')
+			# frappe.msgprint(str(perviuos_permission[0].total_min))
+			# frappe.msgprint('str(duration)')
+			# frappe.msgprint(str(duration))
+			# frappe.msgprint(str(perviuos_permission[0].total_min + duration))
+			# frappe.msgprint(str(perviuos_permission[0].total_min + duration))
+			# frappe.msgprint('str(attendance_role.max_permission_minutes)')
+			# frappe.msgprint(str(attendance_role.max_permission_minutes))
+
+			if perviuos_permission[0].total_min + duration > attendance_role.max_permission_minutes  :
+				frappe.throw(_("Employee {} exceed the max Permission Minitues in  This Month \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+
+			monthly_rate = frappe.db.sql("""
+			select max_monthly_rate from `tabAttendence Permission Rule Table` where parent = '{parent}' and permission_type = '{type}' order by creation desc limit 1
+
+			""".format(parent=attendance_role.name , type = self.permission_type),as_dict=1)
+
+			perviuos_permission_type_mins = frappe.db.sql("""select 
+							ifnull(SUM((TIME_TO_SEC(SUBTIME( ifnull(to_time,'00:00:00'), ifnull(from_time,'00:00:00'))) /60)),0) as total_min 
+							from tabPermission where employee = '{employee}' 
+							and date(date) between date('{start_date}')  and date('{end_date}') 
+							and docstatus = 1 and status = 'Completed' and permission_type = '{type}' 
+							and name <> '{name}'
+							""".format(name=self.name,employee=self.employee, start_date=payroll_month.start_date,
+									   end_date=payroll_month.end_date , type = self.permission_type), as_dict=1)
+			if monthly_rate and perviuos_permission_type_mins :
+				if float(monthly_rate[0].max_monthly_rate) < perviuos_permission_type_mins [0].total_min + duration :
+					frappe.throw(_(
+						"Employee {} exceed the max Permission Type Minitues in  This Month \n Please Set Max Permission Count in Attendance role {}".format(
+							self.employee, employee.attendance_role)))
+
 
 	def updateStaus(self):
 		EmpDepartment=frappe.db.sql("""

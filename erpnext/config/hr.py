@@ -175,6 +175,10 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Penality Type"
+				},
+				{
+					"type": "doctype",
 					"name": "Warnings",
 					"dependencies": ["Warnings Types"]
 				},

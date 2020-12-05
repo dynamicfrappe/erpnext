@@ -81,15 +81,3 @@ class EmployeePenality(Document):
 					self.penality_type = ""
 					self.penality_description = ""
 					self.penality_factor = 0
-	def get_Department_supervisors(self):
-		employee = frappe.get_doc( "Employee" , self.employee)
-		if employee :
-			if employee.department and employee.company :
-					employees = frappe.db.sql("""
-					select DISTINCT e.name from tabEmployee e where  e.company = '{company}' and e.name <> '{employee}' and user_id in (select DISTINCT dmr.user from `tabDepartment Managment`  dm join  `tabDepartment Managment Roles` dmr  on dm.role = dmr.name  where dm.type = "Department Managment Roles" and dm.parent = '{department}')  
-					union 
-					select DISTINCT e.name from tabEmployee e where e.company = '{company}'  and e.name <> '{employee}' and user_id in (select DISTINCT dmr.parent from `tabDepartment Managment` dm  join `tabHas Role` dmr  on dm.role = dmr.role  where  dm.type = "Role" and dm.parent = '{department}') 
-			
-			
-					""".format(department=employee.department , employee = employee.name , company = employee.company))
-					return employees

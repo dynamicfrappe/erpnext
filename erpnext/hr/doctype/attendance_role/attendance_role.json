@@ -1,0 +1,134 @@
+{
+ "autoname": "field:role_name",
+ "creation": "2020-12-03 17:18:02.724118",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "role_name",
+  "working_on_holiday_rate",
+  "column_break_3",
+  "hour_rate_for_early_in",
+  "hour_rate_for_late_out",
+  "permission_rule_section",
+  "permission_rule",
+  "max_permission_minutes",
+  "max_permissions_count",
+  "section_break_11",
+  "hour_rate_for_late_in",
+  "hour_rate_for_early_out",
+  "absent_rate",
+  "basic_salary_component_section",
+  "additional_days_salary_component",
+  "overtime_salary_component"
+ ],
+ "fields": [
+  {
+   "fieldname": "role_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Role Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "hour_rate_for_late_in",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Late IN"
+  },
+  {
+   "fieldname": "hour_rate_for_early_in",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Early IN"
+  },
+  {
+   "fieldname": "hour_rate_for_early_out",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Early Out"
+  },
+  {
+   "fieldname": "hour_rate_for_late_out",
+   "fieldtype": "Float",
+   "label": "Hour Rate For Late Out"
+  },
+  {
+   "fieldname": "working_on_holiday_rate",
+   "fieldtype": "Float",
+   "label": "Working On Holiday Rate"
+  },
+  {
+   "fieldname": "absent_rate",
+   "fieldtype": "Float",
+   "label": "Absent Rate"
+  },
+  {
+   "fieldname": "basic_salary_component_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Salary Component"
+  },
+  {
+   "fieldname": "additional_days_salary_component",
+   "fieldtype": "Link",
+   "label": "Additional Days Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "overtime_salary_component",
+   "fieldtype": "Link",
+   "label": "Overtime Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "permission_rule_section",
+   "fieldtype": "Section Break",
+   "label": "Permission Rule"
+  },
+  {
+   "fieldname": "permission_rule",
+   "fieldtype": "Table",
+   "label": "Permission Rule",
+   "options": "Attendence Permission Rule Table"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_permission_minutes",
+   "fieldtype": "Float",
+   "label": "Max Permission minutes"
+  },
+  {
+   "fieldname": "max_permissions_count",
+   "fieldtype": "Float",
+   "label": "Max permissions Count"
+  },
+  {
+   "fieldname": "section_break_11",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "modified": "2020-12-03 18:12:08.724906",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Attendance Role",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
