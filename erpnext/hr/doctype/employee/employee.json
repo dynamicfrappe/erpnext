@@ -55,10 +55,11 @@
   "attendance_and_leave_details",
   "leave_policy",
   "attendance_device_id",
+  "attendance_role",
+  "total_working_hours_per_day",
   "column_break_44",
   "holiday_list",
   "default_shift",
-  "total_working_hours_per_day",
   "leave_approver",
   "salary_information",
   "salary_mode",
@@ -903,12 +904,18 @@
    "fieldname": "total_working_hours_per_day",
    "fieldtype": "Float",
    "label": "Total Working Hours Per Day"
+  },
+  {
+   "fieldname": "attendance_role",
+   "fieldtype": "Link",
+   "label": "Attendance Role",
+   "options": "Attendance Role"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-03 17:56:10.052842",
+ "modified": "2020-12-03 18:24:46.595819",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
