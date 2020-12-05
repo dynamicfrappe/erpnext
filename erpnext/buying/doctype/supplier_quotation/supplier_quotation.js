@@ -93,7 +93,7 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 					frappe.throw({message:__("Please select a Supplier"), title:__("Mandatory")})
 				}
 				erpnext.utils.map_current_doc({
-					method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq",
+					method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_rfq",
 					source_doctype: "Request for Quotation",
 					target: me.frm,
 					setters: {
@@ -103,7 +103,7 @@ erpnext.buying.SupplierQuotationController = erpnext.buying.BuyingController.ext
 					get_query_filters: {
 						supplier: me.frm.doc.supplier
 					},
-					get_query_method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_rfq_containing_supplier"
+					//get_query_method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_rfq_containing_supplier"
 
 				})
 			}, __("Get items from"));

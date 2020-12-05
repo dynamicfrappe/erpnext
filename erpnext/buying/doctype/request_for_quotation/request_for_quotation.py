@@ -242,6 +242,34 @@ def make_supplier_quotation(source_name, for_supplier, target_doc=None):
 
 	return doclist
 
+
+
+
+@frappe.whitelist()
+def make_supplier_quotation_rfq(source_name, target_doc=None):
+	def postprocess(source, target_doc):
+		set_missing_values(source, target_doc)
+
+	doclist = get_mapped_doc("Request for Quotation", source_name, {
+		"Request for Quotation": {
+			"doctype": "Supplier Quotation",
+			"validation": {
+				"docstatus": ["=", 1],
+				
+			}
+		},
+		"Request for Quotation Item": {
+			"doctype": "Supplier Quotation Item",
+			"field_map": {
+				"name": "request_for_quotation_item",
+				"parent": "request_for_quotation",
+			
+			}
+		}
+	}, target_doc, postprocess)
+
+	return doclist
+
 # This method is used to make supplier quotation from supplier's portal.
 @frappe.whitelist()
 def create_supplier_quotation(doc):
