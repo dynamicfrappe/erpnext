@@ -14,7 +14,7 @@ class Permission(Document):
 		department=[]
 		department=frappe.db.sql("""select department from tabEmployee where name='{}'""".format(self.employee),as_dict=1)
 		asd=department[0].get('department')
-		frappe.msgprint(asd)
+		#frappe.msgprint(asd)
 		if not asd:
 			frappe.throw("employee have no department")
 			if not attendance_role.max_permissions_count :
@@ -147,3 +147,39 @@ class Permission(Document):
 		if res1:
 			return 'True'
 		return res1
+
+	def updateAction(self,Action):
+
+		res1=frappe.db.sql("""update `tabMission` set status='{}' where name='{}'""".format(Action,self.name))
+		frappe.db.commit()
+		if(Action=='Completed'):
+			#frappe.msgprint(Action)
+			frappe.db.sql("""update `tabMission` set docstatus=1 where name='{}'""".format(self.name))
+			frappe.db.commit()
+			return "Done"
+		if res1:
+			return 'True'
+		return res1
+			
+	def checkIfHasRoleSubmit(self):
+		EmpDepartment=frappe.db.sql("""
+          select department from tabEmployee where name='{}'
+			""".format(self.employee),as_dict=1)
+		rolelist=frappe.db.sql("""
+          select * from `tabDepartment Managment` where parent='{}'
+			""".format(EmpDepartment[0]['department']),as_dict=1)
+		docstatus=frappe.db.sql("""
+              select status from tabPermission where name='{}'
+			""".format(self.name),as_dict=1)
+		rolee=""
+		mylist=[]
+		for role in rolelist:
+			if role.is_submitted ==1 and role.email==str(frappe.session.user):
+				return 'true'
+		return 'false'
+
+	def Submitdoctype(self,Action):
+		res1=frappe.db.sql("""update `tabPermission` set docstatus=1 where name='{}'""".format(self.name))
+		frappe.db.commit()
+		return "Done"
+
