@@ -321,7 +321,7 @@ class AttendanceCalculation(Document):
 				frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
 			if  attendance_role.late_role_table :
 				if attendance_role.type == 'Daily':
-					frappe.msgprint(str(attendance_role.late_role_table))
+					# frappe.msgprint(str(attendance_role.late_role_table))
 					late_minutes = doc.late_in.seconds /60
 					penality = None
 					for i in attendance_role.late_role_table:
