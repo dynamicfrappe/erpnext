@@ -302,25 +302,60 @@ class AttendanceCalculation(Document):
 			doc.late_out = timedelta(minutes=0)
 		if doc.late_in < timedelta(minutes=0):
 			doc.late_in = timedelta(minutes=0)
-
-		doc = self.calculate_Delays(doc)
+		# Calculate delayes
+		if doc.late_in > timedelta(minutes=0):
+			doc = self.calculate_Delays(doc)
 
 
 		doc.insert()
 
 	def calculate_Delays(self,doc):
 		employee = frappe.get_doc("Employee",doc.employee)
-		if not employee.attendance_role:
-			frappe.throw(_("Please Assign Attendance Role to Employee {}".format(employee.name)))
+		doc.late_penality = 0
+		doc.late_factor = 0
+		if  employee.attendance_role:
+			#frappe.throw(_("Please Assign Attendance Role to Employee {}".format(employee.name)))
 
-		attendance_role = frappe.get_doc("Attendance Role",employee.attendance_role)
-		if not attendance_role.late_role_table :
-			frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
-		late_minutes = doc.late_in.seconds /60
-		for i in attendance_role.late_role_table.reverse():
+			attendance_role = frappe.get_doc("Attendance Role",employee.attendance_role)
+			if not attendance_role.late_role_table :
+				frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
+			if  attendance_role.late_role_table :
+				if attendance_role.type == 'Daily':
+					frappe.msgprint(str(attendance_role.late_role_table))
+					late_minutes = doc.late_in.seconds /60
+					penality = None
+					for i in attendance_role.late_role_table:
 
-			if i.from_min <= late_minutes <= i.to_min :
-				return doc
+						if i.from_min <= late_minutes  :
+							penality = i
+
+
+					if penality :
+						perviuos_penality_component = frappe.db.sql("""
+						select count(*) as count from `tabEmployee Attendance Logs` where employee = '{employee}' and date(date) between date('{from_date}') and date('{to_date}') and late_componant = '{component}'
+						""".format(employee=employee , from_date = self.from_date , to_date = doc.date , component = penality.late_componant ))
+						level = perviuos_penality_component [0][0] + 1
+						level_factor = 0
+						if level == 1 and penality.level_onefactor :
+							level_factor = penality.level_onefactor
+						elif level == 2 and penality.level_towfactor :
+							level_factor = penality.level_towfactor
+						elif level == 3 and penality.level__threefactor :
+							level_factor = penality.level__threefactor
+						elif level == 4 and penality.level_fourfactor:
+							level_factor = penality.level_fourfactor
+						elif level == 5 and penality.leve_five_factor :
+							level_factor = penality.leve_five_factor
+						else:
+							level_factor = penality.leve_five_factor or penality.level_fourfactor or penality.level__threefactor or penality.level_towfactor or penality.level_onefactor or 0
+
+						doc.late_penality = level_factor * penality.factor
+
+						if penality.add_deduction:
+							if deduction_factor :
+								doc.late_factor = penality.deduction_factor
+							else:
+								doc.late_factor = doc.late_in.seconds/60
 
 
 
