@@ -74,7 +74,7 @@
    "label": "insured "
   },
   {
-   "collapsible_depends_on": "insured==1",
+   "depends_on": "insured",
    "fieldname": "insurance_detail_section",
    "fieldtype": "Section Break",
    "label": "Insurance Detail"
@@ -185,7 +185,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-05 11:06:35.923139",
+ "modified": "2020-12-05 11:21:09.844824",
  "modified_by": "kazemaraby@gmail.com",
  "module": "HR",
  "name": "Employee Social Insurance Data",
