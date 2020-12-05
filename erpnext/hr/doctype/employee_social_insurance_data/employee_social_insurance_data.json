@@ -7,6 +7,7 @@
   "employee_detail_section",
   "employee",
   "employee_name",
+  "arabic_name",
   "empid",
   "column_break_4",
   "employee_joined_data",
@@ -164,11 +165,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "employee_strat_insurance_date",
-   "fieldtype": "Date",
-   "label": "Employee Strat insurance Date"
-  },
-  {
    "fieldname": "contrary_number",
    "fieldtype": "Data",
    "label": "Contrary Number"
@@ -182,11 +178,22 @@
    "fieldname": "empid",
    "fieldtype": "Data",
    "label": "Employee id"
+  },
+  {
+   "depends_on": "employee",
+   "fieldname": "arabic_name",
+   "fieldtype": "Data",
+   "label": "Arabic Name"
+  },
+  {
+   "fieldname": "employee_strat_insurance_date",
+   "fieldtype": "Date",
+   "label": "Employee Start insurance Date"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-05 11:21:09.844824",
- "modified_by": "kazemaraby@gmail.com",
+ "modified": "2020-12-05 17:10:04.462550",
+ "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
  "owner": "Administrator",
