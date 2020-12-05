@@ -211,23 +211,7 @@ class AttendanceCalculation(Document):
 		doc.type_number = 2
 		doc.insert()
 
-	# def Present (self,doc , log ,shift , missions = None , type = 1):
-	# 	doc.type = "Present"
-	# 	doc.type_number = 1
-	# 	doc.shift_actual_start = log.IN.time()
-	# 	doc.shift_actual_end = log.OUT.time()
-	# 	doc.early_in = shift.start_time - to_timedelta(str(log.IN.time()))
-	# 	doc.late_in =  to_timedelta(str(log.IN.time())) - shift.start_time
-	# 	doc.early_out =  shift.end_time  -to_timedelta(str(log.OUT.time()))
-	# 	doc.late_out = to_timedelta(str(log.OUT.time())) - shift.end_time
-	# 	if doc.early_in < timedelta(minutes=0):
-	# 		doc.early_in = timedelta(minutes=0)
-	# 	if doc.early_out < timedelta(minutes=0):
-	# 		doc.early_out = timedelta(minutes=0)
-	# 	if doc.late_out < timedelta(minutes=0):
-	# 		doc.late_out = timedelta(minutes=0)
-	# 	if doc.late_in < timedelta(minutes=0):
-	# 		doc.late_in = timedelta(minutes=0)
+
 
 
 	# 	doc.insert()
@@ -319,7 +303,30 @@ class AttendanceCalculation(Document):
 		if doc.late_in < timedelta(minutes=0):
 			doc.late_in = timedelta(minutes=0)
 
+		doc = self.calculate_Delays(doc)
+
 
 		doc.insert()
+
+	def calculate_Delays(self,doc):
+		employee = frappe.get_doc("Employee",doc.employee)
+		if not employee.attendance_role:
+			frappe.throw(_("Please Assign Attendance Role to Employee {}".format(employee.name)))
+
+		attendance_role = frappe.get_doc("Attendance Role",employee.attendance_role)
+		if not attendance_role.late_role_table :
+			frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
+		late_minutes = doc.late_in.seconds /60
+		for i in attendance_role.late_role_table.reverse():
+
+			if i.from_min <= late_minutes <= i.to_min :
+				return doc
+
+
+
+
+
+
+		return doc
 
 

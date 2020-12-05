@@ -26,7 +26,9 @@
   "type_number",
   "is_calculated",
   "company",
-  "flag"
+  "flag",
+  "late_factor",
+  "late_penality"
  ],
  "fields": [
   {
@@ -186,10 +188,20 @@
    "hidden": 1,
    "label": "flag",
    "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day\nWorking On Holiday\nWeek End"
+  },
+  {
+   "fieldname": "late_factor",
+   "fieldtype": "Float",
+   "label": "Late Factor"
+  },
+  {
+   "fieldname": "late_penality",
+   "fieldtype": "Float",
+   "label": "Late Penality"
   }
  ],
  "in_create": 1,
- "modified": "2020-12-03 17:32:42.406725",
+ "modified": "2020-12-05 12:18:04.662492",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
