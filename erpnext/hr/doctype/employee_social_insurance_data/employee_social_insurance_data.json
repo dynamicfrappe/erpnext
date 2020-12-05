@@ -1,5 +1,4 @@
 {
- "autoname": "format:SI-{employee_name} .-",
  "creation": "2020-12-01 13:28:02.019829",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,13 +7,8 @@
   "employee_detail_section",
   "employee",
   "employee_name",
-  "empid",
-  "employee_insurance_number",
   "column_break_4",
   "employee_joined_data",
-  "insurance_organization",
-  "insurance_office",
-  "insurance_jop",
   "is_owner",
   "insured",
   "insurance_detail_section",
@@ -79,7 +73,9 @@
    "label": "insured "
   },
   {
-   "depends_on": "insured",
+
+   "collapsible_depends_on": "insured==1",
+
    "fieldname": "insurance_detail_section",
    "fieldtype": "Section Break",
    "label": "Insurance Detail"
@@ -121,7 +117,7 @@
   {
    "fieldname": "form_2_column",
    "fieldtype": "Column Break",
-   "label": "Form 6"
+   "label": "Form 2"
   },
   {
    "fieldname": "sincome_date",
@@ -182,45 +178,12 @@
    "fieldname": "contrary_number2",
    "fieldtype": "Data",
    "label": "Contrary Number"
-  },
-  {
-   "fieldname": "empid",
-   "fieldtype": "Data",
-   "label": "Employee ID"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 16:37:30.642968",
-   "fieldname": "employee_insurance_number",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Employee Insurance Number",
-   "reqd": 1
-  },
-  {
-   "fieldname": "insurance_organization",
-   "fieldtype": "Link",
-   "label": "Insurance Organization",
-   "options": "Insurance Organization",
-   "reqd": 1
-  },
-  {
-   "fieldname": "insurance_office",
-   "fieldtype": "Link",
-   "label": "Insurance Office",
-   "options": "Insurance Office",
-   "reqd": 1
-  },
-  {
-   "fieldname": "insurance_jop",
-   "fieldtype": "Link",
-   "label": "insurance Jop",
-   "options": "Job insurance codes",
-   "reqd": 1
-  }
- ],
- "is_submittable": 1,
- "modified": "2020-12-03 14:29:47.297552",
+
+ "modified": "2020-12-02 11:27:16.190305",
+
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
