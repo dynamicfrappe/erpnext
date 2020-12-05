@@ -22,6 +22,11 @@
   "caclulate_deduction_in_working_on_holiday",
   "caclulate_deduction_in_working_on_weekend",
   "late_role_table",
+  "absent_rule_section",
+  "abset_rules",
+  "column_break_20",
+  "absent__component",
+  "abset_penalty_component",
   "basic_salary_component_section",
   "absent_rate",
   "additional_days_salary_component",
@@ -127,7 +132,8 @@
    "fieldname": "salary_component_for_late_penalty",
    "fieldtype": "Link",
    "label": "Salary Component For Late Penalty",
-   "options": "Salary Component"
+   "options": "Salary Component",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -145,9 +151,38 @@
    "fieldname": "late_penalty_factor_by_date",
    "fieldtype": "Int",
    "label": "Late Penalty Factor (By Date)"
+  },
+  {
+   "fieldname": "absent_rule_section",
+   "fieldtype": "Section Break",
+   "label": "Absent Rule"
+  },
+  {
+   "fieldname": "absent__component",
+   "fieldtype": "Link",
+   "label": "Absent  Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "abset_penalty_component",
+   "fieldtype": "Link",
+   "label": "Abset Penalty Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "abset_rules",
+   "fieldtype": "Link",
+   "label": "Abset Rules",
+   "options": "Attendance Role"
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2020-12-05 11:46:08.336458",
+ "modified": "2020-12-05 14:06:53.362092",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Role",
@@ -166,7 +201,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

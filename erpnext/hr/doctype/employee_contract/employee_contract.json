@@ -1,19 +1,19 @@
 {
- "autoname": "formate:Emp-Contract-{contract_number} - {employee_name}",
+ "autoname": "naming_series:",
  "creation": "2020-11-30 17:35:32.546884",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "compnay",
   "employee",
   "employee_name",
+  "national_id",
   "employee_joined_day",
   "column_break_4",
   "posting_date",
-  "contract_number",
   "contract_type",
-  "company_representative",
   "company_representative_name",
   "status",
   "company_representative_jop_title",
@@ -172,13 +172,6 @@
    "label": "Net Salary"
   },
   {
-   "fieldname": "contract_number",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Contract Number",
-   "reqd": 1
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -198,17 +191,9 @@
    "label": "Insurance Salary"
   },
   {
-   "fieldname": "company_representative",
-   "fieldtype": "Link",
-   "label": "Company representative",
-   "options": "Employee"
-  },
-  {
-   "fetch_from": "company_representative.employee_name",
    "fieldname": "company_representative_name",
    "fieldtype": "Data",
-   "label": "Company representative Name",
-   "read_only": 1
+   "label": "Company representative Name"
   },
   {
    "fetch_from": "company_representative.designation",
@@ -246,10 +231,23 @@
    "label": "Employee",
    "options": "Employee",
    "reqd": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Contract Number",
+   "options": "CON-",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.national_id",
+   "fieldname": "national_id",
+   "fieldtype": "Data",
+   "label": "Employee National id"
   }
  ],
- "is_submittable": 1,
- "modified": "2020-12-02 13:54:20.057155",
+ "modified": "2020-12-05 16:45:18.499185",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Contract",
@@ -265,20 +263,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "write": 1
-  },
-  {
-   "cancel": 1,
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Administrator",
-   "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],
