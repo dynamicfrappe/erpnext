@@ -6,6 +6,12 @@ frappe.ui.form.on('Device', {
 
 
 	 refresh: function(frm) {
+	 	frappe.realtime.on('update_progress', (data) => {
+	 				frappe.show_progress(__('Getting Logs'),  data.progress , data.total,__('Getting Logs'))
+
+
+		});
+
 	 	if (!frm.is_new()) {
 		 	if (frm.doc.is_active){
 				frm.add_custom_button(__("Get Attendance"),
@@ -16,7 +22,13 @@ frappe.ui.form.on('Device', {
 											device_name: frm.doc.name,
 										},
 										callback: function(r) {
+											frappe.hide_progress();
+											frappe.msgprint(__("Done"))
 											frm.refresh(frm)
+
+
+
+
 										}
 									});
 								}).addClass("btn-primary");
@@ -26,6 +38,7 @@ frappe.ui.form.on('Device', {
 										method: "erpnext.hr.doctype.device.device.map_employees",
 										callback: function(r) {
 											frm.refresh(frm)
+											frapp.msgprint(__("Done"))
 										}
 									});
 								}).addClass("btn-primary");

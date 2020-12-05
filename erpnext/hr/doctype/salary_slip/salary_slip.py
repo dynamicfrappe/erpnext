@@ -121,7 +121,9 @@ class SalarySlip(TransactionBase):
 			  sec_to_time( SUM(time_to_sec(late_in) ) ) as late_in ,
 			  sec_to_time( SUM(time_to_sec(early_out) ) ) as early_out ,
 			  sec_to_time( SUM(time_to_sec(early_in) ) ) as early_in ,
-			  sec_to_time( SUM(time_to_sec(late_out) ) ) as late_out
+			  sec_to_time( SUM(time_to_sec(late_out) ) ) as late_out ,
+			  ifnull(SUM(late_factor),0) as late_factor ,
+			  ifnull(SUM(late_penality),0) as late_penality
 				from `tabEmployee Attendance Logs`
 				where date(date) between  date('{start_date}')
 				and date('{end_date}') group by  employee
@@ -196,27 +198,50 @@ class SalarySlip(TransactionBase):
 				if delays_salary_component and late_out_rate and early_in_rate :
 						early_out_Hours =  (attendance[0].early_out.seconds)/3600
 						late_in_Hours =  (attendance[0].late_in.seconds)/3600
-						delays_factor = ((late_in_Hours* late_in_rate)/total_working_hours_per_day)  + ((early_out_Hours* early_out_rate)/total_working_hours_per_day)
-						delays_amount = delays_factor * self.daily_rate
-						if delays_amount :
-							row  = 	 self.get_salary_slip_row( delays_salary_component_name)
+						# delays_factor =  ((early_out_Hours* early_out_rate)/total_working_hours_per_day)
 
-							self.update_component_row(row, delays_amount, "deductions",adding=1)
-							#
-							# self.append("deductions", {
-							# 	'amount': delays_amount,
-							# 	'default_amount': delays_amount if not delays_salary_component.get("is_additional_component") else 0,
-							# 	'depends_on_payment_days': delays_salary_component.depends_on_payment_days,
-							# 	'salary_component': delays_salary_component.name,
-							# 	'abbr': delays_salary_component.salary_component_abbr,
-							# 	'do_not_include_in_total': delays_salary_component.do_not_include_in_total,
-							# 	'is_tax_applicable': delays_salary_component.is_tax_applicable,
-							# 	'is_flexible_benefit': delays_salary_component.is_flexible_benefit,
-							# 	'variable_based_on_taxable_salary': delays_salary_component.variable_based_on_taxable_salary,
-							# 	'deduct_full_tax_on_selected_payroll_date': delays_salary_component.deduct_full_tax_on_selected_payroll_date,
-							# 	'additional_amount': delays_amount if delays_salary_component.get("is_additional_component") else 0,
-							# 	'exempted_from_income_tax': delays_salary_component.exempted_from_income_tax
-							# })
+						# delays_amount = delays_factor * self.daily_rate
+						penality_amount = 0
+						late_amount = 0
+						employee  =frappe.get_doc("Employee",self.employee)
+						if employee.attendance_role:
+							attendance_role = frappe.get_doc("Attendance Role" , employee.attendance_role)
+							if attendance_role.type:
+								if attendance_role.type == "Daily":
+									penality_amount = (attendance[0].late_penality * self.daily_rate) or 0
+									late_factor = attendance[0].late_factor * (attendance_role.late_penalty_factor_by_date or 0)
+									late_amount = (late_factor * self.daily_rate ) or 0
+
+								elif attendance_role.type == "Monthly":
+
+									late_minutes = (attendance[0].late_in.seconds / 60) or 0
+									penality = None
+									for i in attendance_role.late_role_table:
+										if i.from_min <= late_minutes:
+											penality = i
+
+									if penality:
+
+										penality_factor = penality.level_onefactor * penality.factor
+										penality_amount = (penality_factor  * self.daily_rate) or 0
+
+										late_factor = 0
+										if penality.add_deduction:
+											if deduction_factor:
+												late_factor = (penality.deduction_factor * attendance_role.late_penalty_factor_by_date) or 0
+											else:
+												late_factor = ((attendance[0].late_in.seconds / 60)* attendance_role.late_penalty_factor_by_date) or 0
+										late_amount = late_factor * self.daily_rate
+
+							if attendance_role.salary_componat_for_late and late_amount:
+								row = self.get_salary_slip_row(attendance_role.salary_componat_for_late)
+
+								self.update_component_row(row, late_amount, "deductions", adding=1)
+							if attendance_role.salary_component_for_late_penalty and penality_amount  :
+								row  = 	 self.get_salary_slip_row( attendance_role.salary_component_for_late_penalty)
+
+								self.update_component_row(row, penality_amount, "deductions",adding=1)
+
 				self.calculate_net_pay()
 
 

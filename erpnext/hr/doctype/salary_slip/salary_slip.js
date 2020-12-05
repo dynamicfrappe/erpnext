@@ -49,16 +49,19 @@ frappe.ui.form.on("Salary Slip", {
 		if(frm.doc.start_date){
 			frm.trigger("set_end_date");
 		}
-		frappe.call({
-			"method" :'erpnext.hr.doctype.social_insurance_settings.social_insurance_settings.caculate_employee_insurance',
-			"args":{
-				"employee": frm.doc.employee ,
-				"payrol_date":frm.doc.start_date  
-			},
-			callback:function(r){
-				console.log(r.message)
-			}
-		})
+		if(frm.doc.employee)
+		{
+		// 	frappe.call({
+		// 	"method" :'erpnext.hr.doctype.social_insurance_settings.social_insurance_settings.caculate_employee_insurance',
+		// 	"args":{
+		// 		"employee": frm.doc.employee ,
+		// 		"payrol_date":frm.doc.start_date
+		// 	},
+		// 	callback:function(r){
+		// 		console.log(r.message)
+		// 	}
+		// })
+		}
 	},
 
 	end_date: function(frm) {
