@@ -3,8 +3,16 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
-# import frappe
+import frappe
 from frappe.model.document import Document
 
 class InsuranceOrganization(Document):
 	pass
+
+
+
+
+
+@frappe.whitelist()
+def get_jinja_data(doc):
+	return frappe.db.sql("""select * from `tabEmployee Social Insurance Data`""",as_dict=True)

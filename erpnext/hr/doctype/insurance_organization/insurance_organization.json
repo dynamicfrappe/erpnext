@@ -13,7 +13,7 @@
   "insurance_office",
   "insurance_number",
   "organization_legal_form_section",
-  "organization_legal_form",
+  "organizationlegalform",
   "owner_section",
   "responsible_owner",
   "legal_capacity",
@@ -48,11 +48,6 @@
    "fieldname": "region",
    "fieldtype": "Data",
    "label": "Region"
-  },
-  {
-   "fieldname": "organization_legal_form",
-   "fieldtype": "Small Text",
-   "label": "organization legal form"
   },
   {
    "fieldname": "owner_section",
@@ -97,10 +92,15 @@
    "fieldname": "organization_legal_form_section",
    "fieldtype": "Section Break",
    "label": "organization legal form"
+  },
+  {
+   "fieldname": "organizationlegalform",
+   "fieldtype": "Small Text",
+   "label": "organization legal form"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-01 13:44:06.975087",
+ "modified": "2020-12-03 18:30:02.507999",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Insurance Organization",

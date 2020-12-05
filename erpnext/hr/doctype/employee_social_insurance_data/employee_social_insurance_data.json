@@ -7,6 +7,7 @@
   "employee_detail_section",
   "employee",
   "employee_name",
+  "empid",
   "column_break_4",
   "employee_joined_data",
   "is_owner",
@@ -73,9 +74,7 @@
    "label": "insured "
   },
   {
-
-   "collapsible_depends_on": "insured==1",
-
+   "depends_on": "insured",
    "fieldname": "insurance_detail_section",
    "fieldtype": "Section Break",
    "label": "Insurance Detail"
@@ -178,12 +177,15 @@
    "fieldname": "contrary_number2",
    "fieldtype": "Data",
    "label": "Contrary Number"
+  },
+  {
+   "fieldname": "empid",
+   "fieldtype": "Data",
+   "label": "Employee ID"
   }
  ],
  "is_submittable": 1,
-
- "modified": "2020-12-02 11:27:16.190305",
-
+ "modified": "2020-12-03 16:37:30.642968",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
