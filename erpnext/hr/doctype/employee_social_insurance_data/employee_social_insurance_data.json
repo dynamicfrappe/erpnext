@@ -8,7 +8,6 @@
   "employee_detail_section",
   "employee",
   "employee_name",
-  "arabic_name",
   "empid",
   "column_break_4",
   "employee_joined_data",
@@ -191,16 +190,10 @@
    "fieldname": "insurancenumber",
    "fieldtype": "Data",
    "label": "Insurance Number"
-  },
-  {
-   "fieldname": "arabic_name",
-   "fieldtype": "Data",
-   "label": "Arabic Name",
-   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-05 17:20:13.274261",
+ "modified": "2020-12-05 17:08:58.334471",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
