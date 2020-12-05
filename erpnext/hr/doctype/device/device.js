@@ -29,8 +29,7 @@ frappe.ui.form.on('Device', {
 
 
 
-										},
-										freeze: true
+										}
 									});
 								}).addClass("btn-primary");
 				frm.add_custom_button(__("Map Employees"),

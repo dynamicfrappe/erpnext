@@ -335,6 +335,9 @@ class AttendanceCalculation(Document):
 						select count(*) as count from `tabEmployee Attendance Logs` where employee = '{employee}' and date(date) between date('{from_date}') and date('{to_date}') and late_componant = '{component}'
 						""".format(employee=employee , from_date = self.from_date , to_date = doc.date , component = penality.late_componant ))
 						level = perviuos_penality_component [0][0] + 1
+						message = "employee {} ".format(employee.name) + "date {}".format(doc.date) + " Level {}".format(level) + "component {}".format( penality.late_componant)
+						frappe.msgprint(message)
+						frappe.msgprint(str())
 						level_factor = 0
 						if level == 1 and penality.level_onefactor :
 							level_factor = penality.level_onefactor
@@ -352,7 +355,7 @@ class AttendanceCalculation(Document):
 						doc.late_penality = level_factor * penality.factor
 
 						if penality.add_deduction:
-							if deduction_factor :
+							if attendance_role.deduction_factor :
 								doc.late_factor = penality.deduction_factor
 							else:
 								doc.late_factor = doc.late_in.seconds/60
