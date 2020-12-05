@@ -1,5 +1,5 @@
 {
- "autoname": "field:permission_type",
+ "autoname": "foramt:{parent}-{permission_type}",
  "creation": "2020-12-03 17:25:35.205385",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -27,7 +27,9 @@
   }
  ],
  "istable": 1,
- "modified": "2020-12-05 10:26:01.572882",
+
+ "modified": "2020-12-03 19:24:27.579495",
+
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendence Permission Rule Table",

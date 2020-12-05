@@ -13,7 +13,7 @@ frappe.ui.form.on('Mission', {
                 method:'updateStaus',
                 doc:frm.doc,
                 callback(r) {
-                	console.log(r.message)
+                	
                     if (r.message!="false") {
                        frm.add_custom_button(__(r.message),function(){
                        	 //frm.event.updateAction(r.message);
@@ -36,6 +36,40 @@ frappe.ui.form.on('Mission', {
                 }
             });
 		  }
+		  frm.events.checkIfHasRoleSubmit(frm)
+	},
+
+	checkIfHasRoleSubmit(frm){
+			if(frm.doc.docstatus =='0' &&frm.doc.date !=null){
+		     frm.page.clear_primary_action();
+				frappe.call({
+                
+                method:'checkIfHasRoleSubmit',
+                doc:frm.doc,
+                callback(r) {
+                    if (r.message=="true") {
+                    	
+                       frm.add_custom_button(__("Submit"),function(){
+                       	   	  frappe.call({
+				                method:'Submitdoctype',
+				                doc:frm.doc,
+				                args:{
+				                   'Action':'Approved'
+				                },callback(r) {
+				                	
+				                	frm.page.clear_primary_action();
+				                	frm.refresh();
+				                }
+				              
+				            });
+                         
+                       }).addClass('btn-primary')
+
+                    }
+                   
+                }
+            });
+			}
 	},
 
 	end_time:function(frm){
