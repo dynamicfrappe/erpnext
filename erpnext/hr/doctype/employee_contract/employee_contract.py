@@ -11,14 +11,7 @@ import frappe
 from frappe.model.document import Document
 
 class EmployeeContract(Document):
-	def autoname(self):
-		self.name = "Emp-Contratc" + str(self.contract_number) 
-	def validation(self):
-		self.name = "Emp-Contratc" + str(self.contract_number) 
-
-	def namig_function(self):
-		return self.name
-
+	pass
 
 
 

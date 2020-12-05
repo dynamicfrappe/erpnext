@@ -66,8 +66,14 @@
   "bank_name",
   "bank_ac_no",
   "health_insurance_section",
-  "health_insurance_provider",
-  "health_insurance_no",
+  "insured",
+  "medical_insurance_number",
+  "column_break_60",
+  "form_111",
+  "form_date",
+  "result_of_the_medical_examination",
+  "medical_examination_notes",
+  "section_break_65",
   "contact_details",
   "cell_number",
   "prefered_contact_email",
@@ -477,19 +483,7 @@
    "collapsible": 1,
    "fieldname": "health_insurance_section",
    "fieldtype": "Section Break",
-   "label": "Health Insurance"
-  },
-  {
-   "fieldname": "health_insurance_provider",
-   "fieldtype": "Link",
-   "label": "Health Insurance Provider",
-   "options": "Employee Health Insurance"
-  },
-  {
-   "depends_on": "eval:doc.health_insurance_provider",
-   "fieldname": "health_insurance_no",
-   "fieldtype": "Data",
-   "label": "Health Insurance No"
+   "label": "Goverment Health Insurance"
   },
   {
    "collapsible": 1,
@@ -910,12 +904,56 @@
    "fieldtype": "Link",
    "label": "Attendance Role",
    "options": "Attendance Role"
+  },
+  {
+   "default": "0",
+   "fieldname": "insured",
+   "fieldtype": "Check",
+   "label": "Insured"
+  },
+  {
+   "depends_on": "eval:doc.insured",
+   "fieldname": "medical_insurance_number",
+   "fieldtype": "Data",
+   "label": "Medical Insurance Number"
+  },
+  {
+   "fieldname": "column_break_60",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "form_111",
+   "fieldtype": "Check",
+   "label": "FORM (111)"
+  },
+  {
+   "depends_on": "eval:doc.form_111 ;",
+   "fieldname": "form_date",
+   "fieldtype": "Date",
+   "label": "Form Date"
+  },
+  {
+   "depends_on": "eval:doc.form_111 ;",
+   "fieldname": "result_of_the_medical_examination",
+   "fieldtype": "Small Text",
+   "label": "result of the medical examination"
+  },
+  {
+   "depends_on": "eval:doc.form_111 ;",
+   "fieldname": "medical_examination_notes",
+   "fieldtype": "Small Text",
+   "label": " medical examination Notes"
+  },
+  {
+   "fieldname": "section_break_65",
+   "fieldtype": "Section Break"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-03 18:24:46.595819",
+ "modified": "2020-12-05 16:25:05.778306",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
