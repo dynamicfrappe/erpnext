@@ -22,12 +22,14 @@
    "fieldname": "max_monthly_rate",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Max Monthly Rate (Hours)",
+   "label": "Max Monthly Rate (Minutes)",
    "reqd": 1
   }
  ],
  "istable": 1,
+
  "modified": "2020-12-03 19:24:27.579495",
+
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendence Permission Rule Table",

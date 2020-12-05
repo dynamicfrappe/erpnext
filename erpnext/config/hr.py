@@ -75,6 +75,10 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Attendance Role"
+				},
+				{
+					"type": "doctype",
 					"name": "Attendance",
 					"onboard": 1,
 					"dependencies": ["Employee"]
@@ -281,7 +285,7 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Payroll Period",
+					"name": "Payroll Month",
 				},
 				{
 					"type": "doctype",
