@@ -1,0 +1,68 @@
+{
+ "creation": "2020-12-05 10:31:49.704660",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "late_componant",
+  "level_onefactor",
+  "level_towfactor",
+  "level__threefactor",
+  "level_fourfactor",
+  "leve_five_factor"
+ ],
+ "fields": [
+  {
+   "fieldname": "late_componant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Late Componant",
+   "options": "Late Attendance Componant"
+  },
+  {
+   "fieldname": "level_onefactor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Level One(factor)"
+  },
+  {
+   "fieldname": "level_towfactor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Level Tow(factor)"
+  },
+  {
+   "fieldname": "level__threefactor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Level  Three(factor)"
+  },
+  {
+   "fieldname": "level_fourfactor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Level Four(factor)"
+  },
+  {
+   "fieldname": "leve_five_factor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Level Five (factor)"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-05 10:34:31.445208",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Late Attendance Componant Table",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
