@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-class AttendanceRole(Document):
+class AttendanceRule(Document):
 	def validate(self):
 
 

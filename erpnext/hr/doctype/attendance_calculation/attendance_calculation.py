@@ -314,9 +314,9 @@ class AttendanceCalculation(Document):
 		doc.late_penality = 0
 		doc.late_factor = 0
 		if  employee.attendance_role:
-			#frappe.throw(_("Please Assign Attendance Role to Employee {}".format(employee.name)))
+			#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
 
-			attendance_role = frappe.get_doc("Attendance Role",employee.attendance_role)
+			attendance_role = frappe.get_doc("Attendance Rule",employee.attendance_role)
 			if not attendance_role.late_role_table :
 				frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
 			if  attendance_role.late_role_table :
