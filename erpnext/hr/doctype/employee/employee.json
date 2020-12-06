@@ -960,11 +960,7 @@
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
-<<<<<<< HEAD
- "modified": "2020-12-06 10:18:38.603232",
-=======
- "modified": "2020-12-06 10:27:23.178846",
->>>>>>> 4613a41c9227c1ed7dfddca55a3aec9bfd6edf1b
+ "modified": "2020-12-06 10:55:05.558311",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
