@@ -16,9 +16,10 @@
   "max_permissions_count",
   "late_roles_section",
   "type",
+  "late_penalty_factor_by_date",
+  "fingerprint_forgetten_penality",
   "salary_componat_for_late",
   "salary_component_for_late_penalty",
-  "late_penalty_factor_by_date",
   "caclulate_deduction_in_working_on_holiday",
   "caclulate_deduction_in_working_on_weekend",
   "late_role_table",
@@ -180,9 +181,15 @@
    "fieldtype": "Link",
    "label": "Absent Rules",
    "options": "Absent Rules"
+  },
+  {
+   "default": "1.000",
+   "fieldname": "fingerprint_forgetten_penality",
+   "fieldtype": "Float",
+   "label": "Fingerprint Forgetten Penality"
   }
  ],
- "modified": "2020-12-06 10:13:00.406166",
+ "modified": "2020-12-06 11:27:57.434496",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
