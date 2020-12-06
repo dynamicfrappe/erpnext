@@ -23,6 +23,14 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
     });
 
     },
+    national_id:function(frm){
+    	
+    	var nationalID=frm.national_id;
+    	if((nationalID.length!=14 || isNaN(nationalID)) && nationalID.length!=0){
+    		frappe.msgprint("please enter valid ID")
+    		cur_frm.set_value("national_id","")
+    	}
+    },
 	refresh: function() {
 		var me = this;
 		erpnext.toggle_naming_series();
@@ -34,6 +42,7 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
 			args: {date_of_birth: this.frm.doc.date_of_birth}
 		});
 	},
+
 
 	salutation: function() {
 		if(this.frm.doc.salutation) {
