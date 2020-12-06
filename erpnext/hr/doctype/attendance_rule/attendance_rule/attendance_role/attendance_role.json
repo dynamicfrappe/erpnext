@@ -185,7 +185,7 @@
  "modified": "2020-12-06 10:12:11.063854",
  "modified_by": "Administrator",
  "module": "HR",
- "name": "Attendance Role",
+ "name": "Attendance Rule",
  "owner": "Administrator",
  "permissions": [
   {

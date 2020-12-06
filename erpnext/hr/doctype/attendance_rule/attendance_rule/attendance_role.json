@@ -139,7 +139,7 @@
    "fieldname": "abset_rules",
    "fieldtype": "Link",
    "label": "Abset Rules",
-   "options": "Attendance Role"
+   "options": "Attendance Rule"
   },
   {
    "fieldname": "column_break_20",
@@ -185,7 +185,7 @@
  "modified": "2020-12-06 10:06:55.415125",
  "modified_by": "Administrator",
  "module": "HR",
- "name": "Attendance Role",
+ "name": "Attendance Rule",
  "owner": "Administrator",
  "permissions": [
   {

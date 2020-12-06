@@ -18,9 +18,9 @@ class Permission(Document):
 		if not asd:
 			frappe.throw("employee have no department")
 			if not attendance_role.max_permissions_count :
-				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Role \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Rule \n Please Set Max Permission Count in Attendance Rule {}".format(self.employee,employee.attendance_role)))
 			if not attendance_role.max_permission_minutes:
-				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Role \n Please Set Max Permission Minutes in Attendance role {}".format(self.employee,employee.attendance_role)))
+				frappe.throw(_("Employee {} doesn't have any Permission in Attendance Rule \n Please Set Max Permission Minutes in Attendance Rule {}".format(self.employee,employee.attendance_role)))
 
 			payroll_month = frappe.db.sql("""
 			select * from `tabPayroll Month` where is_closed = 0 and start_date <= '{date}' and end_date >= '{date}'  order by modified desc limit 1
@@ -54,7 +54,7 @@ class Permission(Document):
 			# frappe.msgprint('str(attendance_role.max_permissions_count)')
 			# frappe.msgprint(str(attendance_role.max_permissions_count))
 			if perviuos_permission[0].total_count >= attendance_role.max_permissions_count :
-				frappe.throw(_("Employee {} exceed the max Permission Times \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+				frappe.throw(_("Employee {} exceed the max Permission Times \n Please Set Max Permission Count in Attendance Rule {}".format(self.employee,employee.attendance_role)))
 			# frappe.msgprint('str(perviuos_permission[0].total_min )')
 			# frappe.msgprint(str(perviuos_permission[0].total_min))
 			# frappe.msgprint('str(duration)')
@@ -65,7 +65,7 @@ class Permission(Document):
 			# frappe.msgprint(str(attendance_role.max_permission_minutes))
 
 			if perviuos_permission[0].total_min + duration > attendance_role.max_permission_minutes  :
-				frappe.throw(_("Employee {} exceed the max Permission Minitues in  This Month \n Please Set Max Permission Count in Attendance role {}".format(self.employee,employee.attendance_role)))
+				frappe.throw(_("Employee {} exceed the max Permission Minitues in  This Month \n Please Set Max Permission Count in Attendance Rule {}".format(self.employee,employee.attendance_role)))
 
 			monthly_rate = frappe.db.sql("""
 			select max_monthly_rate from `tabAttendence Permission Rule Table` where parent = '{parent}' and permission_type = '{type}' order by creation desc limit 1
@@ -83,7 +83,7 @@ class Permission(Document):
 			if monthly_rate and perviuos_permission_type_mins :
 				if float(monthly_rate[0].max_monthly_rate) < perviuos_permission_type_mins [0].total_min + duration :
 					frappe.throw(_(
-						"Employee {} exceed the max Permission Type Minitues in  This Month \n Please Set Max Permission Count in Attendance role {}".format(
+						"Employee {} exceed the max Permission Type Minitues in  This Month \n Please Set Max Permission Count in Attendance Rule {}".format(
 							self.employee, employee.attendance_role)))
 
 
