@@ -96,42 +96,42 @@
    "fieldname": "shift_actual_start",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Shift Actual Start",
+   "label": "IN",
    "read_only": 1
   },
   {
    "fieldname": "shift_actual_end",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Shift Actual End",
+   "label": "OUT",
    "read_only": 1
   },
   {
    "fieldname": "early_in",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Early IN",
+   "label": "Overtime IN",
    "read_only": 1
   },
   {
    "fieldname": "early_out",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Early OUT",
+   "label": "Less Time",
    "read_only": 1
   },
   {
    "fieldname": "late_in",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Late IN",
+   "label": "Lates",
    "read_only": 1
   },
   {
    "fieldname": "late_out",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Late Out",
+   "label": "Overtime OUT",
    "read_only": 1
   },
   {
@@ -235,7 +235,7 @@
   }
  ],
  "in_create": 1,
- "modified": "2020-12-06 14:45:48.381877",
+ "modified": "2020-12-06 15:38:54.130654",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
