@@ -24,6 +24,7 @@
   "status",
   "employee_number",
   "employment_type",
+  "national_id",
   "gender",
   "outsource",
   "date_of_birth",
@@ -91,7 +92,6 @@
   "bio",
   "personal_details",
   "passport_number",
-  "national_id",
   "date_of_issue",
   "valid_upto",
   "place_of_issue",
@@ -887,7 +887,8 @@
   {
    "fieldname": "national_id",
    "fieldtype": "Data",
-   "label": "National id"
+   "label": "National id",
+   "reqd": 1
   },
   {
    "collapsible": 1,
@@ -959,7 +960,7 @@
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-06 10:02:54.055836",
+ "modified": "2020-12-06 10:18:38.603232",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
