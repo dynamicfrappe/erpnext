@@ -903,7 +903,7 @@
    "fieldname": "attendance_role",
    "fieldtype": "Link",
    "label": "Attendance Role",
-   "options": "Attendance Role"
+   "options": "Attendance Rule"
   },
   {
    "default": "0",
@@ -953,7 +953,7 @@
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-05 16:25:05.778306",
+ "modified": "2020-12-06 10:12:18.247779",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",

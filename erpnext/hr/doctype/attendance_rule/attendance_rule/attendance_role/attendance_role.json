@@ -23,7 +23,7 @@
   "caclulate_deduction_in_working_on_weekend",
   "late_role_table",
   "absent_rule_section",
-  "abset_rules",
+  "absent_rules",
   "column_break_20",
   "absent__component",
   "abset_penalty_component",
@@ -42,6 +42,15 @@
    "unique": 1
   },
   {
+   "fieldname": "working_on_holiday_rate",
+   "fieldtype": "Float",
+   "label": "Working On Holiday Rate"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "hour_rate_for_early_in",
    "fieldtype": "Float",
    "label": "Hour Rate For Early IN"
@@ -50,33 +59,6 @@
    "fieldname": "hour_rate_for_late_out",
    "fieldtype": "Float",
    "label": "Hour Rate For Late Out"
-  },
-  {
-   "fieldname": "working_on_holiday_rate",
-   "fieldtype": "Float",
-   "label": "Working On Holiday Rate"
-  },
-  {
-   "fieldname": "absent_rate",
-   "fieldtype": "Float",
-   "label": "Absent Rate"
-  },
-  {
-   "fieldname": "basic_salary_component_section",
-   "fieldtype": "Section Break",
-   "label": "Basic Salary Component"
-  },
-  {
-   "fieldname": "additional_days_salary_component",
-   "fieldtype": "Link",
-   "label": "Additional Days Salary Component",
-   "options": "Salary Component"
-  },
-  {
-   "fieldname": "overtime_salary_component",
-   "fieldtype": "Link",
-   "label": "Overtime Salary Component",
-   "options": "Salary Component"
   },
   {
    "fieldname": "permission_rule_section",
@@ -88,10 +70,6 @@
    "fieldtype": "Table",
    "label": "Permission Rule",
    "options": "Attendence Permission Rule Table"
-  },
-  {
-   "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "max_permission_minutes",
@@ -107,12 +85,6 @@
    "fieldname": "late_roles_section",
    "fieldtype": "Section Break",
    "label": "Late Roles "
-  },
-  {
-   "fieldname": "late_role_table",
-   "fieldtype": "Table",
-   "label": "Late Role Table",
-   "options": "Late Attendance Componant Table"
   },
   {
    "fieldname": "type",
@@ -136,6 +108,11 @@
    "reqd": 1
   },
   {
+   "fieldname": "late_penalty_factor_by_date",
+   "fieldtype": "Int",
+   "label": "Late Penalty Factor (By Date)"
+  },
+  {
    "default": "0",
    "fieldname": "caclulate_deduction_in_working_on_holiday",
    "fieldtype": "Check",
@@ -148,14 +125,19 @@
    "label": "Caclulate deduction in Working on Weekend"
   },
   {
-   "fieldname": "late_penalty_factor_by_date",
-   "fieldtype": "Int",
-   "label": "Late Penalty Factor (By Date)"
+   "fieldname": "late_role_table",
+   "fieldtype": "Table",
+   "label": "Late Role Table",
+   "options": "Late Attendance Componant Table"
   },
   {
    "fieldname": "absent_rule_section",
    "fieldtype": "Section Break",
    "label": "Absent Rule"
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "absent__component",
@@ -172,17 +154,35 @@
    "reqd": 1
   },
   {
-   "fieldname": "abset_rules",
-   "fieldtype": "Link",
-   "label": "Abset Rules",
-   "options": "Attendance Role"
+   "fieldname": "basic_salary_component_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Salary Component"
   },
   {
-   "fieldname": "column_break_20",
-   "fieldtype": "Column Break"
+   "fieldname": "absent_rate",
+   "fieldtype": "Float",
+   "label": "Absent Rate"
+  },
+  {
+   "fieldname": "additional_days_salary_component",
+   "fieldtype": "Link",
+   "label": "Additional Days Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "overtime_salary_component",
+   "fieldtype": "Link",
+   "label": "Overtime Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "absent_rules",
+   "fieldtype": "Link",
+   "label": "Absent Rules",
+   "options": "Absent Rules"
   }
  ],
- "modified": "2020-12-05 14:06:53.362092",
+ "modified": "2020-12-06 10:12:11.063854",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Role",
