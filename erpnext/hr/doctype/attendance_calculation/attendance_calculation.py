@@ -339,20 +339,31 @@ class AttendanceCalculation(Document):
 						""".format(employee=employee.name , from_date = self.from_date , to_date = doc.date , component = penality.late_componant ))
 						level = perviuos_penality_component [0][0] + 1
 						message = "employee {} ".format(employee.name) + "date {}".format(doc.date) + " Level {}".format(level) + "component {}".format( penality.late_componant)
-						# frappe.msgprint(message)
-						# frappe.msgprint(str())
+						frappe.msgprint(message)
+						frappe.msgprint(str())
 						level_factor = 0
 						if level == 1  :
+							frappe.msgprint(str(level))
 							level_factor = penality.level_onefactor
 						elif level == 2  :
+							frappe.msgprint(str(level))
+
 							level_factor = penality.level_towfactor
 						elif level == 3 :
+							frappe.msgprint(str(level))
+
 							level_factor = penality.level__threefactor
 						elif level == 4 :
+							frappe.msgprint(str(level))
+
 							level_factor = penality.level_fourfactor
 						elif level == 5  :
+							frappe.msgprint(str(level))
+
 							level_factor = penality.leve_five_factor
 						else:
+							frappe.msgprint(str(level))
+
 							level_factor = penality.leve_five_factor or penality.level_fourfactor or penality.level__threefactor or penality.level_towfactor or penality.level_onefactor or 0
 
 						doc.late_penality = level_factor * penality.factor
