@@ -26,7 +26,7 @@ def execute(filters=None):
 	leave_list = [d[0] for d in leave_types]
 	columns.extend(leave_list)
 	columns.extend([_("Total Early Entries Min") + ":Time:200",_("Total Times Early Entries") + ":Data:200",_("Total Late Entries Min") + ":Time:200",_("Total Times Late Entries") + ":Data:200", _("Total Early Exits Min ") + ":Time:200",_("Total Times Early Exits") + ":Data:200",_("Total Late Exits Min") + ":Time:200",_("Total Times Late Exits") + ":Data:200"])
-	status_map = {"Week End":"<b style='color : blue'>Off </b>","Working On Holiday":"<b style='color : green'>WH </b>","Present": "<b style='color : green'>P </b>  ", "Absent": "<b style='color : red '>A </b> ", "Half Day": "<b style='color : deeppink '>HD </b> ", "Leave": "<b style='color : deeppink '>L </b> ", "None": "", "Holiday":"<b style='color : blue '>H</b>" , "Business Trip" :"<b style='color : darkblue '>BT </b> " , "Mission":"<b style='color : darkblue '>M </b> ","Mission All Day":"<b style='color : darkblue '>MA </b> "} 
+	status_map = { "Working On Weekend":"<b style='color : green'>WoWend </b>" , "Week End":"<b style='color : blue'>Off </b>","Working On Holiday":"<b style='color : green'>WH </b>","Present": "<b style='color : green'>P </b>  ", "Absent": "<b style='color : red '>A </b> ", "Half Day": "<b style='color : deeppink '>HD </b> ", "Leave": "<b style='color : deeppink '>L </b> ", "None": "", "Holiday":"<b style='color : blue '>H</b>" , "Business Trip" :"<b style='color : darkblue '>BT </b> " , "Mission":"<b style='color : darkblue '>M </b> ","Mission All Day":"<b style='color : darkblue '>MA </b> "}
 	leave_dict = get_leaveTypes()
 	status_map.update(leave_dict)
 	for emp in sorted(att_map):
@@ -67,8 +67,8 @@ def execute(filters=None):
 				total_ma += 1
 			elif status == "Working On Holiday":
 				total_p +=1
-			elif status == "Week End":
-				total_week_end +=1
+			elif status == "Working On Weekend":
+				total_p +=1
 			else :
 				total_l+=1
 

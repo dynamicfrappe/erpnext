@@ -123,7 +123,8 @@ class SalarySlip(TransactionBase):
 			  sec_to_time( SUM(time_to_sec(early_in) ) ) as early_in ,
 			  sec_to_time( SUM(time_to_sec(late_out) ) ) as late_out ,
 			  ifnull(SUM(late_factor),0) as late_factor ,
-			  ifnull(SUM(late_penality),0) as late_penality
+			  ifnull(SUM(late_penality),0) as late_penality,
+			  ifnull(SUM(forget_fingerprint),0) as forget_fingerprint
 				from `tabEmployee Attendance Logs`
 				where date(date) between  date('{start_date}')
 				and date('{end_date}') group by  employee
@@ -241,6 +242,13 @@ class SalarySlip(TransactionBase):
 								row  = 	 self.get_salary_slip_row( attendance_role.salary_component_for_late_penalty)
 
 								self.update_component_row(row, penality_amount, "deductions",adding=1)
+							# forget finger print
+							fingerprint_factor = attendance_role.fingerprint_forgetten_penality or 0
+							fingerprint_amount = fingerprint_factor * attendance[0].forget_fingerprint
+							if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
+								row = self.get_salary_slip_row(attendance_role.fingerprint_forgetten_penlaity_salary_component)
+
+								self.update_component_row(row, fingerprint_amount, "deductions", adding=1)
 
 				self.calculate_net_pay()
 

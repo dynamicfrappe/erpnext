@@ -22,7 +22,7 @@ from frappe.utils import now, cint, get_datetime, to_timedelta,update_progress_b
 #   10 => Week End
 #   11 => Sick Leave
 #   12 => Privilege Leave
-#   13 => 
+#   13 => Working On Weekend
 #   14 => 
 #   15 => 
 #   16 => 
@@ -63,6 +63,14 @@ class AttendanceCalculation(Document):
 		return True
 
 	def calculate(self,employee , day):
+
+		joining_date, relieving_date = frappe.get_cached_value("Employee", employee,["date_of_joining", "relieving_date"])
+		if joining_date and day < joining_date:
+			return
+		if relieving_date and day > relieving_date:
+			return
+
+
 		doc = frappe.new_doc('Employee Attendance Logs')
 		doc.name = "Att-{employee}-{date}".format(employee=str(employee) , date = str(day))
 		doc.employee = employee
@@ -106,8 +114,8 @@ class AttendanceCalculation(Document):
 		Shift = frappe.db.get_value('Shift Type', default_shift, ['start_time', 'end_time'], as_dict=1)
 		doc.shift_start = Shift.start_time
 		doc.shift_end = Shift.end_time
-		doc.shift_actual_start = timedelta(minutes=0)
-		doc.shift_actual_end = timedelta(minutes=0)
+		doc.shift_actual_start = ''
+		doc.shift_actual_end = ''
 		user_records_in_day = [x for x in self.attendances if x.employee == employee and x.Day == day]
 		self.Permissions = frappe.db.sql("""
 		select permission.name , type.code , SUBTIME (permission.to_time,permission.from_time) as Duration
@@ -125,8 +133,12 @@ class AttendanceCalculation(Document):
 				else: 
 					self.In_Holiday(doc , type = 'Week End')
 
-			else : 
-				self.Present(doc,user_records_in_day[0],Shift ,type =5)
+			else :
+				if Holidays[0].type == "Official":
+					self.Present(doc,user_records_in_day[0],Shift ,type =5)
+				else:
+					self.Present(doc,user_records_in_day[0],Shift ,type =6)
+
 		else :
 			# Not Holiday
 			Leaves = frappe.db.sql("""
@@ -262,10 +274,16 @@ class AttendanceCalculation(Document):
 			doc.type_number = 8
 			IN = to_timedelta(str(log.IN.time()))
 			OUT = to_timedelta(str(log.OUT.time()))
-		elif type == 5 :
+		elif type == 5:
 			# Working On Holiday
 			doc.type = "Working On Holiday"
 			doc.type_number = 9
+			IN = to_timedelta(str(log.IN.time()))
+			OUT = to_timedelta(str(log.OUT.time()))
+		elif type == 6 :
+			# Working On Holiday
+			doc.type = "Working On Weekend"
+			doc.type_number = 13
 			IN = to_timedelta(str(log.IN.time()))
 			OUT = to_timedelta(str(log.OUT.time()))
 
@@ -302,12 +320,34 @@ class AttendanceCalculation(Document):
 			doc.late_out = timedelta(minutes=0)
 		if doc.late_in < timedelta(minutes=0):
 			doc.late_in = timedelta(minutes=0)
+		if IN == OUT:
+			doc = self.forget_fingerPrint(doc)
+
 		# Calculate delayes
 		if doc.late_in > timedelta(minutes=0):
 			doc = self.calculate_Delays(doc)
 
 
 		doc.insert()
+	def forget_fingerPrint (self,doc):
+		doc.forget_fingerprint = 1
+		in_min = abs((doc.early_in + doc.late_in).seconds / 60)
+		out_min = abs((doc.early_out +  doc.late_out).seconds / 60)
+
+		if in_min <= out_min :
+			# Forgetten is OUT
+			doc.fingerprint_type='Out'
+			doc.shift_actual_end = ''
+			doc.late_out = timedelta(minutes=0)
+			doc.early_out = timedelta(minutes=0)
+		else:
+			# Forgetten is IN
+			doc.fingerprint_type = 'IN'
+			doc.shift_actual_start = ''
+			doc.early_in = timedelta(minutes=0)
+			doc.late_in = timedelta(minutes=0)
+		return doc
+
 
 	def calculate_Delays(self,doc):
 		employee = frappe.get_doc("Employee",doc.employee)
@@ -317,8 +357,15 @@ class AttendanceCalculation(Document):
 			#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
 
 			attendance_role = frappe.get_doc("Attendance Rule",employee.attendance_role)
+			if doc.type == "Working On Holiday":
+				if not attendance_role.caclulate_deduction_in_working_on_holiday :
+					return doc
+			if doc.type == "Working On Weekend":
+				if not attendance_role.caclulate_deduction_in_working_on_weekend :
+					return doc
 			if not attendance_role.late_role_table :
 				frappe.msgprint(_("this Rule {} doesn't Contain Attendance Late Rules".format(attendance_role.name)))
+
 			if  attendance_role.late_role_table :
 				if attendance_role.type == 'Daily':
 					# frappe.msgprint(str(attendance_role.late_role_table))
@@ -343,26 +390,26 @@ class AttendanceCalculation(Document):
 						# frappe.msgprint(str())
 						level_factor = 0
 						if level == 1  :
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 							level_factor = penality.level_onefactor
 						elif level == 2  :
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 
 							level_factor = penality.level_towfactor
 						elif level == 3 :
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 
 							level_factor = penality.level__threefactor
 						elif level == 4 :
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 
 							level_factor = penality.level_fourfactor
 						elif level == 5  :
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 
 							level_factor = penality.leve_five_factor
 						else:
-							frappe.msgprint(str(level))
+							# frappe.msgprint(str(level))
 
 							level_factor = penality.leve_five_factor or penality.level_fourfactor or penality.level__threefactor or penality.level_towfactor or penality.level_onefactor or 0
 
