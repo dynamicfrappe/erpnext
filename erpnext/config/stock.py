@@ -42,9 +42,17 @@ def get_data():
 					"onboard": 1,
 					
 				},
+				# {
+				# 	"type": "doctype",
+				# 	"name": "Delivery Trip"
+				# },
 				{
 					"type": "doctype",
-					"name": "Delivery Trip"
+					"name": "Project"
+				},
+				{
+					"type": "doctype",
+					"name": "Cost Center"
 				},
 			]
 		},
