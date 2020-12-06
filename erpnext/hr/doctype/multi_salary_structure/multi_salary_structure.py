@@ -26,6 +26,25 @@ class Multisalarystructure(Document):
 				if relieving_date and getdate(self.from_date) > relieving_date and not self.flags.old_employee:
 					frappe.throw(_("From Date {0} cannot be after employee's relieving Date {1}")
 					.format(st.from_date, relieving_date))
+	def updateStatus(self):
+		frappe.db.sql("update `tabMulti salary structure` set status='closed' where name='{}'".format(self.name))
+
+	def checkSalryStructureComponent(self,salaryStructure):
+		currentSalaryStructure=frappe.db.sql("select * from `tabSalary Detail` where parent='{}'".format(salaryStructure),as_dict=1)
+		#frappe.msgprint(str(currentSalaryStructure))
+		for S in self.salary_structure:			
+			nextsalarystructure=frappe.db.sql("select * from `tabSalary Detail` where parent='{}'".format(S.salary_structure),as_dict=1)
+			#frappe.msgprint(str(nextsalarystructure))
+			if nextsalarystructure:
+				for css in currentSalaryStructure:
+					for nss in nextsalarystructure:
+						if css.salary_component==nss.salary_component and salaryStructure!=S.salary_structure:
+							return "false"
+								
+		return 'true'
+
+
+
 
 def get_assigned_salary_structure(employee, on_date):
 	if not employee or not on_date:
