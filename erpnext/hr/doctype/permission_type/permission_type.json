@@ -32,9 +32,7 @@
    "reqd": 1
   }
  ],
- "in_create": 1,
- "modified": "2020-12-03 15:23:59.016693",
-
+ "modified": "2020-12-06 09:06:57.832156",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Permission Type",
