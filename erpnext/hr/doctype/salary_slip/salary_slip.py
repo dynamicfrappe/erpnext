@@ -205,7 +205,7 @@ class SalarySlip(TransactionBase):
 						late_amount = 0
 						employee  =frappe.get_doc("Employee",self.employee)
 						if employee.attendance_role:
-							attendance_role = frappe.get_doc("Attendance Role" , employee.attendance_role)
+							attendance_role = frappe.get_doc("Attendance Rule" , employee.attendance_role)
 							if attendance_role.type:
 								if attendance_role.type == "Daily":
 									penality_amount = (attendance[0].late_penality * self.daily_rate) or 0
