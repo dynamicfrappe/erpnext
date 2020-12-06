@@ -17,6 +17,7 @@
   "middle_name",
   "last_name",
   "employee_name",
+  "arabic_name",
   "image",
   "column_break1",
   "company",
@@ -948,12 +949,18 @@
   {
    "fieldname": "section_break_65",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "arabic_name",
+   "fieldtype": "Data",
+   "label": "Arabic Name"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-06 10:12:18.247779",
+
+ "modified": "2020-12-06 10:02:54.055836",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
