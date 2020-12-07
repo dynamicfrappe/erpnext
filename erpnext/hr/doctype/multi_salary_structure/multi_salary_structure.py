@@ -42,7 +42,12 @@ class Multisalarystructure(Document):
 							return "false"
 								
 		return 'true'
-
+	def getEmployeeSalaryStructure(self):
+		mylist = []
+		for salaryStructure in self.salary_structure:
+			mylist.append(salary_structure.salary_structure)
+		frappe.msgprint(mylist)
+		return mylist
 
 
 
