@@ -28,22 +28,63 @@ frappe.ui.form.on('Payroll Month', {
 					}).addClass("btn-primary");
 		}
 	},
+	
 	create_payroll:function(frm){
+		
+
 		var dialog = new frappe.ui.Dialog({
+
 			title: __("Payroll Type "),
 			fields: [
-				{	"fieldtype": "Select", "label": __("Payroll"),
-					"fieldname": "payroll_type",
-					"options": ["A" , "B"],
+				{
+					"fieldtype": "Select", "label": __("By Type"),
+					"fieldname": "search_type",
+					"options": ["ALL" , "By Department" ],
 					"reqd": 1,
-					 },
+					onchange() {
+						if(dialog.get_value('search_type') ){
+							frappe.call({
+								doc:frm.doc,
+								method: 'get_strcuture_type_option',
+							}).then(r => {
+								dialog.set_df_property("payroll_type", "options", r.message)
+						});
+						}
+						if(dialog.get_value('search_type') == "By Department"){
+							dialog.set_df_property("department", "reqd", 1)
+							dialog.set_df_property("department", "hidden",0)
+						}
+						if(dialog.get_value('search_type') == "ALL"){
+							dialog.set_df_property("department", "hidden", 1)
+							dialog.set_df_property("department", "reqd", 0)
+						}
+					}
+				},
+
+				{	
+					
+					"fieldtype": "Select", "label": __("Payroll"),
+					"fieldname": "payroll_type",
+					"options":[],
+					"reqd": 1,
+				},
+				{	
+					
+					"fieldtype": "Link", "label": __("Department"),
+					"fieldname": "department",
+					"options":'Department',
+					"reqd": 0,
+				}
+					 ,
 				{	"fieldtype": "Button", "label": __('Create Payroll Entrs'),
 					"fieldname": "create_payroll_entry", "cssClass": "btn-primary" },
 			]
 		});
+		
 		dialog.fields_dict.create_payroll_entry.$input.click(function() {
 			var args = dialog.get_values();
-			console.log(args)
+			console.log(args.payroll_type)
+			frm.events.make_payroll_entry(frm , args.search_type,args.payroll_type, args.department)
 			dialog.hide();
 		})
 		dialog.show()
@@ -62,6 +103,23 @@ frappe.ui.form.on('Payroll Month', {
 			}
 		})
 
+	},
+
+	make_payroll_entry: function(frm ,serach,frc ,department) {
+		
+		frappe.call({
+				method: "erpnext.hr.doctype.payroll_month.payroll_month.make_payroll_entry",
+				args:{
+							"name":frm.doc.name,
+							"type":serach,
+			             	"frcv" : frc,
+		                	"department":department
+			                },
+				
+				callback:function(r){
+					frappe.set_route("Form", "Multi Payroll", r.message);
+				}
+		})
 	},
 	start_date:function(frm){
 		frappe.call({

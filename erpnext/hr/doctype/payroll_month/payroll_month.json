@@ -18,6 +18,8 @@
   "open_user",
   "close_date",
   "close_user",
+  "payroll_data_section",
+  "payroll_records",
   "amended_from"
  ],
  "fields": [
@@ -102,10 +104,23 @@
   {
    "fieldname": "section_break_8",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "payroll_data_section",
+   "fieldtype": "Section Break",
+   "label": "Payroll Data"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "payroll_records",
+   "fieldtype": "Table",
+   "label": "Payroll records",
+   "options": "Monthly Payroll Records",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 16:53:57.518927",
+ "modified": "2020-12-07 10:20:03.003577",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Payroll Month",

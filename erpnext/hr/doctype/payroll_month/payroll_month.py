@@ -27,3 +27,30 @@ class PayrollMonth(Document):
 			return True
 	def set_end_date(self):
 		return  (datetime.strptime(self.start_date, "%Y-%m-%d").date() +  relativedelta(days=-1)+ relativedelta(months=+1))
+
+	def get_strcuture_type_option(self):
+		a=  frappe.db.sql(""" SELECT type FROM `tabSalary Structure Type` """)
+		return([i[0] for i in a])
+
+
+@frappe.whitelist()
+			
+def make_payroll_entry(name ,type,frcv, department=None,*args,**kwargs):
+	doc = frappe.new_doc('Multi Payroll')
+	frm =  frappe.get_doc("Payroll Month" , name)
+	doc.payroll_month = name
+	doc.posting_date = datetime.today()
+	doc.payroll_frequency = "Monthly"
+	doc.payroll_type = frcv
+	doc.start_date = frm.start_date
+	doc.end_date = frm.end_date
+	if department :
+		doc.department = department
+	doc.save()
+	row = frm.append('payroll_records', {})
+	row.payroll = doc.name
+	row.type = frcv
+	if department :
+		row.department = department
+	frm.save()
+	return doc.name
