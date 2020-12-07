@@ -81,7 +81,7 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Attendance Role"
+					"name": "Attendance Rule"
 				},
 				{
 					"type": "doctype",

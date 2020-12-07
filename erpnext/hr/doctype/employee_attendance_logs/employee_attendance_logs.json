@@ -30,7 +30,9 @@
   "late_factor",
   "late_penality",
   "late_componant",
-  "late_minutes"
+  "late_minutes",
+  "forget_fingerprint",
+  "fingerprint_type"
  ],
  "fields": [
   {
@@ -94,42 +96,42 @@
    "fieldname": "shift_actual_start",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Shift Actual Start",
+   "label": "IN",
    "read_only": 1
   },
   {
    "fieldname": "shift_actual_end",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Shift Actual End",
+   "label": "OUT",
    "read_only": 1
   },
   {
    "fieldname": "early_in",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Early IN",
+   "label": "Overtime IN",
    "read_only": 1
   },
   {
    "fieldname": "early_out",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Early OUT",
+   "label": "Less Time",
    "read_only": 1
   },
   {
    "fieldname": "late_in",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Late IN",
+   "label": "Lates",
    "read_only": 1
   },
   {
    "fieldname": "late_out",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Late Out",
+   "label": "Overtime OUT",
    "read_only": 1
   },
   {
@@ -182,7 +184,8 @@
    "fieldname": "company",
    "fieldtype": "Link",
    "label": "Company",
-   "options": "Company"
+   "options": "Company",
+   "read_only": 1
   },
   {
    "fieldname": "flag",
@@ -208,16 +211,31 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Late Componant",
-   "options": "Late Attendance Componant"
+   "options": "Late Attendance Componant",
+   "read_only": 1
   },
   {
    "fieldname": "late_minutes",
    "fieldtype": "Float",
-   "label": "late_minutes"
+   "label": "late_minutes",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "forget_fingerprint",
+   "fieldtype": "Check",
+   "label": "Forget Fingerprint"
+  },
+  {
+   "fieldname": "fingerprint_type",
+   "fieldtype": "Select",
+   "label": "Fingerprint Type",
+   "options": "\nIN\nOut",
+   "read_only": 1
   }
  ],
  "in_create": 1,
- "modified": "2020-12-05 17:01:59.508521",
+ "modified": "2020-12-06 15:38:54.130654",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",

@@ -39,6 +39,7 @@ frappe.ui.form.on('Device', {
 										callback: function(r) {
 											frm.refresh(frm)
 											frapp.msgprint(__("Done"))
+											frm.refresh(frm)
 										}
 									});
 								}).addClass("btn-primary");

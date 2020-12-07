@@ -14,11 +14,15 @@
   "permission_rule",
   "max_permission_minutes",
   "max_permissions_count",
+  "max_permission_minute_per_once",
   "late_roles_section",
   "type",
+  "late_penalty_factor_by_date",
+  "fingerprint_forgetten_in_penality",
+  "fingerprint_forgetten_out_penality",
+  "fingerprint_forgetten_penlaity_salary_component",
   "salary_componat_for_late",
   "salary_component_for_late_penalty",
-  "late_penalty_factor_by_date",
   "caclulate_deduction_in_working_on_holiday",
   "caclulate_deduction_in_working_on_weekend",
   "late_role_table",
@@ -70,13 +74,15 @@
    "fieldname": "additional_days_salary_component",
    "fieldtype": "Link",
    "label": "Additional Days Salary Component",
-   "options": "Salary Component"
+   "options": "Salary Component",
+   "reqd": 1
   },
   {
    "fieldname": "overtime_salary_component",
    "fieldtype": "Link",
    "label": "Overtime Salary Component",
-   "options": "Salary Component"
+   "options": "Salary Component",
+   "reqd": 1
   },
   {
    "fieldname": "permission_rule_section",
@@ -126,7 +132,8 @@
    "fieldname": "salary_componat_for_late",
    "fieldtype": "Link",
    "label": "Salary Componat for Late",
-   "options": "Salary Component"
+   "options": "Salary Component",
+   "reqd": 1
   },
   {
    "fieldname": "salary_component_for_late_penalty",
@@ -180,9 +187,34 @@
    "fieldtype": "Link",
    "label": "Absent Rules",
    "options": "Absent Rules"
+  },
+  {
+   "fieldname": "fingerprint_forgetten_penlaity_salary_component",
+   "fieldtype": "Link",
+   "label": "Fingerprint Forgetten penlaity Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "default": "1.000",
+   "fieldname": "fingerprint_forgetten_in_penality",
+   "fieldtype": "Float",
+   "label": "Fingerprint Forgetten IN Penality"
+  },
+  {
+   "default": "1",
+   "fieldname": "fingerprint_forgetten_out_penality",
+   "fieldtype": "Float",
+   "label": "Fingerprint Forgetten OUT Penality"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_permission_minute_per_once",
+   "fieldtype": "Float",
+   "label": "Max Permission minute per once"
   }
  ],
- "modified": "2020-12-06 11:54:45.565894",
+ "modified": "2020-12-07 10:08:47.032730",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",

@@ -85,12 +85,13 @@
   {
    "fieldname": "device_logs",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Device Logs",
    "options": "Device Log",
    "read_only": 1
   }
  ],
- "modified": "2020-11-23 16:37:27.818813",
+ "modified": "2020-12-07 10:26:15.192221",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Device",

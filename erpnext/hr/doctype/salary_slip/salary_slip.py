@@ -123,7 +123,9 @@ class SalarySlip(TransactionBase):
 			  sec_to_time( SUM(time_to_sec(early_in) ) ) as early_in ,
 			  sec_to_time( SUM(time_to_sec(late_out) ) ) as late_out ,
 			  ifnull(SUM(late_factor),0) as late_factor ,
-			  ifnull(SUM(late_penality),0) as late_penality
+			  ifnull(SUM(late_penality),0) as late_penality,
+			  ifnull(SUM(case when forget_fingerprint = 1 and fingerprint_type = "IN" then 1 else 0 end ),0) as forget_fingerprint_in,
+			  ifnull(SUM(case when forget_fingerprint = 1 and fingerprint_type = "Out" then 1 else 0 end ),0) as forget_fingerprint_out
 				from `tabEmployee Attendance Logs`
 				where date(date) between  date('{start_date}')
 				and date('{end_date}') group by  employee
@@ -241,6 +243,15 @@ class SalarySlip(TransactionBase):
 								row  = 	 self.get_salary_slip_row( attendance_role.salary_component_for_late_penalty)
 
 								self.update_component_row(row, penality_amount, "deductions",adding=1)
+							# forget finger print
+							fingerprint_factor_in = attendance_role.fingerprint_forgetten_in_penality or 0
+							fingerprint_amount = (fingerprint_factor_in * attendance[0].forget_fingerprint_in) or 0
+							fingerprint_factor_out = attendance_role.fingerprint_forgetten_out_penality or 0
+							fingerprint_amount += (fingerprint_factor_out * attendance[0].forget_fingerprint_out) or 0
+							if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
+								row = self.get_salary_slip_row(attendance_role.fingerprint_forgetten_penlaity_salary_component)
+
+								self.update_component_row(row, fingerprint_amount, "deductions", adding=1)
 
 				self.calculate_net_pay()
 
@@ -426,7 +437,8 @@ class SalarySlip(TransactionBase):
 
 			self.total_working_days = self.total_working_days_temp or working_days
 
-			self.payment_days = working_days
+			# self.payment_days = working_days
+			self.payment_days = self.total_working_days
 			return
 
 		holidays = self.get_holidays_for_employee(self.start_date, self.end_date)
@@ -447,6 +459,8 @@ class SalarySlip(TransactionBase):
 
 		payment_days = flt(self.get_payment_days(joining_date, relieving_date)) - flt(lwp)
 		self.payment_days = payment_days > 0 and payment_days or 0
+		self.payment_days  = self.payment_days <= self.total_working_days and self.payment_days or self.total_working_days
+
 
 	def get_payment_days(self, joining_date, relieving_date):
 		start_date = getdate(self.start_date)
