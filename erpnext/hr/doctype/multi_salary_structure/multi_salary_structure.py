@@ -49,6 +49,15 @@ class Multisalarystructure(Document):
 		frappe.msgprint(mylist)
 		return mylist
 
+	def getcomponentValue(self,SalayDetails):
+		salarycomponentname=frappe.db.sql("select salary_component from `tabSalary Detail` where name='{}'".format(SalayDetails),as_dict=1)
+		salarycomponentValue=frappe.db.sql("select amount from `tabSalary Component` where salary_component='{}'".format(salarycomponentname[0]['salary_component']))
+		return salarycomponentValue
+
+
+
+
+
 
 
 def get_assigned_salary_structure(employee, on_date):

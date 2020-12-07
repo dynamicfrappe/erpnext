@@ -45,7 +45,7 @@ frappe.ui.form.on('Multi salary structure', {
 					        },
 					        {
 					            "label": 'Salary Component',
-					            "fieldname": 'salaryComponent',
+					            "fieldname": 'salaryDetails',
 					            "fieldtype": 'Link',
 					            "options":"Salary Detail",
 					            "get_query":function(){
@@ -55,13 +55,18 @@ frappe.ui.form.on('Multi salary structure', {
                                         ]
 					            	};
 					            },
-					            on_change:function(e){
+					            onchange(){
+					            	
 					            	frappe.call({
                                 	method:"getcomponentValue",
-                                	doc:frm.doc
+                                	doc:frm.doc,
+                                	args:{
+                                      "SalayDetails":d.get_values().salaryDetails
+                                	},
                                     }).then(r=>{
-                                	   d.set_value("value",r.message
-                                	)})
+                                    	//console.log(r.message[0][0])
+                                	   d.set_value("value",r.message[0][0])
+                                	})
 					            }	
 
 					        },
@@ -78,9 +83,15 @@ frappe.ui.form.on('Multi salary structure', {
 					    ],
 					    primary_action_label: 'Submit',
 					    primary_action(values) {
-					        console.log(values);
-					        d.hide();
-					    }
+                            frappe.call({
+					        	method:"RenewDocument",
+					        	doc:frm.doc,
+					        	args:{
+					        		"date":values.date,
+					        		
+					        	}
+					        })	
+                           d.hide();				    }
 					});
 
 					d.show();
