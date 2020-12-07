@@ -38,9 +38,6 @@ frappe.ui.form.on('Absent Rules', {
 frappe.ui.form.on('absent rule templates', {
         rule: function (frm, cdt, cdn) {
             frm.events.sort_table(frm, cdt, cdn);
-
-
-
         },
 
         ruletemplate_add: function (frm, cdt, cdn) {
