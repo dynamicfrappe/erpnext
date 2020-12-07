@@ -5,39 +5,41 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "permission_name",
   "code"
  ],
  "fields": [
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Series",
-   "options": "HR-LAP-.YYYY.-",
-   "reqd": 1
-  },
-  {
    "allow_in_quick_entry": 1,
    "fieldname": "permission_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Permission Name",
    "reqd": 1
   },
   {
    "fieldname": "code",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Code",
    "reqd": 1
   }
  ],
- "modified": "2020-12-06 09:06:57.832156",
+ "modified": "2020-12-07 11:35:18.835274",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Permission Type",
  "owner": "Administrator",
  "permissions": [
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  },
   {
    "create": 1,
    "delete": 1,
@@ -46,7 +48,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "System Manager",
+   "role": "Administrator",
    "share": 1,
    "write": 1
   }
