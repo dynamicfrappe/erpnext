@@ -11,6 +11,12 @@ frappe.ui.form.on('Absent Rules', {
 	     var i = 0 ;
 	     frm.doc.ruletemplate.forEach((e)=>{
 	         e.rule = list [i++];
+	         if (! e.deduction)
+	             e.deduction = 0
+              if (! e.penality)
+	             e.penality = 0
+
+
 	         if (i >=list.length)
              {
                   frm.get_field('ruletemplate').grid.cannot_add_rows = true;
