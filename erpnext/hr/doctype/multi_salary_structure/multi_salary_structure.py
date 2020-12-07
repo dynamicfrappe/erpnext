@@ -45,15 +45,47 @@ class Multisalarystructure(Document):
 	def getEmployeeSalaryStructure(self):
 		mylist = []
 		for salaryStructure in self.salary_structure:
-			mylist.append(salary_structure.salary_structure)
-		frappe.msgprint(mylist)
+			mylist.append(salaryStructure.salary_structure)
 		return mylist
 
 	def getcomponentValue(self,SalayDetails):
-		salarycomponentname=frappe.db.sql("select salary_component from `tabSalary Detail` where name='{}'".format(SalayDetails),as_dict=1)
-		salarycomponentValue=frappe.db.sql("select amount from `tabSalary Component` where salary_component='{}'".format(salarycomponentname[0]['salary_component']))
+		salarycomponentValue=frappe.db.sql("select amount from `tabSalary Detail` where salary_component='{}'".format(SalayDetails))
 		return salarycomponentValue
+	def setSalaryComponent(self,salaryStructure):
+		datalilslist=[]
+		if salaryStructure:
+			salaryStructureList=salaryStructure.split('-')
+		salaryDetaills=frappe.db.sql("select salary_component from `tabSalary Detail` where parent='{}'".format(salaryStructureList[0]),as_dict=1)
+		if salaryDetaills:
+			for sd in salaryDetaills:
+				datalilslist.append(sd['salary_component'])
+		
+		return datalilslist
+				
 
+	def RenewDocument(self,date,newValue,salaryStructure,salaryDetails):
+		frappe.db.sql("update `tabMulti salary structure` set status='closed' where name='{}'".format(self.name))
+		doc = frappe.new_doc('Multi salary structure')
+		doc.employee=self.employee
+		doc.employee_name=self.employee_name
+		doc.department=self.department
+		doc.company=self.company
+		doc.from_date=date
+		doc.designation=self.designation
+		doc.income_tax_slab=self.income_tax_slab
+		doc.base=self.base
+		doc.variable=self.variable
+		doc.save()
+		frappe.db.commit()
+		for salarySructure in self.salary_structure:
+			row=doc.append("salary_structure",{})
+			row.salary_structure=salarySructure.salary_structure
+			row.from_date=date
+			row.type=salarySructure.type
+			row.employee=salarySructure.employee
+		doc.save()
+		frappe.db.commit()
+		frappe.db.sql("update `tabSalary Detail` set amount='{}' where salary_component='{}'".format(newValue,salaryDetails))
 
 
 

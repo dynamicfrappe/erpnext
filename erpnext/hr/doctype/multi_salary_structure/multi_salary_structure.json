@@ -75,8 +75,7 @@
    "fieldname": "salary_structure",
    "fieldtype": "Table",
    "label": "Salary Structure",
-   "options": "Salary structure Template",
-   "reqd": 1
+   "options": "Salary structure Template"
   },
   {
    "fieldname": "income_tax_slab",
@@ -129,7 +128,8 @@
   {
    "fieldname": "from_date",
    "fieldtype": "Date",
-   "label": "From Date"
+   "label": "From Date",
+   "reqd": 1
   },
   {
    "default": "open",
@@ -141,7 +141,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-06 15:08:50.587891",
+ "modified": "2020-12-07 15:19:33.076089",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",
