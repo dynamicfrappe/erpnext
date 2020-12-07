@@ -21,16 +21,80 @@ frappe.ui.form.on('Multi salary structure', {
                         
                }).addClass('btn-primary')
 			    frm.add_custom_button(__("Renew"),function(){
-			  		 /* frappe.call({
-				                method:'updateStatus',
-				                doc:frm.doc,
-				                callback(r) {
-				                	
-				                	frm.page.clear_primary_action();
-				                	frm.refresh();
-				                }
-				              
-				            });*/
+			  		 var d = new frappe.ui.Dialog({
+					    title: 'Enter details',
+					    fields: [
+					        {
+					            "label": 'Date',
+					            "fieldname": 'date',
+					            "fieldtype": 'Date',
+					              
+					        },
+					        {
+					            "label": 'Salary Structure',
+					            "fieldname": 'salaryStructure',
+					            "fieldtype": 'Link',
+					            "options":"Salary structure Template",
+					            "get_query":function(){
+					            	return{
+                                        filters:[
+                                             ["Salary structure Template","employee","=",frm.doc.employee]
+                                        ]
+					            	};
+					            }
+					        },
+					        {
+					            "label": 'Salary Component',
+					            "fieldname": 'salaryDetails',
+					            "fieldtype": 'Link',
+					            "options":"Salary Detail",
+					            "get_query":function(){
+					            	return{
+                                        filters:[
+                                             ["Salary Detail","parent","=",d.get_values().salaryStructure]
+                                        ]
+					            	};
+					            },
+					            onchange(){
+					            	
+					            	frappe.call({
+                                	method:"getcomponentValue",
+                                	doc:frm.doc,
+                                	args:{
+                                      "SalayDetails":d.get_values().salaryDetails
+                                	},
+                                    }).then(r=>{
+                                    	//console.log(r.message[0][0])
+                                	   d.set_value("value",r.message[0][0])
+                                	})
+					            }	
+
+					        },
+					        {
+					            "label": 'Value',
+					            "fieldname": 'value',
+					            "fieldtype": 'Data'
+					        },
+					        {
+					            "label": 'New Value',
+					            "fieldname": 'newValue',
+					            "fieldtype": 'Data'
+					        },
+					    ],
+					    primary_action_label: 'Submit',
+					    primary_action(values) {
+                            frappe.call({
+					        	method:"RenewDocument",
+					        	doc:frm.doc,
+					        	args:{
+					        		"date":values.date,
+					        		
+					        	}
+					        })	
+                           d.hide();				    }
+					});
+
+					d.show();
                        	 
                         
                }).addClass('btn-primary')
