@@ -42,7 +42,7 @@ frappe.ui.form.on('Multi salary structure', {
 					            "options":[],
 					            onchange(){
                                    if((d.get_value('salaryStructure')).length>1){
-                                   	     	frappe.call({
+                                   	    frappe.call({
 					            		method:"setSalaryComponent",
 					            		doc:frm.doc,
 					            		args:{
@@ -75,7 +75,8 @@ frappe.ui.form.on('Multi salary structure', {
 					        {
 					            "label": 'Value',
 					            "fieldname": 'value',
-					            "fieldtype": 'Data'
+					            "fieldtype": 'Data',
+					             "read_only": 1
 					        },
 					        {
 					            "label": 'New Value',
@@ -95,7 +96,9 @@ frappe.ui.form.on('Multi salary structure', {
 					        		"salaryDetails":values.salaryDetails
 					        	}
 					        })	
-                           d.hide();				    }
+                           d.hide();
+                            frappe.set_route("List", "Multi salary structure");
+                           	}
 					});
 
 					d.show();
