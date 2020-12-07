@@ -37,7 +37,7 @@ def add_warnning_types():
 
 
 
-		
+
 def add_Permission_types():
 	if not frappe.db.exists({
 		'doctype':'Permission Type',
