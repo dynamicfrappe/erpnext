@@ -14,6 +14,7 @@
   "permission_rule",
   "max_permission_minutes",
   "max_permissions_count",
+  "max_permission_minute_per_once",
   "late_roles_section",
   "type",
   "late_penalty_factor_by_date",
@@ -205,9 +206,15 @@
    "fieldname": "fingerprint_forgetten_out_penality",
    "fieldtype": "Float",
    "label": "Fingerprint Forgetten OUT Penality"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_permission_minute_per_once",
+   "fieldtype": "Float",
+   "label": "Max Permission minute per once"
   }
  ],
- "modified": "2020-12-07 09:41:40.321221",
+ "modified": "2020-12-07 10:08:47.032730",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",

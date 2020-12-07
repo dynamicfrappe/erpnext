@@ -18,24 +18,33 @@ class AttendanceRule(Document):
 		list.append(str(self.abset_penalty_component))
 		list.append(str(self.additional_days_salary_component))
 		list.append(str(self.overtime_salary_component))
-		message = ''
+		message = '<ol>'
+		count = 0
 		if list.count(str(self.fingerprint_forgetten_penlaity_salary_component)) > 1 :
-			message += '\n' + _('Fingerprint Forgetten penlaity Salary Component')
+			message += '<li>' + _('Fingerprint Forgetten penlaity Salary Component') + '</li>'
+			count +=1
 		if list.count(str(self.salary_componat_for_late)) > 1 :
-			message += '\n' + _('Salary Componat for Late')
+			message += '<li>' + _('Salary Componat for Late')+ '</li>'
+			count +=1
 		if list.count(str(self.salary_component_for_late_penalty)) > 1 :
-			message += '\n' + _('Salary Component For Late Penalty')
+			message += '<li>' + _('Salary Component For Late Penalty')+ '</li>'
+			count +=1
 		if list.count(str(self.absent__component)) > 1 :
-			message += '\n' + _('Absent  Component')
+			message += '<li>' + _('Absent  Component')+ '</li>'
+			count +=1
 		if list.count(str(self.abset_penalty_component)) > 1 :
-			message += '\n' + _('Absent Penalty Component')
+			message += '<li>' + _('Absent Penalty Component')+ '</li>'
+			count +=1
 		if list.count(str(self.additional_days_salary_component)) > 1 :
-			message += '\n' + _('Additional Days Salary Component')
+			message += '<li>' + _('Additional Days Salary Component')+ '</li>'
+			count +=1
 		if list.count(str(self.overtime_salary_component)) > 1 :
-			message += '\n' + _('Overtime Salary Component')
+			message += '<li>' + _('Overtime Salary Component') + '</li>'
+			count +=1
 
-		if message != '' :
-			frappe.throw (_("this elements is Duplicated {}".format(message)))
+		message += '</ol>'
+		if count :
+			frappe.throw (_(" *   this elements is Duplicated <br> {}".format(message)))
 
 		self.set_col_values()
 
