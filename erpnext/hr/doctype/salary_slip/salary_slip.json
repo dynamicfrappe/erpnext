@@ -18,6 +18,7 @@
   "payroll_entry",
   "company",
   "letter_head",
+  "payroll_type",
   "section_break_10",
   "salary_slip_based_on_timesheet",
   "start_date",
@@ -477,12 +478,18 @@
    "label": "Toal Woking hours",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "payroll_type",
+   "fieldtype": "Link",
+   "label": "Type",
+   "options": "Salary Structure Type"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 9,
  "is_submittable": 1,
- "modified": "2020-11-26 15:31:17.400315",
+ "modified": "2020-12-07 12:58:23.684492",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Salary Slip",

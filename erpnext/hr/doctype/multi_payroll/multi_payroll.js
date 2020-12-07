@@ -15,8 +15,6 @@ frappe.ui.form.on('Multi Payroll', {
 
 
 
-
-
 		}
 		if (frm.doc.docstatus == 0 && frm.doc.employees.length > 0) {
 
