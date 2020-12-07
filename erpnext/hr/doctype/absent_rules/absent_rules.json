@@ -17,6 +17,7 @@
    "hidden": 1,
    "label": "Series",
    "no_copy": 1,
+   "options": "Abs-Rule-.####",
    "print_hide": 1,
    "set_only_once": 1
   },
@@ -24,7 +25,7 @@
    "fieldname": "senario",
    "fieldtype": "Select",
    "label": "Senario",
-   "options": "Discount from vacations\nDeduction from salary\notrher"
+   "options": "Discount from Vacations\nDeduction from Salary\nother"
   },
   {
    "fieldname": "ruletemplate",
@@ -43,7 +44,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-05 13:50:21.847323",
+ "modified": "2020-12-07 09:57:18.487638",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Absent Rules",

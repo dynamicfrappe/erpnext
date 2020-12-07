@@ -5,6 +5,58 @@ frappe.ui.form.on('Attendance Rule', {
 	// refresh: function(frm) {
 
 	// }
+	setup: function(frm) {
+		frm.set_query('fingerprint_forgetten_penlaity_salary_component', function(doc) {
+			return {
+				filters: {
+					"type": 'Deduction'
+				}
+			};
+		});
+		frm.set_query('salary_componat_for_late', function(doc) {
+			return {
+				filters: {
+					"type": 'Deduction'
+				}
+			};
+		});
+		frm.set_query('salary_component_for_late_penalty', function(doc) {
+			return {
+				filters: {
+					"type": 'Deduction'
+				}
+			};
+		});
+		frm.set_query('absent__component', function(doc) {
+			return {
+				filters: {
+					"type": 'Deduction'
+				}
+			};
+		});
+		frm.set_query('additional_days_salary_component', function(doc) {
+			return {
+				filters: {
+					"type": 'Earning'
+				}
+			};
+		});
+		frm.set_query('overtime_salary_component', function(doc) {
+			return {
+				filters: {
+					"type": 'Earning'
+				}
+			};
+		});
+		frm.set_query('abset_penalty_component', function(doc) {
+			return {
+				filters: {
+					"type": 'Deduction'
+				}
+			};
+		});
+
+	}
 });
 
 

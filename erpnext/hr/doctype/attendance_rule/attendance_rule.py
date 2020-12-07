@@ -4,11 +4,47 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 class AttendanceRule(Document):
 	def validate(self):
 
+		list = []
+		list.append(str(self.fingerprint_forgetten_penlaity_salary_component))
+		list.append(str(self.salary_componat_for_late))
+		list.append(str(self.salary_component_for_late_penalty))
+		list.append(str(self.absent__component))
+		list.append(str(self.abset_penalty_component))
+		list.append(str(self.additional_days_salary_component))
+		list.append(str(self.overtime_salary_component))
+		message = '<ol>'
+		count = 0
+		if list.count(str(self.fingerprint_forgetten_penlaity_salary_component)) > 1 :
+			message += '<li>' + _('Fingerprint Forgetten penlaity Salary Component') + '</li>'
+			count +=1
+		if list.count(str(self.salary_componat_for_late)) > 1 :
+			message += '<li>' + _('Salary Componat for Late')+ '</li>'
+			count +=1
+		if list.count(str(self.salary_component_for_late_penalty)) > 1 :
+			message += '<li>' + _('Salary Component For Late Penalty')+ '</li>'
+			count +=1
+		if list.count(str(self.absent__component)) > 1 :
+			message += '<li>' + _('Absent  Component')+ '</li>'
+			count +=1
+		if list.count(str(self.abset_penalty_component)) > 1 :
+			message += '<li>' + _('Absent Penalty Component')+ '</li>'
+			count +=1
+		if list.count(str(self.additional_days_salary_component)) > 1 :
+			message += '<li>' + _('Additional Days Salary Component')+ '</li>'
+			count +=1
+		if list.count(str(self.overtime_salary_component)) > 1 :
+			message += '<li>' + _('Overtime Salary Component') + '</li>'
+			count +=1
+
+		message += '</ol>'
+		if count :
+			frappe.throw (_(" *   this elements is Duplicated <br> {}".format(message)))
 
 		self.set_col_values()
 
