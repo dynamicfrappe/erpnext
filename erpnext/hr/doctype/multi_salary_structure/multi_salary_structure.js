@@ -28,33 +28,35 @@ frappe.ui.form.on('Multi salary structure', {
 					            "label": 'Date',
 					            "fieldname": 'date',
 					            "fieldtype": 'Date',
-					              
+					             onchange(){
+					             	frappe.call({
+					             		method:"getEmployeeSalaryStructure",
+					             		doc:frm.doc
+					             	}).then(r=>{d.set_df_property("salaryStructure","options",r.message)})
+					             }
 					        },
 					        {
 					            "label": 'Salary Structure',
 					            "fieldname": 'salaryStructure',
-					            "fieldtype": 'Link',
-					            "options":"Salary structure Template",
-					            "get_query":function(){
-					            	return{
-                                        filters:[
-                                             ["Salary structure Template","employee","=",frm.doc.employee]
-                                        ]
-					            	};
+					            "fieldtype": 'Select',
+					            "options":[],
+					            onchange(){
+                                   if((d.get_value('salaryStructure')).length>1){
+                                   	     	frappe.call({
+					            		method:"setSalaryComponent",
+					            		doc:frm.doc,
+					            		args:{
+					            			"salaryStructure":d.get_values().salaryStructure
+					            		}
+					            	}).then(r=>{d.set_df_property("salaryDetails","options",r.message)})
+                                   }
 					            }
 					        },
 					        {
 					            "label": 'Salary Component',
 					            "fieldname": 'salaryDetails',
-					            "fieldtype": 'Link',
-					            "options":"Salary Detail",
-					            "get_query":function(){
-					            	return{
-                                        filters:[
-                                             ["Salary Detail","parent","=",d.get_values().salaryStructure]
-                                        ]
-					            	};
-					            },
+					            "fieldtype": 'Select',
+					            "options":[],
 					            onchange(){
 					            	
 					            	frappe.call({
@@ -88,7 +90,9 @@ frappe.ui.form.on('Multi salary structure', {
 					        	doc:frm.doc,
 					        	args:{
 					        		"date":values.date,
-					        		
+					        		"newValue":values.newValue,
+					        		"salaryStructure":values.salaryStructure,
+					        		"salaryDetails":values.salaryDetails
 					        	}
 					        })	
                            d.hide();				    }
