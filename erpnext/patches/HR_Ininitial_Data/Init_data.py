@@ -19,6 +19,8 @@ def execute():
 		frappe.log_error(message=e.message, title="add_penality_types")
 
 
+
+
 def add_warnning_types():
 	if not frappe.db.exists('Warnings Types', '1'):
 		doc = frappe.get_doc({
