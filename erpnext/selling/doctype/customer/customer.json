@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
@@ -11,11 +10,11 @@
  "engine": "InnoDB",
  "field_order": [
   "basic_info",
-  "naming_series",
   "salutation",
   "customer_name",
   "gender",
   "customer_type",
+  "naming_series",
   "default_bank_account",
   "lead_name",
   "image",
@@ -81,10 +80,11 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
    "label": "Series",
-   "no_copy": 1,
-   "options": "CUST-.YYYY.-",
-   "set_only_once": 1
+   "options": "CUST-.YYYY.-"
   },
   {
    "depends_on": "eval:doc.customer_type!='Company'",
@@ -485,8 +485,7 @@
  "icon": "fa fa-user",
  "idx": 363,
  "image_field": "image",
- "links": [],
- "modified": "2020-03-17 11:03:42.706907",
+ "modified": "2020-12-07 16:27:02.619137",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Customer",
