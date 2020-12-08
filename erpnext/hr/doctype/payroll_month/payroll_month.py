@@ -17,7 +17,8 @@ class PayrollMonth(Document):
 			frappe.throw("Invalid End Date")
 	def get_attendance_years(self):
 		year = datetime.today().year
-		year_list =[ x for x in range(2019 ,year+1 )]
+		year_list = range(2019 ,year+2 )
+
 		return "\n".join(str(x) for x in year_list)
 	def month_for_year(self):
 		dublicated = frappe.db.sql("""SELECT name FROM `tabPayroll Month` WHERE month='%s' AND year='%s' and docstatus=1"""%(self.month ,self.year))
