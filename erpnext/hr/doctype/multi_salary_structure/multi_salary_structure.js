@@ -185,7 +185,7 @@ frappe.ui.form.on('Multi salary structure', {
 				        'salaryStructure':child.salary_structure
 				    },
 				    callback(r) {
-				    	console.log(r.message)
+				    	//console.log(r.message)
 				            if(r.message =='false'){
 				            	frappe.msgprint("existing component")
                                  child.salary_structure=""
@@ -201,6 +201,18 @@ frappe.ui.form.on('Multi salary structure', {
 		})
 	     frappe.ui.form.on("Salary structure Template", "salary_structure", function (frm, cdt, cdn) {
             var child=locals[cdt][cdn]
+             var dict=frm.doc.salary_structure
+			 var count=0;
+			 for(let i=0;i<dict.length;i++){
+
+			 	if(dict[i]['salary_structure']==child.salary_structure){
+			 		count++;
+			 		if(count==2){
+			 		frappe.msgprint("salary structure already exist")
+					child.salary_structure=""
+			 		}
+				}
+			 }
             child.from_date=frm.doc.from_date
             cur_frm.refresh_field("salary_structure");
             
