@@ -2,6 +2,20 @@
 // License: GNU General Public License v3. See license.txt
 
 frappe.ui.form.on("Supplier", {
+	onload:function(frm){
+		frappe.call({
+			doc:frm.doc,
+			method:"check_coding_status" ,
+			callback:function(r){
+				if (r.message == 1) {
+					console.log("1")
+
+									frm.set_df_property("supplier_code" ,"read_only" , "1")}
+									frm.refresh_field("supplier_code")
+			}
+
+		})
+	},
 	setup: function (frm) {
 		frm.set_query('default_price_list', { 'buying': 1 });
 		if (frm.doc.__islocal == 1) {

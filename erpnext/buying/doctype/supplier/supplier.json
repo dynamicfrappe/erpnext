@@ -383,14 +383,13 @@
   {
    "fieldname": "supplier_code",
    "fieldtype": "Data",
-   "label": "Supplier Code",
-   "reqd": 1
+   "label": "Supplier Code"
   }
  ],
  "icon": "fa fa-user",
  "idx": 370,
  "image_field": "image",
- "modified": "2020-12-07 16:27:46.102782",
+ "modified": "2020-12-07 16:54:22.735410",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier",

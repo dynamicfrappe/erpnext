@@ -3,10 +3,14 @@
  "description": "Settings for Buying Module",
  "doctype": "DocType",
  "document_type": "Other",
+ "engine": "InnoDB",
  "field_order": [
   "supp_master_name",
   "supplier_group",
   "buying_price_list",
+  "auto_create_supplier_codes",
+  "selet_namig_code_type",
+  "serializer",
   "column_break_3",
   "po_required",
   "pr_required",
@@ -87,12 +91,31 @@
   {
    "fieldname": "column_break_11",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_create_supplier_codes",
+   "fieldtype": "Check",
+   "label": "Auto Create Supplier Codes"
+  },
+  {
+   "depends_on": "eval:doc.auto_create_supplier_codes==1 ;",
+   "fieldname": "selet_namig_code_type",
+   "fieldtype": "Select",
+   "label": "Selet naming code Type",
+   "options": "Manual Add\nAdd By Group Code"
+  },
+  {
+   "depends_on": "eval:doc.selet_namig_code_type=='Manual Add' ;",
+   "fieldname": "serializer",
+   "fieldtype": "Data",
+   "label": "Serializer"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "modified": "2019-08-20 13:13:09.055189",
+ "modified": "2020-12-07 16:58:31.574827",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Buying Settings",
@@ -107,5 +130,7 @@
    "share": 1,
    "write": 1
   }
- ]
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
 }

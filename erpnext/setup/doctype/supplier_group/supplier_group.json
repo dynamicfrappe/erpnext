@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:supplier_group_name",
@@ -10,6 +9,7 @@
  "field_order": [
   "supplier_group_name",
   "parent_supplier_group",
+  "group_code",
   "is_group",
   "section_credit_limit",
   "payment_terms",
@@ -101,13 +101,17 @@
    "options": "Supplier Group",
    "print_hide": 1,
    "report_hide": 1
+  },
+  {
+   "fieldname": "group_code",
+   "fieldtype": "Data",
+   "label": "Group Code"
   }
  ],
  "icon": "fa fa-flag",
  "idx": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2020-03-18 18:26:07.179330",
+ "modified": "2020-12-07 17:05:50.962763",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Supplier Group",
