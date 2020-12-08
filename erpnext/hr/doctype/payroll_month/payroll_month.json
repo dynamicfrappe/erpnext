@@ -18,7 +18,11 @@
   "open_user",
   "close_date",
   "close_user",
-  "amended_from"
+  "amended_from",
+  "attendance_month_section",
+  "attendance_start_date",
+  "column_break_16",
+  "attendance_end_date"
  ],
  "fields": [
   {
@@ -102,10 +106,31 @@
   {
    "fieldname": "section_break_8",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "attendance_month_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Month"
+  },
+  {
+   "fieldname": "attendance_start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attendance_end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 16:53:57.518927",
+ "modified": "2020-12-08 14:10:20.232929",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Payroll Month",

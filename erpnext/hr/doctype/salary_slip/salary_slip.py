@@ -82,7 +82,7 @@ class SalarySlip(TransactionBase):
 			self.update_salary_slip_in_additional_salary()
 			if (frappe.db.get_single_value("HR Settings", "email_salary_slip_to_employee")) and not frappe.flags.via_payroll_entry:
 				self.email_salary_slip()
-			self.update_attendance_logs (status = 1)
+			# self.update_attendance_logs (status = 1)
 	def update_attendance_logs (self , status = 1):
 		frappe.db.sql (""" 
 		update `tabEmployee Attendance Logs` set docstatus = {status} , is_calculated = {status} where employee = '{employee}' and  date(date) between date('{from_date}') and date ('{to_date}') ;
@@ -92,7 +92,7 @@ class SalarySlip(TransactionBase):
 		self.set_status()
 		self.update_status()
 		self.update_salary_slip_in_additional_salary()
-		self.update_attendance_logs(status=0)
+		# self.update_attendance_logs(status=0)
 
 	def on_trash(self):
 		from frappe.model.naming import revert_series_if_last
@@ -295,6 +295,7 @@ class SalarySlip(TransactionBase):
 
 	def get_emp_and_leave_details(self):
 		'''First time, load all the components from salary structure'''
+
 		if self.employee:
 			self.set("earnings", [])
 			self.set("deductions", [])
@@ -588,9 +589,13 @@ class SalarySlip(TransactionBase):
 		self.set_component_amounts_based_on_payment_days(component_type)
 
 	def add_structure_components(self, component_type):
+		frappe.msgprint('add_structure_components')
 		data = self.get_data_for_eval()
 		for struct_row in self._salary_structure_doc.get(component_type):
 			amount = self.eval_condition_and_formula(struct_row, data)
+			frappe.msgprint('amount')
+			frappe.msgprint(str(amount))
+			frappe.msgprint(str(struct_row))
 			if amount and struct_row.statistical_component == 0:
 				self.update_component_row(struct_row, amount, component_type)
 

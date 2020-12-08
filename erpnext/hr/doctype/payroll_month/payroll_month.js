@@ -5,7 +5,8 @@ frappe.ui.form.on('Payroll Month', {
 	// refresh: function(frm) {
 
 	// }
-    setup: function(frm) {
+    refresh: function(frm) {
+
 		frm.trigger("get_years");
 	 },
 	 get_years: function(frm) {

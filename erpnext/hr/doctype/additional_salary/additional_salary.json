@@ -22,7 +22,8 @@
   "type",
   "amount_based_on_formula",
   "description",
-  "amended_from"
+  "amended_from",
+  "attendance_calculation"
  ],
  "fields": [
   {
@@ -148,10 +149,17 @@
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "fieldname": "attendance_calculation",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Attendance Calculation",
+   "options": "Attendance Calculation"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-01 09:52:48.742831",
+ "modified": "2020-12-08 11:25:33.688989",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Additional Salary",
