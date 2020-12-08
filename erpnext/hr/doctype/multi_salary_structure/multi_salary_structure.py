@@ -4,13 +4,15 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils import getdate
+from frappe.utils import getdate,today
 from frappe import _
 from frappe.model.document import Document
 
 class Multisalarystructure(Document):
 	def validate(self):
 		self.validate_dates()
+		if getdate(self.from_date) >getdate(today()):
+			self.status="closed"
 
 	def validate_dates(self):
 		joining_date, relieving_date = frappe.db.get_value("Employee", self.employee,
@@ -49,7 +51,11 @@ class Multisalarystructure(Document):
 		return mylist
 
 	def getcomponentValue(self,SalayDetails):
-		salarycomponentValue=frappe.db.sql("select amount from `tabSalary Detail` where salary_component='{}'".format(SalayDetails))
+		#salarycomponentValue=frappe.db.sql("select amount from `tabSalary Detail` where salary_component='{}'".format(SalayDetails))
+		for c in self.component:
+			if c.componentname==SalayDetails:
+				salarycomponentValue={"amount":c.amount}
+
 		return salarycomponentValue
 	def getAllSalaryStructureComponent(self):
 		data=[]
@@ -73,7 +79,17 @@ class Multisalarystructure(Document):
 				datalilslist.append(sd['salary_component'])
 		
 		return datalilslist
-				
+
+	def updateComponentTable(self,component,amount,oldValue,date):
+		frappe.db.sql("update `tabMulti salary structure` set docstatus=0 where name='{}'".format(self.name))
+		self.from_date=date
+		row=self.append("history",{})
+		row.component=component
+		row.amount=oldValue
+		row.fromdate=self.from_date
+		self.docstatus=1
+		self.save()
+		frappe.db.sql("update `tabSalary Components` set amount='{}' where componentname='{}' and parent='{}'".format(amount,component,self.name))
 
 	def RenewDocument(self,date,newValue,salaryStructure,salaryDetails):
 		frappe.db.sql("update `tabMulti salary structure` set status='closed' where name='{}'".format(self.name))
