@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:customer_group_name",
@@ -10,6 +9,7 @@
  "field_order": [
   "customer_group_name",
   "parent_customer_group",
+  "group_code",
   "is_group",
   "cb0",
   "default_price_list",
@@ -133,13 +133,17 @@
    "fieldtype": "Table",
    "label": "Credit Limit",
    "options": "Customer Credit Limit"
+  },
+  {
+   "fieldname": "group_code",
+   "fieldtype": "Data",
+   "label": "Group Code"
   }
  ],
  "icon": "fa fa-sitemap",
  "idx": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2020-03-18 18:26:02.536305",
+ "modified": "2020-12-07 16:58:27.466323",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Customer Group",
