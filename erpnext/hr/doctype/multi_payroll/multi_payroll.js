@@ -23,13 +23,29 @@ frappe.ui.form.on('Multi Payroll', {
 				frm.page.clear_primary_action();
 				frm.add_custom_button(__("Create Salary Slip "),
 					function() {
-						frm.events.get_employee_details(frm);
+						frm.events.creat_salary_slip(frm);
 					}
 				).toggleClass('btn-primary', !(frm.doc.employees || []).length);
 
 
 			}
 		}
+
+	},
+	creat_salary_slip:function(frm){
+		return frappe.call({
+			doc: frm.doc,
+			method: 'create_salary_slips',
+			callback: function(r) {
+
+				console.log("Done")
+			}
+			
+		})
+
+
+
+
 
 	},
 
