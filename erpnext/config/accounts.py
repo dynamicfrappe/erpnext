@@ -246,6 +246,13 @@ def get_data():
 					"name": "Supplier Ledger Summary",
 					"doctype": "Sales Invoice",
 					"is_query_report": True,
+				},
+				{
+					"type": "report",
+					"label": "Value Added Tax Report",
+					"name": "Value Added Tax",
+					"doctype": "Account",
+					"is_query_report": True,
 				}
 			]
 		},

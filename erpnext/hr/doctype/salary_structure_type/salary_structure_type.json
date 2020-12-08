@@ -5,16 +5,23 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "type"
+  "type",
+  "frequency"
  ],
  "fields": [
   {
    "fieldname": "type",
    "fieldtype": "Data",
    "label": "Type"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "label": "Frequency",
+   "options": "\nMonthly\nFortnightly\nBimonthly\nWeekly\nDaily"
   }
  ],
- "modified": "2020-12-06 13:32:54.378724",
+ "modified": "2020-12-06 15:57:31.414299",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Salary Structure Type",
