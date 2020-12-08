@@ -45,13 +45,14 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-07 14:59:52.710949",
+ "modified": "2020-12-08 09:18:10.852591",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Absent Rules",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -61,6 +62,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

@@ -232,28 +232,30 @@ class SalarySlip(TransactionBase):
 
 					if attendance_role.absent_rules  :
 							absent_rule = frappe.get_doc("Absent Rules", attendance_role.absent_rules)
-							self.absent_days = int(attendance[0].AbsentDays)
-							absent_rate = 0
-							absent_penality_rate = 0
-							flag = 1
-							if absent_rule.ruletemplate :
-								for i in range (1,self.absent_days+1):
-									if len(absent_rule.ruletemplate) >= i :
-										absent_rate += absent_rule.ruletemplate[i-1].deduction
-										absent_penality_rate += absent_rule.ruletemplate[i-1].penality
-									else:
-										absent_rate += absent_rule.ruletemplate[-1].deduction
-										absent_penality_rate += absent_rule.ruletemplate[-1].penality
+							if absent_rule.senario == 'Deduction from Salary':
+								self.absent_days = int(attendance[0].AbsentDays)
+								frappe.msgprint(str(self.absent_days))
+								absent_rate = 0
+								absent_penality_rate = 0
+								flag = 1
+								if absent_rule.ruletemplate :
+									for i in range (1,self.absent_days+1):
+										if len(absent_rule.ruletemplate) >= i :
+											absent_rate += absent_rule.ruletemplate[i-1].deduction
+											absent_penality_rate += absent_rule.ruletemplate[i-1].penality
+										else:
+											absent_rate += absent_rule.ruletemplate[-1].deduction
+											absent_penality_rate += absent_rule.ruletemplate[-1].penality
 
-							absent_amount = absent_rate  * self.daily_rate
-							absent_penality_amount = absent_penality_rate *   self.daily_rate
-							if absent_amount:
-								row = self.get_salary_slip_row(absents_salary_component)
+								absent_amount = absent_rate  * self.daily_rate
+								absent_penality_amount = absent_penality_rate *   self.daily_rate
+								if absent_amount:
+									row = self.get_salary_slip_row(absents_salary_component)
 
-								self.update_component_row(row, absent_amount, "deductions", adding=1)
-							if absent_penality_amount:
-								row = self.get_salary_slip_row(abset_penalty_component)
-								self.update_component_row(row, absent_penality_amount, "deductions", adding=1)
+									self.update_component_row(row, absent_amount, "deductions", adding=1)
+								if absent_penality_amount:
+									row = self.get_salary_slip_row(abset_penalty_component)
+									self.update_component_row(row, absent_penality_amount, "deductions", adding=1)
 
 
 
