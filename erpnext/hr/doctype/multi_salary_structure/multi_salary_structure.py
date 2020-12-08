@@ -59,6 +59,8 @@ class Multisalarystructure(Document):
 			row=self.append("component",{})
 			row.componentname=d.salary_component
 			row.amount=d.amount
+			# self.update(self.component)
+		self.save()
 		return data
 
 	def setSalaryComponent(self,salaryStructure):

@@ -18,7 +18,7 @@ class MultiPayroll(Document):
 	
 		for d in employees:
 			valid = validate_salary_slip(d[0],self. start_date , self.end_date ,self.payroll_type)
-			if valid:
+			if valid and  d[2] <= datetime.strptime( self.end_date, "%Y-%m-%d").date() :
 				row  = self.append('employees', {})
 				row.employee = d[0]
 				row.salary_structure = d[1]
@@ -26,11 +26,12 @@ class MultiPayroll(Document):
 		
 
 	def get_emp_list(self):
-		assignment = """SELECT  distinct t1.employee , t2.salary_structure 
+		assignment = """SELECT  distinct t1.employee , t2.salary_structure  , em.date_of_joining , em.relieving_date
 		 FROM `tabMulti salary structure` AS t1   join  `tabSalary structure Template` AS t2
-		 ON t1.name = t2.parent  
+		 ON t1.name = t2.parent 
+		 join `tabEmployee` AS em on   t1.employee_name = em.employee_name
 		 WHERE type = '%s' 
-		 and t2.docstatus = 1"""%self.payroll_type 
+		 and t2.docstatus = 1 and t1.status='open' """%self.payroll_type 
 		if self.department : 
 		 	department_con = """ and  t1.department = '%s'  """%self.department
 		 	assignment += department_con
