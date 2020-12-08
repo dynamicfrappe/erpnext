@@ -5,6 +5,9 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from frappe import _
+from datetime import  datetime
+
 
 class MultiPayroll(Document):
 	def fill_employee_details(self):
@@ -14,15 +17,15 @@ class MultiPayroll(Document):
 			frappe.throw(_("No employees for the mentioned criteria"))
 	
 		for d in employees:
-			valid = validate_salary_slip(d,self. start_date , self.end_date ,self.payroll_type)
+			valid = validate_salary_slip(d[0],self. start_date , self.end_date ,self.payroll_type)
 			if valid:
 				row  = self.append('employees', {})
-				row.employee = d
+				row.employee = d[0]
+				row.salary_structure = d[1]
 		self.number_of_employees = len(self.employees)
 		
 
 	def get_emp_list(self):
-		# data = []
 		assignment = """SELECT  distinct t1.employee , t2.salary_structure 
 		 FROM `tabMulti salary structure` AS t1   join  `tabSalary structure Template` AS t2
 		 ON t1.name = t2.parent  
@@ -33,37 +36,47 @@ class MultiPayroll(Document):
 		 	assignment += department_con
 		employees = frappe.db.sql(assignment)
 		try :
-			data =[ i[0] for i in employees ]
+			data =[ i for i in employees ]
 		except:
 			data = None
 		return  data
+	def set_component(self,salary_slip,i,typ):	
+			row = salary_slip.append(typ, {})
+			row.salary_component = i.salary_component
+			row.abbr= i.abbr
+			row.statistical_component = i.statistical_component
+			row.deduct_full_tax_on_selected_payroll_date = i.deduct_full_tax_on_selected_payroll_date
+			row.depends_on_payment_days =i.depends_on_payment_days
+			row.is_tax_applicable = i.is_tax_applicable
+			row.exempted_from_income_tax = i.exempted_from_income_tax
+			row.formula = i.formula
+			row.amount = i.amount
+			salary_slip.save()
+	def create_salary_slips(self ):
+		if self.employees:
+			for salary_structure in self.employees :
+				salary_slip = frappe.new_doc('Monthly Salary Slip')
+				salary_slip.posting_date = datetime.today()
+				salary_slip.employee = salary_structure.employee
+				salary_slip.payroll_type = self.payroll_type
+				salary_slip.start_date = self.start_date
+				salary_slip.end_date = self.end_date
+				salary_slip.total_working_days = 30
+				salary_slip.payment_days = 30
+				salary_slip.salary_structure = salary_structure.salary_structure
+				salary_slip.save()
+				structure = frappe.get_doc("Salary Structure" , salary_structure.salary_structure ) 
+				#add Errnings
+				for i in structure.earnings :
+					self.set_component(salary_slip , i , 'earnings')
+				#add Errnings
+				for i in structure.deductions :
+					self.set_component(salary_slip , i , 'deductions')
 
-	# def create_salary_slips(self):
-	# 	if self.employees:
-	# 		for employee in self.employees:
-	# 			valid = 
 
-	# 	# self.check_permission('write')
-		# self.created = 1
-		# emp_list = [d.employee for d in self.get_emp_list()]
-		# if emp_list:
-		# 	args = frappe._dict({
-		# 		"salary_slip_based_on_timesheet": self.salary_slip_based_on_timesheet,
-		# 		"payroll_frequency": self.payroll_frequency,
-		# 		"start_date": self.start_date,
-		# 		"end_date": self.end_date,
-		# 		"company": self.company,
-		# 		"posting_date": self.posting_date,
-		# 		"deduct_tax_for_unclaimed_employee_benefits": self.deduct_tax_for_unclaimed_employee_benefits,
-		# 		"deduct_tax_for_unsubmitted_tax_exemption_proof": self.deduct_tax_for_unsubmitted_tax_exemption_proof,
-		# 		"payroll_entry": self.name
-		# 	})
-		# 	if len(emp_list) > 30:
-		# 		frappe.enqueue(create_salary_slips_for_employees, timeout=600, employees=emp_list, args=args)
-		# 	else:
-		# 		create_salary_slips_for_employees(emp_list, args, publish_progress=False)
-		# 		# since this method is called via frm.call this doc needs to be updated manually
-		# 		self.reload()
+
+
+	
 
 	def get_filter_condition(self):
 		
