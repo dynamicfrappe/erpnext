@@ -185,7 +185,7 @@ class SalarySlip(TransactionBase):
 						if attendance_role.type == "Daily":
 							penality_amount = (attendance[0].late_penality * self.daily_rate) or 0
 							late_factor = attendance[0].late_factor * (attendance_role.late_penalty_factor_by_date or 0)
-							late_amount = (late_factor * self.daily_rate ) or 0
+							late_amount = (late_factor * self.hour_rate ) or 0
 
 						elif attendance_role.type == "Monthly":
 
@@ -218,9 +218,9 @@ class SalarySlip(TransactionBase):
 						self.update_component_row(row, penality_amount, "deductions",adding=1)
 					# forget finger print
 					fingerprint_factor_in = attendance_role.fingerprint_forgetten_in_penality or 0
-					fingerprint_amount = (fingerprint_factor_in * attendance[0].forget_fingerprint_in) or 0
+					fingerprint_amount = (fingerprint_factor_in * attendance[0].forget_fingerprint_in * self.daily_rate ) or 0
 					fingerprint_factor_out = attendance_role.fingerprint_forgetten_out_penality or 0
-					fingerprint_amount += (fingerprint_factor_out * attendance[0].forget_fingerprint_out) or 0
+					fingerprint_amount += (fingerprint_factor_out * attendance[0].forget_fingerprint_out * self.daily_rate) or 0
 					if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
 						row = self.get_salary_slip_row(attendance_role.fingerprint_forgetten_penlaity_salary_component)
 
@@ -234,7 +234,6 @@ class SalarySlip(TransactionBase):
 							absent_rule = frappe.get_doc("Absent Rules", attendance_role.absent_rules)
 							if absent_rule.senario == 'Deduction from Salary':
 								self.absent_days = int(attendance[0].AbsentDays)
-								frappe.msgprint(str(self.absent_days))
 								absent_rate = 0
 								absent_penality_rate = 0
 								flag = 1
@@ -246,7 +245,6 @@ class SalarySlip(TransactionBase):
 										else:
 											absent_rate += absent_rule.ruletemplate[-1].deduction
 											absent_penality_rate += absent_rule.ruletemplate[-1].penality
-
 								absent_amount = absent_rate  * self.daily_rate
 								absent_penality_amount = absent_penality_rate *   self.daily_rate
 								if absent_amount:
