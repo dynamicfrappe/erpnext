@@ -48,6 +48,20 @@ class Customer(TransactionBase):
 		self.update_lead_status()
 
 	def validate(self):
+		is_selectednaming=frappe.db.get_single_value('Selling Settings', 'auto_add_customer_code')
+		if is_selectednaming==1:
+			whichname=frappe.db.get_single_value('Selling Settings', 'naming')
+			if whichname=="Manual Naming":
+				serializer = frappe.db.get_single_value('Selling Settings', 'serializer')
+				#count=frappe.db.sql("select count(*) as 'count' from tabEmployee",as_dict=1)
+				self.customer_code="cus"+self.name+"serializer+count[0]['count']"
+			else:
+				customerGroup=self.customer_group
+				if customerGroup !="All Customer Groups":
+					#groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup),as_dict=1)
+					#if groupcode:
+					self.customer_code="cus"+"groupcode[0]['customer_group']"+"count"
+
 		self.flags.is_new_doc = self.is_new()
 		self.flags.old_lead = self.lead_name
 		validate_party_accounts(self)
