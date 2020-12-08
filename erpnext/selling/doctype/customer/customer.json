@@ -12,6 +12,7 @@
   "basic_info",
   "salutation",
   "customer_name",
+  "customer_code",
   "gender",
   "customer_type",
   "naming_series",
@@ -480,12 +481,17 @@
    "fieldname": "dn_required",
    "fieldtype": "Check",
    "label": "Allow Sales Invoice Creation Without Delivery Note"
+  },
+  {
+   "fieldname": "customer_code",
+   "fieldtype": "Data",
+   "label": "Customer code"
   }
  ],
  "icon": "fa fa-user",
  "idx": 363,
  "image_field": "image",
- "modified": "2020-12-07 16:27:02.619137",
+ "modified": "2020-12-07 17:27:48.918505",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Customer",
