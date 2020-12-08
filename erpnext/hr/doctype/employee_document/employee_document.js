@@ -15,6 +15,7 @@ frappe.ui.form.on('Employee Document', {
 					            "label": 'New Start Date',
 					            "fieldname": 'date',
 					            "fieldtype": 'Date',
+								"reqd": 1,
                                 onchange(){
 					            	d.set_df_property("number","options",[frm.doc.doc_number])
 								}
@@ -31,8 +32,13 @@ frappe.ui.form.on('Employee Document', {
 					            "fieldname": 'newnumber',
 					            "fieldtype": 'Data',
 
-
 					        },
+							 {
+							   "fieldname": "document",
+							   "fieldtype": "Attach",
+							   "label": "Document",
+							   "reqd": 1
+							  },
 
 					    ],
 					    primary_action_label: 'Submit',
@@ -46,7 +52,8 @@ frappe.ui.form.on('Employee Document', {
 					        	doc:frm.doc,
 					        	args:{
 					        		"date":values.date,
-                                     "newnumber":newnumber
+                                     "newnumber":newnumber,
+									"document":values.document
 					        	}
 					        })
                            d.hide();

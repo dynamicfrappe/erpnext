@@ -29,7 +29,7 @@ class EmployeeDocument(Document):
 				doc.save()
 				frappe.db.commit()
 
-	def RenewDocument(self,date,newnumber):
+	def RenewDocument(self,date,newnumber,document):
 		if not newnumber:
 			newnumber=self.doc_number
 		frappe.db.sql("update `tabEmployee Document` set docstatus=0 where name='{}'".format(self.name))
@@ -40,7 +40,7 @@ class EmployeeDocument(Document):
 		row.satrtdate=self.start_date
 		row.enddtate=self.end_date
 		self.save()
-		frappe.db.sql("update `tabEmployee Document` set start_date='{}' , end_date='{}',doc_number='{}' where name='{}'".format(date,use_date,newnumber,self.name))
+		frappe.db.sql("update `tabEmployee Document` set start_date='{}' , end_date='{}',doc_number='{}',document='{}' where name='{}'".format(date,use_date,newnumber,document,self.name))
 
 
 
