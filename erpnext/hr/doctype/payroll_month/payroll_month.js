@@ -5,6 +5,8 @@ frappe.ui.form.on('Payroll Month', {
 	// refresh: function(frm) {
 
 	// }
+
+
 	onload:function(frm){
 		frappe.call({
 			method: "get_attendance_years",
@@ -15,22 +17,22 @@ frappe.ui.form.on('Payroll Month', {
 			}
 		});
 
-		
+
 
 	},
 
 	refresh: function(frm) {
 	if (frm.doc.docstatus == 1){
-			
+
 				frm.add_custom_button(__("Create Payroll"), function() {
 					frm.events.create_payroll(frm)
-						
+
 					}).addClass("btn-primary");
 		}
 	},
-	
+
 	create_payroll:function(frm){
-		
+
 
 		var dialog = new frappe.ui.Dialog({
 
@@ -61,15 +63,15 @@ frappe.ui.form.on('Payroll Month', {
 					}
 				},
 
-				{	
-					
+				{
+
 					"fieldtype": "Select", "label": __("Payroll"),
 					"fieldname": "payroll_type",
 					"options":[],
 					"reqd": 1,
 				},
-				{	
-					
+				{
+
 					"fieldtype": "Link", "label": __("Department"),
 					"fieldname": "department",
 					"options":'Department',
@@ -80,7 +82,7 @@ frappe.ui.form.on('Payroll Month', {
 					"fieldname": "create_payroll_entry", "cssClass": "btn-primary" },
 			]
 		});
-		
+
 		dialog.fields_dict.create_payroll_entry.$input.click(function() {
 			var args = dialog.get_values();
 			console.log(args.payroll_type)
@@ -106,7 +108,7 @@ frappe.ui.form.on('Payroll Month', {
 	},
 
 	make_payroll_entry: function(frm ,serach,frc ,department) {
-		
+
 		frappe.call({
 				method: "erpnext.hr.doctype.payroll_month.payroll_month.make_payroll_entry",
 				args:{
@@ -115,7 +117,7 @@ frappe.ui.form.on('Payroll Month', {
 			             	"frcv" : frc,
 		                	"department":department
 			                },
-				
+
 				callback:function(r){
 					frappe.set_route("Form", "Multi Payroll", r.message);
 				}
