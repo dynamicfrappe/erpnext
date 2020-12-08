@@ -42,12 +42,33 @@ class Customer(TransactionBase):
 			return "{0} - {1}".format(self.customer_name, cstr(count))
 
 		return self.customer_name
-
+ 
 	def after_insert(self):
 		'''If customer created from Lead, update customer id in quotations, opportunities'''
 		self.update_lead_status()
+	def validate_customer_code(self):
+		data = self.customer_code
+		check_if_exst  = frappe.db.sql("SELECT name FROM `tabCustomer` WHERE customer_code = '%s' "%self.customer_code)
+		if check_if_exst :
+			self.customer_code = data +'-'+ str(self.customer_name)+'-'+'1'
 
 	def validate(self):
+		if not self.customer_code :
+			add_number =frappe.db.sql("""SELECT COUNT(name) FROM `tabCustomer` """)
+			is_selectednaming=frappe.db.get_single_value('Selling Settings', 'auto_add_customer_code')
+			if is_selectednaming==1:
+				whichname=frappe.db.get_single_value('Selling Settings', 'naming')
+				if whichname=="Manual Naming":
+					serializer = frappe.db.get_single_value('Selling Settings', 'serializer')
+					self.customer_code="CUS"+'-'+str(serializer)+'-'+str(add_number[0][0])
+				else:
+					customerGroup=self.customer_group
+					groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup))
+					if groupcode:
+					       self.customer_code="CUS"+'-'+str(groupcode[0][0])+'-'+str(add_number[0][0])
+
+
+			self.validate_customer_code()
 		self.flags.is_new_doc = self.is_new()
 		self.flags.old_lead = self.lead_name
 		validate_party_accounts(self)
@@ -55,8 +76,6 @@ class Customer(TransactionBase):
 		self.set_loyalty_program()
 		self.check_customer_group_change()
 		self.validate_default_bank_account()
-
-		# set loyalty program tier
 		if frappe.db.exists('Customer', self.name):
 			customer = frappe.get_doc('Customer', self.name)
 			if self.loyalty_program == customer.loyalty_program and not self.loyalty_program_tier:

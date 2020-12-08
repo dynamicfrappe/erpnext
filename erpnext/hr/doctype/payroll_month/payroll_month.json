@@ -18,11 +18,13 @@
   "open_user",
   "close_date",
   "close_user",
-  "amended_from",
-  "attendance_month_section",
+  "payroll_data_section",
+  "payroll_records",
+  "attendance_period_section",
   "attendance_start_date",
-  "column_break_16",
-  "attendance_end_date"
+  "column_break_17",
+  "attendance_end_date",
+  "amended_from"
  ],
  "fields": [
   {
@@ -108,9 +110,22 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "attendance_month_section",
+   "fieldname": "payroll_data_section",
    "fieldtype": "Section Break",
-   "label": "Attendance Month"
+   "label": "Payroll Data"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "payroll_records",
+   "fieldtype": "Table",
+   "label": "Payroll records",
+   "options": "Monthly Payroll Records",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attendance_period_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Period"
   },
   {
    "fieldname": "attendance_start_date",
@@ -119,7 +134,7 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_16",
+   "fieldname": "column_break_17",
    "fieldtype": "Column Break"
   },
   {
@@ -130,7 +145,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-08 14:10:20.232929",
+ "modified": "2020-12-08 14:29:48.911607",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Payroll Month",

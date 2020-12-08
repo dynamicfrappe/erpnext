@@ -7,6 +7,7 @@ import frappe
 from frappe.model.document import Document
 from datetime import datetime,date
 from frappe import msgprint, _
+from dateutil.relativedelta import *
 class EmployeeDocument(Document):
 
 	def checkNotification(self):
@@ -27,5 +28,19 @@ class EmployeeDocument(Document):
 				doc.end_date=documents[i]["end_date"]
 				doc.save()
 				frappe.db.commit()
+
+	def RenewDocument(self,date,newnumber,document):
+		if not newnumber:
+			newnumber=self.doc_number
+		frappe.db.sql("update `tabEmployee Document` set docstatus=0 where name='{}'".format(self.name))
+		date_time_obj = datetime.strptime(date,'%Y-%m-%d')
+		use_date = date_time_obj + relativedelta(months=+int(self.docperiod))
+		row=self.append("document_history",{})
+		row.docnumber=self.doc_number
+		row.satrtdate=self.start_date
+		row.enddtate=self.end_date
+		self.save()
+		frappe.db.sql("update `tabEmployee Document` set start_date='{}' , end_date='{}',doc_number='{}',document='{}' where name='{}'".format(date,use_date,newnumber,document,self.name))
+
 
 

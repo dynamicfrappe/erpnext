@@ -73,6 +73,8 @@
   "column_break_60",
   "form_111",
   "form_date",
+  "medical_examination",
+  "medical_examination_date",
   "result_of_the_medical_examination",
   "medical_examination_notes",
   "section_break_65",
@@ -933,16 +935,16 @@
    "depends_on": "eval:doc.form_111 ;",
    "fieldname": "form_date",
    "fieldtype": "Date",
-   "label": "Form Date"
+   "label": "Receved Date"
   },
   {
-   "depends_on": "eval:doc.form_111 ;",
+   "depends_on": "eval:doc.medical_examination;",
    "fieldname": "result_of_the_medical_examination",
    "fieldtype": "Small Text",
    "label": "result of the medical examination"
   },
   {
-   "depends_on": "eval:doc.form_111 ;",
+   "depends_on": "eval:doc.medical_examination ;",
    "fieldname": "medical_examination_notes",
    "fieldtype": "Small Text",
    "label": " medical examination Notes"
@@ -955,12 +957,25 @@
    "fieldname": "arabic_name",
    "fieldtype": "Data",
    "label": "Arabic Name"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.form_111;",
+   "fieldname": "medical_examination",
+   "fieldtype": "Check",
+   "label": "Medical Examination"
+  },
+  {
+   "depends_on": "eval:doc.medical_examination;",
+   "fieldname": "medical_examination_date",
+   "fieldtype": "Date",
+   "label": "Medical Examination Date"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-06 10:55:05.558311",
+ "modified": "2020-12-08 13:11:25.215152",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",

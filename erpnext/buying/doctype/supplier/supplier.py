@@ -37,13 +37,33 @@ class Supplier(TransactionBase):
 			self.name = self.supplier_name
 		else:
 			set_name_by_naming_series(self)
-
 	def on_update(self):
 		if not self.naming_series:
 			self.naming_series = ''
-
+	def validate_supplier_code(self):
+		data = self.supplier_code
+		check_if_exst  = frappe.db.sql("SELECT name FROM `tabSupplier` WHERE supplier_code = '%s' "%self.supplier_code)
+		if check_if_exst :
+			self.supplier_code = data +'-'+ str(self.supplier_name)+'-'+'1'
 	def validate(self):
 		# validation for Naming Series mandatory field...
+		if not self.supplier_code:
+			code_naming = frappe.db.get_single_value('Buying Settings' ,'auto_create_supplier_codes' ) 
+			count_supplier = frappe.db.sql("SELECT  count(name) FROM `tabSupplier` ")
+			if code_naming and not self.supplier_code:
+				check_type = frappe.db.get_single_value('Buying Settings' ,'selet_namig_code_type' ) 
+				if check_type == 'Manual Add':
+					add_type= frappe.db.get_single_value('Buying Settings' ,'serializer' ) 
+					self.supplier_code = 'SUPP' + "-"+str(add_type) +'-'+ str(int(count_supplier[0][0])+1)
+				if check_type == 'Add By Group Code':
+					group = frappe.db.get_doc('Supplier Group',self.supplier_group)
+					code = group.group_code
+					if code :
+						self.supplier_code = 'SUPP' + "-"+str(code) +'-'+str(int(count_supplier[0][0])+1)
+					else :
+						self.supplier_code = 'SUPP' + "-"+str(int(count_supplier[0][0])+1)
+			self.validate_supplier_code()
+		
 		if frappe.defaults.get_global_default('supp_master_name') == 'Naming Series':
 			if not self.naming_series:
 				msgprint(_("Series is mandatory"), raise_exception=1)
@@ -56,3 +76,7 @@ class Supplier(TransactionBase):
 	def after_rename(self, olddn, newdn, merge=False):
 		if frappe.defaults.get_global_default('supp_master_name') == 'Supplier Name':
 			frappe.db.set(self, "supplier_name", newdn)
+
+
+	def check_coding_status(self):
+		return (frappe.db.get_single_value('Buying Settings' ,'auto_create_supplier_codes' ) )
