@@ -10,6 +10,7 @@
   "customer_group_name",
   "group_code",
   "parent_customer_group",
+  "group_code",
   "is_group",
   "cb0",
   "default_price_list",
