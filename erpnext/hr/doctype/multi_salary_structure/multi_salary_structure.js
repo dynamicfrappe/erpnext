@@ -2,7 +2,18 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Multi salary structure', {
-
+       getcomponent:function (frm){
+       	cur_frm.clear_table("component")
+       	  frappe.call({
+			  method:"getAllSalaryStructureComponent",
+			  doc:frm.doc,
+			  callback(r){
+                 if(r.data){
+                 	cur_frm.refresh_fields('component');
+				 }
+			  }
+		  })
+	   },
 
         refresh:function(frm){
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
