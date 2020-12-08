@@ -84,6 +84,7 @@ class Multisalarystructure(Document):
 		row=self.append("history",{})
 		row.component=component
 		row.amount=oldValue
+		row.fromdate=self.from_date
 		self.docstatus=1
 		self.save()
 		frappe.db.sql("update `tabSalary Components` set amount='{}' where componentname='{}' and parent='{}'".format(amount,component,self.name))
