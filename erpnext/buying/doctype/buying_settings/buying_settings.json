@@ -106,7 +106,7 @@
    "options": "Manual Add\nAdd By Group Code"
   },
   {
-   "depends_on": "eval:doc.selet_namig_code_type=='Manual Add' ;",
+   "depends_on": "eval:doc.selet_namig_code_type=='Manual Add' && doc.auto_create_supplier_codes;",
    "fieldname": "serializer",
    "fieldtype": "Data",
    "label": "Serializer"
@@ -115,7 +115,7 @@
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "modified": "2020-12-07 16:58:31.574827",
+ "modified": "2020-12-08 10:05:17.726908",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Buying Settings",
