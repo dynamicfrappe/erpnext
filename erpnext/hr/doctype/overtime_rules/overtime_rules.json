@@ -1,0 +1,45 @@
+{
+ "creation": "2020-12-08 16:28:57.171167",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "from",
+  "to",
+  "factor"
+ ],
+ "fields": [
+  {
+   "fieldname": "from",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "From (Min)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "To (Min)",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "factor",
+   "fieldtype": "Float",
+   "label": "Factor",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-08 17:02:35.926617",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Overtime Rules",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

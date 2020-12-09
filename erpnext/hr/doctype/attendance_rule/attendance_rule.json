@@ -7,9 +7,10 @@
  "field_order": [
   "role_name",
   "working_on_holiday_rate",
-  "column_break_3",
+  "data_3",
   "hour_rate_for_early_in",
   "hour_rate_for_late_out",
+  "section_break_6",
   "permission_rule_section",
   "permission_rule",
   "max_permission_minutes",
@@ -34,7 +35,29 @@
   "basic_salary_component_section",
   "absent_rate",
   "additional_days_salary_component",
-  "overtime_salary_component"
+  "column_break_3",
+  "working_type",
+  "total_working_hours_per_day",
+  "total_working_hours_per_month",
+  "total_working_days_per_month",
+  "overtime_section",
+  "overtime_salary_component",
+  "staying_up_late_salary_component",
+  "morning_overtime_start",
+  "evening_overtime_start",
+  "morning_overtime_factor",
+  "overtime_factor_in_weekend",
+  "calculate_early_in",
+  "column_break_42",
+  "overtime_in_holiday_salary_component",
+  "overtime_in_weekend_salary_component",
+  "morning_overtime_end",
+  "evening_overtime_end",
+  "evening_overtime_factor",
+  "overtime_factor_in_holidays",
+  "deduct_overtime_from_delays",
+  "overtime_rules_section",
+  "overtime_rules"
  ],
  "fields": [
   {
@@ -97,7 +120,8 @@
   },
   {
    "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break",
+   "label": "Monthly Working Hours"
   },
   {
    "fieldname": "max_permission_minutes",
@@ -212,9 +236,147 @@
    "fieldname": "max_permission_minute_per_once",
    "fieldtype": "Float",
    "label": "Max Permission minute per once"
+  },
+  {
+   "fieldname": "data_3",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "working_type",
+   "fieldtype": "Select",
+   "label": "Working_type",
+   "options": "Shift\nTarget Hours",
+   "reqd": 1
+  },
+  {
+   "default": "8",
+   "fieldname": "total_working_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Total Working Hours Per Day",
+   "reqd": 1
+  },
+  {
+   "default": "208",
+   "fieldname": "total_working_hours_per_month",
+   "fieldtype": "Float",
+   "label": "Total Working Hours Per Month",
+   "reqd": 1
+  },
+  {
+   "default": "30",
+   "fieldname": "total_working_days_per_month",
+   "fieldtype": "Float",
+   "label": "Total Working Days Per Month",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime"
+  },
+  {
+   "fieldname": "staying_up_late_salary_component",
+   "fieldtype": "Link",
+   "label": "Staying up late Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "morning_overtime_start",
+   "fieldtype": "Time",
+   "label": "Morning Overtime Start",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evening_overtime_start",
+   "fieldtype": "Time",
+   "label": "Evening Overtime Start",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "morning_overtime_factor",
+   "fieldtype": "Float",
+   "label": "Morning Overtime Factor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_42",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "overtime_in_holiday_salary_component",
+   "fieldtype": "Link",
+   "label": "Overtime in Holiday Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime_in_weekend_salary_component",
+   "fieldtype": "Link",
+   "label": "Overtime in Weekend Salary Component",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "morning_overtime_end",
+   "fieldtype": "Time",
+   "label": "Morning Overtime End",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evening_overtime_end",
+   "fieldtype": "Time",
+   "label": "Evening Overtime End",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evening_overtime_factor",
+   "fieldtype": "Float",
+   "label": "Evening Overtime Factor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime_rules_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime Rules"
+  },
+  {
+   "fieldname": "overtime_rules",
+   "fieldtype": "Table",
+   "label": "Overtime Rules",
+   "options": "Overtime Rules"
+  },
+  {
+   "default": "1",
+   "fieldname": "calculate_early_in",
+   "fieldtype": "Check",
+   "label": "Calculate Early IN "
+  },
+  {
+   "fieldname": "overtime_factor_in_weekend",
+   "fieldtype": "Data",
+   "label": "Overtime factor in Weekend ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime_factor_in_holidays",
+   "fieldtype": "Data",
+   "label": "Overtime factor in Holidays ",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "deduct_overtime_from_delays",
+   "fieldtype": "Check",
+   "label": "Deduct Overtime from Delays"
   }
  ],
- "modified": "2020-12-08 09:20:52.785103",
+ "modified": "2020-12-08 17:01:43.311749",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",

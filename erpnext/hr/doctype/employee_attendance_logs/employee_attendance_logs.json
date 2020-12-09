@@ -21,6 +21,7 @@
   "early_out",
   "late_in",
   "late_out",
+  "total_wrking_hours",
   "reference_type",
   "reference_name",
   "type_number",
@@ -232,10 +233,16 @@
    "label": "Fingerprint Type",
    "options": "\nIN\nOut",
    "read_only": 1
+  },
+  {
+   "fieldname": "total_wrking_hours",
+   "fieldtype": "Time",
+   "label": "Total Wrking Hours",
+   "read_only": 1
   }
  ],
  "in_create": 1,
- "modified": "2020-12-06 15:38:54.130654",
+ "modified": "2020-12-08 16:40:56.016637",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",

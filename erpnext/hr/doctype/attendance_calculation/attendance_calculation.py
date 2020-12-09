@@ -86,10 +86,11 @@ class AttendanceCalculation(Document):
 		doc.name = "Att-{employee}-{date}".format(employee=str(employee) , date = str(day))
 		doc.employee = employee
 		doc.date = day 
-		doc.early_in = 0
-		doc.early_out = 0
-		doc.late_in = 0
-		doc.late_out = 0
+		doc.early_in = ''
+		doc.early_out = ''
+		doc.late_in = ''
+		doc.late_out = ''
+		doc.total_wrking_hours=''
 
 
 		Holidays = None
@@ -306,6 +307,9 @@ class AttendanceCalculation(Document):
 		doc.early_out =  shift.end_time  - OUT
 		doc.late_out = OUT - shift.end_time
 
+
+
+
 		if self.Permissions :
 			for i in self.Permissions:
 				if i.code == 1:
@@ -334,9 +338,29 @@ class AttendanceCalculation(Document):
 		if IN == OUT:
 			doc = self.forget_fingerPrint(doc)
 
-		# Calculate delayes
-		if doc.late_in > timedelta(minutes=0):
-			doc = self.calculate_Delays(doc)
+		employee = frappe.get_doc("Employee", doc.employee)
+		if employee.attendance_role:
+			attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
+
+			if attendance_role.deduct_overtime_from_delays:
+				if doc.late_in.seconds > doc.late_out:
+					doc.late_in -= doc.late_out
+				else:
+					doc.late_out -= doc.late_in
+
+			# Calculate delayes
+			if doc.late_in > timedelta(minutes=0):
+				doc = self.calculate_Delays(doc,employee,attendance_role)
+
+			# Calculate Overtime
+			if doc.late_out > timedelta(minutes=0):
+				doc = self.calculate_overtime(doc,employee,attendance_role)
+		working_in = doc.shift_actual_start or shift.start_time
+		working_out = doc.shift_actual_end or shift.end_time
+		doc.total_wrking_hours = working_out - working_in
+
+
+
 
 
 		doc.insert()
@@ -360,14 +384,13 @@ class AttendanceCalculation(Document):
 		return doc
 
 
-	def calculate_Delays(self,doc):
-		employee = frappe.get_doc("Employee",doc.employee)
+	def calculate_Delays(self,doc,employee , attendance_role):
+		# employee = frappe.get_doc("Employee",doc.employee)
 		doc.late_penality = 0
 		doc.late_factor = 0
-		if  employee.attendance_role:
-			#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
+		#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
 
-			attendance_role = frappe.get_doc("Attendance Rule",employee.attendance_role)
+		if attendance_role.type == "Daily" and working_type == "Shift":
 			if doc.type == "Working On Holiday":
 				if not attendance_role.caclulate_deduction_in_working_on_holiday :
 					return doc
@@ -439,6 +462,8 @@ class AttendanceCalculation(Document):
 
 		return doc
 
+	def calculate_overtime(self,doc,employee,attendance_role):
+		pass
 
 	def check_sal_struct(self,employee):
 		joining_date = employee.date_of_joining or self.from_date
@@ -635,7 +660,7 @@ class AttendanceCalculation(Document):
 				doc.amount = amount
 				doc.salary_component = salary_component
 				doc.employee = employee
-				doc.overwrite_salary_structure_amount = 1
+				doc.overwrite_salary_structure_amount = 0
 				doc.amount_based_on_formula = 0
 				doc.type = component.type
 				doc.payroll_date = self.payroll_effect_date
