@@ -86,10 +86,11 @@ class AttendanceCalculation(Document):
 		doc.name = "Att-{employee}-{date}".format(employee=str(employee) , date = str(day))
 		doc.employee = employee
 		doc.date = day 
-		doc.early_in = 0
-		doc.early_out = 0
-		doc.late_in = 0
-		doc.late_out = 0
+		doc.early_in = ''
+		doc.early_out = ''
+		doc.late_in = ''
+		doc.late_out = ''
+		doc.total_wrking_hours=''
 
 
 		Holidays = None
@@ -306,6 +307,9 @@ class AttendanceCalculation(Document):
 		doc.early_out =  shift.end_time  - OUT
 		doc.late_out = OUT - shift.end_time
 
+
+
+
 		if self.Permissions :
 			for i in self.Permissions:
 				if i.code == 1:
@@ -334,12 +338,45 @@ class AttendanceCalculation(Document):
 		if IN == OUT:
 			doc = self.forget_fingerPrint(doc)
 
-		# Calculate delayes
-		if doc.late_in > timedelta(minutes=0):
-			doc = self.calculate_Delays(doc)
+		working_in = doc.shift_actual_start or shift.start_time
+		working_out = doc.shift_actual_end or shift.end_time
+		doc.total_wrking_hours = working_out - working_in
+
+		employee = frappe.get_doc("Employee", doc.employee)
+		if employee.attendance_role:
+			attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
+			if attendance_role.calculate_early_in:
+				doc.overtime = doc.early_in + doc.late_out
+			else :
+				doc.overtime = doc.late_out
+
+				if attendance_role.deduct_overtime_from_delays:
+
+					if doc.late_in.seconds > doc.overtime.seconds :
+						doc.late_in -= doc.overtime
+					else:
+						doc.overtime -= doc.late_in
+
+
+
+			# Calculate delayes
+			if doc.late_in > timedelta(minutes=0):
+				doc = self.calculate_Delays(doc,employee,attendance_role)
+
+			# Calculate Overtime
+			if employee.enable_overtime and doc.overtime > timedelta(minutes=0):
+				doc = self.calculate_overtime(doc,employee,attendance_role)
+
+
+
+
+
+
 
 
 		doc.insert()
+
+
 	def forget_fingerPrint (self,doc):
 		doc.forget_fingerprint = 1
 		in_min = abs((doc.early_in + doc.late_in).seconds / 60)
@@ -360,14 +397,13 @@ class AttendanceCalculation(Document):
 		return doc
 
 
-	def calculate_Delays(self,doc):
-		employee = frappe.get_doc("Employee",doc.employee)
+	def calculate_Delays(self,doc,employee , attendance_role):
+		# employee = frappe.get_doc("Employee",doc.employee)
 		doc.late_penality = 0
 		doc.late_factor = 0
-		if  employee.attendance_role:
-			#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
+		#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
 
-			attendance_role = frappe.get_doc("Attendance Rule",employee.attendance_role)
+		if attendance_role.type == "Daily" and attendance_role.working_type == "Shift":
 			if doc.type == "Working On Holiday":
 				if not attendance_role.caclulate_deduction_in_working_on_holiday :
 					return doc
@@ -439,6 +475,87 @@ class AttendanceCalculation(Document):
 
 		return doc
 
+	def calculate_overtime(self,doc,employee,attendance_role):
+		overtime_factor = 0
+		overtime_mins = 0
+		if attendance_role.type == "Daily" and attendance_role. working_type == "Shift":
+
+				if doc.type == "Present":
+
+					if attendance_role.max_overtime_hours_per_day:
+						if doc.overtime > timedelta(hours=attendance_role.max_overtime_hours_per_day):
+							doc.overtime = timedelta(hours=attendance_role.max_overtime_hours_per_day)
+					overtime_mins = doc.overtime.seconds /3600
+					if attendance_role.overtime_rules:
+						# calcuate based on rules
+						for i in attendance_role.overtime_rules :
+							if  i.from_min <= overtime_mins <= i.to_min:
+								overtime_factor += overtime_mins * i.factor
+							elif overtime_mins > i.to_min :
+								overtime_factor += i.to_min * i.factor
+								overtime_mins -= i.to_min
+					else :
+						# calculate based on Overtime Law
+						if attendance_role.evening_overtime_start and attendance_role.morning_overtime_start and attendance_role.evening_overtime_end and attendance_role.morning_overtime_end :
+							# OUT = datetime.strptime(doc.shift_actual_end , "%H:%M:%S")
+							OUT = doc.shift_actual_end
+							# attendance_role.evening_overtime_start = datetime.strptime(attendance_role.evening_overtime_start , "%H:%M:%S")
+							# attendance_role.morning_overtime_start = datetime.strptime(attendance_role.morning_overtime_start , "%H:%M:%S")
+							# attendance_role.evening_overtime_end = datetime.strptime(attendance_role.evening_overtime_end , "%H:%M:%S")
+							# attendance_role.morning_overtime_end = datetime.strptime(attendance_role.morning_overtime_end , "%H:%M:%S")
+							if OUT < attendance_role.morning_overtime_end :
+								overtime_factor += (doc.late_out.seconds /60) * attendance_role.morning_overtime_factor
+							else :
+								diff = (doc.late_out.seconds /60) - (OUT - attendance_role.morning_overtime_end).seconds / 60
+								overtime_factor += diff * attendance_role.evening_overtime_factor
+							if attendance_role.calculate_early_in :
+								if doc.early_in.seconds > 0:
+									IN = doc.shift_actual_start
+									# IN = datetime.strptime(doc.shift_actual_start, "%H:%M:%S")
+									if IN:
+										if IN > attendance_role.morning_overtime_start:
+											overtime_factor += (doc.early_in.seconds /60) * attendance_role.evening_overtime_factor
+										else:
+											diff = (doc.early_in.seconds /60) - ( attendance_role.morning_overtime_end - IN).seconds / 60
+											overtime_factor += diff * attendance_role.morning_overtime_factor
+
+
+
+
+
+				elif doc.type == "Working On Holiday":
+
+					if attendance_role.max_overtime_hours_in_holiday:
+						if doc.total_wrking_hours.seconds  /3600 > attendance_role.max_overtime_hours_in_holiday:
+							overtime_mins = attendance_role.max_overtime_hours_in_holiday * 60
+						elif attendance_role.calculate_all_day_in_holiday :
+							if (doc.total_wrking_hours.seconds  /3600) < attendance_role.total_working_hours_per_day:
+								overtime_mins = attendance_role.total_working_hours_per_day * 60
+					if not overtime_mins :
+						overtime_mins = doc.total_wrking_hours.seconds /60
+					if attendance_role.overtime_factor_in_holidays:
+						overtime_factor = overtime_mins *  attendance_role.overtime_factor_in_holidays
+
+				elif doc.type == "Working On Weekend":
+
+					if attendance_role.overtime_factor_in_weekend:
+						if doc.total_wrking_hours.seconds  /3600 > attendance_role.overtime_factor_in_weekend:
+							overtime_mins = attendance_role.max_overtime_hours_in_weekend * 60
+						elif attendance_role.calculate_all_day_in_weekend :
+							if (doc.total_wrking_hours.seconds  /3600) < attendance_role.total_working_hours_per_day:
+								overtime_mins = attendance_role.total_working_hours_per_day * 60
+					if not overtime_mins :
+						overtime_mins = doc.total_wrking_hours.seconds /60
+					if attendance_role.overtime_factor_in_weekend:
+						overtime_factor = overtime_mins *  attendance_role.overtime_factor_in_weekend
+
+
+
+
+
+
+		doc.overtime_factor = overtime_factor or 0
+		return  doc
 
 	def check_sal_struct(self,employee):
 		joining_date = employee.date_of_joining or self.from_date
@@ -635,7 +752,7 @@ class AttendanceCalculation(Document):
 				doc.amount = amount
 				doc.salary_component = salary_component
 				doc.employee = employee
-				doc.overwrite_salary_structure_amount = 1
+				doc.overwrite_salary_structure_amount = 0
 				doc.amount_based_on_formula = 0
 				doc.type = component.type
 				doc.payroll_date = self.payroll_effect_date
