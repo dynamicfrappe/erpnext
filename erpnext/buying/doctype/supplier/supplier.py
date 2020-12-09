@@ -56,7 +56,7 @@ class Supplier(TransactionBase):
 					add_type= frappe.db.get_single_value('Buying Settings' ,'serializer' ) 
 					self.supplier_code = 'SUPP' + "-"+str(add_type) +'-'+ str(int(count_supplier[0][0])+1)
 				if check_type == 'Add By Group Code':
-					group = frappe.db.get_doc('Supplier Group',self.supplier_group)
+					group = frappe.get_doc('Supplier Group',self.supplier_group)
 					code = group.group_code
 					if code :
 						self.supplier_code = 'SUPP' + "-"+str(code) +'-'+str(int(count_supplier[0][0])+1)

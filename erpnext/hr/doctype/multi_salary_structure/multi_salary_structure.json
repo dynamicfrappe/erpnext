@@ -11,16 +11,22 @@
   "department",
   "company",
   "column_break_6",
+  "postingdate",
   "from_date",
   "designation",
   "income_tax_slab",
   "status",
   "section_break_8",
   "salary_structure",
+  "getcomponent",
+  "section_break_13",
+  "component",
   "section_break_7",
   "base",
   "column_break_9",
   "variable",
+  "component_history_section",
+  "history",
   "amended_from"
  ],
  "fields": [
@@ -32,7 +38,7 @@
    "label": "Employee",
    "options": "Employee",
    "reqd": 1,
-   "search_index": 1
+   "unique": 1
   },
   {
    "fetch_from": "employee.employee_name",
@@ -138,10 +144,43 @@
    "label": "Satus",
    "options": "open\nclosed",
    "read_only": 1
+  },
+  {
+   "fieldname": "getcomponent",
+   "fieldtype": "Button",
+   "label": "Get Component"
+  },
+  {
+   "fieldname": "section_break_13",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "component",
+   "fieldtype": "Table",
+   "label": "Component",
+   "options": "Salary Components"
+  },
+  {
+   "fieldname": "component_history_section",
+   "fieldtype": "Section Break",
+   "label": "Component History"
+  },
+  {
+   "fieldname": "history",
+   "fieldtype": "Table",
+   "label": "Component History",
+   "options": "Component History"
+  },
+  {
+   "default": "Today",
+   "fieldname": "postingdate",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-07 15:19:33.076089",
+ "modified": "2020-12-08 17:08:36.674197",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",
