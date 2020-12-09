@@ -49,10 +49,10 @@ class AttendanceCalculation(Document):
 		self.attendances = frappe.db.sql("""
 			select emp.name as employee , Date(log_time) as Day  , MIN(log_time) as 'IN' ,  MAX(log_time) as 'OUT'  from `tabDevice Log`
 			inner join `tabEmployee` emp on emp.attendance_device_id = `tabDevice Log`.enroll_no
-			where emp.name is not null
+			where emp.name is not null and emp.company = '{company}'
 			group by Date(log_time),emp.name  
 			having  Day between '{from_date}' and '{to_date}'
-			""".format(from_date=self.from_date,to_date=self.to_date),as_dict=1)
+			""".format(company=self.company, from_date=self.from_date,to_date=self.to_date),as_dict=1)
 		day = datetime.strptime(self.from_date,'%Y-%m-%d').date()
 		self.to_date = datetime.strptime(self.to_date,'%Y-%m-%d').date()
 		self.from_date = datetime.strptime(self.from_date,'%Y-%m-%d').date()
@@ -91,7 +91,8 @@ class AttendanceCalculation(Document):
 		doc.late_in = ''
 		doc.late_out = ''
 		doc.total_wrking_hours=''
-
+		doc.overtime_mins = ''
+		doc.overtime_factor = 0
 
 		Holidays = None
 		Leaves = None
@@ -345,27 +346,32 @@ class AttendanceCalculation(Document):
 		employee = frappe.get_doc("Employee", doc.employee)
 		if employee.attendance_role:
 			attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
-			if attendance_role.calculate_early_in:
-				doc.overtime = doc.early_in + doc.late_out
-			else :
-				doc.overtime = doc.late_out
+			if doc.type in ["Present","Working On Holiday","Working On Weekend"]:
+				if attendance_role.calculate_early_in:
+					doc.overtime_mins = doc.early_in + doc.late_out
+				else :
+					doc.overtime_mins = doc.late_out
 
-				if attendance_role.deduct_overtime_from_delays:
+					if attendance_role.deduct_overtime_from_delays:
 
-					if doc.late_in.seconds > doc.overtime.seconds :
-						doc.late_in -= doc.overtime
-					else:
-						doc.overtime -= doc.late_in
+						if doc.late_in.seconds > doc.overtime.seconds :
+							doc.late_in -= doc.overtime_mins
+						else:
+							doc.overtime_mins -= doc.late_in
 
 
 
-			# Calculate delayes
-			if doc.late_in > timedelta(minutes=0):
-				doc = self.calculate_Delays(doc,employee,attendance_role)
+				# Calculate delayes
+				if doc.late_in > timedelta(minutes=0):
+					doc = self.calculate_Delays(doc,employee,attendance_role)
 
-			# Calculate Overtime
-			if employee.enable_overtime and doc.overtime > timedelta(minutes=0):
-				doc = self.calculate_overtime(doc,employee,attendance_role)
+				# Calculate Overtime
+				if employee.enable_overtime and doc.overtime_mins > timedelta(minutes=0):
+					doc = self.calculate_overtime(doc,employee,attendance_role)
+			else:
+				# frappe.msgprint(doc.type)
+				doc.overtime_mins = ''
+				doc.overtime_factor = 0
 
 
 
@@ -483,9 +489,9 @@ class AttendanceCalculation(Document):
 				if doc.type == "Present":
 
 					if attendance_role.max_overtime_hours_per_day:
-						if doc.overtime > timedelta(hours=attendance_role.max_overtime_hours_per_day):
-							doc.overtime = timedelta(hours=attendance_role.max_overtime_hours_per_day)
-					overtime_mins = doc.overtime.seconds /3600
+						if doc.overtime_mins > timedelta(hours=attendance_role.max_overtime_hours_per_day):
+							doc.overtime_mins = timedelta(hours=attendance_role.max_overtime_hours_per_day)
+					overtime_mins = doc.overtime_mins.seconds /60
 					if attendance_role.overtime_rules:
 						# calcuate based on rules
 						for i in attendance_role.overtime_rules :
@@ -518,6 +524,7 @@ class AttendanceCalculation(Document):
 										else:
 											diff = (doc.early_in.seconds /60) - ( attendance_role.morning_overtime_end - IN).seconds / 60
 											overtime_factor += diff * attendance_role.morning_overtime_factor
+					# frappe.msgprint(str(overtime_factor))
 
 
 
