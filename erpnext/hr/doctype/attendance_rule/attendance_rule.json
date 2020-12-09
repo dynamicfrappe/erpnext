@@ -365,7 +365,7 @@
   },
   {
    "fieldname": "overtime_factor_in_weekend",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Overtime factor in Weekend ",
    "reqd": 1
   },
@@ -418,7 +418,7 @@
    "label": "Max Overtime hours per Month"
   }
  ],
- "modified": "2020-12-09 11:54:18.046743",
+ "modified": "2020-12-09 13:35:36.090129",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
