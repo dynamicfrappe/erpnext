@@ -2,7 +2,18 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Multi salary structure', {
-
+       getcomponent:function (frm){
+       	cur_frm.clear_table("component")
+       	  frappe.call({
+			  method:"getAllSalaryStructureComponent",
+			  doc:frm.doc,
+			  callback(r){
+                 if(r.data){
+                 	cur_frm.refresh_fields('component');
+				 }
+			  }
+		  })
+	   },
 
         refresh:function(frm){
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
@@ -20,7 +31,7 @@ frappe.ui.form.on('Multi salary structure', {
                        	 
                         
                }).addClass('btn-primary')
-			    frm.add_custom_button(__("Renew"),function(){
+			    frm.add_custom_button(__("Update"),function(){
 			  		 var d = new frappe.ui.Dialog({
 					    title: 'Enter details',
 					    fields: [
@@ -67,7 +78,7 @@ frappe.ui.form.on('Multi salary structure', {
                                 	},
                                     }).then(r=>{
                                     	//console.log(r.message[0][0])
-                                	   d.set_value("value",r.message[0][0])
+                                	   d.set_value("value",r.message.amount)
                                 	})
 					            }	
 
@@ -86,18 +97,23 @@ frappe.ui.form.on('Multi salary structure', {
 					    ],
 					    primary_action_label: 'Submit',
 					    primary_action(values) {
-                            frappe.call({
-					        	method:"RenewDocument",
-					        	doc:frm.doc,
-					        	args:{
-					        		"date":values.date,
-					        		"newValue":values.newValue,
-					        		"salaryStructure":values.salaryStructure,
-					        		"salaryDetails":values.salaryDetails
-					        	}
-					        })	
+
+
+							frappe.call({
+								method:"updateComponentTable",
+								doc:frm.doc,
+								args:{
+									"component":values.salaryDetails,
+									"amount":values.newValue,
+									"oldValue":values.value,
+									"date":values.date
+
+								}
+							})
+
                            d.hide();
-                            frappe.set_route("List", "Multi salary structure");
+							cur_frm.refresh_fields('component');
+                            //frappe.set_route("List", "Multi salary structure");
                            	}
 					});
 
@@ -174,7 +190,7 @@ frappe.ui.form.on('Multi salary structure', {
 				        'salaryStructure':child.salary_structure
 				    },
 				    callback(r) {
-				    	console.log(r.message)
+				    	//console.log(r.message)
 				            if(r.message =='false'){
 				            	frappe.msgprint("existing component")
                                  child.salary_structure=""
@@ -190,6 +206,18 @@ frappe.ui.form.on('Multi salary structure', {
 		})
 	     frappe.ui.form.on("Salary structure Template", "salary_structure", function (frm, cdt, cdn) {
             var child=locals[cdt][cdn]
+             var dict=frm.doc.salary_structure
+			 var count=0;
+			 for(let i=0;i<dict.length;i++){
+
+			 	if(dict[i]['salary_structure']==child.salary_structure){
+			 		count++;
+			 		if(count==2){
+			 		frappe.msgprint("salary structure already exist")
+					child.salary_structure=""
+			 		}
+				}
+			 }
             child.from_date=frm.doc.from_date
             cur_frm.refresh_field("salary_structure");
             
