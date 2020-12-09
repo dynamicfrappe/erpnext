@@ -75,7 +75,7 @@ def get_data():
 		{
 			"module_name": "Projects",
 			"category": "Modules",
-			"label": _("Operations"),
+			"label": _("Projects"),
 			"color": "#3498db",
 			"icon": "icon projects-blue",
 			"type": "module",
