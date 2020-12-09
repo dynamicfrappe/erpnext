@@ -8,15 +8,15 @@ def execute():
 	try:
 		add_warnning_types()
 	except Exception as e:
-		frappe.log_error(message=e.message , title="add_warnning_types")
+		frappe.log_error(message=e , title="add_warnning_types")
 	try:
 		add_Permission_types()
 	except Exception as e:
-		frappe.log_error(message=e.message, title="add_Permission_types")
+		frappe.log_error(message=e, title="add_Permission_types")
 	try:
 		add_penality_types()
 	except Exception as e:
-		frappe.log_error(message=e.message, title="add_penality_types")
+		frappe.log_error(message=e, title="add_penality_types")
 
 
 
