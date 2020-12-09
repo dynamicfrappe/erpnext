@@ -27,12 +27,13 @@
    "default": "0",
    "fieldname": "factor",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Factor",
    "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2020-12-08 17:02:35.926617",
+ "modified": "2020-12-09 09:24:44.154263",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Overtime Rules",
