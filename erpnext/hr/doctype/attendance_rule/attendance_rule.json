@@ -57,7 +57,13 @@
   "overtime_factor_in_holidays",
   "deduct_overtime_from_delays",
   "overtime_rules_section",
-  "overtime_rules"
+  "overtime_rules",
+  "calculate_all_day_in_weekend",
+  "calculate_all_day_in_holiday",
+  "max_overtime_hours_in_holiday",
+  "max_overtime_hours_in_weekend",
+  "max_overtime_hours_per_day",
+  "max_overtime_hours_per_month"
  ],
  "fields": [
   {
@@ -374,9 +380,45 @@
    "fieldname": "deduct_overtime_from_delays",
    "fieldtype": "Check",
    "label": "Deduct Overtime from Delays"
+  },
+  {
+   "default": "0",
+   "fieldname": "calculate_all_day_in_weekend",
+   "fieldtype": "Check",
+   "label": "Calculate all day in weekend"
+  },
+  {
+   "default": "0",
+   "fieldname": "calculate_all_day_in_holiday",
+   "fieldtype": "Check",
+   "label": "Calculate all day in Holiday"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_overtime_hours_in_holiday",
+   "fieldtype": "Float",
+   "label": "Max Overtime hours in Holiday"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_overtime_hours_in_weekend",
+   "fieldtype": "Float",
+   "label": "Max Overtime hours in weekend"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_overtime_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Max Overtime hours per day"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_overtime_hours_per_month",
+   "fieldtype": "Float",
+   "label": "Max Overtime hours per Month"
   }
  ],
- "modified": "2020-12-08 17:01:43.311749",
+ "modified": "2020-12-09 11:54:18.046743",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",

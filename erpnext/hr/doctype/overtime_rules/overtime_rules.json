@@ -4,25 +4,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "from",
-  "to",
+  "from_min",
+  "to_min",
   "factor"
  ],
  "fields": [
-  {
-   "fieldname": "from",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "From (Min)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "to",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "To (Min)",
-   "reqd": 1
-  },
   {
    "default": "0",
    "fieldname": "factor",
@@ -30,10 +16,24 @@
    "in_list_view": 1,
    "label": "Factor",
    "reqd": 1
+  },
+  {
+   "fieldname": "from_min",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "From (Min)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_min",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "To (Min)",
+   "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2020-12-09 09:24:44.154263",
+ "modified": "2020-12-09 11:09:42.477200",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Overtime Rules",

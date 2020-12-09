@@ -341,20 +341,29 @@ class AttendanceCalculation(Document):
 		employee = frappe.get_doc("Employee", doc.employee)
 		if employee.attendance_role:
 			attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
+			if attendance_role.calculate_early_in:
+				doc.overtime = doc.early_in + doc.late_out
+			else :
+				doc.overtime = doc.late_out
 
-			if attendance_role.deduct_overtime_from_delays:
-				if doc.late_in.seconds > doc.late_out:
-					doc.late_in -= doc.late_out
-				else:
-					doc.late_out -= doc.late_in
+				if attendance_role.deduct_overtime_from_delays:
+
+					if doc.late_in.seconds > doc.overtime.seconds :
+						doc.late_in -= doc.overtime
+					else:
+						doc.overtime -= doc.late_in
+
+
 
 			# Calculate delayes
 			if doc.late_in > timedelta(minutes=0):
 				doc = self.calculate_Delays(doc,employee,attendance_role)
 
 			# Calculate Overtime
-			if doc.late_out > timedelta(minutes=0):
-				doc = self.calculate_overtime(doc,employee,attendance_role)
+			# if employee.enable_overtime and doc.overtime > timedelta(minutes=0):
+			# 	doc = self.calculate_overtime(doc,employee,attendance_role)
+
+
 		working_in = doc.shift_actual_start or shift.start_time
 		working_out = doc.shift_actual_end or shift.end_time
 		doc.total_wrking_hours = working_out - working_in
@@ -463,7 +472,30 @@ class AttendanceCalculation(Document):
 		return doc
 
 	def calculate_overtime(self,doc,employee,attendance_role):
-		pass
+
+		if attendance_role.type == "Daily" and working_type == "Shift":
+			if attendance_role.overtime_rules:
+				# calcuate based on rules
+				overtime_factor = 0
+				overtime_mins = doc.overtime.seconds /60
+				if doc.type == "Present":
+					for i in attendance_role.overtime_rules :
+						if  i.from_min <= overtime_mins <= i.to_min:
+							overtime_factor += overtime_mins * i.factor
+						elif overtime_mins > i.to_min :
+							overtime_factor += i.to_min * i.factor
+							overtime_mins -= i.to_min
+				elif doc.type == "Working On Holiday":
+
+					doc.overtime_factor = overtime_factor or 0
+			else:
+				# calculate based on Overtime Law
+				pass
+				# if attendance_role.
+
+
+
+		return  doc
 
 	def check_sal_struct(self,employee):
 		joining_date = employee.date_of_joining or self.from_date
