@@ -69,11 +69,12 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-08 14:07:24.732924",
+ "modified": "2020-12-09 15:11:43.035854",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Calculation",
