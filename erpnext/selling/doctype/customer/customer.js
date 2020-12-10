@@ -64,6 +64,33 @@ frappe.ui.form.on("Customer", {
 			}
 		});
 	},
+	onload:function(frm){
+		frm.events.get_customer_code(frm)
+	},
+	get_customer_code:function(frm){
+		frappe.call({
+			doc:frm.doc,
+			method:"check_coding_status" ,
+			callback:function(r){
+				if (r.message == 1) {
+					frappe.call({
+						doc:frm.doc,
+						method:"set_customer_code" ,
+
+					
+					callback:function(r){
+						console.log(frm.doc.customer_code)
+						frm.set_value("customer_code" ,frm.doc.customer_code)
+						frm.refresh_field("customer_code")
+					}
+				})
+										
+									frm.set_df_property("customer_code" ,"read_only" , "1")}
+									frm.refresh_field("customer_code")
+			}
+
+		})
+	},
 	customer_primary_address: function(frm){
 		if(frm.doc.customer_primary_address){
 			frappe.call({

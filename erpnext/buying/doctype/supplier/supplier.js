@@ -3,13 +3,26 @@
 
 frappe.ui.form.on("Supplier", {
 	onload:function(frm){
+		frm.events.get_supplier_code(frm)
+	},
+	get_supplier_code:function(frm){
 		frappe.call({
 			doc:frm.doc,
 			method:"check_coding_status" ,
 			callback:function(r){
 				if (r.message == 1) {
-					console.log("1")
+					frappe.call({
+						doc:frm.doc,
+						method:"coding_supp" ,
 
+					
+					callback:function(r){
+						console.log(frm.doc.supplier_code)
+						frm.set_value("supplier_code" ,frm.doc.supplier_code)
+						frm.refresh_field("supplier_code")
+					}
+				})
+										
 									frm.set_df_property("supplier_code" ,"read_only" , "1")}
 									frm.refresh_field("supplier_code")
 			}
@@ -77,6 +90,9 @@ frappe.ui.form.on("Supplier", {
 			// indicators
 			erpnext.utils.set_party_dashboard_indicators(frm);
 		}
+	},
+	supplier_group :function(frm){
+		frm.events.get_supplier_code(frm)
 	},
 
 	is_internal_supplier: function(frm) {

@@ -7,9 +7,9 @@
  "document_type": "Setup",
  "engine": "InnoDB",
  "field_order": [
+  "group_code",
   "supplier_group_name",
   "parent_supplier_group",
-  "group_code",
   "is_group",
   "section_credit_limit",
   "payment_terms",
@@ -105,13 +105,14 @@
   {
    "fieldname": "group_code",
    "fieldtype": "Data",
-   "label": "Group Code"
+   "label": "Group Code",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-flag",
  "idx": 1,
  "is_tree": 1,
- "modified": "2020-12-07 17:05:50.962763",
+ "modified": "2020-12-10 11:38:38.745971",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Supplier Group",

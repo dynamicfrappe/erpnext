@@ -3,6 +3,7 @@
 
 frappe.ui.form.on('Multi Payroll', {
 	refresh: function(frm) {
+		
 		if (frm.doc.docstatus == 0 && frm.doc.employees.length == 0) {
 			if(!frm.is_new()) {
 				frm.page.clear_primary_action();
@@ -32,6 +33,7 @@ frappe.ui.form.on('Multi Payroll', {
 		}
 
 	},
+
 	creat_salary_slip:function(frm){
 		return frappe.call({
 			doc: frm.doc,

@@ -10,8 +10,8 @@
  "engine": "InnoDB",
  "field_order": [
   "basic_info",
-  "naming_series",
   "supplier_code",
+  "naming_series",
   "supplier_name",
   "country",
   "default_bank_account",
@@ -383,13 +383,18 @@
   {
    "fieldname": "supplier_code",
    "fieldtype": "Data",
-   "label": "Supplier Code"
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Supplier Code",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 370,
  "image_field": "image",
- "modified": "2020-12-07 16:54:22.735410",
+ "modified": "2020-12-10 12:10:00.589043",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Supplier",

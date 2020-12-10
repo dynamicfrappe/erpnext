@@ -46,8 +46,15 @@ class Supplier(TransactionBase):
 		if check_if_exst :
 			self.supplier_code = data +'-'+ str(self.supplier_name)+'-'+'1'
 	def validate(self):
-		# validation for Naming Series mandatory field...
-		if not self.supplier_code:
+		self.coding_supp()
+			
+		if frappe.defaults.get_global_default('supp_master_name') == 'Naming Series':
+			if not self.naming_series:
+				msgprint(_("Series is mandatory"), raise_exception=1)
+
+		validate_party_accounts(self)
+	def coding_supp(self):
+		if not self.supplier_code and self.supplier_group:
 			code_naming = frappe.db.get_single_value('Buying Settings' ,'auto_create_supplier_codes' ) 
 			count_supplier = frappe.db.sql("SELECT  count(name) FROM `tabSupplier` ")
 			if code_naming and not self.supplier_code:
@@ -63,13 +70,7 @@ class Supplier(TransactionBase):
 					else :
 						self.supplier_code = 'SUPP' + "-"+str(int(count_supplier[0][0])+1)
 			self.validate_supplier_code()
-		
-		if frappe.defaults.get_global_default('supp_master_name') == 'Naming Series':
-			if not self.naming_series:
-				msgprint(_("Series is mandatory"), raise_exception=1)
-
-		validate_party_accounts(self)
-
+		return self.supplier_code
 	def on_trash(self):
 		delete_contact_and_address('Supplier', self.name)
 
