@@ -21,6 +21,7 @@
   "early_out",
   "late_in",
   "late_out",
+  "total_wrking_hours",
   "reference_type",
   "reference_name",
   "type_number",
@@ -32,7 +33,9 @@
   "late_componant",
   "late_minutes",
   "forget_fingerprint",
-  "fingerprint_type"
+  "fingerprint_type",
+  "overtime_mins",
+  "overtime_factor"
  ],
  "fields": [
   {
@@ -196,7 +199,7 @@
   },
   {
    "fieldname": "late_factor",
-   "fieldtype": "Float",
+   "fieldtype": "Time",
    "in_list_view": 1,
    "label": "Late Factor"
   },
@@ -216,7 +219,7 @@
   },
   {
    "fieldname": "late_minutes",
-   "fieldtype": "Float",
+   "fieldtype": "Time",
    "label": "late_minutes",
    "read_only": 1
   },
@@ -232,10 +235,26 @@
    "label": "Fingerprint Type",
    "options": "\nIN\nOut",
    "read_only": 1
+  },
+  {
+   "fieldname": "total_wrking_hours",
+   "fieldtype": "Time",
+   "label": "Total Wrking Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_mins",
+   "fieldtype": "Time",
+   "label": "Overtime mins"
+  },
+  {
+   "fieldname": "overtime_factor",
+   "fieldtype": "Time",
+   "label": "Overtime factor"
   }
  ],
  "in_create": 1,
- "modified": "2020-12-06 15:38:54.130654",
+ "modified": "2020-12-09 16:51:38.689184",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",

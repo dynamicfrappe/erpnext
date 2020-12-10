@@ -49,10 +49,10 @@ class AttendanceCalculation(Document):
 		self.attendances = frappe.db.sql("""
 			select emp.name as employee , Date(log_time) as Day  , MIN(log_time) as 'IN' ,  MAX(log_time) as 'OUT'  from `tabDevice Log`
 			inner join `tabEmployee` emp on emp.attendance_device_id = `tabDevice Log`.enroll_no
-			where emp.name is not null
+			where emp.name is not null and emp.company = '{company}'
 			group by Date(log_time),emp.name  
 			having  Day between '{from_date}' and '{to_date}'
-			""".format(from_date=self.from_date,to_date=self.to_date),as_dict=1)
+			""".format(company=self.company, from_date=self.from_date,to_date=self.to_date),as_dict=1)
 		day = datetime.strptime(self.from_date,'%Y-%m-%d').date()
 		self.to_date = datetime.strptime(self.to_date,'%Y-%m-%d').date()
 		self.from_date = datetime.strptime(self.from_date,'%Y-%m-%d').date()
@@ -86,10 +86,15 @@ class AttendanceCalculation(Document):
 		doc.name = "Att-{employee}-{date}".format(employee=str(employee) , date = str(day))
 		doc.employee = employee
 		doc.date = day 
-		doc.early_in = 0
-		doc.early_out = 0
-		doc.late_in = 0
-		doc.late_out = 0
+		doc.early_in = ''
+		doc.early_out = ''
+		doc.late_in = ''
+		doc.late_out = ''
+		doc.total_wrking_hours=''
+		doc.overtime_mins = ''
+		doc.overtime_factor = 0
+		doc.late_minutes = ''
+		doc.late_factor = ''
 
 
 		Holidays = None
@@ -306,6 +311,9 @@ class AttendanceCalculation(Document):
 		doc.early_out =  shift.end_time  - OUT
 		doc.late_out = OUT - shift.end_time
 
+
+
+
 		if self.Permissions :
 			for i in self.Permissions:
 				if i.code == 1:
@@ -334,12 +342,46 @@ class AttendanceCalculation(Document):
 		if IN == OUT:
 			doc = self.forget_fingerPrint(doc)
 
-		# Calculate delayes
-		if doc.late_in > timedelta(minutes=0):
-			doc = self.calculate_Delays(doc)
+		working_in = doc.shift_actual_start or shift.start_time
+		working_out = doc.shift_actual_end or shift.end_time
+		doc.total_wrking_hours = working_out - working_in
+
+		employee = frappe.get_doc("Employee", doc.employee)
+		if employee.attendance_role:
+			attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
+			if doc.type in ["Present","Working On Holiday","Working On Weekend"]:
+				if attendance_role.calculate_early_in:
+					doc.overtime_mins = doc.early_in + doc.late_out
+				else :
+					doc.overtime_mins = doc.late_out
+
+					if attendance_role.deduct_overtime_from_delays:
+
+						if doc.late_in.seconds > doc.overtime.seconds :
+							doc.late_in -= doc.overtime_mins
+						else:
+							doc.overtime_mins -= doc.late_in
 
 
+
+				# Calculate delayes
+				if doc.late_in > timedelta(minutes=0):
+					doc = self.calculate_Delays(doc,employee,attendance_role)
+
+				# Calculate Overtime
+				if employee.enable_overtime and doc.overtime_mins > timedelta(minutes=0):
+					doc = self.calculate_overtime(doc,employee,attendance_role)
+
+
+			else:
+				# frappe.msgprint(doc.type)
+				doc.overtime_mins = ''
+				doc.overtime_factor = 0
+
+		doc.overtime_factor = timedelta(minutes=doc.overtime_factor)
 		doc.insert()
+
+
 	def forget_fingerPrint (self,doc):
 		doc.forget_fingerprint = 1
 		in_min = abs((doc.early_in + doc.late_in).seconds / 60)
@@ -360,14 +402,13 @@ class AttendanceCalculation(Document):
 		return doc
 
 
-	def calculate_Delays(self,doc):
-		employee = frappe.get_doc("Employee",doc.employee)
+	def calculate_Delays(self,doc,employee , attendance_role):
+		# employee = frappe.get_doc("Employee",doc.employee)
 		doc.late_penality = 0
 		doc.late_factor = 0
-		if  employee.attendance_role:
-			#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
+		#frappe.throw(_("Please Assign Attendance Rule to Employee {}".format(employee.name)))
 
-			attendance_role = frappe.get_doc("Attendance Rule",employee.attendance_role)
+		if attendance_role.type == "Daily" and attendance_role.working_type == "Shift":
 			if doc.type == "Working On Holiday":
 				if not attendance_role.caclulate_deduction_in_working_on_holiday :
 					return doc
@@ -381,7 +422,7 @@ class AttendanceCalculation(Document):
 				if attendance_role.type == 'Daily':
 					# frappe.msgprint(str(attendance_role.late_role_table))
 					late_minutes = doc.late_in.seconds /60
-					doc.late_minutes =late_minutes
+					doc.late_minutes = timedelta(minutes=late_minutes)
 					penality = None
 					for i in attendance_role.late_role_table:
 
@@ -435,10 +476,92 @@ class AttendanceCalculation(Document):
 
 
 
-
-
+		if doc.late_factor:
+			doc.late_factor = timedelta (minutes=doc.late_factor)
 		return doc
 
+	def calculate_overtime(self,doc,employee,attendance_role):
+		overtime_factor = 0
+		overtime_mins = 0
+		if attendance_role.type == "Daily" and attendance_role. working_type == "Shift":
+
+				if doc.type == "Present":
+
+					if attendance_role.max_overtime_hours_per_day:
+						if doc.overtime_mins > timedelta(hours=attendance_role.max_overtime_hours_per_day):
+							doc.overtime_mins = timedelta(hours=attendance_role.max_overtime_hours_per_day)
+					overtime_mins = doc.overtime_mins.seconds /60
+					if attendance_role.overtime_rules:
+						# calcuate based on rules
+						for i in attendance_role.overtime_rules :
+							if  i.from_min <= overtime_mins <= i.to_min:
+								overtime_factor += overtime_mins * i.factor
+							elif overtime_mins > i.to_min :
+								overtime_factor += i.to_min * i.factor
+								overtime_mins -= i.to_min
+					else :
+						# calculate based on Overtime Law
+						if attendance_role.evening_overtime_start and attendance_role.morning_overtime_start and attendance_role.evening_overtime_end and attendance_role.morning_overtime_end :
+							# OUT = datetime.strptime(doc.shift_actual_end , "%H:%M:%S")
+							OUT = doc.shift_actual_end
+							# attendance_role.evening_overtime_start = datetime.strptime(attendance_role.evening_overtime_start , "%H:%M:%S")
+							# attendance_role.morning_overtime_start = datetime.strptime(attendance_role.morning_overtime_start , "%H:%M:%S")
+							# attendance_role.evening_overtime_end = datetime.strptime(attendance_role.evening_overtime_end , "%H:%M:%S")
+							# attendance_role.morning_overtime_end = datetime.strptime(attendance_role.morning_overtime_end , "%H:%M:%S")
+							if OUT < attendance_role.morning_overtime_end :
+								overtime_factor += (doc.late_out.seconds /60) * attendance_role.morning_overtime_factor
+							else :
+								diff = (doc.late_out.seconds /60) - (OUT - attendance_role.morning_overtime_end).seconds / 60
+								overtime_factor += diff * attendance_role.evening_overtime_factor
+							if attendance_role.calculate_early_in :
+								if doc.early_in.seconds > 0:
+									IN = doc.shift_actual_start
+									# IN = datetime.strptime(doc.shift_actual_start, "%H:%M:%S")
+									if IN:
+										if IN > attendance_role.morning_overtime_start:
+											overtime_factor += (doc.early_in.seconds /60) * attendance_role.evening_overtime_factor
+										else:
+											diff = (doc.early_in.seconds /60) - ( attendance_role.morning_overtime_end - IN).seconds / 60
+											overtime_factor += diff * attendance_role.morning_overtime_factor
+					# frappe.msgprint(str(overtime_factor))
+
+
+
+
+
+				elif doc.type == "Working On Holiday":
+
+					if attendance_role.max_overtime_hours_in_holiday:
+						if doc.total_wrking_hours.seconds  /3600 > attendance_role.max_overtime_hours_in_holiday:
+							overtime_mins = attendance_role.max_overtime_hours_in_holiday * 60
+						elif attendance_role.calculate_all_day_in_holiday :
+							if (doc.total_wrking_hours.seconds  /3600) < attendance_role.total_working_hours_per_day:
+								overtime_mins = attendance_role.total_working_hours_per_day * 60
+					if not overtime_mins :
+						overtime_mins = doc.total_wrking_hours.seconds /60
+					if attendance_role.overtime_factor_in_holidays:
+						overtime_factor = overtime_mins *  attendance_role.overtime_factor_in_holidays
+
+				elif doc.type == "Working On Weekend":
+
+					if attendance_role.overtime_factor_in_weekend:
+						if doc.total_wrking_hours.seconds  /3600 > attendance_role.overtime_factor_in_weekend:
+							overtime_mins = attendance_role.max_overtime_hours_in_weekend * 60
+						elif attendance_role.calculate_all_day_in_weekend :
+							if (doc.total_wrking_hours.seconds  /3600) < attendance_role.total_working_hours_per_day:
+								overtime_mins = attendance_role.total_working_hours_per_day * 60
+					if not overtime_mins :
+						overtime_mins = doc.total_wrking_hours.seconds /60
+					if attendance_role.overtime_factor_in_weekend:
+						overtime_factor = overtime_mins *  attendance_role.overtime_factor_in_weekend
+
+
+
+
+
+
+		doc.overtime_factor = overtime_factor or 0
+		return  doc
 
 	def check_sal_struct(self,employee):
 		joining_date = employee.date_of_joining or self.from_date
@@ -469,161 +592,174 @@ class AttendanceCalculation(Document):
 	def post_attendance(self):
 		if self.from_date and self.to_date:
 			sql = """
-				select  employee ,SUM(case when type = "Absent" then 1 else 0 end) as AbsentDays ,
+				select  log.employee ,SUM(case when type = "Absent" then 1 else 0 end) as AbsentDays ,
 			   SUM(case when type = "Working On Holiday" then 1 else 0 end) as working_on_holiday ,
 			  sec_to_time( SUM(time_to_sec(late_in) ) ) as late_in ,
 			  sec_to_time( SUM(time_to_sec(early_out) ) ) as early_out ,
 			  sec_to_time( SUM(time_to_sec(early_in) ) ) as early_in ,
 			  sec_to_time( SUM(time_to_sec(late_out) ) ) as late_out ,
-			  ifnull(SUM(late_factor),0) as late_factor ,
+			  ifnull(SUM(TIME_TO_SEC(late_factor)/60),0) as late_factor ,
+			  ifnull(SUM(case when log.type = "Present" then TIME_TO_SEC(overtime_factor)/60 end),0) as normal_overtime_factor ,
+			  ifnull(SUM(case when log.type = "Working On Holiday" then TIME_TO_SEC(overtime_factor)/60 end),0) as holiday_overtime_factor ,
+			  ifnull(SUM(case when log.type = "Working On Weekend" then TIME_TO_SEC(overtime_factor)/60 end),0) as weekend_overtime_factor ,
+
 			  ifnull(SUM(late_penality),0) as late_penality,
 			  ifnull(SUM(case when forget_fingerprint = 1 and fingerprint_type = "IN" then 1 else 0 end ),0) as forget_fingerprint_in,
 			  ifnull(SUM(case when forget_fingerprint = 1 and fingerprint_type = "Out" then 1 else 0 end ),0) as forget_fingerprint_out
-				from `tabEmployee Attendance Logs`
-				where date(date) between  date('{start_date}')
-				and docstatus = 1 and is_calculated = 1
-				and date('{end_date}') group by  employee
+				from `tabEmployee Attendance Logs` log
+				Left Join tabEmployee e on e.name = log.employee
+				where date( log.date) between  date('{start_date}') and date('{end_date}') 
+				/*and  log.docstatus = 0 and  log.is_calculated = 0*/
+				
+				and e.company = '{company}'
+				
+				group by  employee
 				;
-			""".format( start_date = self.from_date , end_date = self.to_date )
+			""".format(company = self.company, start_date = self.from_date , end_date = self.to_date )
 			attendances = frappe.db.sql(sql ,as_dict=1)
 			if attendances :
 				for attendance in attendances:
 					employee = frappe.get_doc("Employee", attendance.employee)
-					self.check_sal_struct(employee)
-					if not getattr(self, '_salary_structure_doc', None) and  getattr(self, 'salary_structure', None):
-						self._salary_structure_doc = frappe.get_doc('Salary Structure', self.salary_structure)
-					if getattr(self, '_salary_structure_doc', None) :
-						total_hourly_salary = 0
-						for item in self._salary_structure_doc.get(
-								"earnings"):  # if not (len(self.get("earnings")) or len(self.get("deductions"))):
-							salary_compnent = frappe.get_doc("Salary Component", item.salary_component)
-							if salary_compnent:
-								if salary_compnent.consider_in_hour_rate and salary_compnent.type == "Earning" and item.amount:
-									total_hourly_salary += item.amount
-						total_working_days =  frappe.db.get_single_value("HR Settings","total_working_days")
-						total_working_hours_per_day =employee.total_working_hours_per_day
-						if not total_working_hours_per_day:
-							frappe.msgprint(
-								_("Please Set The Total Working Hours in Employee {}".format(employee)), title='Error',
-								indicator='red')
-						self.daily_rate = total_hourly_salary / (total_working_days)
-						self.hour_rate = self.daily_rate / total_working_hours_per_day
+					if employee.attendance_role:
+						attendance_role = frappe.get_doc("Attendance Rule", employee.attendance_role)
+						self.check_sal_struct(employee)
+						if not getattr(self, '_salary_structure_doc', None) and  getattr(self, 'salary_structure', None):
+							self._salary_structure_doc = frappe.get_doc('Salary Structure', self.salary_structure)
+						if getattr(self, '_salary_structure_doc', None) :
+							total_hourly_salary = 0
+							for item in self._salary_structure_doc.get(
+									"earnings"):  # if not (len(self.get("earnings")) or len(self.get("deductions"))):
+								salary_compnent = frappe.get_doc("Salary Component", item.salary_component)
+								if salary_compnent:
+									if salary_compnent.consider_in_hour_rate and salary_compnent.type == "Earning" and item.amount:
+										total_hourly_salary += item.amount
+							total_working_days =  attendance_role.total_working_days_per_month
+							total_working_hours_per_day =attendance_role.total_working_hours_per_day
+							total_working_hours_per_month =attendance_role.total_working_hours_per_month
+							if not total_working_hours_per_day:
+								frappe.msgprint(
+									_("Please Set The Total Working Hours in Employee {}".format(employee)), title='Error',
+									indicator='red')
+							self.daily_rate = total_hourly_salary / (total_working_days)
+							self.hour_rate = self.daily_rate / total_working_hours_per_day
 
-						# Over Time
-						overtime_salary_component_name = frappe.db.get_single_value("HR Settings" , "overtime_salary_component")
-						overtime_salary_component = frappe.get_doc("Salary Component"  , overtime_salary_component_name)
-						late_out_rate = frappe.db.get_single_value("HR Settings" , "late_out_rate")
-						early_in_rate = frappe.db.get_single_value("HR Settings" , "early_in_rate")
-						if overtime_salary_component and late_out_rate and early_in_rate :
-								# overtime_factor = int(attendance.AbsentDays) * self.daily_rate
-								early_in_Hours =  (attendance.early_in.seconds)/3600
-								late_out_Hours =  (attendance.late_out.seconds)/3600
-								overtime_factor = ((late_out_Hours * late_out_rate )/total_working_hours_per_day ) + ((early_in_Hours* early_in_rate)/total_working_hours_per_day)
-								overtime_amount = overtime_factor * self.daily_rate
-								if overtime_amount :
-									desc = 'Overtime value : ' + str (overtime_factor)
-									self.submit_Additional_salary(employee.name, overtime_salary_component_name ,overtime_amount, desc )
-						#Delays
+							# Over Time Normal
+							overtime_salary_component = attendance_role.overtime_salary_component
+							weekend_overtime_salary_component = attendance_role.overtime_in_weekend_salary_component
+							holiday_overtime_salary_component = attendance_role.overtime_in_holiday_salary_component
+							present_overtime_amount = 0
+							holiday_overtime_amount = 0
+							weekend_overtime_amount = 0
+							if attendance_role.working_type == "Shift" and attendance_role.type == "Daily" :
+									# overtime_factor = int(attendance.AbsentDays) * self.daily_rate
+									if attendance_role.max_overtime_hours_per_month :
+										if attendance_role.max_overtime_hours_per_month < (attendance.normal_overtime_factor /60):
+											attendance.normal_overtime_factor = attendance_role.max_overtime_hours_per_month * 60
+									present_overtime_amount = (attendance.normal_overtime_factor/60) * self.hour_rate
+									holiday_overtime_amount = (attendance.holiday_overtime_factor/60) * self.hour_rate
+									weekend_overtime_amount = (attendance.weekend_overtime_factor/60) * self.hour_rate
 
+									if present_overtime_amount and overtime_salary_component :
+										desc = 'Normal Overtime value : ' + str (attendance.normal_overtime_factor)
+										self.submit_Additional_salary(employee.name, overtime_salary_component ,present_overtime_amount, desc )
+									if holiday_overtime_amount and hokiday_overtime_salary_component :
+										desc = 'Normal Overtime value : ' + str (attendance.holiday_overtime_factor)
+										self.submit_Additional_salary(employee.name, holiday_overtime_salary_component ,holiday_overtime_amount, desc )
+									if weekend_overtime_amount and hokiday_overtime_salary_component :
+										desc = 'Normal Overtime value : ' + str (attendance.weekend_overtime_factor)
+										self.submit_Additional_salary(employee.name, weekend_overtime_salary_component ,weekend_overtime_amount, desc )
 
-						early_out_Hours =  (attendance.early_out.seconds)/3600
-						late_in_Hours =  (attendance.late_in.seconds)/3600
-						# delays_factor =  ((early_out_Hours* early_out_rate)/total_working_hours_per_day)
+							elif attendance_role.working_type == "Target Hours" and attendance_role.type == "Monthly":
+								pass
 
-						# delays_amount = delays_factor * self.daily_rate
-						penality_amount = 0
-						late_amount = 0
-						penality_factor = 0
-						late_factor = 0
-						if employee.attendance_role:
-							attendance_role = frappe.get_doc("Attendance Rule" , employee.attendance_role)
-							if attendance_role.type:
-								if attendance_role.type == "Daily":
-									penality_amount = (attendance.late_penality * self.daily_rate) or 0
-									late_factor = attendance.late_factor * (attendance_role.late_penalty_factor_by_date or 0)
-									late_amount = (late_factor * self.hour_rate ) or 0
+							#Delays
+							early_out_Hours =  (attendance.early_out.seconds)/3600
+							late_in_Hours =  (attendance.late_in.seconds)/3600
+							# delays_factor =  ((early_out_Hours* early_out_rate)/total_working_hours_per_day)
 
-								elif attendance_role.type == "Monthly":
+							# delays_amount = delays_factor * self.daily_rate
+							penality_amount = 0
+							late_amount = 0
+							penality_factor = 0
+							late_factor = 0
+							if employee.attendance_role:
+								attendance_role = frappe.get_doc("Attendance Rule" , employee.attendance_role)
+								if attendance_role.type:
+									if attendance_role.type == "Daily":
+										penality_amount = (attendance.late_penality * self.daily_rate) or 0
+										late_factor = attendance.late_factor * (attendance_role.late_penalty_factor_by_date or 0)
+										late_amount = (late_factor * self.hour_rate ) or 0
 
-									late_minutes = (attendance.late_in.seconds / 60) or 0
-									penality = None
-									for i in attendance_role.late_role_table:
-										if i.from_min <= late_minutes:
-											penality = i
+									elif attendance_role.type == "Monthly":
 
-									if penality:
+										late_minutes = (attendance.late_in.seconds / 60) or 0
+										penality = None
+										for i in attendance_role.late_role_table:
+											if i.from_min <= late_minutes:
+												penality = i
 
-										penality_factor = penality.level_onefactor * penality.factor
-										penality_amount = (penality_factor  * self.daily_rate) or 0
+										if penality:
 
-										late_factor = 0
-										if penality.add_deduction:
-											if penality.deduction_factor:
-												late_factor = (penality.deduction_factor * attendance_role.late_penalty_factor_by_date) or 0
-											else:
-												late_factor = ((attendance.late_in.seconds / 60)* attendance_role.late_penalty_factor_by_date) or 0
-										late_amount = late_factor * self.daily_rate
+											penality_factor = penality.level_onefactor * penality.factor
+											penality_amount = (penality_factor  * self.daily_rate) or 0
 
-							if attendance_role.salary_componat_for_late and late_amount:
-								desc = 'Delays : ' + str(late_factor)
-								self.submit_Additional_salary(employee.name, attendance_role.salary_componat_for_late,late_amount, desc)
-
-							if attendance_role.salary_component_for_late_penalty and penality_amount  :
-								desc = 'Delays Penality: ' + str(penality_factor)
-								self.submit_Additional_salary(employee.name, attendance_role.salary_component_for_late_penalty,penality_amount, desc)
-
-							# forget finger print
-							fingerprint_factor_in = attendance_role.fingerprint_forgetten_in_penality or 0
-							fingerprint_amount = (fingerprint_factor_in * attendance.forget_fingerprint_in * self.daily_rate ) or 0
-							fingerprint_factor_out = attendance_role.fingerprint_forgetten_out_penality or 0
-							fingerprint_amount += (fingerprint_factor_out * attendance.forget_fingerprint_out * self.daily_rate) or 0
-							if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
-								desc = 'Fingerprint IN forgetten times: ' + str(fingerprint_factor_in)
-								desc += '\nFingerprint OUT forgetten times: ' + str(fingerprint_factor_out)
-								self.submit_Additional_salary(employee.name,attendance_role.fingerprint_forgetten_penlaity_salary_component,fingerprint_amount, desc)
-
-							# Absents Days
-							absent_rate = frappe.db.get_single_value("HR Settings", "absent_rate") or 0
-							absents_salary_component = attendance_role.absent__component
-							abset_penalty_component = attendance_role.abset_penalty_component
-
-							if attendance_role.absent_rules  :
-									absent_rule = frappe.get_doc("Absent Rules", attendance_role.absent_rules)
-									if absent_rule.senario == 'Deduction from Salary':
-										self.absent_days = int(attendance.AbsentDays)
-										absent_rate = 0
-										absent_penality_rate = 0
-										flag = 1
-										if absent_rule.ruletemplate :
-											for i in range (1,self.absent_days+1):
-												if len(absent_rule.ruletemplate) >= i :
-													absent_rate += absent_rule.ruletemplate[i-1].deduction
-													absent_penality_rate += absent_rule.ruletemplate[i-1].penality
+											late_factor = 0
+											if penality.add_deduction:
+												if penality.deduction_factor:
+													late_factor = (penality.deduction_factor * attendance_role.late_penalty_factor_by_date) or 0
 												else:
-													absent_rate += absent_rule.ruletemplate[-1].deduction
-													absent_penality_rate += absent_rule.ruletemplate[-1].penality
-										absent_amount = absent_rate  * self.daily_rate
-										absent_penality_amount = absent_penality_rate *   self.daily_rate
-										if absent_amount:
-											desc = '\nAbsent Days Factor: ' + str(absent_rate)
-											self.submit_Additional_salary(employee.name,absents_salary_component,absent_amount, desc)
-										if absent_penality_amount:
-											desc = '\nAbsent Days Penaliteies: ' + str(absent_penality_rate)
-											self.submit_Additional_salary(employee.name, abset_penalty_component,absent_penality_amount, desc)
+													late_factor = ((attendance.late_in.seconds / 60)* attendance_role.late_penalty_factor_by_date) or 0
+											late_amount = late_factor * self.daily_rate
+
+								if attendance_role.salary_componat_for_late and late_amount:
+									desc = 'Delays : ' + str(late_factor)
+									self.submit_Additional_salary(employee.name, attendance_role.salary_componat_for_late,late_amount, desc)
+
+								if attendance_role.salary_component_for_late_penalty and penality_amount  :
+									desc = 'Delays Penality: ' + str(penality_factor)
+									self.submit_Additional_salary(employee.name, attendance_role.salary_component_for_late_penalty,penality_amount, desc)
+
+
+								# forget finger print
+								fingerprint_factor_in = attendance_role.fingerprint_forgetten_in_penality or 0
+								fingerprint_amount = (fingerprint_factor_in * attendance.forget_fingerprint_in * self.daily_rate ) or 0
+								fingerprint_factor_out = attendance_role.fingerprint_forgetten_out_penality or 0
+								fingerprint_amount += (fingerprint_factor_out * attendance.forget_fingerprint_out * self.daily_rate) or 0
+								if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
+									desc = 'Fingerprint IN forgetten times: ' + str(fingerprint_factor_in)
+									desc += '\nFingerprint OUT forgetten times: ' + str(fingerprint_factor_out)
+									self.submit_Additional_salary(employee.name,attendance_role.fingerprint_forgetten_penlaity_salary_component,fingerprint_amount, desc)
 
 
 
-							# Worhing On Holiday
-							working_holiday_rate = attendance_role.working_on_holiday_rate or 0
-							additional_days_salary_component_name = attendance_role.additional_days_salary_component or None
-							if additional_days_salary_component_name and working_holiday_rate:
-								self.adding_days = int(attendance.working_on_holiday)
-								add_days_amount = working_holiday_rate * int(attendance.working_on_holiday) * self.daily_rate
-								if add_days_amount:
-									# frappe.msgprint("str(additional_days_salary_component)")
-									# frappe.msgprint(str(additional_days_salary_component))
-									desc = 'Addiotinal Days : ' + str(attendance.working_on_holiday)
-									self.submit_Additional_salary(employee.name, additional_days_salary_component_name, add_days_amount, desc)
+								# Absents Days
+								absent_rate = frappe.db.get_single_value("HR Settings", "absent_rate") or 0
+								absents_salary_component = attendance_role.absent__component
+								abset_penalty_component = attendance_role.abset_penalty_component
+
+								if attendance_role.absent_rules  :
+										absent_rule = frappe.get_doc("Absent Rules", attendance_role.absent_rules)
+										if absent_rule.senario == 'Deduction from Salary':
+											self.absent_days = int(attendance.AbsentDays)
+											absent_rate = 0
+											absent_penality_rate = 0
+											flag = 1
+											if absent_rule.ruletemplate :
+												for i in range (1,self.absent_days+1):
+													if len(absent_rule.ruletemplate) >= i :
+														absent_rate += absent_rule.ruletemplate[i-1].deduction
+														absent_penality_rate += absent_rule.ruletemplate[i-1].penality
+													else:
+														absent_rate += absent_rule.ruletemplate[-1].deduction
+														absent_penality_rate += absent_rule.ruletemplate[-1].penality
+											absent_amount = absent_rate  * self.daily_rate
+											absent_penality_amount = absent_penality_rate *   self.daily_rate
+											if absent_amount:
+												desc = '\nAbsent Days Factor: ' + str(absent_rate)
+												self.submit_Additional_salary(employee.name,absents_salary_component,absent_amount, desc)
+											if absent_penality_amount:
+												desc = '\nAbsent Days Penaliteies: ' + str(absent_penality_rate)
+												self.submit_Additional_salary(employee.name, abset_penalty_component,absent_penality_amount, desc)
 
 	def submit_Additional_salary(self, employee, salary_component, amount, desc):
 		last_doc = frappe.db.get_value('Additional Salary', { "salary_component":salary_component , "employee":employee ,"attendance_calculation" : self.name}, ['name'])
@@ -635,7 +771,7 @@ class AttendanceCalculation(Document):
 				doc.amount = amount
 				doc.salary_component = salary_component
 				doc.employee = employee
-				doc.overwrite_salary_structure_amount = 1
+				doc.overwrite_salary_structure_amount = 0
 				doc.amount_based_on_formula = 0
 				doc.type = component.type
 				doc.payroll_date = self.payroll_effect_date

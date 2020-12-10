@@ -73,6 +73,15 @@ def get_data():
 			"description": "Accounts, billing, payments, cost center and budgeting."
 		},
 		{
+			"module_name": "Projects",
+			"category": "Modules",
+			"label": _("Projects"),
+			"color": "#3498db",
+			"icon": "icon projects-blue",
+			"type": "module",
+			"description": "Projects."
+		},
+		{
 			"module_name": "CRM",
 			"category": "Modules",
 			"label": _("CRM"),

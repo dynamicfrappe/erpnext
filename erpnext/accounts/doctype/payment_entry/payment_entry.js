@@ -445,6 +445,14 @@ frappe.ui.form.on('Payment Entry', {
 					},
 					callback: function(r, rt) {
 						frm.set_value("source_exchange_rate", r.message);
+						if (r.message > 1)
+						{
+							frm.doc.paid_amount = frm.doc.paid_amount / r.message;
+						}else {
+							rm.doc.paid_amount = frm.doc.paid_amount * r.message;
+						}
+							refresh_field("paid_amount");
+
 					}
 				})
 			} else {
@@ -481,6 +489,7 @@ frappe.ui.form.on('Payment Entry', {
 	},
 
 	source_exchange_rate: function(frm) {
+
 		if (frm.doc.paid_amount) {
 			frm.set_value("base_paid_amount", flt(frm.doc.paid_amount) * flt(frm.doc.source_exchange_rate));
 			if(!frm.set_paid_amount_based_on_received_amount &&
@@ -518,6 +527,7 @@ frappe.ui.form.on('Payment Entry', {
 	},
 
 	paid_amount: function(frm) {
+
 		frm.set_value("base_paid_amount", flt(frm.doc.paid_amount) * flt(frm.doc.source_exchange_rate));
 		frm.trigger("reset_received_amount");
 		frm.events.hide_unhide_fields(frm);
