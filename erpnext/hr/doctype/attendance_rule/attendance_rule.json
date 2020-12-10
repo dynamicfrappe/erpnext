@@ -60,7 +60,12 @@
   "calculate_all_day_in_weekend",
   "max_overtime_hours_in_holiday",
   "max_overtime_hours_per_month",
-  "amended_from"
+  "amended_from",
+  "less_time_setting_section",
+  "less_time_salary_component",
+  "less_rules",
+  "column_break_60",
+  "less_time_factor"
  ],
  "fields": [
   {
@@ -408,10 +413,36 @@
   {
    "fieldname": "column_break_6",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "less_time_setting_section",
+   "fieldtype": "Section Break",
+   "label": "Less Time Setting"
+  },
+  {
+   "fieldname": "less_time_salary_component",
+   "fieldtype": "Link",
+   "label": "Less Time Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "less_time_factor",
+   "fieldtype": "Data",
+   "label": "Less Time Factor"
+  },
+  {
+   "fieldname": "less_rules",
+   "fieldtype": "Table",
+   "label": "Less Factor Rules",
+   "options": "Less Factor Table"
+  },
+  {
+   "fieldname": "column_break_60",
+   "fieldtype": "Column Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 13:48:57.712854",
+ "modified": "2020-12-10 14:47:51.650789",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
