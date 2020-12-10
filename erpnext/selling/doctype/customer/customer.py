@@ -50,7 +50,7 @@ class Customer(TransactionBase):
 		data = self.customer_code
 		check_if_exst  = frappe.db.sql("SELECT name FROM `tabCustomer` WHERE customer_code = '%s' "%self.customer_code)
 		if check_if_exst :
-			self.customer_code = data +'-'+ str(self.customer_name)+'-'+'1'
+			self.customer_code = data +'-'+'1'
 
 	def validate(self):
 		self.set_customer_code()
@@ -70,7 +70,7 @@ class Customer(TransactionBase):
 			if sum([member.allocated_percentage or 0 for member in self.sales_team]) != 100:
 				frappe.throw(_("Total contribution percentage should be equal to 100"))
 	def set_customer_code(self):
-		if not self.customer_code and self.customer_group:
+		if self.customer_group:
 			add_number =frappe.db.sql("""SELECT COUNT(name) FROM `tabCustomer` """)
 			
 			if  self.check_coding_status():
@@ -79,10 +79,16 @@ class Customer(TransactionBase):
 					serializer = frappe.db.get_single_value('Selling Settings', 'serializer')
 					self.customer_code="CUST"+'-'+str(serializer)+'-'+str(add_number[0][0])
 				else:
-					customerGroup=self.customer_group
-					groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup))
+					customerGroup=frappe.get_doc("Customer Group" ,self.customer_group )
+					# groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup))
+					groupcode = customerGroup.group_code
 					if groupcode:
-					       self.customer_code="CUST"+'-'+str(groupcode[0][0])+'-'+str(add_number[0][0])
+					   
+						customer_code =  'CUST' + "-" +str(groupcode) 
+						self.customer_code =self.check_customer_code( customer_code)
+						# frappe.throw(str(groupcode))
+					else:
+						 self.customer_code =  'CUST' + "-"+str(add_number[0][0]) 
 
 
 			self.validate_customer_code()
@@ -90,6 +96,19 @@ class Customer(TransactionBase):
 
 	def check_coding_status(self):
 		return (frappe.db.get_single_value('Selling Settings', 'auto_add_customer_code') )
+
+	def check_customer_code(self ,code):
+		strin = "'%" +str(code) + "%'"
+		last = frappe.db.sql(""" 
+		 SELECT customer_code FROM `tabCustomer`  WHERE customer_code like %s  ORDER BY creation desc limit 1 """ %strin)
+		if last :
+			number_list = last[0][0].split('-')
+			numer = int(number_list[-1]) + 1
+			return str(code) + "-" + str(numer)
+		else :
+			numer = code + "-"+"1"
+			
+			return  numer
 	def check_customer_group_change(self):
 
 		frappe.flags.customer_group_changed = False
