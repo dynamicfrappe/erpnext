@@ -701,13 +701,13 @@ class AttendanceCalculation(Document):
 									weekend_overtime_amount = (attendance.weekend_overtime_factor/60) * self.hour_rate
 
 									if present_overtime_amount and overtime_salary_component :
-										desc = 'Normal Overtime value : ' + str (attendance.normal_overtime_factor)
+										desc = _('Normal Overtime value : {} '.format(str (timedelta (minutes=attendance.normal_overtime_factor))))
 										self.submit_Additional_salary(employee.name, overtime_salary_component ,present_overtime_amount, desc , "Normal Overtime" )
 									if holiday_overtime_amount and hokiday_overtime_salary_component :
-										desc = 'Holiday Overtime value : ' + str (attendance.holiday_overtime_factor)
+										desc = _('Holiday Overtime value : {} '.format(str (timedelta (minutes=attendance.holiday_overtime_factor))))
 										self.submit_Additional_salary(employee.name, holiday_overtime_salary_component ,holiday_overtime_amount, desc , "Holiday Overtime" )
 									if weekend_overtime_amount and holiday_overtime_salary_component :
-										desc = 'Week Overtime value : ' + str (attendance.weekend_overtime_factor)
+										desc = _('Weekend Overtime value : {} '.format(str (timedelta(minutes=attendance.weekend_overtime_factor))))
 										self.submit_Additional_salary(employee.name, weekend_overtime_salary_component ,weekend_overtime_amount, desc ,"Weekend Overtime")
 
 							elif attendance_role.working_type == "Target Hours":
@@ -723,7 +723,7 @@ class AttendanceCalculation(Document):
 
 								present_overtime_amount = overtime_factor * self.hour_rate
 								if present_overtime_amount and overtime_salary_component:
-									desc = 'Normal Overtime value : ' + str(attendance.normal_overtime_factor)
+									desc = _('Normal Overtime value : {} '.format(str(timedelta(minutes= attendance.normal_overtime_factor_))))
 									self.submit_Additional_salary(employee.name, overtime_salary_component,
 																  present_overtime_amount, desc, "Normal Overtime")
 							# less time
@@ -761,7 +761,7 @@ class AttendanceCalculation(Document):
 							if attendance_role.working_type == "Shift" :
 								if attendance_role.type == "Daily":
 									penality_amount = (attendance.late_penality * self.daily_rate) or 0
-									late_factor = attendance.late_factor * (attendance_role.late_penalty_factor_by_date or 0)
+									late_factor = attendance.late_factor * (attendance_role.late_penalty_factor_by_date or 0) /60
 									late_amount = (late_factor * self.hour_rate ) or 0
 
 								elif attendance_role.type == "Monthly":
@@ -787,11 +787,11 @@ class AttendanceCalculation(Document):
 
 
 							if attendance_role.salary_componat_for_late and late_amount:
-								desc = 'Delays : ' + str(late_factor)
+								desc = _('Delays : {} ' .format(str(timedelta(hours=late_factor))))
 								self.submit_Additional_salary(employee.name, attendance_role.salary_componat_for_late,late_amount, desc , 'Delays')
 
 							if attendance_role.salary_component_for_late_penalty and penality_amount  :
-								desc = 'Delays Penality: ' + str(penality_factor)
+								desc = _('Delays Penality:  {} '.format(str( timedelta(days=penality_factor))))
 								self.submit_Additional_salary(employee.name, attendance_role.salary_component_for_late_penalty,penality_amount, desc , 'Delays Penality')
 
 
@@ -801,8 +801,8 @@ class AttendanceCalculation(Document):
 							fingerprint_factor_out = attendance_role.fingerprint_forgetten_out_penality or 0
 							fingerprint_amount += (fingerprint_factor_out * attendance.forget_fingerprint_out * self.daily_rate) or 0
 							if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
-								desc = 'Fingerprint IN forgetten times: ' + str(fingerprint_factor_in)
-								desc += '\nFingerprint OUT forgetten times: ' + str(fingerprint_factor_out)
+								desc = _('Fingerprint IN forgetten times: {} '.format(str(fingerprint_factor_in)))
+								desc += '\n' + _('Fingerprint OUT forgetten times: '.format(str(fingerprint_factor_out)))
 								self.submit_Additional_salary(employee.name,attendance_role.fingerprint_forgetten_penlaity_salary_component,fingerprint_amount, desc , 'Fingerprint Penality')
 
 
@@ -830,10 +830,10 @@ class AttendanceCalculation(Document):
 										absent_amount = absent_rate  * self.daily_rate
 										absent_penality_amount = absent_penality_rate *   self.daily_rate
 										if absent_amount:
-											desc = '\nAbsent Days Factor: ' + str(absent_rate)
+											desc = _('Absent Days Factor: '.format(str(timedelta(days=absent_rate))))
 											self.submit_Additional_salary(employee.name,absents_salary_component,absent_amount, desc,'Absent Days')
 										if absent_penality_amount:
-											desc = '\nAbsent Days Penaliteies: ' + str(absent_penality_rate)
+											desc = _('Absent Days Penaliteies: '.format(str(timedelta(days=absent_penality_rate))))
 											self.submit_Additional_salary(employee.name, abset_penalty_component,absent_penality_amount, desc,'Absent Days Penaliteies')
 
 
