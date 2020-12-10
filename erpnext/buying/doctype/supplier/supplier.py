@@ -42,22 +42,27 @@ class Supplier(TransactionBase):
 			self.naming_series = ''
 	def validate_supplier_code(self):
 		data = self.supplier_code
-		check_if_exst  = frappe.db.sql("SELECT name FROM `tabSupplier` WHERE supplier_code = '%s' "%self.supplier_code)
+		check_if_exst  = frappe.db.sql("SELECT name FROM `tabSupplier` WHERE supplier_code = '%s' AND name != '%s'"%(self.supplier_code ,self.name))
 		if check_if_exst :
-			self.supplier_code = data +'-'+ str(self.supplier_name)+'-'+'1'
+			number_list = self.supplier_code.split('-')
+			number_list[-1] = int(number_list[-1]) + 1
+			self.supplier_code = ''
+			for i in number_list :
+				self.supplier_code +=  str(i)
 	def validate(self):
-		self.coding_supp()
-			
+		if not self.supplier_code :
+			self.coding_supp()
+		self.validate_supplier_code()
 		if frappe.defaults.get_global_default('supp_master_name') == 'Naming Series':
 			if not self.naming_series:
 				msgprint(_("Series is mandatory"), raise_exception=1)
 
 		validate_party_accounts(self)
 	def coding_supp(self):
-		if not self.supplier_code and self.supplier_group:
+		if  self.supplier_group:
 			code_naming = frappe.db.get_single_value('Buying Settings' ,'auto_create_supplier_codes' ) 
 			count_supplier = frappe.db.sql("SELECT  count(name) FROM `tabSupplier` ")
-			if code_naming and not self.supplier_code:
+			if code_naming :
 				check_type = frappe.db.get_single_value('Buying Settings' ,'selet_namig_code_type' ) 
 				if check_type == 'Manual Add':
 					add_type= frappe.db.get_single_value('Buying Settings' ,'serializer' ) 
@@ -66,11 +71,27 @@ class Supplier(TransactionBase):
 					group = frappe.get_doc('Supplier Group',self.supplier_group)
 					code = group.group_code
 					if code :
-						self.supplier_code = 'SUPP' + "-"+str(code) +'-'+str(int(count_supplier[0][0])+1)
+						 
+						supplier_code =  'SUPP' + "-"+str(code) 
+						self.supplier_code =self.check_supplier_code(supplier_code)
+						
 					else :
 						self.supplier_code = 'SUPP' + "-"+str(int(count_supplier[0][0])+1)
 			self.validate_supplier_code()
 		return self.supplier_code
+
+	def check_supplier_code(self ,code):
+		strin = "'%" +str(code) + "%'"
+		last = frappe.db.sql(""" 
+		 SELECT supplier_code FROM `tabSupplier`  WHERE supplier_code like %s  ORDER BY creation desc limit 1 """ %strin)
+		if last :
+			number_list = last[0][0].split('-')
+			numer = int(number_list[-1]) + 1
+			return str(code) + "-" + str(numer)
+		else :
+			numer = code + "-"+"1"
+			
+			return  numer
 	def on_trash(self):
 		delete_contact_and_address('Supplier', self.name)
 
