@@ -35,7 +35,8 @@
   "forget_fingerprint",
   "fingerprint_type",
   "overtime_mins",
-  "overtime_factor"
+  "overtime_factor",
+  "less_time"
  ],
  "fields": [
   {
@@ -251,10 +252,15 @@
    "fieldname": "overtime_factor",
    "fieldtype": "Time",
    "label": "Overtime factor"
+  },
+  {
+   "fieldname": "less_time",
+   "fieldtype": "Time",
+   "label": "Less Time "
   }
  ],
  "in_create": 1,
- "modified": "2020-12-09 16:51:38.689184",
+ "modified": "2020-12-10 12:42:09.162156",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
