@@ -103,7 +103,7 @@ class MonthlySalarySlip(TransactionBase):
 	def check_sal_struct(self, starting_date):
 
 
-		salary_structure = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE  from_date  <=  '%s' """%starting_date)
+		salary_structure = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE  from_date  <=  '%s'  and status='open' """%starting_date)
 		if not salary_structure :
 			frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
 				.format(self.employee), title=_('Salary Structure Missing'))
