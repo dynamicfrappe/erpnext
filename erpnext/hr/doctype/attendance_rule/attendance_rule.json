@@ -415,6 +415,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "collapsible": 1,
    "fieldname": "less_time_setting_section",
    "fieldtype": "Section Break",
    "label": "Less Time Setting"
@@ -427,7 +428,7 @@
   },
   {
    "fieldname": "less_time_factor",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Less Time Factor"
   },
   {
@@ -442,7 +443,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 14:47:51.650789",
+ "modified": "2020-12-10 16:24:35.449399",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
