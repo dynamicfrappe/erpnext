@@ -53,7 +53,8 @@ class Customer(TransactionBase):
 			self.customer_code = data +'-'+'1'
 
 	def validate(self):
-		self.set_customer_code()
+		if not self.customer_code:
+			self.set_customer_code()
 		self.flags.is_new_doc = self.is_new()
 		self.flags.old_lead = self.lead_name
 		validate_party_accounts(self)
