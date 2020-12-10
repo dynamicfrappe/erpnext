@@ -53,22 +53,7 @@ class Customer(TransactionBase):
 			self.customer_code = data +'-'+ str(self.customer_name)+'-'+'1'
 
 	def validate(self):
-		if not self.customer_code :
-			add_number =frappe.db.sql("""SELECT COUNT(name) FROM `tabCustomer` """)
-			is_selectednaming=frappe.db.get_single_value('Selling Settings', 'auto_add_customer_code')
-			if is_selectednaming==1:
-				whichname=frappe.db.get_single_value('Selling Settings', 'naming')
-				if whichname=="Manual Naming":
-					serializer = frappe.db.get_single_value('Selling Settings', 'serializer')
-					self.customer_code="CUS"+'-'+str(serializer)+'-'+str(add_number[0][0])
-				else:
-					customerGroup=self.customer_group
-					groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup))
-					if groupcode:
-					       self.customer_code="CUS"+'-'+str(groupcode[0][0])+'-'+str(add_number[0][0])
-
-
-			self.validate_customer_code()
+		self.set_customer_code()
 		self.flags.is_new_doc = self.is_new()
 		self.flags.old_lead = self.lead_name
 		validate_party_accounts(self)
@@ -84,8 +69,29 @@ class Customer(TransactionBase):
 		if self.sales_team:
 			if sum([member.allocated_percentage or 0 for member in self.sales_team]) != 100:
 				frappe.throw(_("Total contribution percentage should be equal to 100"))
+	def set_customer_code(self):
+		if not self.customer_code and self.customer_group:
+			add_number =frappe.db.sql("""SELECT COUNT(name) FROM `tabCustomer` """)
+			
+			if  self.check_coding_status():
+				whichname=frappe.db.get_single_value('Selling Settings', 'naming')
+				if whichname=="Manual Naming":
+					serializer = frappe.db.get_single_value('Selling Settings', 'serializer')
+					self.customer_code="CUST"+'-'+str(serializer)+'-'+str(add_number[0][0])
+				else:
+					customerGroup=self.customer_group
+					groupcode=frappe.db.sql("select group_code from `tabCustomer Group` where name='{}'".format(customerGroup))
+					if groupcode:
+					       self.customer_code="CUST"+'-'+str(groupcode[0][0])+'-'+str(add_number[0][0])
 
+
+			self.validate_customer_code()
+		return self.customer_code
+
+	def check_coding_status(self):
+		return (frappe.db.get_single_value('Selling Settings', 'auto_add_customer_code') )
 	def check_customer_group_change(self):
+
 		frappe.flags.customer_group_changed = False
 
 		if not self.get('__islocal'):
