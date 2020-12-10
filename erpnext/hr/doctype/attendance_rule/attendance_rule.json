@@ -6,6 +6,13 @@
  "engine": "InnoDB",
  "field_order": [
   "role_name",
+  "working_details_section",
+  "type",
+  "total_working_days_per_month",
+  "total_working_hours_per_month",
+  "column_break_6",
+  "working_type",
+  "total_working_hours_per_day",
   "section_break_6",
   "permission_rule_section",
   "permission_rule",
@@ -13,8 +20,6 @@
   "max_permissions_count",
   "max_permission_minute_per_once",
   "late_roles_section",
-  "type",
-  "working_type",
   "late_penalty_factor_by_date",
   "fingerprint_forgetten_in_penality",
   "fingerprint_forgetten_out_penality",
@@ -26,16 +31,10 @@
   "late_role_table",
   "absent_rule_section",
   "absent_rules",
-  "column_break_20",
   "absent__component",
-  "abset_penalty_component",
-  "basic_salary_component_section",
+  "column_break_20",
   "absent_rate",
-  "additional_days_salary_component",
-  "column_break_3",
-  "total_working_hours_per_day",
-  "total_working_hours_per_month",
-  "total_working_days_per_month",
+  "abset_penalty_component",
   "overtime_section",
   "overtime_salary_component",
   "staying_up_late_salary_component",
@@ -43,7 +42,6 @@
   "evening_overtime_start",
   "morning_overtime_factor",
   "overtime_factor_in_weekend",
-  "calculate_early_in",
   "column_break_42",
   "overtime_in_holiday_salary_component",
   "overtime_in_weekend_salary_component",
@@ -51,14 +49,16 @@
   "evening_overtime_end",
   "evening_overtime_factor",
   "overtime_factor_in_holidays",
-  "deduct_overtime_from_delays",
   "overtime_rules_section",
-  "overtime_rules",
-  "calculate_all_day_in_weekend",
-  "calculate_all_day_in_holiday",
-  "max_overtime_hours_in_holiday",
+  "calculate_early_in",
+  "deduct_overtime_from_delays",
   "max_overtime_hours_in_weekend",
   "max_overtime_hours_per_day",
+  "overtime_rules",
+  "column_break_50",
+  "calculate_all_day_in_holiday",
+  "calculate_all_day_in_weekend",
+  "max_overtime_hours_in_holiday",
   "max_overtime_hours_per_month",
   "amended_from"
  ],
@@ -77,18 +77,6 @@
    "label": "Absent Rate"
   },
   {
-   "fieldname": "basic_salary_component_section",
-   "fieldtype": "Section Break",
-   "label": "Basic Salary Component"
-  },
-  {
-   "fieldname": "additional_days_salary_component",
-   "fieldtype": "Link",
-   "label": "Additional Days Salary Component",
-   "options": "Salary Component",
-   "reqd": 1
-  },
-  {
    "fieldname": "overtime_salary_component",
    "fieldtype": "Link",
    "label": "Overtime Salary Component",
@@ -96,6 +84,7 @@
    "reqd": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "permission_rule_section",
    "fieldtype": "Section Break",
    "label": "Permission Rule"
@@ -105,11 +94,6 @@
    "fieldtype": "Table",
    "label": "Permission Rule",
    "options": "Attendence Permission Rule Table"
-  },
-  {
-   "fieldname": "column_break_3",
-   "fieldtype": "Section Break",
-   "label": "Monthly Working Hours"
   },
   {
    "fieldname": "max_permission_minutes",
@@ -122,6 +106,7 @@
    "label": "Max permissions Count"
   },
   {
+   "collapsible": 1,
    "fieldname": "late_roles_section",
    "fieldtype": "Section Break",
    "label": "Late Rules "
@@ -172,6 +157,7 @@
    "label": "Late Penalty Factor (By Date)"
   },
   {
+   "collapsible": 1,
    "fieldname": "absent_rule_section",
    "fieldtype": "Section Break",
    "label": "Absent Rule"
@@ -186,7 +172,7 @@
   {
    "fieldname": "abset_penalty_component",
    "fieldtype": "Link",
-   "label": "Abset Penalty Component",
+   "label": "Absent Penalty Component",
    "options": "Salary Component",
    "reqd": 1
   },
@@ -226,8 +212,10 @@
    "label": "Max Permission minute per once"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_6",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Permission Setting"
   },
   {
    "default": "Shift",
@@ -259,6 +247,7 @@
    "reqd": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "overtime_section",
    "fieldtype": "Section Break",
    "label": "Overtime"
@@ -326,6 +315,7 @@
    "reqd": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "overtime_rules_section",
    "fieldtype": "Section Break",
    "label": "Overtime Rules"
@@ -404,10 +394,24 @@
    "options": "Attendance Rule",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "working_details_section",
+   "fieldtype": "Section Break",
+   "label": "Working Details"
+  },
+  {
+   "fieldname": "column_break_50",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 11:08:58.886272",
+ "modified": "2020-12-10 13:48:57.712854",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
