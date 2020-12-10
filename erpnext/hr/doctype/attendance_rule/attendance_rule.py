@@ -16,7 +16,6 @@ class AttendanceRule(Document):
 		list.append(str(self.salary_component_for_late_penalty))
 		list.append(str(self.absent__component))
 		list.append(str(self.abset_penalty_component))
-		list.append(str(self.additional_days_salary_component))
 		list.append(str(self.overtime_salary_component))
 		message = '<ol>'
 		count = 0
@@ -35,9 +34,7 @@ class AttendanceRule(Document):
 		if list.count(str(self.abset_penalty_component)) > 1 :
 			message += '<li>' + _('Absent Penalty Component')+ '</li>'
 			count +=1
-		if list.count(str(self.additional_days_salary_component)) > 1 :
-			message += '<li>' + _('Additional Days Salary Component')+ '</li>'
-			count +=1
+
 		if list.count(str(self.overtime_salary_component)) > 1 :
 			message += '<li>' + _('Overtime Salary Component') + '</li>'
 			count +=1

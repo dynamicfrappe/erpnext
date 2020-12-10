@@ -3,7 +3,18 @@
 
 frappe.ui.form.on("Supplier", {
 	onload:function(frm){
-		frm.events.get_supplier_code(frm)
+		
+		frappe.call({
+			doc:frm.doc,
+			method:"check_coding_status" ,
+			callback:function(r){
+				if (r.message == 1) {
+				frm.set_df_property("supplier_code" ,"read_only" , "1")
+	  			 frm.refresh_field("supplier_code") }
+					}
+         })
+		if (frm.is_new()){
+				frm.events.get_supplier_code(frm)}
 	},
 	get_supplier_code:function(frm){
 		frappe.call({
@@ -17,7 +28,7 @@ frappe.ui.form.on("Supplier", {
 
 					
 					callback:function(r){
-						console.log(frm.doc.supplier_code)
+	
 						frm.set_value("supplier_code" ,frm.doc.supplier_code)
 						frm.refresh_field("supplier_code")
 					}

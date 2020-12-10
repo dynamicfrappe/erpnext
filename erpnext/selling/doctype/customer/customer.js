@@ -65,7 +65,28 @@ frappe.ui.form.on("Customer", {
 		});
 	},
 	onload:function(frm){
+			
+
+			frappe.call({
+			doc:frm.doc,
+			method:"check_coding_status" ,
+			callback:function(r){
+				if (r.message == 1) {
+				frm.set_df_property("customer_code" ,"read_only" , "1")
+	  			 frm.refresh_field("customer_code") }
+					}
+         })
+
+
+			if (frm.is_new()){
+		frm.events.get_customer_code(frm)}
+	},
+
+
+	customer_group:function(frm){
 		frm.events.get_customer_code(frm)
+
+
 	},
 	get_customer_code:function(frm){
 		frappe.call({
