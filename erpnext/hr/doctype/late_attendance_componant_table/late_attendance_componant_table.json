@@ -67,7 +67,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "late_componant.deduction_factor",
+   "fetch_from": "late_componant.add_deduction",
    "fieldname": "add_deduction",
    "fieldtype": "Check",
    "label": "Add Deduction"
@@ -95,9 +95,7 @@
   }
  ],
  "istable": 1,
-
- "modified": "2020-12-05 14:04:45.645967",
-
+ "modified": "2020-12-10 16:22:18.812511",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Late Attendance Componant Table",
