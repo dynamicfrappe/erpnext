@@ -199,7 +199,7 @@
   },
   {
    "fieldname": "late_factor",
-   "fieldtype": "Float",
+   "fieldtype": "Time",
    "in_list_view": 1,
    "label": "Late Factor"
   },
@@ -219,7 +219,7 @@
   },
   {
    "fieldname": "late_minutes",
-   "fieldtype": "Float",
+   "fieldtype": "Time",
    "label": "late_minutes",
    "read_only": 1
   },
@@ -249,12 +249,12 @@
   },
   {
    "fieldname": "overtime_factor",
-   "fieldtype": "Float",
+   "fieldtype": "Time",
    "label": "Overtime factor"
   }
  ],
  "in_create": 1,
- "modified": "2020-12-09 10:49:15.357801",
+ "modified": "2020-12-09 16:51:38.689184",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
