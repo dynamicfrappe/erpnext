@@ -95,6 +95,7 @@ class AttendanceCalculation(Document):
 		doc.overtime_factor = 0
 		doc.late_minutes = ''
 		doc.late_factor = ''
+		doc.less_time =  ''
 
 
 		Holidays = None
@@ -713,9 +714,9 @@ class AttendanceCalculation(Document):
 								overtime_factor = 0
 								if  attendance_role.type == "Monthly" :
 									if attendance_role.total_working_hours_per_month :
-										total = timedelta(hours=attendance_role.total_working_hours_per_month)
+										total = attendance_role.total_working_hours_per_month
 										if attendance.total_wrking_hours > total :
-											overtime_factor = (attendance.total_wrking_hours - total).seconds/3600 * attendance_role.morning_overtime_factor
+											overtime_factor = (attendance.total_wrking_hours - total) * attendance_role.morning_overtime_factor
 
 								elif attendance_role.type == "Daily":
 									overtime_factor = (attendance.overtime_mins / 60) * attendance_role.morning_overtime_factor
@@ -728,19 +729,22 @@ class AttendanceCalculation(Document):
 							# less time
 							less_amount = 0
 							less_salary_compnent = attendance_role.less_time_salary_component
-							less_min = attendance.less_time /60
+							less_time = attendance.less_time /60
 
-							if attendance_role.type == "Shift" :
-								less_amount = ((attendance_role.less_time_factor or 0) * less_min ) * self.hour_rate
+							if attendance_role.working_type == "Shift" :
 
-							elif attendance_role.type == "Target Hours":
+								less_factor = float(attendance_role.less_time_factor) * float(less_time )
+								less_amount = less_factor * self.hour_rate
+
+							elif attendance_role.working_type == "Target Hours":
 								if attendance_role.total_working_hours_per_month:
-									total = timedelta(hours=attendance_role.total_working_hours_per_month)
-									if attendance.total_wrking_hours > total:
-										less_min = (attendance.total_wrking_hours - total).seconds / 3600
-										less_amount = less_min * attendance_role.less_time_factor * self.hour_rate
+									total =attendance_role.total_working_hours_per_month
+									if attendance.total_wrking_hours < total:
+										less_time = (total - attendance.total_wrking_hours)
+										less_factor = float (less_time) * float(attendance_role.less_time_factor)
+										less_amount = less_factor * self.hour_rate
 							if less_amount and less_salary_compnent :
-								desc = _("Less Time : {}".format(timedelta(minutes=less_min)))
+								desc = _("Less Time : {}".format(timedelta(hours=less_time)))
 								self.submit_Additional_salary(employee.name, less_salary_compnent,less_amount, desc, "Less Time")
 
 							#Delays
