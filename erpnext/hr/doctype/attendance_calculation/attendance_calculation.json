@@ -1,5 +1,5 @@
 {
- "autoname": "format:Attendance-{from_date}:{to_date}",
+ "autoname": "format:Attendance-{payroll_month}-{company}",
  "creation": "2020-11-19 14:48:45.783646",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -53,7 +53,6 @@
    "fieldname": "payroll_effect_date",
    "fieldtype": "Date",
    "label": "Payroll Effect Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -74,7 +73,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 11:45:26.420634",
+ "modified": "2020-12-10 12:29:20.492141",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Calculation",
