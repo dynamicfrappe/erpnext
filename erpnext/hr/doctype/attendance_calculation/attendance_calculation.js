@@ -113,8 +113,8 @@ frappe.ui.form.on('Attendance Calculation', {
 											method: "on_submit",
 
 											callback: function(r) {
-												// frappe.msgprint(__("Done"))
-												frappe.hide_progress()
+												frappe.msgprint(__("Done"));
+												frappe.hide_progress();
 
 											},
 											freeze: true
