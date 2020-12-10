@@ -661,13 +661,13 @@ class AttendanceCalculation(Document):
 
 									if present_overtime_amount and overtime_salary_component :
 										desc = 'Normal Overtime value : ' + str (attendance.normal_overtime_factor)
-										self.submit_Additional_salary(employee.name, overtime_salary_component ,present_overtime_amount, desc )
+										self.submit_Additional_salary(employee.name, overtime_salary_component ,present_overtime_amount, desc , "Normal Overtime" )
 									if holiday_overtime_amount and hokiday_overtime_salary_component :
-										desc = 'Normal Overtime value : ' + str (attendance.holiday_overtime_factor)
-										self.submit_Additional_salary(employee.name, holiday_overtime_salary_component ,holiday_overtime_amount, desc )
-									if weekend_overtime_amount and hokiday_overtime_salary_component :
-										desc = 'Normal Overtime value : ' + str (attendance.weekend_overtime_factor)
-										self.submit_Additional_salary(employee.name, weekend_overtime_salary_component ,weekend_overtime_amount, desc )
+										desc = 'Holiday Overtime value : ' + str (attendance.holiday_overtime_factor)
+										self.submit_Additional_salary(employee.name, holiday_overtime_salary_component ,holiday_overtime_amount, desc , "Holiday Overtime" )
+									if weekend_overtime_amount and holiday_overtime_salary_component :
+										desc = 'Week Overtime value : ' + str (attendance.weekend_overtime_factor)
+										self.submit_Additional_salary(employee.name, weekend_overtime_salary_component ,weekend_overtime_amount, desc ,"Weekend Overtime")
 
 							elif attendance_role.working_type == "Target Hours" and attendance_role.type == "Monthly":
 								pass
@@ -713,11 +713,11 @@ class AttendanceCalculation(Document):
 
 								if attendance_role.salary_componat_for_late and late_amount:
 									desc = 'Delays : ' + str(late_factor)
-									self.submit_Additional_salary(employee.name, attendance_role.salary_componat_for_late,late_amount, desc)
+									self.submit_Additional_salary(employee.name, attendance_role.salary_componat_for_late,late_amount, desc , 'Delays')
 
 								if attendance_role.salary_component_for_late_penalty and penality_amount  :
 									desc = 'Delays Penality: ' + str(penality_factor)
-									self.submit_Additional_salary(employee.name, attendance_role.salary_component_for_late_penalty,penality_amount, desc)
+									self.submit_Additional_salary(employee.name, attendance_role.salary_component_for_late_penalty,penality_amount, desc , 'Delays Penality')
 
 
 								# forget finger print
@@ -728,7 +728,7 @@ class AttendanceCalculation(Document):
 								if attendance_role.fingerprint_forgetten_penlaity_salary_component and fingerprint_amount :
 									desc = 'Fingerprint IN forgetten times: ' + str(fingerprint_factor_in)
 									desc += '\nFingerprint OUT forgetten times: ' + str(fingerprint_factor_out)
-									self.submit_Additional_salary(employee.name,attendance_role.fingerprint_forgetten_penlaity_salary_component,fingerprint_amount, desc)
+									self.submit_Additional_salary(employee.name,attendance_role.fingerprint_forgetten_penlaity_salary_component,fingerprint_amount, desc , 'Fingerprint Penality')
 
 
 
@@ -756,15 +756,17 @@ class AttendanceCalculation(Document):
 											absent_penality_amount = absent_penality_rate *   self.daily_rate
 											if absent_amount:
 												desc = '\nAbsent Days Factor: ' + str(absent_rate)
-												self.submit_Additional_salary(employee.name,absents_salary_component,absent_amount, desc)
+												self.submit_Additional_salary(employee.name,absents_salary_component,absent_amount, desc,'Absent Days')
 											if absent_penality_amount:
 												desc = '\nAbsent Days Penaliteies: ' + str(absent_penality_rate)
-												self.submit_Additional_salary(employee.name, abset_penalty_component,absent_penality_amount, desc)
+												self.submit_Additional_salary(employee.name, abset_penalty_component,absent_penality_amount, desc,'Absent Days Penaliteies')
 
-	def submit_Additional_salary(self, employee, salary_component, amount, desc):
-		last_doc = frappe.db.get_value('Additional Salary', { "salary_component":salary_component , "employee":employee ,"attendance_calculation" : self.name}, ['name'])
-
-		if not last_doc:
+	def submit_Additional_salary(self, employee, salary_component, amount, desc , attendance_flag):
+		last_doc = frappe.db.get_value('Additional Salary', { "salary_component":salary_component , "employee":employee ,"attendance_calculation" : self.name , "attendance_flag":attendance_flag},  ['name', 'salary_slip'], as_dict=1)
+		if last_doc :
+			salary_slip = last_doc.salary_slip
+			last_doc = last_doc.name
+		if not last_doc or (last_doc and (not salary_slip)) :
 				component = frappe.get_doc("Salary Component", salary_component)
 				# Data for update_component_row
 				doc = frappe.new_doc("Additional Salary")
@@ -777,9 +779,11 @@ class AttendanceCalculation(Document):
 				doc.payroll_date = self.payroll_effect_date
 				doc.description = desc
 				doc.attendance_calculation = self.name
+				doc.attendance_flag = attendance_flag
 				doc.insert()
 				doc.submit()
 		else:
+
 			frappe.msgprint(_("Employee {employee} has this Additional Salary {name} before".format(employee=employee , name=last_doc)))
 
 
