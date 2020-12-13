@@ -15,8 +15,8 @@
   "end_date",
   "section_break_9",
   "document",
-  "recived_by",
   "is_recived",
+  "recived_by",
   "status",
   "docperiod",
   "notificationperiod",
@@ -155,7 +155,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-13 10:07:44.940865",
+ "modified": "2020-12-13 11:15:21.459585",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Document",

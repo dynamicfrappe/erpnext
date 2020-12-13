@@ -3,7 +3,9 @@
 
 frappe.ui.form.on('Employee Document', {
 
-
+   is_recived:function (frm){
+   	 frm.set_df_property("recived_by", "reqd", 1);
+   },
 
 	refresh:function(frm){
 		var todayDate = new Date()

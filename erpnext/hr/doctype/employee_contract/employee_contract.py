@@ -14,7 +14,15 @@ class EmployeeContract(Document):
 
 	def validate(self):
 		if frappe.db.exists("Employee", self.employee):
-			frappe.db.sql("update tabEmployee set designation='{}',national_id='{}' where name='{}'".format(self.designation,self.national_id,self.employee))
+			if self.department:
+				frappe.db.sql("update tabEmployee set department='{}' where name='{}'".format(self.department,self.employee))
+			if self.department:
+				frappe.db.sql("update tabEmployee set branch='{}' where name='{}'".format(self.branch,self.employee))
+			if self.national_id:
+				frappe.db.sql("update tabEmployee set national_id='{}' where name='{}'".format(self.national_id,self.employee))
+			if self.designation:
+				frappe.db.sql("update tabEmployee set designation='{}' where name='{}'".format(self.designation, self.employee))
+
 
 
 
