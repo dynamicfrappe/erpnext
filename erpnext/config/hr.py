@@ -617,6 +617,12 @@ def get_data():
 					"name": "Department Analytics",
 					"doctype": "Employee"
 				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Employee Documents Report",
+					"doctype": "Employee Document"
+				},
 			]
 		},
 	]

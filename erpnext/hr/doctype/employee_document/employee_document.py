@@ -10,6 +10,10 @@ from frappe import msgprint, _
 from dateutil.relativedelta import *
 class EmployeeDocument(Document):
 
+	def validate(self):
+		if self.document:
+			self.is_recived=1
+
 	def checkNotification(self):
 		documents=frappe.db.sql("""select * from  `tabEmployee Document` where is_notified=0""",as_dict=1)
 		for i in range(0,len(documents)):

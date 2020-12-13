@@ -5,6 +5,14 @@ frappe.ui.form.on('Employee Contract', {
 	// refresh: function(frm) {
 
 	// }
+	national_id:function(frm){
+
+    	var nationalID=frm.doc.national_id;
+    	if((nationalID.length!=14 || isNaN(nationalID)) && nationalID.length!=0){
+    		frappe.msgprint("please enter valid ID")
+    		cur_frm.set_value("national_id","")
+    	}
+    },
 
 	onload:function(frm){
 
