@@ -7,7 +7,7 @@ import frappe
 from frappe.model.document import Document
 from frappe import _
 from datetime import  datetime
-
+from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 
 class MultiPayroll(Document):
 	def fill_employee_details(self):
@@ -59,17 +59,20 @@ class MultiPayroll(Document):
 				salary_slip = frappe.new_doc('Monthly Salary Slip')
 				salary_slip.posting_date = datetime.today()
 				salary_slip.employee = salary_structure.employee
-				employe = frappe.get_doc("Employee" ,salary_structure.employee )
+				employe = frappe.get_doc("Employee" ,str(salary_structure.employee) )
+				
 				salary_slip.payroll_type = self.payroll_type
 				if employe.date_of_joining <= datetime.strptime( self.start_date, "%Y-%m-%d").date():
 					salary_slip.start_date = self.start_date
 				else:
 					salary_slip.start_date=employe.date_of_joining
-
-				if employe.relieving_date >= datetime.strptime( self.end_date, "%Y-%m-%d").date():
-					salary_slip.end_date = self.end_date
+				if 	 employe.relieving_date :
+					if employe.relieving_date  >= datetime.strptime( self.end_date, "%Y-%m-%d").date():
+						salary_slip.end_date = self.end_date
+					else:
+						salary_slip.end_date =employe.relieving_date
 				else:
-					salary_slip.start_date=employe.relieving_date
+					salary_slip.end_date = self.end_date
 
 				
 
@@ -81,8 +84,8 @@ class MultiPayroll(Document):
 				try :
 					a = 0 
 				except:
-					pass
-				salary_slip.payment_days = 30
+					pass			
+				salary_slip.payment_days = salary_slip.total_working_days
 				salary_slip.salary_structure = salary_structure.salary_structure
 				salary_slip.save()
 				structure = frappe.get_doc("Salary Structure" , salary_structure.salary_structure ) 
