@@ -48,12 +48,16 @@ class MonthlySalarySlip(TransactionBase):
 		else: 
 			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
+		 
 		self.status = self.get_status()
 		self.validate_dates()
 		self.check_existing()
 		# self.check_sal_struct(self.end_date)
 		self.set_salary_component_first_time()
 		self.ceck_for_update_values_in_salary_strycrtue()
+		
+
+		self.set_formula_valus()
 		self.update_dates_for_employee()
 
 
@@ -86,6 +90,19 @@ class MonthlySalarySlip(TransactionBase):
 
 
 
+	def get_amount_pase_on_formula(self,formula , data = None):
+		data = { i.abbr:i.amount  for i in self.earnings}
+		func  =formula.strip(" ").replace("\n", " ")
+		d =[i for  i in data.keys() ]
+		for e in range(0,len(d)) :
+			func  = func.replace(str(max(d ,key=len)) , str(data[max(d ,key=len)]))
+			d.remove(max(d ,key=len))
+			
+		try :
+			return (eval(func))
+		except:
+			return("error")
+		
 
 	def set_salary_component_first_time(self):
 		active_salary =self.get_active_salary_structure()
@@ -125,7 +142,33 @@ class MonthlySalarySlip(TransactionBase):
 				i.amount = float(new_value)
 
 
-			
+
+	def set_formula_valus(self):
+
+		for i in self.earnings :
+			if i.amount_based_on_formula :
+
+				i.amount = self.get_amount_pase_on_formula(i.formula)
+				
+		for i in self.deductions:
+			if i.amount_based_on_formula :
+				i.amount = self.get_amount_pase_on_formula(i.formula)
+
+		# for i in self.earnings :
+		# 	value = frappe.db.sql(""" SELECT amount FROM `tabSalary Detail` WHERE parent ='%s' and
+		# 		abbr = '%s' """ %(str(salary_structure[0][1]) , i.component_short_name))
+		# 	if value :
+		# 		data[str(i.component_short_name)] = float(value[0][0])
+		# 	else :
+		# 		data[str(i.component_short_name)] = 0
+		# 		# frappe.throw("Validation error in component '%s' pleas check if employee have it in his salary struct "%i.component_short_name)
+
+		
+		# formula = component.formula
+		# if formula :
+		# 	return self.get_amount_pase_on_formula(formula ,data)
+		# else :
+		# 	return 0 
 
 	def get_updated_value(self , i):
 		active_salary =self.get_active_salary_structure()
@@ -148,6 +191,7 @@ class MonthlySalarySlip(TransactionBase):
 				row.depends_on_payment_days =i.depends_on_payment_days
 				row.is_tax_applicable = i.is_tax_applicable
 				row.exempted_from_income_tax = i.exempted_from_income_tax
+				row.amount_based_on_formula = i.amount_based_on_formula
 				row.formula = i.formula
 				row.amount = i.amount
 				
