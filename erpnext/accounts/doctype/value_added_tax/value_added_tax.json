@@ -1,0 +1,105 @@
+{
+ "creation": "2020-12-13 13:35:33.475105",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "fromdae",
+  "todate",
+  "status",
+  "details",
+  "summary_section",
+  "collectedtax",
+  "paidtax",
+  "clearanceamount",
+  "taxauthority",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "fromdae",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "todate",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "open\nClosed"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Details",
+   "options": "Value Added Tax Details"
+  },
+  {
+   "fieldname": "summary_section",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "collectedtax",
+   "fieldtype": "Currency",
+   "label": "Collected Tax"
+  },
+  {
+   "fieldname": "paidtax",
+   "fieldtype": "Currency",
+   "label": "Paid Tax"
+  },
+  {
+   "fieldname": "clearanceamount",
+   "fieldtype": "Currency",
+   "label": "Tax clearance amount"
+  },
+  {
+   "fieldname": "taxauthority",
+   "fieldtype": "Link",
+   "label": "Tax Authority",
+   "options": "Tax Template"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Value Added Tax",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-12-13 13:35:35.902356",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Value Added Tax",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
