@@ -30,11 +30,9 @@
    "default": "0",
    "fieldname": "is_recived",
    "fieldtype": "Check",
-   "hidden": 1,
    "in_filter": 1,
    "in_standard_filter": 1,
-   "label": "IS Recived",
-   "print_hide": 1
+   "label": "IS Recived"
   },
   {
    "fieldname": "doc_number",
@@ -157,7 +155,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-08 13:26:06.703607",
+ "modified": "2020-12-13 10:07:44.940865",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Document",

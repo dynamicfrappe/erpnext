@@ -11,7 +11,11 @@ import frappe
 from frappe.model.document import Document
 
 class EmployeeContract(Document):
-	pass
+
+	def validate(self):
+		if frappe.db.exists("Employee", self.employee):
+			frappe.db.sql("update tabEmployee set designation='{}',national_id='{}' where name='{}'".format(self.designation,self.national_id,self.employee))
+
 
 
 
