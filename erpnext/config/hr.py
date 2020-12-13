@@ -177,6 +177,37 @@ def get_data():
 		}
 		,
 		{
+		 "label":_("New PayRoll "),
+		 "items": [
+		 		{
+					"type": "doctype",
+					"name": "Payroll Month"
+					
+				},
+				 {
+					"type": "doctype",
+					"name": "Multi Payroll"
+				},
+				{
+					"type": "doctype",
+					"name": "Salary Structure Type",
+				},
+				
+				{
+					"type": "doctype",
+					"name": "Multi salary structure"
+				},
+				{
+					"type": "doctype",
+					"name": "Monthly Salary Slip",
+					"dependencies": ["Permission Type"]
+
+				},
+				
+				
+		 ]
+		},
+		{
 		 "label":_("Employee Penalties"),
 		 "items": [
 				 {

@@ -127,8 +127,7 @@
    "fieldname": "employees",
    "fieldtype": "Table",
    "label": "Employee Details",
-   "options": "Payroll Employee Detail",
-   "read_only": 1
+   "options": "Payroll Employee Detail"
   },
   {
    "fieldname": "section_break_13",
@@ -278,7 +277,7 @@
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
- "modified": "2020-12-08 16:35:59.568420",
+ "modified": "2020-12-13 14:32:28.130651",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi Payroll",

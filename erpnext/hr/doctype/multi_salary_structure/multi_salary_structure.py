@@ -20,7 +20,7 @@ class Multisalarystructure(Document):
 
 		for st in self.salary_structure:
 			if st.from_date:
-				if frappe.db.exists("Salary structure Template", {"type": st.type, "from_date": st.from_date, "docstatus": 1,"employee":self.employee}):
+				if frappe.db.exists("Multi salary structure", { "from_date": st.from_date, "docstatus": 1,"employee":self.employee}):
 					frappe.throw(_("Salary Structure Assignment for Employee already exists"))
 				if joining_date and getdate(st.from_date) < joining_date:
 					frappe.throw(_("From Date {0} cannot be before employee's joining Date {1}")
