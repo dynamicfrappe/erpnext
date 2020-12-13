@@ -243,7 +243,6 @@
    "reqd": 1
   },
   {
-   "fetch_from": "employee.national_id",
    "fieldname": "national_id",
    "fieldtype": "Data",
    "label": "Employee National id"
@@ -259,7 +258,7 @@
    "label": "Employee Addresse"
   }
  ],
- "modified": "2020-12-05 17:25:08.778201",
+ "modified": "2020-12-13 09:55:03.030182",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Contract",
