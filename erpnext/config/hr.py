@@ -188,6 +188,10 @@ def get_data():
 					"type": "doctype",
 					"name": "Multi Payroll"
 				},
+				{
+					"type": "doctype",
+					"name": "Salary Structure Type",
+				},
 				
 				{
 					"type": "doctype",
