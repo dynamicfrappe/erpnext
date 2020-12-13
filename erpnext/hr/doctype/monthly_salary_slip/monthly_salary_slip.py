@@ -139,7 +139,7 @@ class MonthlySalarySlip(TransactionBase):
 				return False
 
 	def set_component(self,i,typ):
-		if i.amount > 0 :	
+		if i.amount >= 0 :	
 				row = self.append(typ, {})
 				row.salary_component = i.salary_component
 				row.abbr= i.abbr
