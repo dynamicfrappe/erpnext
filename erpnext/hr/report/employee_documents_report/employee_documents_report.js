@@ -4,6 +4,11 @@
 
 frappe.query_reports["Employee Documents Report"] = {
 	"filters": [
-
+		{
+			"fieldname": "employee",
+			"label": __("Employee"),
+			"fieldtype": "Link",
+			"options": "Employee"
+		}
 	]
 };
