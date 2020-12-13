@@ -30,26 +30,127 @@ class MonthlySalarySlip(TransactionBase):
 		}
 		self.total_working_days_temp = 0
 		self.daily_rate = 0
-
+		self.real_month = None
+		self.salary_slip_based_on_timesheet = None
 	def autoname(self):
 		self.name = make_autoname(self.series)
 
+	def set_dates_above_month(self):
+		if self.month :
+			real_month = frappe.get_doc("Payroll Month" ,self.month)
+			if not real_month.is_closed:
+				self.start_date = real_month.start_date
+				self.end_date = real_month.end_date
 
+			else :
+				frappe.throw("You Chosed Closed Month ")
+
+		else: 
+			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
 		self.status = self.get_status()
 		self.validate_dates()
 		self.check_existing()
-		self.check_sal_struct(self.start_date)
+		# self.check_sal_struct(self.end_date)
+		self.set_salary_component_first_time()
+		self.ceck_for_update_values_in_salary_strycrtue()
+		self.update_dates_for_employee()
 
-		# if not (len(self.get("earnings")) or len(self.get("deductions"))):
-		# 	# get details from salary structure
-		# 	self.get_emp_and_leave_details()
-		# else:
-		# 	self.get_leave_details(lwp = self.leave_without_pay)
 
 	def validate_dates(self):
 		if date_diff(self.end_date, self.start_date) < 0:
 			frappe.throw(_("To date cannot be before From date"))
+
+
+
+
+	def get_active_salary_structure (self):
+		active_salary = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE employee = '%s' AND from_date <= '%s'
+		 AND docstatus= 1 """%(self.employee ,  self.end_date ))
+		return active_salary
+
+
+	def get_employee_active_salary_structure_type(self):
+		active_salary =self.get_active_salary_structure()
+
+		if active_salary :
+			
+
+			valid_types = frappe.db.sql(""" SELECT type FROM `tabSalary structure Template` WHERE parent = '%s'
+			 """%(str(active_salary[0][0])))
+			# frappe.throw(str(valid_types))
+			return([x for x in valid_types[0]])
+ 
+		else :
+			frappe.throw("No Active Salary Structure For employee '%s' , from date '%s' "%(self.employee , self.start_date))
+
+
+
+
+	def set_salary_component_first_time(self):
+		active_salary =self.get_active_salary_structure()
+		stucture_name = frappe.db.sql("""SELECT salary_structure FROM `tabSalary structure Template` WHERE parent='%s' and type='%s'  
+			    """%(active_salary[0][0] ,self.payroll_type))
+
+
+		salary_component = frappe.get_doc("Salary Structure" ,stucture_name[0][0] )
+		for i in salary_component.earnings  :
+					self.set_component(i , 'earnings')
+		for i in salary_component.deductions :
+					self.set_component(i , 'deductions')
+
+
+	def update_dates_for_employee(self):
+		employe = frappe.get_doc("Employee" ,str(self.employee) )
+		if employe.date_of_joining <= datetime.datetime.strptime( self.start_date, "%Y-%m-%d").date():
+			pass
+		else:
+			self.start_date=employe.date_of_joining
+		if 	 employe.relieving_date :
+			if employe.relieving_date  >= datetime.strptime( self.end_date, "%Y-%m-%d").date():
+				pass
+			else:
+				self.end_date =employe.relieving_date
+		
+
+	def ceck_for_update_values_in_salary_strycrtue(self):
+	
+		for i in self.earnings :
+			new_value = self.get_updated_value(i.salary_component)
+			if new_value :
+				i.amount = float(new_value)
+		for i in self.deductions:
+			new_value = self.get_updated_value(i.salary_component)
+			if new_value :
+				i.amount = float(new_value)
+
+
+			
+
+	def get_updated_value(self , i):
+		active_salary =self.get_active_salary_structure()
+		value = frappe.db.sql("""SELECT amount from `tabSalary Components` WHERE parent ='%s' AND componentname = '%s' 
+			"""%(active_salary[0][0] , i))
+
+		if value:
+			if (float(value[0][0])) > 0  :
+				return(value[0][0])
+			else:
+				return False
+
+	def set_component(self,i,typ):
+		if i.amount > 0 :	
+				row = self.append(typ, {})
+				row.salary_component = i.salary_component
+				row.abbr= i.abbr
+				row.statistical_component = i.statistical_component
+				row.deduct_full_tax_on_selected_payroll_date = i.deduct_full_tax_on_selected_payroll_date
+				row.depends_on_payment_days =i.depends_on_payment_days
+				row.is_tax_applicable = i.is_tax_applicable
+				row.exempted_from_income_tax = i.exempted_from_income_tax
+				row.formula = i.formula
+				row.amount = i.amount
+				
 
 	def get_status(self):
 		if self.docstatus == 0:
@@ -103,7 +204,8 @@ class MonthlySalarySlip(TransactionBase):
 	def check_sal_struct(self, starting_date):
 
 
-		salary_structure = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE  from_date  <=  '%s'  and status='open' """%starting_date)
+		salary_structure = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE  from_date  <=  '%s' 
+		 and status='open' """%starting_date)
 		if not salary_structure :
 			frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
 				.format(self.employee), title=_('Salary Structure Missing'))
@@ -112,26 +214,3 @@ class MonthlySalarySlip(TransactionBase):
 			pass
 
 
-
-		# cond = """and sa.employee=%(employee)s and (sa.from_date <= %(start_date)s or
-		# 		sa.from_date <= %(end_date)s or sa.from_date <= %(joining_date)s)"""
-		# if self.payroll_frequency:
-		# 	cond += """and ss.payroll_frequency = '%(payroll_frequency)s'""" % {"payroll_frequency": self.payroll_frequency}
-		# st_name = frappe.db.sql("""
-		# 	select sa.salary_structure
-		# 	from `tabSalary Structure Assignment` sa join `tabSalary Structure` ss
-		# 	where sa.salary_structure=ss.name
-		# 		and sa.docstatus = 1 and ss.docstatus = 1 and ss.is_active ='Yes' %s
-		# 	order by sa.from_date desc
-		# 	limit 1
-		# """ %cond, {'employee': self.employee, 'start_date': self.start_date,
-		# 	'end_date': self.end_date, 'joining_date': joining_date})
-
-		# if st_name:
-		# 	self.salary_structure = st_name[0][0]
-		# 	return self.salary_structure
-
-		# else:
-		# 	self.salary_structure = None
-		# 	frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
-		# 		.format(self.employee), title=_('Salary Structure Missing'))
