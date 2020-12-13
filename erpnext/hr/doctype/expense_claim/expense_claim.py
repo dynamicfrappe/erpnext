@@ -62,8 +62,19 @@ class ExpenseClaim(AccountsController):
 			self.cost_center = frappe.get_cached_value('Company', self.company, 'cost_center')
 
 	def on_submit(self):
-		if self.reference_name:
-			frappe.db.sql(""" update `tabRequest for expence claim` set status='close' where name='%s' """%str(self.reference_name))
+		if self.reference_doctype =="Request for expence claim":
+			Total=0
+			totalSanctionedAmount=0
+			for ex in self.expenses:
+				Total+=float(ex.amount)
+				totalSanctionedAmount+=float(ex.sanctioned_amount)
+			if totalSanctionedAmount<Total:
+				diff=Total-totalSanctionedAmount
+				frappe.db.sql("update `tabRequest for expence claim` set totalsanctioned_amount='{}',status='Partially close',diff='{}',expenceclaim='{}' where name='{}'".format(totalSanctionedAmount,diff,self.name,self.reference_name))
+			elif totalSanctionedAmount==Total:
+				frappe.db.sql("update `tabRequest for expence claim` set totalsanctioned_amount='{}',diff='0',status='close',expenceclaim='{}' where name='{}'".format(totalSanctionedAmount,self.name, self.reference_name))
+
+
 			
 		
 		if self.approval_status=="Draft":

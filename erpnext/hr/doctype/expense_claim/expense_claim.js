@@ -191,7 +191,9 @@ frappe.ui.form.on("Expense Claim", {
         frm.trigger("toggle_fields");
 
         frm.add_custom_button(__("Get from request for expence claim"), function() {
-            frm.events.get_from_expence_claim(frm)
+            frm.events.get_from_expence_claim(frm);
+            frm.events.rate(frm)
+
 
         }).addClass("btn-primary");
 
@@ -226,7 +228,7 @@ frappe.ui.form.on("Expense Claim", {
             get_query_filters: {
                 docstatus: 1,
                 status: ["not in", ["close"]],
-
+                employee:frm.doc.employee
             }
         });
     },

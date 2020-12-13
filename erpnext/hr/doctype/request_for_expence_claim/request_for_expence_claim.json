@@ -1,10 +1,13 @@
 {
+ "autoname": "naming_series:",
  "creation": "2020-10-27 12:41:42.908113",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "employee",
+  "employeename",
   "project",
   "transaction_date",
   "status",
@@ -12,6 +15,10 @@
   "expence",
   "section_break_6",
   "total",
+  "column_break_10",
+  "totalsanctioned_amount",
+  "diff",
+  "expenceclaim",
   "amended_from"
  ],
  "fields": [
@@ -26,7 +33,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "status",
-   "options": "open\nclose",
+   "options": "open\nPartially close\nclose",
    "reqd": 1
   },
   {
@@ -61,7 +68,8 @@
   {
    "fieldname": "transaction_date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "employee",
@@ -70,10 +78,44 @@
    "label": "Employee name",
    "options": "Employee",
    "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employeename",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "totalsanctioned_amount",
+   "fieldtype": "Data",
+   "label": "Total Sanctioned Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "diff",
+   "fieldtype": "Data",
+   "label": "Difference"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "Req-Claim-.YYYY.-"
+  },
+  {
+   "fieldname": "expenceclaim",
+   "fieldtype": "Link",
+   "label": "Expence Claim",
+   "options": "Expense Claim"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-27 15:12:31.258558",
+ "modified": "2020-12-10 15:52:28.010347",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Request for expence claim",
