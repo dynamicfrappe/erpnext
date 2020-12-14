@@ -142,10 +142,10 @@ class ValueAddedTax(Document):
 			row.taxcategory=inv.account_head
 			if (inv.type=='Sales Invoice' and float(inv.tax_amount)>0) or  (inv.type=='Purchase Invoice' and float(inv.tax_amount)<0):
 				row.taxtype="Collected"
-				collected+=abs(inv.tax_amount)
+				collected+=inv.tax_amount
 			if (inv.type == 'Sales Invoice' and float(inv.tax_amount) < 0) or (inv.type == 'Purchase Invoice' and float(inv.tax_amount) > 0):
 				row.taxtype="Paid"
-				paid+=abs(inv.tax_amount)
+				paid+=inv.tax_amount
 		self.collectedtax=collected
 		self.paidtax=paid
 		self.clearanceamount=collected-paid
