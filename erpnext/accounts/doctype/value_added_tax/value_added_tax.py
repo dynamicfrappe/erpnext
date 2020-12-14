@@ -138,7 +138,7 @@ class ValueAddedTax(Document):
 			row.docdate=inv.due_date
 			row.cadno=inv.tax_id
 			row.docamount=inv.total
-			row.taxamount=inv.tax_amount
+			row.taxamount=abs(inv.tax_amount)
 			row.taxcategory=inv.account_head
 			if (inv.type=='Sales Invoice' and float(inv.tax_amount)>0) or  (inv.type=='Purchase Invoice' and float(inv.tax_amount)<0):
 				row.taxtype="Collected"
