@@ -1,18 +1,29 @@
 {
+ "autoname": "naming_series:",
  "creation": "2020-12-13 13:35:33.475105",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "fromdae",
   "todate",
+  "column_break_3",
+  "postingdate",
   "status",
+  "section_break_6",
   "details",
+  "section_break_16",
+  "htmltemplate",
   "summary_section",
+  "column_break_8",
   "collectedtax",
-  "paidtax",
   "clearanceamount",
+  "column_break_10",
+  "paidtax",
   "taxauthority",
+  "accountname",
+  "journal_created",
   "amended_from"
  ],
  "fields": [
@@ -66,7 +77,8 @@
    "fieldname": "taxauthority",
    "fieldtype": "Link",
    "label": "Tax Authority",
-   "options": "Tax Template"
+   "options": "Tax Template",
+   "reqd": 1
   },
   {
    "fieldname": "amended_from",
@@ -76,10 +88,68 @@
    "options": "Value Added Tax",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fetch_from": "taxauthority.account",
+   "fieldname": "accountname",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Account",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "postingdate",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "htmltemplate",
+   "fieldtype": "HTML",
+   "label": "Table"
+  },
+  {
+   "fieldname": "section_break_16",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "print_hide": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "journal_created",
+   "fieldtype": "Check",
+   "label": "Journal Entry Created",
+   "read_only": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "Val-Add-",
+   "print_hide": 1,
+   "set_only_once": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-13 13:35:35.902356",
+ "modified": "2020-12-14 14:12:34.497667",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Value Added Tax",

@@ -13,7 +13,7 @@
  "fields": [
   {
    "fieldname": "naming_series",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Series",
    "no_copy": 1,
    "options": "Tax-Temp-.YYYY.-",
@@ -41,7 +41,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-13 13:34:18.812747",
+ "modified": "2020-12-14 10:02:57.093800",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Tax Template",
