@@ -11,6 +11,7 @@ from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils.background_jobs import enqueue
 from erpnext.hr.doctype.additional_salary.additional_salary import get_additional_salary_component
+from erpnext.hr.doctype.additional_salary.additional_salary import get_additional_salary_component_with_salary_component
 from erpnext.hr.doctype.payroll_period.payroll_period import get_period_factor, get_payroll_period
 from erpnext.hr.doctype.employee_benefit_application.employee_benefit_application import get_benefit_component_amount
 from erpnext.hr.doctype.employee_benefit_claim.employee_benefit_claim import get_benefit_claim_amount, get_last_payroll_period_benefits
@@ -133,7 +134,39 @@ class MonthlySalarySlip(TransactionBase):
 					self.set_component(i , 'earnings')
 		for i in salary_component.deductions :
 					self.set_component(i , 'deductions')
+	def get_attendance (self):
+		component_list = frappe.db.sql("""SELECT  
+												a.fingerprint_forgetten_penlaity_salary_component,
+												a.salary_componat_for_late,
+												a.salary_component_for_late_penalty	,
+												a.absent__component,
+												a.abset_penalty_component,
+												a.overtime_salary_component,
+												a.staying_up_late_salary_component,
+												a.overtime_in_holiday_salary_component,
+												a.overtime_in_weekend_salary_component,
+												a.less_time_salary_component
+												 FROM `tabEmployee` AS e 
+													JOIN `tabAttendance Rule` AS a 
+													ON e.attendance_role = a.name 
+													WHERE e.name = '%s' """%self.employee ) [0] or None
+		if component_list:
+			attendance_earnings = get_additional_salary_component_with_salary_component(self.employee , self.start_date,self.end_date , "earnings" , component_list)
+			if attendance_earnings:
+				self.add_attendance_additional_salary_components ("earnings",attendance_earnings)
 
+			attendance_deductions = get_additional_salary_component_with_salary_component(self.employee , self.start_date,self.end_date , "deductions" , component_list)
+			if attendance_deductions:
+				self.add_attendance_additional_salary_components ("deductions",attendance_deductions)
+
+	def add_attendance_additional_salary_components(self, component_type , additional_components):
+
+		if additional_components:
+			for additional_component in additional_components:
+				amount = additional_component.amount
+				overwrite = additional_component.overwrite
+				self.update_component_row(frappe._dict(additional_component.struct_row), amount,
+					component_type, overwrite=overwrite)
 
 	def update_dates_for_employee(self):
 		employe = frappe.get_doc("Employee" ,str(self.employee) )
