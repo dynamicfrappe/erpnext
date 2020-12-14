@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import frappe, erpnext
 import datetime, math
-
+from frappe import _
 from frappe.utils import add_days, cint, cstr, flt, getdate, rounded, date_diff, money_in_words
 from frappe.model.naming import make_autoname
 
@@ -42,7 +42,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.daily_rate = 0
 		self.real_month = None
 		self.salary_slip_based_on_timesheet = None
-		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
+		# self.total_working_days = 0  
 	def autoname(self):
 		self.name = make_autoname(self.series)
 
@@ -60,10 +60,10 @@ class MonthlySalarySlip(TransactionBase):
 			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
 		self.get_active_month()
+		self.total_working_days= self.get_monthly_working_days_from_attendence_rule()
 		self.status = self.get_status()
 		self.validate_dates()
 		self.check_existing()
-		# self.check_sal_struct(self.end_date)
 		self.set_salary_component_first_time()
 		self.ceck_for_update_values_in_salary_strycrtue()
 		self.set_formula_valus()
@@ -98,7 +98,10 @@ class MonthlySalarySlip(TransactionBase):
 			JOIN `tabAttendance Rule` AS a 
 			ON e.attendance_role = a.name 
 			WHERE e.name = '%s' """%self.employee )
-		return get_data[0][0]
+		try :
+			return get_data[0][0]
+		except:
+			frappe.throw(_("Please Set working days in Employee Attendence Rule"))
 	def get_active_month(self):
 		active_month = frappe.get_doc("Payroll Month" ,self.month)
 		start = active_month.start_date
@@ -129,8 +132,10 @@ class MonthlySalarySlip(TransactionBase):
 
 
 		salary_component = frappe.get_doc("Salary Structure" ,stucture_name[0][0] )
+		self.set('earnings',[])
 		for i in salary_component.earnings  :
 					self.set_component(i , 'earnings')
+		self.set('deductions',[])
 		for i in salary_component.deductions :
 					self.set_component(i , 'deductions')
 
@@ -200,7 +205,7 @@ class MonthlySalarySlip(TransactionBase):
 				return False
 
 	def set_component(self,i,typ):
-		self.set(typ,[])
+		
 		if i.amount >= 0 :	
 				row = self.append(typ, {})
 				row.salary_component = i.salary_component
@@ -259,7 +264,7 @@ class MonthlySalarySlip(TransactionBase):
 
 			self.get_leave_details(joining_date, relieving_date)
 			if struct :
-				self.calculate_attendance()
+				# self.calculate_attendance()
 				self.calculate_Tax()
 				self.calculate_net_pay()
 
