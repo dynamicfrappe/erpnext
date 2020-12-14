@@ -69,6 +69,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.ceck_for_update_values_in_salary_strycrtue()
 		self.set_formula_valus()
 		self.update_dates_for_employee()
+		self.get_absent_days()
 
 
 	def validate_dates(self):
@@ -179,6 +180,13 @@ class MonthlySalarySlip(TransactionBase):
 				pass
 			else:
 				self.end_date =employe.relieving_date
+	def get_absent_days (self):
+		self.absent_days = frappe.db.sql("""
+		select ifnull( SUM(case when type ="Absent" then 1 else 0  end) ,0) as absent_days from `tabEmployee Attendance Logs`
+		where employee = '{employee}' and date(date) between date('{start_date}') and date('{end_date}')
+		""".format(employee = self.employee,start_date = self.start_date , end_date = self.end_date),as_dict=1).absent_days or 0
+
+
 		
 
 	def ceck_for_update_values_in_salary_strycrtue(self):

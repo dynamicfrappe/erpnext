@@ -27,6 +27,7 @@
   "payroll_frequency",
   "total_working_days",
   "leave_without_pay",
+  "absent_days",
   "payment_days",
   "hourly_wages",
   "section_break_26",
@@ -491,11 +492,17 @@
    "fieldname": "tax_calculated",
    "fieldtype": "Check",
    "label": "Tax_calculated"
+  },
+  {
+   "default": "0",
+   "fieldname": "absent_days",
+   "fieldtype": "Float",
+   "label": "Absent Days"
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "modified": "2020-12-14 10:52:37.775968",
+ "modified": "2020-12-14 12:38:59.741500",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Monthly Salary Slip",
