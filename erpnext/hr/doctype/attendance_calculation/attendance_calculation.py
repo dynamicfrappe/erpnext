@@ -597,35 +597,85 @@ class AttendanceCalculation(Document):
 
 		return doc
 
+	def ceck_for_update_values_in_salary_strycrtue(self,employee):
 
+		for i in self._salary_structure_doc.earnings:
+			new_value = self.get_updated_value(employee,i.salary_component)
+			if new_value:
+				i.amount = float(new_value)
+		for i in self._salary_structure_doc.deductions:
+			new_value = self.get_updated_value(employee,i.salary_component)
+			if new_value:
+				i.amount = float(new_value)
 
+	def get_active_salary_structure (self,employee):
+		active_salary = frappe.db.sql(""" SELECT name FROM `tabMulti salary structure` WHERE employee = '%s' AND from_date <= '%s'
+		 AND docstatus= 1 """%(employee ,  self.payroll_effect_date ))
+		return active_salary
 
+	def get_updated_value(self ,employee , i):
+		active_salary =self.get_active_salary_structure(employee)
+		value = frappe.db.sql("""SELECT amount from `tabSalary Components` WHERE parent ='%s' AND componentname = '%s' 
+			"""%(active_salary[0][0] , i))
 
+		if value:
+			if (float(value[0][0])) > 0  :
+				return(value[0][0])
+			else:
+				return False
 
 	def check_sal_struct(self,employee):
-		joining_date = employee.date_of_joining or self.from_date
-		relieving_date = employee.relieving_date or self.to_date
-		cond = """and sa.employee=%(employee)s and (sa.from_date <= %(start_date)s or
-				sa.from_date <= %(end_date)s or sa.from_date <= %(joining_date)s)"""
+		active_salary = self.get_active_salary_structure(employee.name)
+		self.salary_structure = None
+		self.set("_salary_structure_doc", None)
 
-		st_name = frappe.db.sql("""
-			select sa.salary_structure
-			from `tabSalary Structure Assignment` sa join `tabSalary Structure` ss
-			where sa.salary_structure=ss.name
-				and sa.docstatus = 1 and ss.docstatus = 1 and ss.is_active ='Yes' %s
-			order by sa.from_date desc
-			limit 1
-		""" %cond, {'employee': employee.name, 'start_date': self.from_date,
-			'end_date': self.to_date, 'joining_date': joining_date})
+		if active_salary:
+			main_type = frappe.db.get_value("Salary Structure Type",{"is_main" : 1} , ['name'] , as_dict =1 )
+			if main_type:
+				stucture_name = frappe.db.sql("""SELECT salary_structure FROM `tabSalary structure Template` WHERE parent='%s' and type='%s'  
+								""" % (active_salary[0][0],main_type.name ))
+				if stucture_name :
+					salary_component = frappe.get_doc("Salary Structure", stucture_name[0][0])
+					self.salary_structure = stucture_name[0][0]
+					self.set("_salary_structure_doc",salary_component)
+					self.ceck_for_update_values_in_salary_strycrtue(employee.name)
+				else:
+					self.salary_structure = None
+					frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
+									.format(employee.name), title=_('Salary Structure Missing'))
 
-		if st_name:
-			self.salary_structure = st_name[0][0]
-			return self.salary_structure
 
 		else:
 			self.salary_structure = None
 			frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
 				.format(employee.name), title=_('Salary Structure Missing'))
+
+
+
+	# def check_sal_struct(self,employee):
+	# 	joining_date = employee.date_of_joining or self.from_date
+	# 	relieving_date = employee.relieving_date or self.to_date
+	# 	cond = """and sa.employee=%(employee)s and (sa.from_date <= %(start_date)s or
+	# 			sa.from_date <= %(end_date)s or sa.from_date <= %(joining_date)s)"""
+	#
+	# 	st_name = frappe.db.sql("""
+	# 		select sa.salary_structure
+	# 		from `tabSalary Structure Assignment` sa join `tabSalary Structure` ss
+	# 		where sa.salary_structure=ss.name
+	# 			and sa.docstatus = 1 and ss.docstatus = 1 and ss.is_active ='Yes' %s
+	# 		order by sa.from_date desc
+	# 		limit 1
+	# 	""" %cond, {'employee': employee.name, 'start_date': self.from_date,
+	# 		'end_date': self.to_date, 'joining_date': joining_date})
+	#
+	# 	if st_name:
+	# 		self.salary_structure = st_name[0][0]
+	# 		return self.salary_structure
+	#
+	# 	else:
+	# 		self.salary_structure = None
+	# 		frappe.msgprint(_("No active or default Salary Structure found for employee {0} for the given dates")
+	# 			.format(employee.name), title=_('Salary Structure Missing'))
 
 
 	def post_attendance(self):

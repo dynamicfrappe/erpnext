@@ -17,8 +17,11 @@ class Multisalarystructure(Document):
 	def validate_dates(self):
 		joining_date, relieving_date = frappe.db.get_value("Employee", self.employee,
 			["date_of_joining", "relieving_date"])
-
+		is_main = 0
 		for st in self.salary_structure:
+			type = frappe.get_doc("Salary Structure Type" ,st.type )
+			if type.is_main :
+				is_main = 1
 			if st.from_date:
 				if frappe.db.exists("Multi salary structure", { "from_date": st.from_date, "docstatus": 1,"employee":self.employee}):
 					frappe.throw(_("Salary Structure Assignment for Employee already exists"))
@@ -28,6 +31,8 @@ class Multisalarystructure(Document):
 				if relieving_date and getdate(self.from_date) > relieving_date and not self.flags.old_employee:
 					frappe.throw(_("From Date {0} cannot be after employee's relieving Date {1}")
 					.format(st.from_date, relieving_date))
+		if not is_main:
+			frappe.throw(_("Salary Strucutre Must have main type"))
 	def updateStatus(self):
 		frappe.db.sql("update `tabMulti salary structure` set status='closed' where name='{}'".format(self.name))
 
