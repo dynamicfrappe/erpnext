@@ -317,49 +317,61 @@ class SalarySlip(TransactionBase):
 			self.get_leave_details(joining_date, relieving_date)
 			if struct :
 				self.calculate_attendance()
-				self.calculate_Tax()
+				# self.calculate_Tax()
 				self.calculate_net_pay()
 	def calculate_Tax (self):
-		hr_settings = frappe.get_single("HR Settings" )
-		Tax_Sc = hr_settings.income_tax_salary_component or None
-		personal_exemption_value = hr_settings.personal_exemption_value or 0
-		disability_exemption_value =  hr_settings.disability_exemption_value or 0
-		tax_layers =   hr_settings.tax_layers or None
-		if Tax_Sc and tax_layers :
-			total_taxable_amount = 0
-			for e in self.get("earnings"):
-				SC = frappe.get_doc("Salary Component" , e.salary_component)
-				if SC :
-					if not SC.exempted_from_income_tax :
-						total_taxable_amount += e.amount
-			for e in self.get("deductions"):
-				SC = frappe.get_doc("Salary Component" , e.salary_component)
-				if SC :
-					if not SC.exempted_from_income_tax :
-						total_taxable_amount -= e.amount
-			if total_taxable_amount :
-				total_taxable_amount_yearly =  (total_taxable_amount * 12) - personal_exemption_value
-				total_tax = 0
-				perviuos_limit = 0
-				number = str(int(total_taxable_amount_yearly))[:-1]
-				number  = number +  str('0')
-				total_taxable_amount_yearly = float(number)
-				for i in tax_layers:
-					if i.limit < total_taxable_amount_yearly:
-						total_tax += (i.limit - perviuos_limit) * (i.tax_percent/100)
-						perviuos_limit = i.limit
+		total_taxable_amount = 0
+		for e in self.get("earnings"):
+			SC = frappe.get_doc("Salary Component", e.salary_component)
+			if SC:
+				if not SC.exempted_from_income_tax:
+					total_taxable_amount += e.amount
+		for e in self.get("deductions"):
+			SC = frappe.get_doc("Salary Component", e.salary_component)
+			if SC:
+				if not SC.exempted_from_income_tax:
+					total_taxable_amount -= e.amount
+		self.tax_pool = total_taxable_amount or 0
+		self.Tax_calculated = 0
+
+		if self.calculate_income_tax :
+			total_tax_pool = frappe.db.sql ("""
+			select ifnull(sum(tax_pool),0) from `tabMonthly Salary Slip`
+			where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0 """.format(month=self.month , employee = self.employee)) [0] [0]
+			total_taxable_amount += total_tax_pool
+			hr_settings = frappe.get_single("HR Settings" )
+			Tax_Sc = hr_settings.income_tax_salary_component or None
+			personal_exemption_value = hr_settings.personal_exemption_value or 0
+			disability_exemption_value =  hr_settings.disability_exemption_value or 0
+			tax_layers =   hr_settings.tax_layers or None
+			if Tax_Sc and tax_layers :
+
+				if total_taxable_amount :
+					total_taxable_amount_yearly =  (total_taxable_amount * 12) - personal_exemption_value
+					total_tax = 0
+					perviuos_limit = 0
+					number = str(int(total_taxable_amount_yearly))[:-1]
+					number  = number +  str('0')
+					total_taxable_amount_yearly = float(number)
+					for i in tax_layers:
+						if i.limit < total_taxable_amount_yearly:
+							total_tax += (i.limit - perviuos_limit) * (i.tax_percent/100)
+							perviuos_limit = i.limit
 
 
-					else :
-						total_taxable_amount_yearly -= perviuos_limit
-						total_tax += total_taxable_amount_yearly * (i.tax_percent/100)
-						break;
-				total_tax = total_tax / 12
-				if total_tax :
-					row = self.get_salary_slip_row(Tax_Sc)
+						else :
+							total_taxable_amount_yearly -= perviuos_limit
+							total_tax += total_taxable_amount_yearly * (i.tax_percent/100)
+							break;
+					total_tax = total_tax / 12
+					if total_tax :
+						row = self.get_salary_slip_row(Tax_Sc)
 
-					self.update_component_row(row, total_tax, "deductions", adding=1)
-
+						self.update_component_row(row, total_tax, "deductions", adding=1)
+			self.tax_calculated = 1
+			frappe.db.sql("""update  `tabMonthly Salary Slip`
+						set tax_calculated = 1
+						where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0""".format(month=self.month, employee=self.employee))
 
 
 	def calculate_hour_rate(self):
