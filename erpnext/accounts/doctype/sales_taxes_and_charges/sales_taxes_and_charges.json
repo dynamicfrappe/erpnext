@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "charge_type",
+  "tax_class",
   "row_id",
   "account_head",
   "col_break_1",
@@ -181,11 +182,19 @@
   {
    "fieldname": "dimension_col_break",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_class",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Tax Class",
+   "options": "Tax Class",
+   "reqd": 1
   }
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2020-11-10 12:06:46.507775",
+ "modified": "2020-12-14 16:21:51.065999",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Taxes and Charges",
