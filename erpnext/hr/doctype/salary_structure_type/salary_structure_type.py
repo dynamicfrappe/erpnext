@@ -15,8 +15,9 @@ class SalaryStructureType(Document):
 			""")
 		else:
 			result = frappe.db.sql("""
-			select * from `tabSalary Structure Type`   where is_main = 1
-			""")
+			select * from `tabSalary Structure Type`   where is_main = 1 and name != '{name}'
+			""".format(name=self.name),as_dict=1)
+			# frappe.msgprint(str(result))
 			if not result :
 				self.is_main = 1
 
