@@ -41,18 +41,7 @@ class MultiPayroll(Document):
 		except:
 			data = None
 		return  data
-	def set_component(self,salary_slip,i,typ):	
-			row = salary_slip.append(typ, {})
-			row.salary_component = i.salary_component
-			row.abbr= i.abbr
-			row.statistical_component = i.statistical_component
-			row.deduct_full_tax_on_selected_payroll_date = i.deduct_full_tax_on_selected_payroll_date
-			row.depends_on_payment_days =i.depends_on_payment_days
-			row.is_tax_applicable = i.is_tax_applicable
-			row.exempted_from_income_tax = i.exempted_from_income_tax
-			row.formula = i.formula
-			row.amount = i.amount
-			salary_slip.save()
+	
 	def create_salary_slips(self ):
 		if self.employees:
 			for salary_structure in self.employees :
@@ -71,14 +60,7 @@ class MultiPayroll(Document):
 
 
 
-	def get_filter_condition(self):
-		
-		cond = ''
-		for f in ['company', 'branch', 'department', 'designation']:
-			if self.get(f):
-				cond += " and t1." + f + " = '" + self.get(f).replace("'", "\'") + "'"
-
-		return cond
+	
 	def get_joining_relieving_condition(self):
 		cond = """
 			and ifnull(t1.date_of_joining, '0000-00-00') <= '%(end_date)s'
