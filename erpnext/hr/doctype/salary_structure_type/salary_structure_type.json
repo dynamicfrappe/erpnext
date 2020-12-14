@@ -6,7 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "type",
-  "frequency"
+  "frequency",
+  "is_main"
  ],
  "fields": [
   {
@@ -19,9 +20,15 @@
    "fieldtype": "Select",
    "label": "Frequency",
    "options": "\nMonthly\nFortnightly\nBimonthly\nWeekly\nDaily"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_main",
+   "fieldtype": "Check",
+   "label": "Is Main"
   }
  ],
- "modified": "2020-12-06 15:57:31.414299",
+ "modified": "2020-12-14 14:22:17.448666",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Salary Structure Type",
