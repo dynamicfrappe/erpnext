@@ -263,6 +263,112 @@ class MonthlySalarySlip(TransactionBase):
 				self.calculate_Tax()
 				self.calculate_net_pay()
 
+	def calculate_Tax(self):
+		total_taxable_amount = 0
+		for e in self.get("earnings"):
+			SC = frappe.get_doc("Salary Component", e.salary_component)
+			if SC:
+				if not SC.exempted_from_income_tax:
+					total_taxable_amount += e.amount
+		for e in self.get("deductions"):
+			SC = frappe.get_doc("Salary Component", e.salary_component)
+			if SC:
+				if not SC.exempted_from_income_tax:
+					total_taxable_amount -= e.amount
+		self.tax_pool = total_taxable_amount or 0
+		self.Tax_calculated = 0
+
+		if self.calculate_income_tax:
+			total_tax_pool = frappe.db.sql("""
+			select ifnull(sum(tax_pool),0) from `tabMonthly Salary Slip`
+			where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0 """.format(
+				month=self.month, employee=self.employee))[0][0]
+			total_taxable_amount += total_tax_pool
+			hr_settings = frappe.get_single("HR Settings")
+			Tax_Sc = hr_settings.income_tax_salary_component or None
+			personal_exemption_value = hr_settings.personal_exemption_value or 0
+			disability_exemption_value = hr_settings.disability_exemption_value or 0
+			tax_layers = hr_settings.tax_layers or None
+			if Tax_Sc and tax_layers:
+
+				if total_taxable_amount:
+					total_taxable_amount_yearly = (total_taxable_amount * 12) - personal_exemption_value
+					total_tax = 0
+					perviuos_limit = 0
+					number = str(int(total_taxable_amount_yearly))[:-1]
+					number = number + str('0')
+					total_taxable_amount_yearly = float(number)
+					for i in tax_layers:
+						if i.limit < total_taxable_amount_yearly:
+							total_tax += (i.limit - perviuos_limit) * (i.tax_percent / 100)
+							perviuos_limit = i.limit
+
+
+						else:
+							total_taxable_amount_yearly -= perviuos_limit
+							total_tax += total_taxable_amount_yearly * (i.tax_percent / 100)
+							break;
+					total_tax = total_tax / 12
+					if total_tax:
+						row = self.get_salary_slip_row(Tax_Sc)
+
+						self.update_component_row(row, total_tax, "deductions", adding=1)
+			self.tax_calculated = 1
+			frappe.db.sql("""update  `tabMonthly Salary Slip`
+						set tax_calculated = 1
+						where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0""".format(
+				month=self.month, employee=self.employee))
+	def get_salary_slip_row(self, salary_component):
+		component = frappe.get_doc("Salary Component", salary_component)
+		# Data for update_component_row
+		struct_row = frappe._dict()
+		struct_row['depends_on_payment_days'] = component.depends_on_payment_days
+		struct_row['salary_component'] = component.name
+		struct_row['abbr'] = component.salary_component_abbr
+		struct_row['do_not_include_in_total'] = component.do_not_include_in_total
+		struct_row['is_tax_applicable'] = component.is_tax_applicable
+		struct_row['is_flexible_benefit'] = component.is_flexible_benefit
+		struct_row['variable_based_on_taxable_salary'] = component.variable_based_on_taxable_salary
+		return struct_row
+	def update_component_row(self, struct_row, amount, key, overwrite=1 , adding = 0):
+		component_row = None
+		for d in self.get(key):
+			if d.salary_component == struct_row.salary_component:
+				component_row = d
+
+		if not component_row:
+			if amount:
+				self.append(key, {
+					'amount': amount,
+					'default_amount': amount if not struct_row.get("is_additional_component") else 0,
+					'depends_on_payment_days' : struct_row.depends_on_payment_days,
+					'salary_component' : struct_row.salary_component,
+					'abbr' : struct_row.abbr,
+					'do_not_include_in_total' : struct_row.do_not_include_in_total,
+					'is_tax_applicable': struct_row.is_tax_applicable,
+					'is_flexible_benefit': struct_row.is_flexible_benefit,
+					'variable_based_on_taxable_salary': struct_row.variable_based_on_taxable_salary,
+					'deduct_full_tax_on_selected_payroll_date': struct_row.deduct_full_tax_on_selected_payroll_date,
+					'additional_amount': amount if struct_row.get("is_additional_component") else 0,
+					'exempted_from_income_tax': struct_row.exempted_from_income_tax
+				})
+		else:
+			if struct_row.get("is_additional_component"):
+				if overwrite:
+					component_row.additional_amount = amount - component_row.get("default_amount", 0)
+				else:
+					component_row.additional_amount = amount
+
+				if not overwrite and component_row.default_amount:
+					amount += component_row.default_amount
+			else:
+				component_row.default_amount = amount
+
+			if adding:
+				component_row.amount += amount
+			else :
+				component_row.amount = amount
+			component_row.deduct_full_tax_on_selected_payroll_date = struct_row.deduct_full_tax_on_selected_payroll_date
 
 	def check_sal_struct(self, starting_date):
 
