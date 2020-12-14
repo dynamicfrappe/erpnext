@@ -421,6 +421,7 @@
    "label": "Less Time Setting"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "less_time_salary_component",
    "fieldtype": "Link",
    "label": "Less Time Salary Component",
@@ -443,7 +444,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 16:24:35.449399",
+ "modified": "2020-12-14 12:14:07.907788",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
