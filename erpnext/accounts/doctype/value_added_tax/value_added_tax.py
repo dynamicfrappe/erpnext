@@ -26,7 +26,7 @@ class ValueAddedTax(Document):
 			Account["category"]=i.taxcategory
 			for j in myTable:
 				if i.taxcategory==j.taxcategory and j.taxtype=="Collected":
-					Amount+=float(j.taxamount)
+					Amount+=abs(j.taxamount)
 			Account["Amount"]=Amount
 			Accountdata["data"].append(Account)
 		doc = frappe.new_doc('Journal Entry')
@@ -87,7 +87,7 @@ class ValueAddedTax(Document):
 									ON
 									  invoice.customer = customer.`name`
 
-		                           where invoice.due_date >='{}' and invoice.due_date <='{}'         
+		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1        
 									GROUP BY
 									invoice.`name`
 					""".format(fromDate,todate), as_dict=1)
@@ -122,7 +122,7 @@ class ValueAddedTax(Document):
 									  tabSupplier  supplier
 									ON
 									  invoice.supplier = supplier.`name`
-		                             where invoice.due_date >='{}' and invoice.due_date <='{}'
+		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 
 									GROUP BY
 									invoice.`name`
 
@@ -138,14 +138,14 @@ class ValueAddedTax(Document):
 			row.docdate=inv.due_date
 			row.cadno=inv.tax_id
 			row.docamount=inv.total
-			row.taxamount=inv.tax_amount
+			row.taxamount=abs(inv.tax_amount)
 			row.taxcategory=inv.account_head
 			if (inv.type=='Sales Invoice' and float(inv.tax_amount)>0) or  (inv.type=='Purchase Invoice' and float(inv.tax_amount)<0):
 				row.taxtype="Collected"
-				collected+=inv.tax_amount
+				collected+=abs(inv.tax_amount)
 			if (inv.type == 'Sales Invoice' and float(inv.tax_amount) < 0) or (inv.type == 'Purchase Invoice' and float(inv.tax_amount) > 0):
 				row.taxtype="Paid"
-				paid+=inv.tax_amount
+				paid+=abs(inv.tax_amount)
 		self.collectedtax=collected
 		self.paidtax=paid
 		self.clearanceamount=collected-paid
