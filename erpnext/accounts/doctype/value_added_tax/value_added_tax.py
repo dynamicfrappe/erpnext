@@ -89,7 +89,7 @@ class ValueAddedTax(Document):
 
 		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1        
 									GROUP BY
-									invoice.`name`
+									invoice.`name`, taxes.tax_amount
 					""".format(fromDate,todate), as_dict=1)
 
 		sales_invoices += frappe.db.sql("""
@@ -124,7 +124,7 @@ class ValueAddedTax(Document):
 									  invoice.supplier = supplier.`name`
 		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 
 									GROUP BY
-									invoice.`name`
+									invoice.`name`, taxes.tax_amount
 
 
 					""".format(fromDate,todate),as_dict=1)
