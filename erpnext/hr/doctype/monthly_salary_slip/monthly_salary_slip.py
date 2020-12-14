@@ -16,6 +16,16 @@ from erpnext.hr.doctype.employee_benefit_application.employee_benefit_applicatio
 from erpnext.hr.doctype.employee_benefit_claim.employee_benefit_claim import get_benefit_claim_amount, get_last_payroll_period_benefits
 
 
+
+
+
+employee_status = {"""  Present
+						Absent
+						Leave
+						Holiday
+						Business Trip
+						Mission
+						Mission All Day"""}
 class MonthlySalarySlip(TransactionBase):
 	def __init__(self, *args, **kwargs):
 		super(MonthlySalarySlip, self).__init__(*args, **kwargs)
@@ -32,6 +42,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.daily_rate = 0
 		self.real_month = None
 		self.salary_slip_based_on_timesheet = None
+		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 	def autoname(self):
 		self.name = make_autoname(self.series)
 
@@ -48,15 +59,13 @@ class MonthlySalarySlip(TransactionBase):
 		else: 
 			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
-		 
+		self.get_active_month()
 		self.status = self.get_status()
 		self.validate_dates()
 		self.check_existing()
 		# self.check_sal_struct(self.end_date)
 		self.set_salary_component_first_time()
 		self.ceck_for_update_values_in_salary_strycrtue()
-		
-
 		self.set_formula_valus()
 		self.update_dates_for_employee()
 
@@ -76,19 +85,28 @@ class MonthlySalarySlip(TransactionBase):
 
 	def get_employee_active_salary_structure_type(self):
 		active_salary =self.get_active_salary_structure()
-
 		if active_salary :
-			
-
 			valid_types = frappe.db.sql(""" SELECT type FROM `tabSalary structure Template` WHERE parent = '%s'
 			 """%(str(active_salary[0][0])))
-			# frappe.throw(str(valid_types))
 			return([x for x in valid_types[0]])
  
 		else :
 			frappe.throw("No Active Salary Structure For employee '%s' , from date '%s' "%(self.employee , self.start_date))
 
-
+	def get_monthly_working_days_from_attendence_rule(self):
+		get_data =  frappe.db.sql("""SELECT  a.total_working_days_per_month FROM `tabEmployee` AS e 
+			JOIN `tabAttendance Rule` AS a 
+			ON e.attendance_role = a.name 
+			WHERE e.name = '%s' """%self.employee )
+		return get_data[0][0]
+	def get_active_month(self):
+		active_month = frappe.get_doc("Payroll Month" ,self.month)
+		start = active_month.start_date
+		end = active_month.end_date
+		if (start == self.start_date and  end == self.end_date) :
+			self.payment_days = self.total_working_days
+		else :
+			self.payment_days = date_diff(self.end_date , self.start_date)
 
 	def get_amount_pase_on_formula(self,formula , data = None):
 		data = { i.abbr:i.amount  for i in self.earnings}
@@ -182,6 +200,7 @@ class MonthlySalarySlip(TransactionBase):
 				return False
 
 	def set_component(self,i,typ):
+		self.set(typ,[])
 		if i.amount >= 0 :	
 				row = self.append(typ, {})
 				row.salary_component = i.salary_component

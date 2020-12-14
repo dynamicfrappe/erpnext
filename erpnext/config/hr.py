@@ -584,6 +584,35 @@ def get_data():
 				},
 			]
 		},
+					{
+			"label": _("Medical Insurance"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Insurance Office",
+				},
+				{
+					"type": "doctype",
+					"name": "Insurance Organization",
+				},
+				{
+					"type": "doctype",
+					"name": "Job insurance codes",
+				},
+				{
+					"type": "doctype",
+					"name": "Employee Social Insurance Data",
+				},
+				{
+					"type": "doctype",
+					"name": "Social Insurance Settings",
+				},
+					{
+					"type": "doctype",
+					"name": "Government",
+				},
+			]
+		},
 		# {
 		# 	"label": _("Fleet Management"),
 		# 	"items": [
