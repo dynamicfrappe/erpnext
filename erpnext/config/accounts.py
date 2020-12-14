@@ -294,6 +294,11 @@ def get_data():
 					"name": "Tax Withholding Category",
 					"description": _("Tax Withholding rates to be applied on transactions.")
 				},
+				{
+					"type": "doctype",
+					"name": "Value Added Tax",
+					"description": _("Value Added Tax")
+				},
 			]
 		},
 		{
