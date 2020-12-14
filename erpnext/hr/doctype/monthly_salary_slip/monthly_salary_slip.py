@@ -43,7 +43,8 @@ class MonthlySalarySlip(TransactionBase):
 		self.daily_rate = 0
 		self.real_month = None
 		self.salary_slip_based_on_timesheet = None
-		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
+		# self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
+
 	def autoname(self):
 		self.name = make_autoname(self.series)
 
@@ -60,6 +61,7 @@ class MonthlySalarySlip(TransactionBase):
 		else: 
 			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
+		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 		self.get_active_month()
 		self.status = self.get_status()
 		self.validate_dates()
@@ -70,6 +72,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.set_formula_valus()
 		self.update_dates_for_employee()
 		self.get_absent_days()
+		self.get_attendance()
 
 
 	def validate_dates(self):
@@ -100,7 +103,10 @@ class MonthlySalarySlip(TransactionBase):
 			JOIN `tabAttendance Rule` AS a 
 			ON e.attendance_role = a.name 
 			WHERE e.name = '%s' """%self.employee )
-		return get_data[0][0]
+		try:
+			return get_data[0][0]
+		except:
+			frappe.throw(_("Please Set Toal Working Days per Month in Attendance Rule"))
 	def get_active_month(self):
 		active_month = frappe.get_doc("Payroll Month" ,self.month)
 		start = active_month.start_date
@@ -131,8 +137,11 @@ class MonthlySalarySlip(TransactionBase):
 
 
 		salary_component = frappe.get_doc("Salary Structure" ,stucture_name[0][0] )
+		self.set('earnings', [])
 		for i in salary_component.earnings  :
+
 					self.set_component(i , 'earnings')
+		self.set('deductions', [])
 		for i in salary_component.deductions :
 					self.set_component(i , 'deductions')
 	def get_attendance (self):
@@ -184,7 +193,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.absent_days = frappe.db.sql("""
 		select ifnull( SUM(case when type ="Absent" then 1 else 0  end) ,0) as absent_days from `tabEmployee Attendance Logs`
 		where employee = '{employee}' and date(date) between date('{start_date}') and date('{end_date}')
-		""".format(employee = self.employee,start_date = self.start_date , end_date = self.end_date),as_dict=1).absent_days or 0
+		""".format(employee = self.employee,start_date = self.start_date , end_date = self.end_date),as_dict=1)[0].absent_days or 0
 
 
 		
@@ -241,8 +250,9 @@ class MonthlySalarySlip(TransactionBase):
 				return False
 
 	def set_component(self,i,typ):
-		self.set(typ,[])
-		if i.amount >= 0 :	
+		# self.set(typ,[])
+
+		if i.amount >= 0 :
 				row = self.append(typ, {})
 				row.salary_component = i.salary_component
 				row.abbr= i.abbr
@@ -300,8 +310,8 @@ class MonthlySalarySlip(TransactionBase):
 
 			self.get_leave_details(joining_date, relieving_date)
 			if struct :
-				self.calculate_attendance()
-				self.calculate_Tax()
+				# self.calculate_attendance()
+				# self.calculate_Tax()
 				self.calculate_net_pay()
 
 	def calculate_Tax(self):
