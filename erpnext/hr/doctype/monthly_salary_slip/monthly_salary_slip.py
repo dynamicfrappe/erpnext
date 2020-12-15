@@ -75,6 +75,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.update_dates_for_employee()
 		self.get_absent_days()
 		self.get_attendance()
+		self.set_loan_repayment()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
 
@@ -482,4 +483,33 @@ class MonthlySalarySlip(TransactionBase):
 			except:
 				pass
 
-		self.net_pay = self.gross_pay - self.total_deduction
+		self.net_pay = self.gross_pay - self.total_deduction - (self.total_loan_repayment or 0)
+	def set_loan_repayment(self):
+		self.set('loans', [])
+		self.total_loan_repayment = 0
+		self.total_interest_amount = 0
+		self.total_principal_amount = 0
+
+		for loan in self.get_loan_details():
+			self.append('loans', {
+				'loan': loan.name,
+				'total_payment': loan.total_payment,
+				'interest_amount': loan.interest_amount,
+				'principal_amount': loan.principal_amount,
+				'loan_account': loan.loan_account,
+				'interest_income_account': loan.interest_income_account
+			})
+
+			self.total_loan_repayment += loan.total_payment
+			self.total_interest_amount += loan.interest_amount
+			self.total_principal_amount += loan.principal_amount
+	def get_loan_details(self):
+		return frappe.db.sql("""select rps.principal_amount,
+				rps.name as repayment_name, rps.interest_amount, l.name,
+				rps.total_payment, l.loan_account, l.interest_income_account
+			from
+				`tabRepayment Schedule` as rps, `tabLoan` as l
+			where
+				l.name = rps.parent and rps.payment_date between %s and %s and
+				l.repay_from_salary = 1 and l.docstatus = 1 and l.applicant = %s""",
+			(self.start_date, self.end_date, self.employee), as_dict=True) or []
