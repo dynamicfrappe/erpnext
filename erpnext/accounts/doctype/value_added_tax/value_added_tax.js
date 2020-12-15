@@ -6,6 +6,8 @@ frappe.ui.form.on('Value Added Tax', {
 
          if(frm.doc.docstatus==0 && frm.doc.details !=null &&frm.doc.journal_created==0){
          	frm.add_custom_button(__("Create Journal Entry"), function() {
+
+
                  frappe.call({
 					 method: "createJournalEntry",
 					 doc:frm.doc,
@@ -18,10 +20,26 @@ frappe.ui.form.on('Value Added Tax', {
 
 		 }
 	},
+	taxtype:function (frm){
+		cur_frm.clear_table("details");
+		frm.call({
+				method:"getTaxes",
+				doc:frm.doc,
+				args:{
+					 "fromDate":frm.doc.fromdae,
+					"todate":frm.doc.todate
+				},
+				callback(r){
+			
+				}
+			})
+
+	},
 	todate:function (frm){
 	  if(frm.doc.todate &&frm.doc.fromdae){
 	  	frm.add_custom_button(__("Get Taxes"), function() {
 	  		cur_frm.clear_table("details");
+
 	  		frm.call({
 				method:"getTaxes",
 				doc:frm.doc,
