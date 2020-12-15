@@ -87,10 +87,10 @@ class ValueAddedTax(Document):
 									ON
 									  invoice.customer = customer.`name`
 
-		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1        
+		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1  and taxes.tax_class='{}'      
 									GROUP BY
 									invoice.`name`, taxes.tax_amount
-					""".format(fromDate,todate), as_dict=1)
+					""".format(fromDate,todate,self.taxtype), as_dict=1)
 
 		sales_invoices += frappe.db.sql("""
 
@@ -122,12 +122,12 @@ class ValueAddedTax(Document):
 									  tabSupplier  supplier
 									ON
 									  invoice.supplier = supplier.`name`
-		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 
+		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 and taxes.tax_class='{}'
 									GROUP BY
 									invoice.`name`, taxes.tax_amount
 
 
-					""".format(fromDate,todate),as_dict=1)
+					""".format(fromDate,todate,self.taxtype),as_dict=1)
 
 		for inv in sales_invoices:
 			row=self.append("details",{})

@@ -8,6 +8,7 @@
   "naming_series",
   "fromdae",
   "todate",
+  "taxtype",
   "column_break_3",
   "postingdate",
   "status",
@@ -146,10 +147,16 @@
    "options": "Val-Add-",
    "print_hide": 1,
    "set_only_once": 1
+  },
+  {
+   "fieldname": "taxtype",
+   "fieldtype": "Link",
+   "label": "Tax Type",
+   "options": "Tax Class"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-14 14:12:34.497667",
+ "modified": "2020-12-15 10:21:02.128262",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Value Added Tax",
