@@ -63,8 +63,10 @@ class MonthlySalarySlip(TransactionBase):
 	def validate(self):
 		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 		self.get_active_month()
+
 		self.status = self.get_status()
 		self.validate_dates()
+		
 		self.check_existing()
 		# self.check_sal_struct(self.end_date)
 		self.set_salary_component_first_time()
@@ -73,6 +75,8 @@ class MonthlySalarySlip(TransactionBase):
 		self.update_dates_for_employee()
 		self.get_absent_days()
 		self.get_attendance()
+		self.calculate_net_pay()
+		self.check_employee_leave_without_pay()
 
 
 	def validate_dates(self):
@@ -434,3 +438,48 @@ class MonthlySalarySlip(TransactionBase):
 			pass
 
 
+	def check_employee_leave_without_pay(self):
+		self.leave_without_pay = 0
+		month_leave = frappe.db.sql(""" SELECT total_leave_days FROM `tabLeave Application`  WHERE employee='%s' 
+			and leave_type='Leave Without Pay' and 
+			from_date >= '%s' and to_date <= '%s' """%(self.employee , self.start_date,self.end_date))
+		if month_leave :
+			self.leave_without_pay = int(month_leave[0][0])
+			
+		get_end_month_leaves = frappe.db.sql(""" SELECT total_leave_days ,to_date FROM `tabLeave Application`  WHERE employee='%s' 
+			and leave_type='Leave Without Pay' and 
+			from_date <= '%s' and to_date >= '%s' """%(self.employee , self.end_date,self.end_date))
+		
+		if get_end_month_leaves :
+			defrence_between_end =  date_diff( self.end_date,get_end_month_leaves[0][1] )
+			end_month_dates = int(get_end_month_leaves[0][0]) + defrence_between_end
+			self.leave_without_pay += end_month_dates
+
+			# self.payment_days = self.payment_days-self.leave_without_pay
+			
+		self.payment_days = self.payment_days - self.leave_without_pay
+		get_start_month_dates = frappe.db.sql(""" SELECT total_leave_days FROM `tabLeave Application`  WHERE employee='%s' 
+			and leave_type='Leave Without Pay' and 
+			from_date <= '%s' and to_date >= '%s' """%(self.employee , self.start_date,self.start_date))
+		# frappe.throw(str(get_start_month_dates))
+		# frappe.throw(str(get_start_month_dates ))
+		self.payment_days = self.payment_days - self.absent_days
+
+	def calculate_net_pay(self):
+
+		self.gross_pay = 0
+		self.total_deduction = 0
+		self.net_pay = 0
+		for i in self.earnings :
+			# msgprint(str(i.amount))
+			try :
+				self.gross_pay += float(i.amount) 
+			except:
+				pass
+		for i in self.deductions:
+			try :
+				self.total_deduction+= float(i.amount)
+			except:
+				pass
+
+		self.net_pay = self.gross_pay - self.total_deduction

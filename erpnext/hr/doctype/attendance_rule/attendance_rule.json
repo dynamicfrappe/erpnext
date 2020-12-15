@@ -77,6 +77,7 @@
    "unique": 1
   },
   {
+   "default": "0",
    "fieldname": "absent_rate",
    "fieldtype": "Float",
    "label": "Absent Rate"
@@ -421,6 +422,7 @@
    "label": "Less Time Setting"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "less_time_salary_component",
    "fieldtype": "Link",
    "label": "Less Time Salary Component",
@@ -443,7 +445,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-10 16:24:35.449399",
+ "modified": "2020-12-15 09:36:33.795385",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
