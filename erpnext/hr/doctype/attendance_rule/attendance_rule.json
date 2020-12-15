@@ -422,6 +422,7 @@
    "label": "Less Time Setting"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "less_time_salary_component",
    "fieldtype": "Link",
    "label": "Less Time Salary Component",
