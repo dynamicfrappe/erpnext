@@ -6,7 +6,19 @@ frappe.ui.form.on('Employee Document', {
    is_recived:function (frm){
    	 frm.set_df_property("recived_by", "reqd", 1);
    },
-
+    document_type:function (frm){
+       frappe.call({
+		   method: "isWorkLetter",
+		   doc:frm.doc,
+		   callback(r){
+               if(r.message=="true"){
+               	   frm.set_df_property("workletterdetails","hidden",0)
+			   }else {
+               	 frm.set_df_property("workletterdetails","hidden",1)
+			   }
+		   }
+	   })
+	},
 	refresh:function(frm){
 		var todayDate = new Date()
 		var enddate=new Date(frm.doc.end_date)
