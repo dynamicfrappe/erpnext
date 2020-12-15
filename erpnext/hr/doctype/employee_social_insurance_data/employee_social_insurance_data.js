@@ -6,8 +6,10 @@ frappe.ui.form.on('Employee Social Insurance Data', {
 	is_owner:function (frm){
 		if(frm.doc.is_owner==1) {
 			frm.set_df_property("insured", "read_only", 1)
+			frm.set_df_property("anotherog", "read_only", 1)
 		}else {
 			frm.set_df_property("insured", "read_only", 0)
+			frm.set_df_property("anotherog", "read_only", 0)
 		}
 	},
 
