@@ -17,10 +17,13 @@
   "anotherog",
   "insurancenumber",
   "insurance_detail_section",
-  "insurance_salary",
-  "basic_salary",
+  "insorganization",
+  "insoffice",
+  "insuancejob",
   "column_break_11",
   "employee_strat_insurance_date",
+  "basic_salary",
+  "insurance_salary",
   "section_break_11",
   "form_1_column",
   "income_date",
@@ -164,12 +167,13 @@
    "label": "Employee id"
   },
   {
-   "depends_on": "insured",
+   "depends_on": "eval:doc.insured==1 || doc.is_owner==1",
    "fieldname": "insurancenumber",
    "fieldtype": "Data",
    "label": "Insurance Number"
   },
   {
+   "fetch_from": "employee.arabic_name",
    "fieldname": "arabic_name",
    "fieldtype": "Data",
    "label": "Arabic Name",
@@ -180,10 +184,30 @@
    "fieldname": "anotherog",
    "fieldtype": "Check",
    "label": "Insured From Another org"
+  },
+  {
+   "fieldname": "insorganization",
+   "fieldtype": "Link",
+   "label": "Insurance Organization",
+   "options": "Insurance Organization",
+   "reqd": 1
+  },
+  {
+   "fieldname": "insoffice",
+   "fieldtype": "Link",
+   "label": "Insurance Office",
+   "options": "Insurance Office",
+   "reqd": 1
+  },
+  {
+   "fieldname": "insuancejob",
+   "fieldtype": "Link",
+   "label": "Job insurance codes",
+   "options": "Job insurance codes"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-14 17:25:49.836167",
+ "modified": "2020-12-15 10:58:18.074222",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
