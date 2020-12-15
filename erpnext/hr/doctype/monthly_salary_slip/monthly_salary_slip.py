@@ -65,6 +65,8 @@ class MonthlySalarySlip(TransactionBase):
 		self.get_Employee_Salary_Details()
 
 	def get_Employee_Salary_Details(self):
+		# frappe.msgprint(str(self.is_main))
+
 		self.get_employee_active_salary_structure_type()
 		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 		self.get_active_month()
@@ -79,8 +81,10 @@ class MonthlySalarySlip(TransactionBase):
 		self.set_formula_valus()
 		self.update_dates_for_employee()
 		self.get_absent_days()
+
 		self.get_attendance()
 		self.set_loan_repayment()
+		self.calculate_Tax()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
 
@@ -145,16 +149,23 @@ class MonthlySalarySlip(TransactionBase):
 		active_salary =self.get_active_salary_structure()
 		stucture_name = frappe.db.sql("""SELECT salary_structure FROM `tabSalary structure Template` WHERE parent='%s' and type='%s'  
 			    """%(active_salary[0][0] ,self.payroll_type))
-
-
-		salary_component = frappe.get_doc("Salary Structure" ,stucture_name[0][0] )
 		self.set('earnings', [])
-		for i in salary_component.earnings  :
-
-					self.set_component(i , 'earnings')
 		self.set('deductions', [])
-		for i in salary_component.deductions :
-					self.set_component(i , 'deductions')
+		self.earnings = []
+		self.deductions = []
+		if stucture_name:
+			salary_component = frappe.get_doc("Salary Structure" ,stucture_name[0][0] )
+
+			for i in salary_component.earnings  :
+
+						self.set_component(i , 'earnings')
+
+			for i in salary_component.deductions :
+						self.set_component(i , 'deductions')
+		else :
+			frappe.msgprint(_("No Active Salary Structure For employee '%s' , from date '%s' with this type '%s' "%(self.employee , self.start_date , self.payroll_type)) , raise_exception=0 , indicator='red')
+
+
 	def get_attendance (self):
 		component_list = frappe.db.sql("""SELECT  
 												a.fingerprint_forgetten_penlaity_salary_component,
@@ -212,6 +223,7 @@ class MonthlySalarySlip(TransactionBase):
 	def ceck_for_update_values_in_salary_strycrtue(self):
 	
 		for i in self.earnings :
+
 			new_value = self.get_updated_value(i.salary_component)
 			if new_value :
 				i.amount = float(new_value)
@@ -343,17 +355,20 @@ class MonthlySalarySlip(TransactionBase):
 		if self.calculate_income_tax:
 			total_tax_pool = frappe.db.sql("""
 			select ifnull(sum(tax_pool),0) from `tabMonthly Salary Slip`
-			where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0 """.format(
+			where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' """.format(
 				month=self.month, employee=self.employee))[0][0]
 			total_taxable_amount += total_tax_pool
+			self.tax_pool = total_taxable_amount or 0
+
 			hr_settings = frappe.get_single("HR Settings")
 			Tax_Sc = hr_settings.income_tax_salary_component or None
 			personal_exemption_value = hr_settings.personal_exemption_value or 0
 			disability_exemption_value = hr_settings.disability_exemption_value or 0
 			tax_layers = hr_settings.tax_layers or None
+
 			if Tax_Sc and tax_layers:
 
-				if total_taxable_amount:
+				if total_taxable_amount and total_taxable_amount > 0:
 					total_taxable_amount_yearly = (total_taxable_amount * 12) - personal_exemption_value
 					total_tax = 0
 					perviuos_limit = 0
@@ -374,12 +389,12 @@ class MonthlySalarySlip(TransactionBase):
 					if total_tax:
 						row = self.get_salary_slip_row(Tax_Sc)
 
-						self.update_component_row(row, total_tax, "deductions", adding=1)
+						self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)
 			self.tax_calculated = 1
-			frappe.db.sql("""update  `tabMonthly Salary Slip`
-						set tax_calculated = 1
-						where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' and tax_calculated = 0""".format(
-				month=self.month, employee=self.employee))
+
+
+
+
 	def get_salary_slip_row(self, salary_component):
 		component = frappe.get_doc("Salary Component", salary_component)
 		# Data for update_component_row
@@ -392,28 +407,29 @@ class MonthlySalarySlip(TransactionBase):
 		struct_row['is_flexible_benefit'] = component.is_flexible_benefit
 		struct_row['variable_based_on_taxable_salary'] = component.variable_based_on_taxable_salary
 		return struct_row
-	def update_component_row(self, struct_row, amount, key, overwrite=1 , adding = 0):
+	def update_component_row(self, struct_row, amount, key, overwrite=1 , adding = 0 , adding_if_not_exist = 0):
 		component_row = None
 		for d in self.get(key):
 			if d.salary_component == struct_row.salary_component:
 				component_row = d
 
 		if not component_row:
-			if amount:
-				self.append(key, {
-					'amount': amount,
-					'default_amount': amount if not struct_row.get("is_additional_component") else 0,
-					'depends_on_payment_days' : struct_row.depends_on_payment_days,
-					'salary_component' : struct_row.salary_component,
-					'abbr' : struct_row.abbr,
-					'do_not_include_in_total' : struct_row.do_not_include_in_total,
-					'is_tax_applicable': struct_row.is_tax_applicable,
-					'is_flexible_benefit': struct_row.is_flexible_benefit,
-					'variable_based_on_taxable_salary': struct_row.variable_based_on_taxable_salary,
-					'deduct_full_tax_on_selected_payroll_date': struct_row.deduct_full_tax_on_selected_payroll_date,
-					'additional_amount': amount if struct_row.get("is_additional_component") else 0,
-					'exempted_from_income_tax': struct_row.exempted_from_income_tax
-				})
+			if adding_if_not_exist :
+				if amount:
+					self.append(key, {
+						'amount': amount,
+						'default_amount': amount if not struct_row.get("is_additional_component") else 0,
+						'depends_on_payment_days' : struct_row.depends_on_payment_days,
+						'salary_component' : struct_row.salary_component,
+						'abbr' : struct_row.abbr,
+						'do_not_include_in_total' : struct_row.do_not_include_in_total,
+						'is_tax_applicable': struct_row.is_tax_applicable,
+						'is_flexible_benefit': struct_row.is_flexible_benefit,
+						'variable_based_on_taxable_salary': struct_row.variable_based_on_taxable_salary,
+						'deduct_full_tax_on_selected_payroll_date': struct_row.deduct_full_tax_on_selected_payroll_date,
+						'additional_amount': amount if struct_row.get("is_additional_component") else 0,
+						'exempted_from_income_tax': struct_row.exempted_from_income_tax
+					})
 		else:
 			if struct_row.get("is_additional_component"):
 				if overwrite:
