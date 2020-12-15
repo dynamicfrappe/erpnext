@@ -13,6 +13,9 @@
   "document_type",
   "start_date",
   "end_date",
+  "senddate",
+  "postaldate",
+  "workletterdate",
   "section_break_9",
   "document",
   "is_recived",
@@ -23,7 +26,8 @@
   "amended_from",
   "is_notified",
   "document_history_section",
-  "document_history"
+  "document_history",
+  "is_work_letter"
  ],
  "fields": [
   {
@@ -152,10 +156,37 @@
    "label": "Document History",
    "options": "Document History",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "document_type.isWorkLetter",
+   "fieldname": "is_work_letter",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "is work letter",
+   "print_hide": 1
+  },
+  {
+   "depends_on": "eval:doc.is_work_letter==1",
+   "fieldname": "senddate",
+   "fieldtype": "Date",
+   "label": "Send Date"
+  },
+  {
+   "depends_on": "eval:doc.is_work_letter==1",
+   "fieldname": "postaldate",
+   "fieldtype": "Data",
+   "label": "postal Date"
+  },
+  {
+   "depends_on": "eval:doc.is_work_letter==1",
+   "fieldname": "workletterdate",
+   "fieldtype": "Data",
+   "label": "Work Letter Number"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-13 11:15:21.459585",
+ "modified": "2020-12-14 17:39:06.854727",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Document",

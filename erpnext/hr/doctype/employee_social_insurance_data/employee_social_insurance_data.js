@@ -2,6 +2,24 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Employee Social Insurance Data', {
+
+	is_owner:function (frm){
+		if(frm.doc.is_owner==1) {
+			frm.set_df_property("insured", "read_only", 1)
+		}else {
+			frm.set_df_property("insured", "read_only", 0)
+		}
+	},
+
+		insured:function (frm){
+		if(frm.doc.insured==1) {
+			frm.set_df_property("is_owner", "read_only", 1)
+		}else {
+			frm.set_df_property("is_owner", "read_only", 0)
+		}
+	},
+
+
     	setup:function(frm){
 		frm.set_query("employee_document",function(){
 			return{
