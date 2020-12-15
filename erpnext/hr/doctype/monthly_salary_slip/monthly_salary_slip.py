@@ -202,12 +202,12 @@ class MonthlySalarySlip(TransactionBase):
 
 	def update_dates_for_employee(self):
 		employe = frappe.get_doc("Employee" ,str(self.employee) )
-		if employe.date_of_joining <= datetime.datetime.strptime( self.start_date, "%Y-%m-%d").date():
+		if employe.date_of_joining <= datetime.datetime.strptime( str(self.start_date), "%Y-%m-%d").date():
 			pass
 		else:
 			self.start_date=employe.date_of_joining
 		if 	 employe.relieving_date :
-			if employe.relieving_date  >= datetime.strptime( self.end_date, "%Y-%m-%d").date():
+			if employe.relieving_date  >= datetime.strptime( str(self.end_date), "%Y-%m-%d").date():
 				pass
 			else:
 				self.end_date =employe.relieving_date

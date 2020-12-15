@@ -3,8 +3,8 @@
 
 frappe.ui.form.on('Multi Payroll', {
 	refresh: function(frm) {
-		
-		if (frm.doc.docstatus == 0 && frm.doc.employees.length == 0) {
+		debugger;
+		if (frm.doc.docstatus == 0 && (frm.doc.employees || []).length == 0) {
 			if(!frm.is_new()) {
 				frm.page.clear_primary_action();
 				frm.add_custom_button(__("Get Employees"),
@@ -17,9 +17,9 @@ frappe.ui.form.on('Multi Payroll', {
 
 
 		}
-		if (frm.doc.docstatus == 0 && frm.doc.employees.length > 0) {
+		if (frm.doc.docstatus == 0 && (frm.doc.employees || []).length > 0) {
 
-			if(!frm.is_new()) {
+			if(!frm.is_new() && frm.doc.salary_slips_created == 0) {
 
 				frm.page.clear_primary_action();
 				frm.add_custom_button(__("Create Salary Slip "),
@@ -32,15 +32,43 @@ frappe.ui.form.on('Multi Payroll', {
 			}
 		}
 
-	},
 
+
+		if(!frm.is_new() && frm.doc.salary_slips_created == 1) {
+
+			frm.page.clear_primary_action();
+			frm.add_custom_button(__("Calculate"),
+				function() {
+					frm.events.calculate_salary_slip(frm);
+				}
+			).toggleClass('btn-primary', !(frm.doc.employees || []).length);
+
+
+		}
+
+
+	},
+	calculate_salary_slip : function (frm){
+		return frappe.call({
+			doc: frm.doc,
+			method: 'calculate_salary_slip',
+			callback: function(r) {
+
+				// frappe.msgprint(__("Done"));
+				frm.refresh();
+			}
+
+		})
+	}
+	,
 	creat_salary_slip:function(frm){
 		return frappe.call({
 			doc: frm.doc,
 			method: 'create_salary_slips',
 			callback: function(r) {
 
-				console.log("Done")
+				// frappe.msgprint(__("Done"));
+				frm.refresh();
 			}
 			
 		})

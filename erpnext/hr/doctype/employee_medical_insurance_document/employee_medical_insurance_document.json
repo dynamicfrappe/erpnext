@@ -81,7 +81,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Insurance Document ",
-   "options": "Medical Insurance Dcoument",
+   "options": "Medical Insurance Document",
    "reqd": 1
   },
   {
@@ -154,7 +154,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-03 16:08:48.795475",
+ "modified": "2020-12-15 15:45:17.080434",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Document",
