@@ -589,28 +589,13 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Insurance Office",
+					"name": "Medical Insurance Dcoument",
 				},
 				{
 					"type": "doctype",
-					"name": "Insurance Organization",
+					"name": "Employee Medical Insurance Document",
 				},
-				{
-					"type": "doctype",
-					"name": "Job insurance codes",
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Social Insurance Data",
-				},
-				{
-					"type": "doctype",
-					"name": "Social Insurance Settings",
-				},
-					{
-					"type": "doctype",
-					"name": "Government",
-				},
+			
 			]
 		},
 		# {
