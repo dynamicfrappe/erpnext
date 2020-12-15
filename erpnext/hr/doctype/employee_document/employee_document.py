@@ -13,6 +13,14 @@ class EmployeeDocument(Document):
 	def validate(self):
 		if self.document:
 			self.is_recived=1
+	def isWorkLetter(self):
+		isletter=frappe.db.sql("select isworkletter from `tabEmployee document type` where name='{}'".format(self.document_type),as_dict=1)
+		if isletter[0]["isworkletter"]==1:
+			return "true"
+		else:
+			return "false"
+
+
 
 	def checkNotification(self):
 		documents=frappe.db.sql("""select * from  `tabEmployee Document` where is_notified=0""",as_dict=1)

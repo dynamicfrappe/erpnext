@@ -858,7 +858,7 @@ class AttendanceCalculation(Document):
 
 
 							# Absents Days
-							absent_rate = frappe.db.get_single_value("HR Settings", "absent_rate") or 0
+							absent_rate = attendance_role.absent_rate or 0
 							absents_salary_component = attendance_role.absent__component
 							abset_penalty_component = attendance_role.abset_penalty_component
 
