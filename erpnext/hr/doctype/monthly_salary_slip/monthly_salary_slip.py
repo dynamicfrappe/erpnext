@@ -84,6 +84,8 @@ class MonthlySalarySlip(TransactionBase):
 
 		self.get_attendance()
 		self.set_loan_repayment()
+		if self.is_main:
+			self.get_Employee_advance()
 		self.calculate_Tax()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
@@ -91,6 +93,21 @@ class MonthlySalarySlip(TransactionBase):
 	def validate_dates(self):
 		if date_diff(self.end_date, self.start_date) < 0:
 			frappe.throw(_("To date cannot be before From date"))
+
+
+
+	def get_Employee_advance(self):
+		amount = frappe.db.sql("""
+		select ifnull(SUM(case when (paid_amount - claimed_amount) >0 then (paid_amount - claimed_amount) else 0 end ),0) as advance from `tabEmployee Advance`
+		where repay_unclaimed_amount_from_salary=1 and  docstatus = 1 and  employee = '{employee}' 
+		""".format(employee=self.employee ))[0][0] or 0
+
+		if amount:
+			salary_component = frappe.db.get_single_value("HR Settings",'advance_salary_component')
+			if salary_component :
+				row = self.get_salary_slip_row(salary_component)
+
+				self.update_component_row(row, amount, "deductions", adding=1, adding_if_not_exist=1)
 
 
 
