@@ -61,12 +61,16 @@ class MonthlySalarySlip(TransactionBase):
 		else: 
 			frappe.throw("Pleas Set financial Month First !")
 	def validate(self):
+		self.validate_dates()
+		self.get_Employee_Salary_Details()
+
+	def get_Employee_Salary_Details(self):
 		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 		self.get_active_month()
 
 		self.status = self.get_status()
-		self.validate_dates()
-		
+
+
 		self.check_existing()
 		# self.check_sal_struct(self.end_date)
 		self.set_salary_component_first_time()
@@ -78,7 +82,6 @@ class MonthlySalarySlip(TransactionBase):
 		self.set_loan_repayment()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
-
 
 	def validate_dates(self):
 		if date_diff(self.end_date, self.start_date) < 0:
@@ -490,6 +493,7 @@ class MonthlySalarySlip(TransactionBase):
 				pass
 
 		self.net_pay = self.gross_pay - self.total_deduction - (self.total_loan_repayment or 0)
+		self.rounded_total = rounded(self.net_pay) or 0
 	def set_loan_repayment(self):
 		self.set('loans', [])
 		self.total_loan_repayment = 0
