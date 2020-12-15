@@ -118,8 +118,10 @@ class MonthlySalarySlip(TransactionBase):
 		end = active_month.end_date
 		if (start == self.start_date and  end == self.end_date) :
 			self.payment_days = self.total_working_days
+
 		else :
-			self.payment_days = date_diff(self.end_date , self.start_date)
+			self.payment_days = date_diff(self.end_date , self.start_date) +1
+
 
 	def get_amount_pase_on_formula(self,formula , data = None):
 		data = { i.abbr:i.amount  for i in self.earnings}
@@ -459,12 +461,16 @@ class MonthlySalarySlip(TransactionBase):
 			# self.payment_days = self.payment_days-self.leave_without_pay
 			
 		self.payment_days = self.payment_days - self.leave_without_pay
+
+
+
 		get_start_month_dates = frappe.db.sql(""" SELECT total_leave_days FROM `tabLeave Application`  WHERE employee='%s' 
 			and leave_type='Leave Without Pay' and 
 			from_date <= '%s' and to_date >= '%s' """%(self.employee , self.start_date,self.start_date))
 		# frappe.throw(str(get_start_month_dates))
 		# frappe.throw(str(get_start_month_dates ))
 		self.payment_days = self.payment_days - self.absent_days
+
 
 	def calculate_net_pay(self):
 
