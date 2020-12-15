@@ -14,6 +14,7 @@
   "employee_joined_data",
   "is_owner",
   "insured",
+  "anotherog",
   "insurancenumber",
   "insurance_detail_section",
   "insurance_salary",
@@ -29,10 +30,6 @@
   "sincome_date",
   "sincome_number",
   "contrary_number2",
-  "work_letter_section",
-  "wdate",
-  "wnumber",
-  "employee_document",
   "amended_from"
  ],
  "fields": [
@@ -77,7 +74,7 @@
    "label": "insured "
   },
   {
-   "depends_on": "insured",
+   "depends_on": "eval:doc.insured==1 || doc.is_owner==1 ",
    "fieldname": "insurance_detail_section",
    "fieldtype": "Section Break",
    "label": "Insurance Detail"
@@ -98,6 +95,7 @@
    "label": "Is Owner"
   },
   {
+   "depends_on": "eval:doc.anotherog==1",
    "fieldname": "section_break_11",
    "fieldtype": "Section Break"
   },
@@ -130,27 +128,6 @@
    "fieldname": "sincome_number",
    "fieldtype": "Data",
    "label": "Income Number"
-  },
-  {
-   "fieldname": "work_letter_section",
-   "fieldtype": "Section Break",
-   "label": "Work Letter"
-  },
-  {
-   "fieldname": "wdate",
-   "fieldtype": "Date",
-   "label": "Work Letter Date "
-  },
-  {
-   "fieldname": "wnumber",
-   "fieldtype": "Date",
-   "label": "Work Letter Number"
-  },
-  {
-   "fieldname": "employee_document",
-   "fieldtype": "Link",
-   "label": "Employee Document",
-   "options": "Employee Document"
   },
   {
    "fieldname": "basic_salary",
@@ -197,10 +174,16 @@
    "fieldtype": "Data",
    "label": "Arabic Name",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "anotherog",
+   "fieldtype": "Check",
+   "label": "Insured From Another org"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-06 10:14:01.771460",
+ "modified": "2020-12-14 17:25:49.836167",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",

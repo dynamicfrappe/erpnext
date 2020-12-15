@@ -9,6 +9,7 @@
   "category",
   "add_deduct_tax",
   "charge_type",
+  "tax_class",
   "row_id",
   "included_in_print_rate",
   "col_break1",
@@ -203,11 +204,19 @@
   {
    "fieldname": "dimension_col_break",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_class",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Tax Class",
+   "options": "Tax Class",
+   "reqd": 1
   }
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2020-11-18 10:28:16.472891",
+ "modified": "2020-12-14 16:22:19.272023",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Taxes and Charges",
