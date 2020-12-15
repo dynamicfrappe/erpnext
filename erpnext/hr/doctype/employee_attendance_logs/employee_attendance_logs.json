@@ -196,7 +196,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "flag",
-   "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day\nWorking On Holiday\nWeek End"
+   "options": "Present\nAbsent\nLeave\nHoliday\nBusiness Trip\nMission\nMission All Day\nHalf Day\nWorking On Holiday\nWeek End\nWorking On Weekend"
   },
   {
    "fieldname": "late_factor",
@@ -260,7 +260,7 @@
   }
  ],
  "in_create": 1,
- "modified": "2020-12-10 12:42:09.162156",
+ "modified": "2020-12-15 09:16:23.469574",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Attendance Logs",
