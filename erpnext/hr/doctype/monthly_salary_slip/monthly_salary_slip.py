@@ -65,6 +65,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.get_Employee_Salary_Details()
 
 	def get_Employee_Salary_Details(self):
+		self.get_employee_active_salary_structure_type()
 		self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 		self.get_active_month()
 
