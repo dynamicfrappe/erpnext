@@ -266,12 +266,14 @@
    "reqd": 1
   },
   {
+   "default": "7:00:00",
    "fieldname": "morning_overtime_start",
    "fieldtype": "Time",
    "label": "Morning Overtime Start",
    "reqd": 1
   },
   {
+   "default": "19:00:00",
    "fieldname": "evening_overtime_start",
    "fieldtype": "Time",
    "label": "Evening Overtime Start",
@@ -303,18 +305,21 @@
    "reqd": 1
   },
   {
+   "default": "18:59:59",
    "fieldname": "morning_overtime_end",
    "fieldtype": "Time",
    "label": "Morning Overtime End",
    "reqd": 1
   },
   {
+   "default": "06:59:59",
    "fieldname": "evening_overtime_end",
    "fieldtype": "Time",
    "label": "Evening Overtime End",
    "reqd": 1
   },
   {
+   "default": "1.35",
    "fieldname": "evening_overtime_factor",
    "fieldtype": "Float",
    "label": "Evening Overtime Factor",
@@ -339,12 +344,14 @@
    "label": "Calculate Early IN "
   },
   {
+   "default": "2",
    "fieldname": "overtime_factor_in_weekend",
    "fieldtype": "Float",
    "label": "Overtime factor in Weekend ",
    "reqd": 1
   },
   {
+   "default": "2",
    "fieldname": "overtime_factor_in_holidays",
    "fieldtype": "Data",
    "label": "Overtime factor in Holidays ",
@@ -422,11 +429,11 @@
    "label": "Less Time Setting"
   },
   {
-   "allow_on_submit": 1,
    "fieldname": "less_time_salary_component",
    "fieldtype": "Link",
    "label": "Less Time Salary Component",
-   "options": "Salary Component"
+   "options": "Salary Component",
+   "reqd": 1
   },
   {
    "fieldname": "less_time_factor",
@@ -445,7 +452,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-15 09:36:33.795385",
+ "modified": "2020-12-16 15:08:57.828014",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance Rule",
