@@ -60,17 +60,7 @@ frappe.ui.form.on('Employee Medical Insurance Document', {
 
 
 	},
-	refresh :function(frm){
-		if (frm.doc.include_family_members == 0){
-		
-				frm.set_df_property('employee_medical_insurance_members' , 'hidden' ,1);
-				frm.refresh_field('employee_medical_insurance_members')
-		}else{
-			frm.set_df_property('employee_medical_insurance_members' , 'hidden' ,1);
-			frm.refresh_field('employee_medical_insurance_members')
-		}
-
-	},
+	
 	compnay_fee:function(frm){
 		
 		if (frm.doc.compnay_fee &&  frm.doc.employee_medical_insurance_members){
