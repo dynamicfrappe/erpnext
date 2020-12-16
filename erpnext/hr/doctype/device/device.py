@@ -15,6 +15,7 @@ class Device(Document):
 	def get_attendance(self):
 		# frappe.msgprint(os.path)
 		doc = self
+		device_name = self.name1
 		if doc:
 			if doc.is_active:
 				# create ZK instance
