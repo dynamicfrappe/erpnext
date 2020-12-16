@@ -95,6 +95,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
 
+
 	def validate_dates(self):
 		if date_diff(self.end_date, self.start_date) < 0:
 			frappe.throw(_("To date cannot be before From date"))
@@ -410,7 +411,7 @@ class MonthlySalarySlip(TransactionBase):
 					total_taxable_amount -= e.amount
 		# total_taxable_amount -= self.social_insurance_amount
 		self.tax_pool = total_taxable_amount or 0
-		has_disability , is_consultant = frappe.db.get_value("employee" , self.employee , ['has_disability','is_consultant'])
+		has_disability , is_consultant = frappe.db.get_value("Employee" , self.employee , ['has_disability','is_consultant'])
 		total_tax = 0
 		hr_settings = frappe.get_single("HR Settings")
 		Tax_Sc = hr_settings.income_tax_salary_component or None
@@ -423,7 +424,7 @@ class MonthlySalarySlip(TransactionBase):
 		else :
 			total_tax_pool = frappe.db.sql("""
 			select ifnull(sum(tax_pool),0) from `tabMonthly Salary Slip`
-			where employee = '{employee}'  and month = '{month}' and name <> '{self.name}' """.format(
+			where employee = '{employee}'  and month = '{month}' and name <> '{name}' """.format(
 				month=self.month, employee=self.employee , name=self.name))[0][0] or 0
 			total_taxable_amount += total_tax_pool
 
@@ -457,7 +458,7 @@ class MonthlySalarySlip(TransactionBase):
 
 		total_tax_value = frappe.db.sql("""
 					select ifnull(sum(tax_value),0) from `tabMonthly Salary Slip`
-					where employee = '{employee}'  and month = '{month}' and name <> '{self.name}' """.format(
+					where employee = '{employee}'  and month = '{month}' and name <> '{name}' """.format(
 			month=self.month, employee=self.employee, name=self.name))[0][0] or 0
 		total_tax -= total_tax_value
 		if total_tax < 0:

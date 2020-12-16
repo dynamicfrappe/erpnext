@@ -144,6 +144,8 @@ frappe.ui.form.on('Monthly Salary Slip', {
                     refresh_field("deductions");
                 }
             });
+
+         frm.refresh();
     }
 
 
