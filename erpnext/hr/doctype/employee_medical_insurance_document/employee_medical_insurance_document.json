@@ -11,9 +11,11 @@
   "employee_name",
   "employee_national_id",
   "include_family_members",
+  "family_member_count",
   "column_break_7",
   "insurance_card_number",
-  "insurance_card_start_date",
+  "insurancs_card_resived_date",
+  "insurance_start_date",
   "insurance_document",
   "insurance_type",
   "insurance_document_start_date",
@@ -24,7 +26,13 @@
   "compnay_fee",
   "section_break_16",
   "employee_medical_insurance_members",
-  "amended_from"
+  "amended_from",
+  "employee_total_fee_section",
+  "employee_family_cost",
+  "total_document_fee_monthly",
+  "column_break_25",
+  "employee_insurance_cost",
+  "total_company_fee"
  ],
  "fields": [
   {
@@ -38,7 +46,8 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Active\nClosed"
+   "options": "hold\nActive\nClosed",
+   "read_only": 1
   },
   {
    "fieldname": "employee",
@@ -69,12 +78,6 @@
   {
    "fieldname": "column_break_7",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "insurance_card_start_date",
-   "fieldtype": "Date",
-   "label": "Insurance Card Start Date",
-   "reqd": 1
   },
   {
    "fieldname": "insurance_document",
@@ -112,14 +115,18 @@
    "label": "Payment Terms"
   },
   {
+   "default": "0",
    "fieldname": "employee_fee",
    "fieldtype": "Currency",
-   "label": "Employee Fee"
+   "label": "Employee Fee",
+   "reqd": 1
   },
   {
+   "default": "0",
    "fieldname": "compnay_fee",
    "fieldtype": "Currency",
-   "label": "Compnay Fee"
+   "label": "Compnay Fee",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_16",
@@ -142,6 +149,7 @@
   },
   {
    "default": "0",
+   "depends_on": "eval:doc.employee && doc.insurance_document ;",
    "fieldname": "include_family_members",
    "fieldtype": "Check",
    "label": "Include Family Members"
@@ -151,10 +159,58 @@
    "fieldtype": "Table",
    "label": "Employee Medical Insurance Members",
    "options": "Employee Medical Insurance Members"
+  },
+  {
+   "depends_on": "eval:doc.include_family_members == 1;",
+   "fieldname": "family_member_count",
+   "fieldtype": "Data",
+   "label": "Family Member Count "
+  },
+  {
+   "fieldname": "employee_total_fee_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Total Fee"
+  },
+  {
+   "fieldname": "employee_family_cost",
+   "fieldtype": "Currency",
+   "label": "Employee Family Cost"
+  },
+  {
+   "fieldname": "total_document_fee_monthly",
+   "fieldtype": "Currency",
+   "label": "Total Employee Fee (Monthly)"
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_insurance_cost",
+   "fieldtype": "Currency",
+   "label": "Employee Insurance Cost"
+  },
+  {
+   "fieldname": "insurance_start_date",
+   "fieldtype": "Date",
+   "label": "Insurance Card Start Date",
+   "reqd": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "depends_on": "eval:doc.insurance_card_number;",
+   "fieldname": "insurancs_card_resived_date",
+   "fieldtype": "Date",
+   "label": "Insurancs Card Resived Date"
+  },
+  {
+   "fieldname": "total_company_fee",
+   "fieldtype": "Currency",
+   "label": "Total company Fee"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-15 15:45:17.080434",
+ "modified": "2020-12-16 10:50:45.507921",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Document",

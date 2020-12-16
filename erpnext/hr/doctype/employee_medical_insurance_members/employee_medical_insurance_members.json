@@ -5,32 +5,30 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "member",
   "relation",
+  "member",
   "age",
   "medication_card_number",
   "medication_card_recieving_date",
+  "document_no",
+  "insurance_type",
   "company_share_ratio",
   "employee_share_ratio",
-  "start_date",
-  "document_no"
+  "start_date"
  ],
  "fields": [
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "member",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Full name",
-   "reqd": 1,
-   "unique": 1
+   "label": "Full name"
   },
   {
    "columns": 1,
    "default": "0",
    "fieldname": "age",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Age",
    "reqd": 1
   },
@@ -38,6 +36,7 @@
    "columns": 2,
    "fieldname": "company_share_ratio",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Company Share Ratio",
    "reqd": 1
   },
@@ -45,6 +44,7 @@
    "columns": 2,
    "fieldname": "employee_share_ratio",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Employee Share Ratio",
    "reqd": 1
   },
@@ -57,8 +57,9 @@
   {
    "columns": 2,
    "fieldname": "document_no",
-   "fieldtype": "Data",
-   "label": "Document No"
+   "fieldtype": "Link",
+   "label": "Document No",
+   "options": "Medical Insurance Dcoument"
   },
   {
    "columns": 1,
@@ -66,7 +67,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Relation",
-   "options": "Employee Family Relation"
+   "options": "Employee Family Relation",
+   "reqd": 1
   },
   {
    "columns": 2,
@@ -82,10 +84,16 @@
    "in_list_view": 1,
    "label": "Card Recieving Date ",
    "reqd": 1
+  },
+  {
+   "fieldname": "insurance_type",
+   "fieldtype": "Link",
+   "label": "Insurance Type",
+   "options": "Medical Insurance Dcoument Category"
   }
  ],
  "istable": 1,
- "modified": "2020-12-03 13:42:39.052775",
+ "modified": "2020-12-15 15:40:20.179315",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Members",
