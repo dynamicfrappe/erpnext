@@ -833,6 +833,8 @@
    "label": "Medical Insurance"
   },
   {
+   "depends_on": "eval:doc.document",
+   "fetch_from": "document.insurance_provider",
    "fieldname": "provider",
    "fieldtype": "Link",
    "label": "Provider",
@@ -983,7 +985,7 @@
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-08 16:32:22.052269",
+ "modified": "2020-12-16 12:54:34.216179",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",

@@ -174,12 +174,14 @@
   {
    "fieldname": "employee_family_cost",
    "fieldtype": "Currency",
-   "label": "Employee Family Cost"
+   "label": "Employee Family Cost",
+   "read_only": 1
   },
   {
    "fieldname": "total_document_fee_monthly",
    "fieldtype": "Currency",
-   "label": "Total Employee Fee (Monthly)"
+   "label": "Total Employee Fee (Monthly)",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_25",
@@ -188,7 +190,8 @@
   {
    "fieldname": "employee_insurance_cost",
    "fieldtype": "Currency",
-   "label": "Employee Insurance Cost"
+   "label": "Employee Insurance Cost",
+   "read_only": 1
   },
   {
    "fieldname": "insurance_start_date",
@@ -206,11 +209,12 @@
   {
    "fieldname": "total_company_fee",
    "fieldtype": "Currency",
-   "label": "Total company Fee"
+   "label": "Total company Fee",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-16 10:50:45.507921",
+ "modified": "2020-12-16 13:13:10.648371",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Medical Insurance Document",

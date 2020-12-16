@@ -12,8 +12,61 @@ class EmployeeMedicalInsuranceDocument(Document):
 
 
 	def on_submit(self):
-		a= frappe.db.sql(""" UPDATE `tabEmployee` SET document = '%s' , medication_card_recieving_date ='%s',employee_share_ratio ='%s'
-		 WHERE name='%s' """%(self.insurance_document ,self.insurance_card_start_date , self.employee_fee ,self.employee ))
+		a= frappe.db.sql(""" UPDATE `tabEmployee` SET document = '%s' ,insurance_start_date  ='%s',
+			employee_share_ratio ='%s' ,medication_card_number ='%s'
+		 WHERE name='%s' """%(self.insurance_document ,self.insurance_start_date , 
+		 	self.employee_fee  ,self.insurance_card_number,
+		 	self.employee))
+		frappe.db.commit()
+
+		empl = frappe.get_doc("Employee" ,self.employee)
+		empl.set("members", [])
+		for i in self.employee_medical_insurance_members :
+			row = empl.append('members')
+			row.relation = i.relation
+			row.member = i.member
+			row.age = i.age
+			row.medication_card_number = i.medication_card_number
+			row.document_no = i.document_no
+			row.insurance_type = i.insurance_type
+			row.company_share_ratio = i.company_share_ratio
+			row.employee_share_ratio = i.employee_share_ratio
+			row.start_date = i.start_date
+		empl.save()
+
+		self.update_document_members()
+
+
+	def update_document_members(self):
+		employee_document = frappe.get_doc("Medical Insurance Document" ,self.insurance_document)
+		employee_document.current_member_count += 1
+		employee_document.save()
+		for i in self.employee_medical_insurance_members :
+			document = frappe.get_doc("Medical Insurance Document" ,i.document_no)
+			document.current_member_count += 1
+			document.save()
+
+
+	def on_cancel(self):
+		empl = frappe.get_doc("Employee" ,self.employee)
+		empl.set("members", [])
+		empl.document=''
+		empl.insurance_start_date=''
+		empl.employee_share_ratio=''
+		empl.medication_card_number = ''
+		empl.save()
+		employee_document = frappe.get_doc("Medical Insurance Document" ,self.insurance_document)
+		employee_document.current_member_count -= 1
+		employee_document.save()
+		for i in self.employee_medical_insurance_members :
+			document = frappe.get_doc("Medical Insurance Document" ,i.document_no)
+			document.current_member_count -= 1
+			document.save()
+
+
+
+
+
 	def set_family_members(self):
 		self.set("employee_medical_insurance_members", [])
 		employee_family_data = frappe.db.sql(""" SELECT relation ,name1 , age FROM 
