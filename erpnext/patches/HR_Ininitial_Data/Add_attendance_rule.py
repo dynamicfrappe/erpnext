@@ -54,6 +54,8 @@ def add_attendance_rule():
 		doc.less_time_salary_component = "Less Time"
 		doc.overtime_in_weekend_salary_component = "Weekend Overtime"
 		doc.overtime_in_holiday_salary_component = "Holiday Overtime"
-		doc.overtime_factor_in_weekend
+		doc.overtime_factor_in_weekend = 2
+		doc. evening_overtime_factor = 1.65
+		doc.overtime_factor_in_holidays = 2
 		doc.save()
 
