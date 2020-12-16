@@ -90,7 +90,7 @@ frappe.ui.form.on('Employee Document', {
        //if(day<10){day='0'+day}
        var month =satrtDate.getMonth()+1;
        var year =satrtDate.getFullYear();
-       var fulldate=year+"-"+month+"-"+day
+       var fulldate=year+"-"+month+"-"+(day-1)
        cur_frm.set_value('end_date',fulldate)
        console.log(year)
    	  }

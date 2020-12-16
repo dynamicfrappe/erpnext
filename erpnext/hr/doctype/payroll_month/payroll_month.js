@@ -132,5 +132,15 @@ frappe.ui.form.on('Payroll Month', {
 				frm.refresh_field("end_date")
 			}
 		})
+	},
+	attendance_start_date:function(frm){
+		frappe.call({
+			doc:frm.doc ,
+			"method":"set_attendance_end_date" ,
+			callback:function(r){
+				frm.set_value("attendance_end_date" ,r.message)
+				frm.refresh_field("attendance_end_date")
+			}
+		})
 	}
 });

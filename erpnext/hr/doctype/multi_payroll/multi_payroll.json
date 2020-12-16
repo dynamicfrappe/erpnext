@@ -238,7 +238,7 @@
   {
    "default": "0",
    "fieldname": "salary_slips_created",
-   "fieldtype": "Check",
+   "fieldtype": "Read Only",
    "hidden": 1,
    "label": "Salary Slips Created",
    "read_only": 1
@@ -277,7 +277,7 @@
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
- "modified": "2020-12-13 14:32:28.130651",
+ "modified": "2020-12-15 15:08:58.883194",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi Payroll",

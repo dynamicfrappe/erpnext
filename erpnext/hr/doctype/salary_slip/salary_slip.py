@@ -601,13 +601,13 @@ class SalarySlip(TransactionBase):
 		self.set_component_amounts_based_on_payment_days(component_type)
 
 	def add_structure_components(self, component_type):
-		frappe.msgprint('add_structure_components')
+		# frappe.msgprint('add_structure_components')
 		data = self.get_data_for_eval()
 		for struct_row in self._salary_structure_doc.get(component_type):
 			amount = self.eval_condition_and_formula(struct_row, data)
-			frappe.msgprint('amount')
-			frappe.msgprint(str(amount))
-			frappe.msgprint(str(struct_row))
+			# frappe.msgprint('amount')
+			# frappe.msgprint(str(amount))
+			# frappe.msgprint(str(struct_row))
 			if amount and struct_row.statistical_component == 0:
 				self.update_component_row(struct_row, amount, component_type)
 

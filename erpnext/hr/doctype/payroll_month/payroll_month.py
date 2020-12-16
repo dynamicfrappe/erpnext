@@ -29,6 +29,9 @@ class PayrollMonth(Document):
 	def set_end_date(self):
 		return  (datetime.strptime(self.start_date, "%Y-%m-%d").date() +  relativedelta(months=+1))+relativedelta(days=-1)
 
+	def set_attendance_end_date(self):
+		return  (datetime.strptime(self.attendance_start_date, "%Y-%m-%d").date() +  relativedelta(months=+1))+relativedelta(days=-1)
+
 	def get_strcuture_type_option(self):
 		a=  frappe.db.sql(""" SELECT type FROM `tabSalary Structure Type` """)
 		return([i[0] for i in a])

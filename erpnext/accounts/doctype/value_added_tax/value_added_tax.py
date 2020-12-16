@@ -41,7 +41,7 @@ class ValueAddedTax(Document):
 			row.party=z["partner"]
 			row.credit_in_account_currency=z["Amount"]
 		doc.save()
-		frappe.db.sql("update `tabValue Added Tax` set journal_created=1,status='Closed' where name='{}'".format(self.name))
+		frappe.db.sql("update `tabValue Added Tax` set journal_created=1,status='Closed',docstatus=1 where name='{}'".format(self.name))
 		# for m in Accountdata["data"]:
 		# 	frappe.msgprint(str(m))
 
@@ -53,6 +53,12 @@ class ValueAddedTax(Document):
 
 
 	def getTaxes(self,fromDate,todate):
+		data=frappe.db.sql("select * from `tabValue Added Tax` where ((fromdae between '{}' and '{}') or (todate between '{}' and '{}')) and status='Closed'".format(fromDate,todate,fromDate,todate))
+		if data:
+			frappe.throw("already exist")
+		condition=""
+		if self.taxtype:
+			condition+= "and taxes.tax_class='{}'".format(self.taxtype)
 		collected=0
 		paid=0
 
@@ -68,6 +74,7 @@ class ValueAddedTax(Document):
 									invoice.net_total,
 									invoice.tax_category,
 									taxes.account_head,
+									taxes.tax_class,
 									taxes.tax_amount as 'tax_amount',
 									IFNULL(SUM(case when  taxes.rate > 0 then taxes.rate  else 0 END ),0) as tax_rate_positive,
 									IFNULL(SUM(case when  taxes.tax_amount > 0 then taxes.tax_amount else 0 END ),0) as tax_amount_positive,
@@ -87,10 +94,10 @@ class ValueAddedTax(Document):
 									ON
 									  invoice.customer = customer.`name`
 
-		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1        
+		                           where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1  {condition}      
 									GROUP BY
 									invoice.`name`, taxes.tax_amount
-					""".format(fromDate,todate), as_dict=1)
+					""".format(fromDate,todate,self.taxtype,condition=condition), as_dict=1)
 
 		sales_invoices += frappe.db.sql("""
 
@@ -105,6 +112,7 @@ class ValueAddedTax(Document):
 									invoice.tax_category,
 									taxes.account_head,
 									taxes.tax_amount as 'tax_amount',
+									taxes.tax_class,
 									IFNULL(SUM(case when  taxes.rate > 0 then taxes.rate  else 0 END ),0) as tax_rate_positive,
 									IFNULL(SUM(case when  taxes.tax_amount > 0 then taxes.tax_amount else 0 END ),0) as tax_amount_positive,
 		       						IFNULL(SUM(case when  taxes.rate < 0 then taxes.rate * -1  else 0 END ),0) as tax_rate_negative,
@@ -122,12 +130,12 @@ class ValueAddedTax(Document):
 									  tabSupplier  supplier
 									ON
 									  invoice.supplier = supplier.`name`
-		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 
+		                             where invoice.due_date >='{}' and invoice.due_date <='{}' and invoice.docstatus=1 {condition}
 									GROUP BY
 									invoice.`name`, taxes.tax_amount
 
 
-					""".format(fromDate,todate),as_dict=1)
+					""".format(fromDate,todate,self.taxtype,condition=condition),as_dict=1)
 
 		for inv in sales_invoices:
 			row=self.append("details",{})
@@ -140,6 +148,7 @@ class ValueAddedTax(Document):
 			row.docamount=inv.total
 			row.taxamount=abs(inv.tax_amount)
 			row.taxcategory=inv.account_head
+			row.taxclass=inv.tax_class
 			if (inv.type=='Sales Invoice' and float(inv.tax_amount)>0) or  (inv.type=='Purchase Invoice' and float(inv.tax_amount)<0):
 				row.taxtype="Collected"
 				collected+=abs(inv.tax_amount)
