@@ -46,6 +46,7 @@ class MonthlySalarySlip(TransactionBase):
 		# self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
 
 	def autoname(self):
+		self.series = 'Sal Slip/{0}/.#####'.format(self.employee)
 		self.name = make_autoname(self.series)
 
 	def set_dates_above_month(self):
