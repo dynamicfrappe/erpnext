@@ -26,11 +26,13 @@ employee_status = {"""  Present
 						Holiday
 						Business Trip
 						Mission
-						Mission All Day"""}
+						Mission All Day
+				"""}
 class MonthlySalarySlip(TransactionBase):
 	def __init__(self, *args, **kwargs):
 		super(MonthlySalarySlip, self).__init__(*args, **kwargs)
 		self.series = 'Sal Slip/{0}/.#####'.format(self.employee)
+		self.social_insurance_amount = 0
 		self.whitelisted_globals = {
 			"int": int,
 			"float": float,
@@ -87,6 +89,8 @@ class MonthlySalarySlip(TransactionBase):
 		self.set_loan_repayment()
 		if self.is_main:
 			self.get_Employee_advance()
+			self.get_medical_insurance()
+			self.get_social_insurance()
 		self.calculate_Tax()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
@@ -95,7 +99,44 @@ class MonthlySalarySlip(TransactionBase):
 		if date_diff(self.end_date, self.start_date) < 0:
 			frappe.throw(_("To date cannot be before From date"))
 
+	def get_medical_insurance(self):
 
+		amount = frappe.db.sql("""
+				select ifnull(sum(total_document_fee_monthly),0)  as total_fee from `tabEmployee Medical Insurance Document` where docstatus=1   and employee = '{employee}' and status = 'Active'
+				and date(insurance_document_start_date) <=   date('{end_date}')
+				order  by insurance_document_start_date desc limit 1
+				""".format(employee=self.employee ,end_date=self.end_date))[0][0] or 0
+
+		if amount:
+			salary_component = frappe.db.get_single_value("HR Settings", 'medical_insurance_salary_component')
+			if salary_component:
+				row = self.get_salary_slip_row(salary_component)
+
+				self.update_component_row(row, amount, "deductions", adding=1, adding_if_not_exist=1)
+	def get_social_insurance(self):
+
+		data  = frappe.db.sql("""
+				select  ifnull(sum(insurance_salary),0)  as insurance_salary , ifnull(is_owner,0) as is_owner from `tabEmployee Social Insurance Data`
+				where docstatus = 1 and date(employee_strat_insurance_date) <= date('{end_date}') and  employee = '{employee}'
+				""".format(employee=self.employee ,end_date=self.end_date))
+		insurance_salary = data [0][0] or 0
+		is_owner = data [0][1] or 0
+		percent = 0
+		if is_owner:
+			percent = frappe.db.get_single_value("Social Insurance Settings", 'owner_percent') or 0
+		else:
+			percent = frappe.db.get_single_value("Social Insurance Settings", 'employee_percent') or 0
+
+
+		amount = (insurance_salary * percent /100) or 0
+		self.social_insurance_amount = amount or 0
+
+		if amount:
+			salary_component = frappe.db.get_single_value("HR Settings", 'social_insurance_salary_component')
+			if salary_component:
+				row = self.get_salary_slip_row(salary_component)
+
+				self.update_component_row(row, amount, "deductions", adding=1, adding_if_not_exist=1)
 
 	def get_Employee_advance(self):
 		amount = frappe.db.sql("""
@@ -367,21 +408,31 @@ class MonthlySalarySlip(TransactionBase):
 			if SC:
 				if not SC.exempted_from_income_tax:
 					total_taxable_amount -= e.amount
+		# total_taxable_amount -= self.social_insurance_amount
 		self.tax_pool = total_taxable_amount or 0
-		self.Tax_calculated = 0
+		has_disability , is_consultant = frappe.db.get_value("employee" , self.employee , ['has_disability','is_consultant'])
+		total_tax = 0
+		hr_settings = frappe.get_single("HR Settings")
+		Tax_Sc = hr_settings.income_tax_salary_component or None
+		personal_exemption_value = hr_settings.personal_exemption_value or 0
+		disability_exemption_value = hr_settings.disability_exemption_value or 0
 
-		if self.calculate_income_tax:
+		if is_consultant :
+			consultant_percent = hr_settings.consultant_percent
+			total_tax = total_taxable_amount * consultant_percent /100
+		else :
 			total_tax_pool = frappe.db.sql("""
 			select ifnull(sum(tax_pool),0) from `tabMonthly Salary Slip`
-			where employee = '{employee}' and calculate_income_tax = 0 and month = '{month}' """.format(
-				month=self.month, employee=self.employee))[0][0]
+			where employee = '{employee}'  and month = '{month}' and name <> '{self.name}' """.format(
+				month=self.month, employee=self.employee , name=self.name))[0][0] or 0
 			total_taxable_amount += total_tax_pool
-			self.tax_pool = total_taxable_amount or 0
 
-			hr_settings = frappe.get_single("HR Settings")
-			Tax_Sc = hr_settings.income_tax_salary_component or None
-			personal_exemption_value = hr_settings.personal_exemption_value or 0
-			disability_exemption_value = hr_settings.disability_exemption_value or 0
+
+
+
+			if has_disability :
+				personal_exemption_value += disability_exemption_value
+
 			tax_layers = hr_settings.tax_layers or None
 
 			if Tax_Sc and tax_layers:
@@ -390,9 +441,7 @@ class MonthlySalarySlip(TransactionBase):
 					total_taxable_amount_yearly = (total_taxable_amount * 12) - personal_exemption_value
 					total_tax = 0
 					perviuos_limit = 0
-					number = str(int(total_taxable_amount_yearly))[:-1]
-					number = number + str('0')
-					total_taxable_amount_yearly = float(number)
+					total_taxable_amount_yearly = float(int(total_taxable_amount_yearly / 10) * 10)
 					for i in tax_layers:
 						if i.limit < total_taxable_amount_yearly:
 							total_tax += (i.limit - perviuos_limit) * (i.tax_percent / 100)
@@ -404,11 +453,21 @@ class MonthlySalarySlip(TransactionBase):
 							total_tax += total_taxable_amount_yearly * (i.tax_percent / 100)
 							break;
 					total_tax = total_tax / 12
-					if total_tax:
-						row = self.get_salary_slip_row(Tax_Sc)
+					self.tax_value = total_tax
 
-						self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)
-			self.tax_calculated = 1
+		total_tax_value = frappe.db.sql("""
+					select ifnull(sum(tax_value),0) from `tabMonthly Salary Slip`
+					where employee = '{employee}'  and month = '{month}' and name <> '{self.name}' """.format(
+			month=self.month, employee=self.employee, name=self.name))[0][0] or 0
+		total_tax -= total_tax_value
+		if total_tax < 0:
+			total_tax = 0
+
+		self.tax_value = total_tax or 0
+		if total_tax:
+					row = self.get_salary_slip_row(Tax_Sc)
+
+					self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)
 
 
 

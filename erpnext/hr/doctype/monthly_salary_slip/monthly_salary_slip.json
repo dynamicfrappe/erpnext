@@ -63,6 +63,7 @@
   "total_hours",
   "calculate_income_tax",
   "tax_pool",
+  "tax_value",
   "tax_calculated",
   "amended_from"
  ],
@@ -509,11 +510,19 @@
    "fieldtype": "Read Only",
    "label": "is main",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_value",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Tax Value",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "modified": "2020-12-15 13:26:05.478498",
+ "modified": "2020-12-16 12:43:03.386939",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Monthly Salary Slip",

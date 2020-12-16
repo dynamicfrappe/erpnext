@@ -627,7 +627,7 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Medical Insurance Dcoument",
+					"name": "Medical Insurance Document",
 				},
 				{
 					"type": "doctype",

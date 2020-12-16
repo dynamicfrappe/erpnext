@@ -136,7 +136,11 @@
   "employee_share_ratio",
   "medical__insurance_members_section",
   "get_members",
-  "members"
+  "members",
+  "employee_tax_setting_section",
+  "has_disability",
+  "column_break_131",
+  "is_consultant"
  ],
  "fields": [
   {
@@ -978,12 +982,33 @@
    "fieldname": "enable_overtime",
    "fieldtype": "Check",
    "label": "Enable Overtime"
+  },
+  {
+   "fieldname": "employee_tax_setting_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Tax Setting"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_disability",
+   "fieldtype": "Check",
+   "label": "Has Disability"
+  },
+  {
+   "fieldname": "column_break_131",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_consultant",
+   "fieldtype": "Check",
+   "label": "Is Consultant"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-08 16:32:22.052269",
+ "modified": "2020-12-16 12:50:20.990185",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
