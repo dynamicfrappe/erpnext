@@ -10,7 +10,7 @@ class EmployeeMedicalInsuranceDocument(Document):
 
 
 
-	
+
 	def on_submit(self):
 		a= frappe.db.sql(""" UPDATE `tabEmployee` SET document = '%s' , medication_card_recieving_date ='%s',employee_share_ratio ='%s'
 		 WHERE name='%s' """%(self.insurance_document ,self.insurance_card_start_date , self.employee_fee ,self.employee ))

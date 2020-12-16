@@ -589,7 +589,7 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Medical Insurance Dcoument",
+					"name": "Medical Insurance Document",
 				},
 				{
 					"type": "doctype",
