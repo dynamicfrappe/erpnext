@@ -8,42 +8,85 @@ from frappe.model.document import Document
 from datetime import datetime
 
 class ValueAddedTax(Document):
+	def on_submit(self):
+		frappe.db.sql("update `tabTax Period Details` set date='{}' where parent='{}' and refdoc='{}' and taxclass='{}'".format(self.postingdate,self.docname,self.name,self.taxtype))
 	def updateDocStatus(self):
 		frappe.db.sql("update `tabValue Added Tax` set docstatus=1 where name='{}'".format(self.name))
 		return "done"
 	def createJournalEntry(self):
 		Accountdata = { "data":[]}
-
 		myTable=self.details
 		for i in myTable:
 			Amount = 0
 			Account={}
-			if i.taxcategory in [x["name"] for x in Accountdata["data"]]:
+			if i.taxcategory in [x["name"] for x in Accountdata["data"]] and i.taxtype in [x["taxtype"] for x in Accountdata["data"]]:
 				continue
 			Account["name"] = i.taxcategory
 			Account["partner_type"]=i.partner_type
 			Account["partner"]=i.partner
 			Account["category"]=i.taxcategory
+			Account["partner_type"]=i.partner_type
+			Account["partner"]=i.partner
+			if not i.taxtype:
+				Account["taxtype"] = "Collected"
+			else:
+				Account["taxtype"] = i.taxtype
 			for j in myTable:
-				if i.taxcategory==j.taxcategory and j.taxtype=="Collected":
+				if i.taxcategory==j.taxcategory and i.taxtype==j.taxtype:
 					Amount+=abs(j.taxamount)
 			Account["Amount"]=Amount
 			Accountdata["data"].append(Account)
 		doc = frappe.new_doc('Journal Entry')
 		doc.posting_date=datetime.today().strftime('%Y-%m-%d')
-		row = doc.append("accounts",{})
-		row.account=self.accountname
-		row.debit_in_account_currency=self.collectedtax
+		for n in Accountdata["data"]:
+			frappe.msgprint(str(n))
 		for z in Accountdata["data"]:
-			row=doc.append("accounts",{})
-			row.account=z["category"]
-			row.party_type=z["partner_type"]
-			row.party=z["partner"]
-			row.credit_in_account_currency=z["Amount"]
+			#frappe.msgprint("type="+str(z["taxtype"]))
+			if z["taxtype"]=="Collected":
+				row = doc.append("accounts", {})
+				row.account = z["category"]
+				row.party_type=z["partner_type"]
+				row.party=z["partner"]
+				row.debit_in_account_currency = abs(z["Amount"])
+				#frappe.msgprint("collected"+str(z["Amount"]))
+			else:
+				#frappe.msgprint("typepaid=" + str(z["taxtype"]))
+				row = doc.append("accounts", {})
+				row.account = z["category"]
+				row.party_type = z["partner_type"]
+				row.party = z["partner"]
+				row.credit_in_account_currency = abs(z["Amount"])
+
+				#frappe.msgprint("paid"+str(z["Amount"]))
+		# for p in Accountdata["data"]:
+		# 	if p["taxtype"] == "Paid":
+		# 		row = doc.append("accounts", {})
+		# 		row.account = p["category"]
+		# 		row.credit_in_account_currency=abs(p["Amount"])
+		# 		frappe.msgprint(str(z["Amount"]))
+
+		Row = doc.append("accounts", {})
+		Row.account=self.accountname
+		Row.credit_in_account_currency=abs(self.clearanceamount)
+		#frappe.msgprint("clearence"+str(self.clearanceamount))
+
 		doc.save()
+		doc2=frappe.new_doc('Journal Entry')
+		doc2.posting_date = datetime.today().strftime('%Y-%m-%d')
+		row2=doc2.append("accounts",{})
+		row2.account=self.account
+		row2.credit_in_account_currency=abs(self.collectedtax)
+		row3 = doc2.append("accounts", {})
+		row3.account = self.accountname
+		row3.debit_in_account_currency = abs(self.collectedtax)
+		doc2.save()
+		frappe.msgprint("done")
 		frappe.db.sql("update `tabValue Added Tax` set journal_created=1,status='Closed',docstatus=1 where name='{}'".format(self.name))
+		frappe.db.sql("update `tabTax Period Details` set date='{}' where parent='{}' and refdoc='{}' and taxclass='{}'".format(self.postingdate, self.docname, self.name,self.taxtype))
+		frappe.msgprint("Journal Entry Created")
 		# for m in Accountdata["data"]:
 		# 	frappe.msgprint(str(m))
+		return "true"
 
 
 
@@ -53,8 +96,8 @@ class ValueAddedTax(Document):
 
 
 	def getTaxes(self,fromDate,todate):
-		data=frappe.db.sql("select * from `tabValue Added Tax` where ((fromdae between '{}' and '{}') or (todate between '{}' and '{}')) and status='Closed'".format(fromDate,todate,fromDate,todate))
-		if data:
+		data=frappe.db.sql("select * from `tabValue Added Tax` where ((fromdae between '{}' and '{}') or (todate between '{}' and '{}')) and status='Closed' and taxtype='{}'".format(fromDate,todate,fromDate,todate,self.taxtype))
+		if data and self.docstatus==0:
 			frappe.throw("already exist")
 		condition=""
 		if self.taxtype:

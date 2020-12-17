@@ -22,74 +22,85 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Document Type",
-   "options": "DocType"
+   "options": "DocType",
+   "read_only": 1
   },
   {
    "fieldname": "documentnumber",
    "fieldtype": "Dynamic Link",
    "in_list_view": 1,
    "label": "Document Number",
-   "options": "doocumenttpe"
+   "options": "doocumenttpe",
+   "read_only": 1
   },
   {
    "fieldname": "docdate",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Date"
+   "label": "Date",
+   "read_only": 1
   },
   {
    "fieldname": "cadno",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "taxes card no"
+   "label": "taxes card no",
+   "read_only": 1
   },
   {
    "fieldname": "docamount",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Document Amount"
+   "label": "Document Amount",
+   "read_only": 1
   },
   {
    "fieldname": "taxamount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Tax Amount"
+   "label": "Tax Amount",
+   "read_only": 1
   },
   {
    "fieldname": "taxcategory",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Tax Category"
+   "label": "Tax Category",
+   "read_only": 1
   },
   {
    "fieldname": "taxtype",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Tax Type",
-   "options": "Collected\nPaid"
+   "options": "Collected\nPaid",
+   "read_only": 1
   },
   {
    "fieldname": "partner",
    "fieldtype": "Dynamic Link",
    "in_list_view": 1,
    "label": "Partner",
-   "options": "partner_type"
+   "options": "partner_type",
+   "read_only": 1
   },
   {
    "fieldname": "partner_type",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "patner type",
-   "options": "DocType"
+   "options": "DocType",
+   "read_only": 1
   },
   {
    "fieldname": "taxclass",
    "fieldtype": "Data",
-   "label": "Tax Class"
+   "label": "Tax Class",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2020-12-15 12:14:54.913525",
+ "modified": "2020-12-17 13:19:54.179153",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Value Added Tax Details",
