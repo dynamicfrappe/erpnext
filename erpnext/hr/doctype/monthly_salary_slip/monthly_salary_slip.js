@@ -70,6 +70,7 @@ frappe.ui.form.on('Monthly Salary Slip', {
 
         })
     },
+
     employee: function(frm) {
         if (frm.doc.employee)
 		frm.events.get_Employee_Salary_Details(frm);
@@ -79,18 +80,72 @@ frappe.ui.form.on('Monthly Salary Slip', {
 		    frm.events.get_Employee_Salary_Details(frm);
 	},
     payroll_type: function(frm) {
-        if (frm.doc.payroll_type)
+
+        //     if (frm.doc.payroll_type){
+        //             frappe.call({
+        //             method: "frappe.client.get",
+        //             args: {
+        //                 doctype: "Salary Structure Type",
+        //                 .name: frm.doc.payroll_type,
+        //             },
+        //             callback(r) {
+        //                 if(r.message) {
+        //                         debugger;
+        //                        frm.set_value("calculate_income_tax" ,r.message.is_main )
+        //                        frm.refresh_field("calculate_income_tax")
+        //                     frm.doc.is_main = r.message.is_main;
+        //                         frm.set_value("is_main" ,r.message.is_main )
+        //                        frm.refresh_field("is_main")
+        //
+        //
+        //
+        //             }
+        //         }
+        //     });
+        // }
+
 		    frm.events.get_Employee_Salary_Details(frm);
 	},
     get_Employee_Salary_Details: function(frm) {
+        debugger;
+        // alert(frm.doc.is_main);
         if (frm .doc.employee && frm .doc.start_date && frm .doc.end_date && frm .doc.month && frm.doc.payroll_type  )
+            //
+            // frappe.call({
+            //         method: "frappe.client.get",
+            //         args: {
+            //             doctype: "Salary Structure Type",
+            //             name: frm.doc.payroll_type,
+            //         },
+            //         callback(r) {
+            //             if(r.message) {
+            //                     debugger;
+            //                    frm.set_value("calculate_income_tax" ,r.message.is_main )
+            //                    frm.refresh_field("calculate_income_tax")
+            //                 frm.doc.is_main = r.message.is_main;
+            //                     frm.set_value("is_main" ,r.message.is_main )
+            //                    frm.refresh_field("is_main")
+            //
+            //
+            //
+            //         }
+            //     }
+            // });
+
+
+
             return frappe.call({
                 method: 'get_Employee_Salary_Details',
                 doc: frm.doc,
                 callback: function(r, rt) {
+                    debugger;
                     frm.refresh();
+                    refresh_field("earnings");
+                    refresh_field("deductions");
                 }
             });
+
+         frm.refresh();
     }
 
 

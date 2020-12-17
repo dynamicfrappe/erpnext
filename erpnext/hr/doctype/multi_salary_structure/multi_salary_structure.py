@@ -10,9 +10,39 @@ from frappe.model.document import Document
 
 class Multisalarystructure(Document):
 	def validate(self):
+		self.validate_components()
 		self.validate_dates()
+
 		if getdate(self.from_date) >getdate(today()):
 			self.status="closed"
+
+	def validate_components(self):
+		if self.component :
+			component_list = frappe.db.sql("""SELECT  
+													a.fingerprint_forgetten_penlaity_salary_component,
+													a.salary_componat_for_late,
+													a.salary_component_for_late_penalty	,
+													a.absent__component,
+													a.abset_penalty_component,
+													a.overtime_salary_component,
+													a.staying_up_late_salary_component,
+													a.overtime_in_holiday_salary_component,
+													a.overtime_in_weekend_salary_component,
+													a.less_time_salary_component
+													 FROM `tabEmployee` AS e 
+														JOIN `tabAttendance Rule` AS a 
+														ON e.attendance_role = a.name 
+														WHERE e.name = '%s' """%self.employee ) [0] or None
+			if component_list:
+				component_list= list(set(component_list))
+				exist_list = [d.componentname for d in self.component]
+				check =  all(item in component_list for item in exist_list)
+				if not check:
+					not_exist_component = [("<li>"  + str(d) + "</li>"  ) for d in component_list if d not in exist_list ]
+					message = "<ol>" +  '  '.join(not_exist_component) + "</ol>"
+					frappe.msgprint( _(message) , title=_("This Salary Component must be exist in salary structure") , indicator='red' , raise_exception=1)
+
+
 
 	def validate_dates(self):
 		joining_date, relieving_date = frappe.db.get_value("Employee", self.employee,

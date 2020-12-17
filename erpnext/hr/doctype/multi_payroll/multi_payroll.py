@@ -43,24 +43,52 @@ class MultiPayroll(Document):
 		return  data
 	
 	def create_salary_slips(self ):
-		if self.employees:
-			for salary_structure in self.employees :
-				salary_slip = frappe.new_doc('Monthly Salary Slip')
-				salary_slip.posting_date = datetime.today()
-				salary_slip.employee = salary_structure.employee
-				employe = frappe.get_doc("Employee" ,str(salary_structure.employee) )
-				salary_slip.month= self.payroll_month
-				salary_slip.payroll_type = self.payroll_type
-				salary_slip.start_date = self.start_date
-				salary_slip.end_date = self.end_date
-				salary_slip.save()
-				
+		try :
+			if self.employees:
+				for salary_structure in self.employees:
+					salary_slip_name = frappe.db.get_value('Monthly Salary Slip', {
+
+						'payroll_type': self.payroll_type,
+						'month': self.payroll_month,
+						'employee': salary_structure.employee,
+					}, ['name'])
+
+					if not salary_slip_name:
+						salary_slip = frappe.new_doc('Monthly Salary Slip')
+						salary_slip.posting_date = datetime.today()
+						salary_slip.employee = salary_structure.employee
+						employe = frappe.get_doc("Employee", str(salary_structure.employee))
+						salary_slip.month = self.payroll_month
+						salary_slip.payroll_type = self.payroll_type
+						salary_slip.start_date = self.start_date
+						salary_slip.end_date = self.end_date
+						salary_slip.save()
+				self.salary_slips_created = 1
+		except:
+			self.salary_slips_created = 0
+		self.save()
 
 
+	def calculate_salary_slip (self):
+			if self.employees:
+				for employee in self.employees :
+					salary_slip_name = frappe.db.get_value('Monthly Salary Slip' , {
+
+						'payroll_type' : self.payroll_type,
+						'month':self.payroll_month ,
+						'employee': employee.employee,
+					} , 'name' )
+
+					if salary_slip_name :
+						salary_slip = frappe.get_doc('Monthly Salary Slip' ,salary_slip_name )
+						if salary_slip.docstatus == 0:
+							salary_slip.run_method('get_Employee_Salary_Details')
+							salary_slip.save()
+						else :
+							frappe.msgprint(_("Salary Slip {} Has been Submitted ".format(salary_slip.name)))
+			frappe.msgprint(_("Done"))
 
 
-
-	
 	def get_joining_relieving_condition(self):
 		cond = """
 			and ifnull(t1.date_of_joining, '0000-00-00') <= '%(end_date)s'

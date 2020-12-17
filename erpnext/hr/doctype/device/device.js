@@ -17,14 +17,13 @@ frappe.ui.form.on('Device', {
 				frm.add_custom_button(__("Get Attendance"),
 								function() {
 									frappe.call({
-										method: "erpnext.hr.doctype.device.device.get_attendance",
-										args: {
-											device_name: frm.doc.name,
-										},
+										doc:frm.doc,
+										method: "get_attendance",
+										freeze: true,
 										callback: function(r) {
-											frappe.hide_progress();
-											frappe.msgprint(__("Done"))
-											frm.refresh(frm)
+											// frappe.hide_progress();
+											frappe.msgprint(__("Done"));
+											frm.refresh();
 
 
 
@@ -36,10 +35,11 @@ frappe.ui.form.on('Device', {
 								function() {
 									frappe.call({
 										method: "erpnext.hr.doctype.device.device.map_employees",
+										freeze: true,
 										callback: function(r) {
-											frm.refresh(frm)
-											frapp.msgprint(__("Done"))
-											frm.refresh(frm)
+
+											frapp.msgprint(__("Done"));
+											frm.refresh();
 										}
 									});
 								}).addClass("btn-primary");

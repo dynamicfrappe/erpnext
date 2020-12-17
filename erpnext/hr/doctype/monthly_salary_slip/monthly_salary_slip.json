@@ -19,6 +19,7 @@
   "company",
   "letter_head",
   "payroll_type",
+  "is_main",
   "section_break_10",
   "start_date",
   "end_date",
@@ -62,6 +63,7 @@
   "total_hours",
   "calculate_income_tax",
   "tax_pool",
+  "tax_value",
   "tax_calculated",
   "amended_from"
  ],
@@ -176,7 +178,6 @@
    "print_hide": 1
   },
   {
-   "depends_on": "eval:doc.employee && doc.month ;",
    "fieldname": "payroll_type",
    "fieldtype": "Link",
    "label": "Type",
@@ -475,34 +476,53 @@
    "reqd": 1
   },
   {
-   "default": "0",
+   "fetch_from": "payroll_type.is_main",
    "fieldname": "calculate_income_tax",
-   "fieldtype": "Check",
-   "label": "Calculate Income Tax"
+   "fieldtype": "Read Only",
+   "label": "Calculate Income Tax",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "tax_pool",
    "fieldtype": "Float",
    "hidden": 1,
-   "label": "Tax Pool "
+   "label": "Tax Pool ",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "tax_calculated",
    "fieldtype": "Check",
-   "label": "Tax_calculated"
+   "hidden": 1,
+   "label": "Tax_calculated",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "absent_days",
    "fieldtype": "Float",
    "label": "Absent Days"
+  },
+  {
+   "fetch_from": "payroll_type.is_main",
+   "fieldname": "is_main",
+   "fieldtype": "Read Only",
+   "label": "is main",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_value",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Tax Value",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "modified": "2020-12-14 12:38:59.741500",
+ "modified": "2020-12-16 12:43:03.386939",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Monthly Salary Slip",
