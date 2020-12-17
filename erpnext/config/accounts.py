@@ -299,6 +299,11 @@ def get_data():
 					"name": "Value Added Tax",
 					"description": _("Value Added Tax")
 				},
+				{
+					"type": "doctype",
+					"name": "Tax period",
+					"description": _("Value Added Tax")
+				},
 			]
 		},
 		{
