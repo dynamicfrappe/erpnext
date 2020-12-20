@@ -17,16 +17,20 @@ class PayrollMonth(Document):
 	def submit(self):
 		last_doc = frappe.db.sql("""
 				 select * from `tabPayroll Month`  where company = '{company}' and docstatus = 1 and ifnull(is_closed,0) = 0  order by start_date desc LIMIT 1
-							""".format(company=self.company), as_dict=1)[0]
+							""".format(company=self.company), as_dict=1)
 		if last_doc :
+			last_doc = last_doc [0]
 			frappe.throw(_("Please Close the opened Month {} first").format(last_doc.name))
 		self.is_closed = 0
+		self.status = 'Opened'
+		self.save()
 	def close_month(self):
 		salary_slip_list = frappe.db.sql("""select * from `tabMonthly Salary Slip` where  month = '{name}' and docstatus = 1""".format(name=self.name))
 		if not salary_slip_list :
 			frappe.throw(_('There is  No Submitted Salary Slip in this Month'))
-		frappe.db.sql("""update `tabPayroll Month` set is_closed = 1  where name = '{name}' """.format(name=self.name))
+		frappe.db.sql("""update `tabPayroll Month` set is_closed = 1 , status = 'Closed' where name = '{name}' """.format(name=self.name))
 		self.is_closed = 1
+		self.status = 'Closed'
 		frappe.msgprint(_("Done") ,title=_("Success"), indicator="green")
 	def validate(self):
 		if not self.month_for_year():
