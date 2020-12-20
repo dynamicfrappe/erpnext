@@ -1,6 +1,6 @@
 {
  "allow_import": 1,
- "autoname": "format:{year}-{month}",
+ "autoname": "format:{month}-{year}-{company}",
  "creation": "2020-12-03 16:46:18.201097",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,6 +8,7 @@
  "field_order": [
   "company",
   "year",
+  "status",
   "is_closed",
   "column_break_2",
   "month",
@@ -52,6 +53,7 @@
    "fieldname": "start_date",
    "fieldtype": "Date",
    "label": "Start Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -65,6 +67,7 @@
    "default": "0",
    "fieldname": "is_closed",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Is Closed"
   },
   {
@@ -132,6 +135,7 @@
    "fieldname": "attendance_start_date",
    "fieldtype": "Date",
    "label": "Start Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -144,10 +148,18 @@
    "label": "End Date",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nOpened\nClosed",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-15 14:30:59.366929",
+ "modified": "2020-12-20 14:31:33.023926",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Payroll Month",

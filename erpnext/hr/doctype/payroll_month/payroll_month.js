@@ -17,6 +17,8 @@ frappe.ui.form.on('Payroll Month', {
 			}
 		});
 
+		frm.events.set_dates(frm);
+
 
 
 	},
@@ -24,13 +26,29 @@ frappe.ui.form.on('Payroll Month', {
 	refresh: function(frm) {
 	if (frm.doc.docstatus == 1){
 
-				frm.add_custom_button(__("Create Payroll"), function() {
+
+				if (!frm.doc.is_closed)
+				{
+					frm.add_custom_button(__("Close Month"), function() {
+					frm.events.close_month(frm);
+
+					}).addClass("btn-primary");
+					frm.add_custom_button(__("Create Payroll"), function() {
 					frm.events.create_payroll(frm)
 
 					}).addClass("btn-primary");
-		}
-	},
+				}
 
+		}
+		// frm.events.set_dates(frm);
+	},
+	year:function(frm){
+		frm.events.set_dates(frm);
+	},
+	Company:function(frm){
+		frm.events.set_dates(frm);
+	}
+	,
 	create_payroll:function(frm){
 
 
@@ -104,6 +122,7 @@ frappe.ui.form.on('Payroll Month', {
 				}
 			}
 		})
+		frm.events.set_dates(frm);
 
 	},
 
@@ -142,5 +161,40 @@ frappe.ui.form.on('Payroll Month', {
 				frm.refresh_field("attendance_end_date")
 			}
 		})
+	},
+	set_dates : function (frm) {
+		if (frm.is_new())
+		{
+					frappe.call({
+					method: "set_start_date",
+					doc : frm.doc,
+					callback: function(r) {
+							refresh_field("start_date");
+							refresh_field("attendance_start_date");
+							refresh_field("end_date");
+							refresh_field("attendance_end_date");
+							refresh_field("month");
+							refresh_field("year");
+							frm.refresh();
+						}
+					});
+		}
+	},
+	close_month : function (frm) {
+		frappe.confirm( __('Are you sure you want to Close This Payroll Month?') , () => {
+
+			frappe.call({
+						method: "close_month",
+						doc : frm.doc,
+						callback: function(r) {
+								refresh_field("is_closed")
+								frm.refresh();
+							}
+						});
+
+		}, () => {} )
+
+
+
 	}
 });
