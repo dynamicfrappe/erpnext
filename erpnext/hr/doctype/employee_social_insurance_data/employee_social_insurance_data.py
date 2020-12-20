@@ -19,6 +19,10 @@ class EmployeeSocialInsuranceData(Document):
 		data={"min":min_basic_salary,"max":max_basic_salary}
 		return data
 
+	def validate(self):
+		if self.is_owner==0 and self.insured==0:
+			frappe.throw("Must be Insured")
+
 
 
 

@@ -190,15 +190,13 @@
    "fieldname": "insorganization",
    "fieldtype": "Link",
    "label": "Insurance Organization",
-   "options": "Insurance Organization",
-   "reqd": 1
+   "options": "Insurance Organization"
   },
   {
    "fieldname": "insoffice",
    "fieldtype": "Link",
    "label": "Insurance Office",
-   "options": "Insurance Office",
-   "reqd": 1
+   "options": "Insurance Office"
   },
   {
    "fieldname": "insuancejob",
@@ -208,7 +206,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-16 11:53:20.606218",
+ "modified": "2020-12-20 10:33:58.345514",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Social Insurance Data",
