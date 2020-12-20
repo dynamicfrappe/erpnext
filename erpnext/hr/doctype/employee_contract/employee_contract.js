@@ -60,6 +60,22 @@ frappe.ui.form.on('Employee Contract', {
 				}
 			})
 		}
+		if (frm.doc.contract_start_date && frm.doc.employee  ){
+			frappe.call({
+
+				doc : frm.doc,
+				method:"validate_employee_active_cotracts",
+				callback:function(r){
+					if (r.message){
+						frm.set_value("contract_start_date" ,r.message)
+						frm.refresh_field('contract_start_date')
+						// frappe.throw("Invalid start date | Employee have active Contract")
+					}
+				}
+			})
+
+
+		}
 
 
 	} , 
