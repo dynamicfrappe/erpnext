@@ -223,6 +223,7 @@ standard_queries = {
 }
 
 doc_events = {
+
 	"Stock Entry": {
 		"on_submit": "erpnext.stock.doctype.material_request.material_request.update_completed_and_requested_qty",
 		"on_cancel": "erpnext.stock.doctype.material_request.material_request.update_completed_and_requested_qty"
@@ -287,7 +288,9 @@ scheduler_events = {
 		"erpnext.support.doctype.issue.issue.set_service_level_agreement_variance",
 		"erpnext.selling.doctype.sales_order.sales_order.Update_Created_to_Rejected_after_7Days",
 		"erpnext.stock.doctype.on_hold.on_hold.close_On_hold",
-		"erpnext.hr.doctype.employee_document.employee_document.checkNotification"
+		"erpnext.hr.doctype.employee_document.employee_document.checkNotification",
+		"erpnext.hr.doctype.employee_document.employee_document.notifyContctEnd",
+		"erpnext.hr.utils.notifyContract"
 	],
 	"daily": [
 		"erpnext.stock.reorder_item.reorder_item",

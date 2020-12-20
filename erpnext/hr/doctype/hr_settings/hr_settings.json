@@ -31,6 +31,7 @@
   "auto_leave_encashment",
   "hiring_settings",
   "check_vacancies",
+  "notificationperiod",
   "attendance_rules_section",
   "late_in_rate",
   "early_out_rate",
@@ -351,12 +352,18 @@
    "fieldtype": "Float",
    "label": "Consultant Percent %",
    "reqd": 1
+  },
+  {
+   "default": "7",
+   "fieldname": "notificationperiod",
+   "fieldtype": "Int",
+   "label": "Contract Notification Period"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "modified": "2020-12-16 13:12:27.445150",
+ "modified": "2020-12-20 13:35:23.805072",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

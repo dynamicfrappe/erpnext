@@ -454,3 +454,9 @@ def get_previous_claimed_amount(employee, payroll_period, non_pro_rata=False, co
 	if sum_of_claimed_amount and flt(sum_of_claimed_amount[0].total_amount) > 0:
 		total_claimed_amount = sum_of_claimed_amount[0].total_amount
 	return total_claimed_amount
+
+@frappe.whitelist()
+def notifyContract(*args,**kwargs):
+	#frappe.msgprint("hello")
+	frappe.db.sql("update `tabEmployee Contract` set status='Active' where testing_end_date <CURDATE();")
+	frappe.db.sql("update `tabEmployee Contract` set status='Ended' where contract_end_date <curdate() and status='Active';")
