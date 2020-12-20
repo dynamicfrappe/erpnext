@@ -11,6 +11,7 @@
   "national_id",
   "employee_addresse",
   "employee_joined_day",
+  "contract_status",
   "column_break_4",
   "compnay",
   "posting_date",
@@ -256,9 +257,17 @@
    "fieldname": "employee_addresse",
    "fieldtype": "Small Text",
    "label": "Employee Addresse"
+  },
+  {
+   "fieldname": "contract_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Contract Status",
+   "options": "In Testing Period\nActive\nEnded"
   }
  ],
- "modified": "2020-12-13 09:55:03.030182",
+ "modified": "2020-12-20 11:10:25.407400",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Contract",
