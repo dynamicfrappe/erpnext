@@ -667,7 +667,18 @@ def get_data():
 					"is_query_report": True,
 					"name": "Employee Documents Report",
 					"doctype": "Employee Document"
-				},
+				},{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Income Tax Settlement",
+					"doctype": "Monthly Salary Slip"
+				},{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Social Insurance Value",
+					"doctype": "Employee Social Insurance Data"
+				}
 			]
 		},
 	]
+
