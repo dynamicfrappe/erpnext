@@ -22,10 +22,18 @@
   "clearanceamount",
   "column_break_10",
   "paidtax",
-  "taxauthority",
   "accountname",
   "journal_created",
-  "amended_from"
+  "refdoc",
+  "docname",
+  "amended_from",
+  "section_break_23",
+  "taxauthority",
+  "cheq_number",
+  "cheqdate",
+  "column_break_25",
+  "methodofpay",
+  "account"
  ],
  "fields": [
   {
@@ -78,8 +86,7 @@
    "fieldname": "taxauthority",
    "fieldtype": "Link",
    "label": "Tax Authority",
-   "options": "Tax Template",
-   "reqd": 1
+   "options": "Tax Template"
   },
   {
    "fieldname": "amended_from",
@@ -153,10 +160,56 @@
    "fieldtype": "Link",
    "label": "Tax Type",
    "options": "Tax Class"
+  },
+  {
+   "fieldname": "refdoc",
+   "fieldtype": "Link",
+   "label": "Reference Document",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "docname",
+   "fieldtype": "Link",
+   "label": "Document Name",
+   "options": "Tax period",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_23",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "methodofpay",
+   "fieldtype": "Select",
+   "label": "Method Of Payment",
+   "options": "Cash\nBank"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "depends_on": "eval:doc.methodofpay==\"Bank\"",
+   "fieldname": "cheq_number",
+   "fieldtype": "Data",
+   "label": "Cheq Number"
+  },
+  {
+   "depends_on": "eval:doc.methodofpay==\"Bank\"",
+   "fieldname": "cheqdate",
+   "fieldtype": "Date",
+   "label": "Cheque/Reference Date"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-15 10:21:02.128262",
+ "modified": "2020-12-17 13:07:09.638043",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Value Added Tax",
@@ -175,7 +228,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

@@ -2,7 +2,31 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Value Added Tax', {
+	methodofpay:function (frm){
+	  if (frm.doc.methodofpay=="Bank"){
+	  	 frm.set_df_property("cheq_number", 'reqd', 1);
+	  	 frm.set_df_property("cheqdate", 'reqd', 1);
+	  }
+	},
 	refresh:function (frm){
+
+		if(frm.doc.refdoc=="Tax period"){
+			frm.set_df_property("taxauthority", 'reqd', 1);
+			frm.set_df_property("account", 'reqd', 1);
+
+			cur_frm.clear_table("details")
+			frm.call({
+				method:"getTaxes",
+				doc:frm.doc,
+				args:{
+					 "fromDate":frm.doc.fromdae,
+					"todate":frm.doc.todate
+				},
+				callback(r){
+
+				}
+			})
+		}
 
          if(frm.doc.docstatus==0 && frm.doc.details !=null &&frm.doc.journal_created==0){
          	frm.add_custom_button(__("Create Journal Entry"), function() {
@@ -12,7 +36,7 @@ frappe.ui.form.on('Value Added Tax', {
 					 method: "createJournalEntry",
 					 doc:frm.doc,
 					 callback(r) {
-                      //frm.page.clear_primary_action();
+                      frm.page.clear_primary_action();
 					 }
 				 })
 
@@ -30,7 +54,7 @@ frappe.ui.form.on('Value Added Tax', {
 					"todate":frm.doc.todate
 				},
 				callback(r){
-			
+
 				}
 			})
 

@@ -1,0 +1,45 @@
+{
+ "creation": "2020-12-15 13:50:54.360472",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "taxclass",
+  "refdoc",
+  "date"
+ ],
+ "fields": [
+  {
+   "fieldname": "taxclass",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Tax Class",
+   "options": "Tax Class"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refdoc",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Reference Document",
+   "options": "Value Added Tax",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-15 16:25:39.172742",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Tax Period Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
