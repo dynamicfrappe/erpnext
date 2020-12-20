@@ -2,9 +2,24 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Employee Contract', {
-	// refresh: function(frm) {
+	 refresh: function(frm) {
+	 	if (frm.doc.status=='Ended'){
+	 		        frm.add_custom_button(__("Renew"),function(){
+                       	 //frm.event.updateAction(r.message);
+                         	  frappe.call({
+				                method:'RenewContract',
+				                doc:frm.doc,
+				                callback(r) {
 
-	// }
+				                	frm.page.clear_primary_action();
+				                	frm.refresh();
+				                }
+
+				            });
+
+                       }).addClass('btn-primary')
+		}
+	 },
 	national_id:function(frm){
 
     	var nationalID=frm.doc.national_id;
