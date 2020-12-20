@@ -45,5 +45,14 @@ frappe.query_reports["Attendance Sheet"] = {
 				year_filter.set_input(year_filter.df.default);
 			}
 		});
-	}
+	},
+	onload:function(frm){
+		frappe.call({
+			method: "get_attendance_years",
+			doc : frm.doc,
+			callback: function(r) {
+				frm.set_df_property("year", "options", r.message );
+				refresh_field("year");
+			}
+		});
 };
