@@ -91,7 +91,8 @@ def getdata(filters):
     monthes_conditions = " and company = %(company)s "
     monthes_conditions += " and year = %(year)s "
     if filters.get("month"):
-        monthes_conditions += " and name = %(month)s "
+        # frappe.msgprint(filters.get("month"))
+        monthes_conditions += " and name in %(month)s "
     payroll_monthes = frappe.db.sql("""
                 select * from `tabPayroll Month` where 1 = 1 
                 {monthes_conditions} 

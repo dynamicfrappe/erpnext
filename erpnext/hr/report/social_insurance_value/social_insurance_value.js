@@ -31,9 +31,7 @@ frappe.query_reports["Social Insurance Value"] = {
 						year: frappe.query_report.get_filter_value("year")
 					});
 
-			},
-			// "options": "Payroll Month",
-			"reqd": 1
+			}
 
 		},
 		{

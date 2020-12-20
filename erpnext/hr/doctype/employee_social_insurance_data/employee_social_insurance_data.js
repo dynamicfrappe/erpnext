@@ -7,21 +7,30 @@ frappe.ui.form.on('Employee Social Insurance Data', {
 		if(frm.doc.is_owner==1) {
 			frm.set_df_property("insured", "read_only", 1)
 			frm.set_df_property("anotherog", "read_only", 1)
+			frm.events.setfieldMandatory(frm,1)
 		}else {
 			frm.set_df_property("insured", "read_only", 0)
 			frm.set_df_property("anotherog", "read_only", 0)
+			frm.events.setfieldMandatory(frm,0)
 		}
 	},
 
 		insured:function (frm){
 		if(frm.doc.insured==1) {
 			frm.set_df_property("is_owner", "read_only", 1)
+			frm.events.setfieldMandatory(frm,1)
 		}else {
 			frm.set_df_property("is_owner", "read_only", 0)
+			frm.events.setfieldMandatory(frm,0)
 		}
 	},
 
-
+    setfieldMandatory:function (frm,val){
+	   	frm.set_df_property("insorganization", "reqd", val)
+		frm.set_df_property("insoffice", "reqd", val)
+		frm.set_df_property("insuancejob", "reqd", val)
+		frm.set_df_property("insurancenumber", "reqd", val)
+	},
     	setup:function(frm){
 		frm.set_query("employee_document",function(){
 			return{
