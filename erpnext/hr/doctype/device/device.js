@@ -38,7 +38,7 @@ frappe.ui.form.on('Device', {
 										freeze: true,
 										callback: function(r) {
 
-											frapp.msgprint(__("Done"));
+											frappe.msgprint(__("Done"));
 											frm.refresh();
 										}
 									});

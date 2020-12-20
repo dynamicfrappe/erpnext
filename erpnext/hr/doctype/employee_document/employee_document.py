@@ -40,7 +40,7 @@ class EmployeeDocument(Document):
 
 
 @frappe.whitelist()
-def checkNotification(self):
+def checkNotification(*args,**kwargs):
 	documents=frappe.db.sql("""select * from  `tabEmployee Document` where is_notified=0""",as_dict=1)
 	for i in range(0,len(documents)):
 		end_date=datetime.strptime(str(documents[i]["end_date"]), '%Y-%m-%d')
@@ -58,6 +58,25 @@ def checkNotification(self):
 			doc.end_date=documents[i]["end_date"]
 			doc.save()
 			frappe.db.commit()
+
+@frappe.whitelist()
+def notifyContctEnd(*args,**kwargs):
+	period=frappe.db.get_single_value("HR Settings", "notificationperiod")
+	documents = frappe.db.sql("select * from `tabEmployee Contract`", as_dict=1)
+	for doc in documents:
+		end_date=datetime.strptime(str(doc.contract_end_date),'%Y-%m-%d')
+		diff = end_date - datetime.strptime(str(date.today()), '%Y-%m-%d')
+		days = str(diff)
+		if int(day[0]) <= period:
+			Doc = frappe.new_doc('Employee Documents Notification')
+			Doc.emp_name = doc.employee
+			Doc.document_type="Employee Contract"
+			Doc.start_date = doc.contract_start_date
+			Doc.end_date = doc.contract_end_date
+			doc.save()
+			frappe.db.commit()
+
+
 
 
 

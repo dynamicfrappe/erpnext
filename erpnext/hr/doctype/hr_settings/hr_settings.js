@@ -19,5 +19,14 @@ frappe.ui.form.on('HR Settings', {
 			}
 			frm.set_value('password_policy', policy.split(new RegExp(" |-", 'g')).filter((token) => token).join('-'));
 		}
+		if (! frm.doc.payroll_month_start_day){
+			frappe.throw(__("Payroll Month start Config Cann't be Equal 0") );
+			return false;
+		}
+		if (! frm.doc.attendance_month_start_day){
+			 frm.doc.attendance_month_start_day = frm.doc.payroll_month_start_day ;
+		}
+
+
 	}
 });

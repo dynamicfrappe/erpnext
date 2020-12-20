@@ -12,6 +12,8 @@
   "stop_birthday_reminders",
   "expense_approver_mandatory_in_expense_claim",
   "payroll_settings",
+  "payroll_month_start_day",
+  "attendance_month_start_day",
   "advance_salary_component",
   "medical_insurance_salary_component",
   "social_insurance_salary_component",
@@ -31,6 +33,7 @@
   "auto_leave_encashment",
   "hiring_settings",
   "check_vacancies",
+  "notificationperiod",
   "attendance_rules_section",
   "late_in_rate",
   "early_out_rate",
@@ -351,12 +354,30 @@
    "fieldtype": "Float",
    "label": "Consultant Percent %",
    "reqd": 1
+  },
+  {
+   "fieldname": "payroll_month_start_day",
+   "fieldtype": "Int",
+   "label": "Payroll Month Start Day",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "payroll_month_start_day",
+   "fieldname": "attendance_month_start_day",
+   "fieldtype": "Int",
+   "label": "Attendance Month Start Day"
+  },{
+   "default": "7",
+   "fieldname": "notificationperiod",
+   "fieldtype": "Int",
+   "label": "Contract Notification Period"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "modified": "2020-12-16 13:12:27.445150",
+
+ "modified": "2020-12-20 13:35:23.805072",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",
