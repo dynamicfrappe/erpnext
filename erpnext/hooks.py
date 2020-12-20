@@ -286,7 +286,8 @@ scheduler_events = {
 		"erpnext.hr.doctype.shift_type.shift_type.process_auto_attendance_for_all_shifts",
 		"erpnext.support.doctype.issue.issue.set_service_level_agreement_variance",
 		"erpnext.selling.doctype.sales_order.sales_order.Update_Created_to_Rejected_after_7Days",
-		"erpnext.stock.doctype.on_hold.on_hold.close_On_hold"
+		"erpnext.stock.doctype.on_hold.on_hold.close_On_hold",
+		"erpnext.hr.doctype.employee_document.employee_document.checkNotification"
 	],
 	"daily": [
 		"erpnext.stock.reorder_item.reorder_item",
