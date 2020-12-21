@@ -15,4 +15,4 @@ class InsuranceOrganization(Document):
 
 @frappe.whitelist()
 def get_jinja_data(doc):
-	return frappe.db.sql("""select * from `tabEmployee Social Insurance Data` where employee_strat_insurance_date < DATE_SUB(CURDATE(),INTERVAL 1 YEAR)  order by insurancenumber Asc""",as_dict=True)
+	return frappe.db.sql("""select  ROW_NUMBER() OVER(ORDER BY name ASC) AS count , `tabEmployee Social Insurance Data`.* from `tabEmployee Social Insurance Data` where employee_strat_insurance_date < DATE_SUB(CURDATE(),INTERVAL 1 YEAR)  order by insurancenumber Asc""",as_dict=True)
