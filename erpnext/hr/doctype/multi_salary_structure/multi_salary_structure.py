@@ -32,9 +32,9 @@ class Multisalarystructure(Document):
 													 FROM `tabEmployee` AS e 
 														JOIN `tabAttendance Rule` AS a 
 														ON e.attendance_role = a.name 
-														WHERE e.name = '%s' """%self.employee ) [0] or None
+														WHERE e.name = '%s' """%self.employee )  or None
 			if component_list:
-				component_list= list(set(component_list))
+				component_list= list(set(component_list[0]))
 				exist_list = [d.componentname for d in self.component]
 				check =  all(item in component_list for item in exist_list)
 				if not check:

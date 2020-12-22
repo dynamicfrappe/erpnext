@@ -158,17 +158,19 @@ frappe.ui.form.on('Multi salary structure', {
 		employee: function(frm) {
 		if(frm.doc.employee){
 			frappe.call({
-				method: "frappe.client.get_value",
+				method: "frappe.client.get",
 				args:{
 					doctype: "Employee",
-					fieldname: "company",
-					filters:{
-						name: frm.doc.employee
-					}
+					name: frm.doc.employee
+
 				},
 				callback: function(data) {
 					if(data.message){
 						frm.set_value("company", data.message.company);
+						if (!data.message.attendance_role)
+							frappe.throw(__("Employee has not assigned To Attendance Rule"));
+						frm.set_value("employee", "");
+						refresh_field("employee");
 					}
 				}
 			});
