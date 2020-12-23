@@ -84,13 +84,14 @@ class MonthlySalarySlip(TransactionBase):
 		self.set_formula_valus()
 		self.update_dates_for_employee()
 		self.get_absent_days()
-
 		self.get_attendance()
+		self.calculate_hour_rate()
 		self.set_loan_repayment()
 		if self.is_main:
 			self.get_Employee_advance()
 			self.get_medical_insurance()
 			self.get_social_insurance()
+			self.check_employee_leave_without_pay()
 		self.calculate_Tax()
 		self.calculate_net_pay()
 		self.check_employee_leave_without_pay()
@@ -470,6 +471,41 @@ class MonthlySalarySlip(TransactionBase):
 
 					self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)
 
+	def calculate_hour_rate(self):
+
+
+			total_hourly_salary = 0
+			for item in self.get("earnings"): #if not (len(self.get("earnings")) or len(self.get("deductions"))):
+				salary_compnent = frappe.get_doc("Salary Component" , item.salary_component)
+				if salary_compnent :
+					if salary_compnent.consider_in_hour_rate and salary_compnent.type == "Earning" and  item.amount:
+						# frappe.msgprint(str(item.amount))
+						total_hourly_salary += item.amount
+			total_working_days = self.total_working_days
+			attendance_rule = frappe.db.get_value("Employee" , self.employee , "attendance_role")
+			if attendance_rule:
+				attendance_rule = frappe.get_doc("Attendance Rule" , attendance_rule)
+
+				if self.payroll_frequency == "Monthly":
+					total_working_days = attendance_rule.total_working_days_per_month or self.total_working_days or 0
+				total_working_hours_per_day = attendance_rule.total_working_hours_per_day or 0
+				if not total_working_hours_per_day:
+						frappe.msgprint(
+							_("Please Set The Total Working Hours for Employee {} in Attendance Rule".format(self.employee)), title='Error', indicator='red',
+							raise_exception=1)
+				self.hour_rate = total_hourly_salary / (total_working_hours_per_day * total_working_days)
+				self.total_working_days_temp = total_working_days
+				self.daily_rate = total_hourly_salary / (total_working_hours_per_day)
+
+			# frappe.msgprint('total_hourly_salary')
+			# frappe.msgprint(str(total_hourly_salary))
+			# frappe.msgprint('total_working_hours_per_day')
+			# frappe.msgprint(str(total_working_hours_per_day))
+			# frappe.msgprint('total_working_days')
+			# frappe.msgprint(str(total_working_days))
+			# frappe.msgprint('str(self.hour_rate)')
+			# frappe.msgprint(str(self.hour_rate))
+
 
 
 
@@ -559,6 +595,16 @@ class MonthlySalarySlip(TransactionBase):
 			# self.payment_days = self.payment_days-self.leave_without_pay
 			
 		self.payment_days = self.payment_days - self.leave_without_pay
+		if self.leave_without_pay :
+			amount = self.leave_without_pay * self.daily_rate or 0
+			sc = frappe.db.get_single_value("HR Settings","leave_without_pay_salary_component")
+			if not sc :
+				frappe.throw(_("Please Set Leave Without Pay Salary Component In Hr Settings"))
+			if amount :
+				row = self.get_salary_slip_row(sc)
+
+				self.update_component_row(row, amount, "deductions", adding=1, adding_if_not_exist=1)
+
 
 
 
