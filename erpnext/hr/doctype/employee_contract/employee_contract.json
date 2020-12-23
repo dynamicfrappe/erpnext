@@ -39,7 +39,8 @@
   "contract_template",
   "section_break_30",
   "attached_image",
-  "amended_from"
+  "amended_from",
+  "isrenewd"
  ],
  "fields": [
   {
@@ -256,9 +257,17 @@
    "fieldname": "employee_addresse",
    "fieldtype": "Small Text",
    "label": "Employee Addresse"
+  },
+  {
+   "default": "0",
+   "fieldname": "isrenewd",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Is Renewd",
+   "print_hide": 1
   }
  ],
- "modified": "2020-12-20 12:42:51.816685",
+ "modified": "2020-12-20 15:47:36.483849",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Contract",

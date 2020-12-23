@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "posting_date",
+  "type",
   "employee",
   "employeename",
   "column_break_4",
@@ -53,9 +54,9 @@
   },
   {
    "fieldname": "employee",
-   "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee"
+   "fieldtype": "Dynamic Link",
+   "label": "Name",
+   "options": "type"
   },
   {
    "fieldname": "start_date",
@@ -141,7 +142,7 @@
    "fetch_from": "employee.employee_name",
    "fieldname": "employeename",
    "fieldtype": "Data",
-   "label": "Employee Name",
+   "label": "Full Name",
    "print_hide": 1,
    "read_only": 1
   },
@@ -177,10 +178,16 @@
    "fieldtype": "Section Break",
    "hidden": 1,
    "label": "work letter details"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Employee\nDriver"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-15 09:57:08.770533",
+ "modified": "2020-12-22 12:46:54.048186",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Document",

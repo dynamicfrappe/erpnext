@@ -37,22 +37,7 @@ class ValueAddedTax(Document):
 			Account["Amount"]=Amount
 			Accountdata["data"].append(Account)
 		if self.collectedtax <self.paidtax:
-			doc = frappe.new_doc('Journal Entry')
-			doc.posting_date = datetime.today().strftime('%Y-%m-%d')
-			row = doc.append("accounts", {})
-			for acc in Accountdata["data"]:
-				if acc["taxtype"]=="Paid":
-					row = doc.append("accounts", {})
-					row.account = acc["category"]
-					row.party_type = acc["partner_type"]
-					row.party = acc["partner"]
-					row.credit_in_account_currency = abs(acc["Amount"])
-			row = doc.append("accounts", {})
-			row.account=self.accountname
-			row.debit_in_account_currency=abs(self.collectedtax)
-			doc.save()
-			frappe.msgprint("Created")
-			return "true"
+			frappe.throw("No Taxes Found")
 
 
 		doc = frappe.new_doc('Journal Entry')

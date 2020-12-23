@@ -81,6 +81,10 @@ class EmployeeContract(Document):
 		doc.attached_image=self.attached_image
 		doc.save()
 		#frappe.set_route("Form", "Employee Contract", doc.name);
+		#frappe.set_route("List", "Employee Contract");
+		frappe.db.sql("update `tabEmployee Contract` set isrenewd=1 where name='{}'".format(self.name))
+		frappe.msgprint("Contract Renewed")
+		return "true"
 
 
 
