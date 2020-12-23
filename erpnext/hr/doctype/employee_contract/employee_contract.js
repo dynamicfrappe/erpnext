@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('Employee Contract', {
 	 refresh: function(frm) {
-	 	if (frm.doc.status=='Ended'){
+	 	if (frm.doc.status=='Ended' && frm.doc.isrenewd==0){
 	 		        frm.add_custom_button(__("Renew"),function(){
                        	 //frm.event.updateAction(r.message);
                          	  frappe.call({
