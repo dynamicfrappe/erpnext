@@ -61,7 +61,6 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -182,7 +181,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-14 09:29:16.216028",
+ "modified": "2020-12-23 11:19:40.623657",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",
