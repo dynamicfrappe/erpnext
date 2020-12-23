@@ -168,15 +168,18 @@ frappe.ui.form.on('Multi salary structure', {
 					if(data.message){
 						frm.set_value("company", data.message.company);
 						if (!data.message.attendance_role)
+						{
 							frappe.throw(__("Employee has not assigned To Attendance Rule"));
-						frm.set_value("employee", "");
-						refresh_field("employee");
+							frm.set_value("employee", "");
+							refresh_field("employee");
+						}
+
 					}
 				}
 			});
 		}
 		else{
-			frm.set_value("company", null);
+			// frm.set_value("company", null);
 		}
 	}
 
