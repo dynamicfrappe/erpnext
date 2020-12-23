@@ -9,9 +9,8 @@ frappe.ui.form.on('Multi salary structure', {
 			  method:"getAllSalaryStructureComponent",
 			  doc:frm.doc,
 			  callback(r){
-                 if(r.data){
-                     frm.refresh_field('component');
-				 }
+			  	refresh_field('component');
+
 			  }
 		  })
 	   },
@@ -113,7 +112,7 @@ frappe.ui.form.on('Multi salary structure', {
 							})
 
                            d.hide();
-							cur_frm.refresh_fields('component');
+							refresh_field('component');
                             //frappe.set_route("List", "Multi salary structure");
                            	}
 					});
@@ -187,8 +186,9 @@ frappe.ui.form.on('Multi salary structure', {
 	   frappe.ui.form.on("Salary structure Template", "salary_structure", function (frm, cdt, cdn) {
             var child=locals[cdt][cdn]
             child.employee=frm.doc.employee
-            cur_frm.refresh_field("salary_structure");
-
+            refresh_field("salary_structure");
+				if (!frm.doc.salary_structure)
+					return;
             	frappe.call({
 				    method:'checkSalryStructureComponent',
 				    doc:frm.doc,
@@ -200,7 +200,7 @@ frappe.ui.form.on('Multi salary structure', {
 				            if(r.message =='false'){
 				            	frappe.msgprint("existing component")
                                  child.salary_structure=""
-                                 cur_frm.refresh_field("salary_structure");
+                                 refresh_field("salary_structure");
 				            }
                                  
 				                }
@@ -225,7 +225,7 @@ frappe.ui.form.on('Multi salary structure', {
 				}
 			 }
             child.from_date=frm.doc.from_date
-            cur_frm.refresh_field("salary_structure");
+            refresh_field("salary_structure");
             
 		})
 
@@ -240,7 +240,7 @@ frappe.ui.form.on('Multi salary structure', {
             			frappe.msgprint("type already exist");
             			 
             			child.type="";
-            			cur_frm.refresh_field("type");
+            			refresh_field("type");
             			break;
             		}
             	}

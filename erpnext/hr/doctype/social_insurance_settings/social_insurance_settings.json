@@ -17,7 +17,7 @@
   "owner_percent",
   "emergency_percent",
   "insurance_salary_component_section",
-  "salary_component"
+  "social_insurance_salary_component"
  ],
  "fields": [
   {
@@ -84,14 +84,14 @@
    "label": "Insurance Salary Component"
   },
   {
-   "fieldname": "salary_component",
+   "fieldname": "social_insurance_salary_component",
    "fieldtype": "Link",
    "label": "Salary Component",
    "options": "Salary Component"
   }
  ],
  "issingle": 1,
- "modified": "2020-12-01 17:04:36.332680",
+ "modified": "2020-12-23 13:06:24.692010",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Social Insurance Settings",

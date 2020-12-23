@@ -94,7 +94,7 @@ class MonthlySalarySlip(TransactionBase):
 			self.check_employee_leave_without_pay()
 		self.calculate_Tax()
 		self.calculate_net_pay()
-		self.check_employee_leave_without_pay()
+		# self.check_employee_leave_without_pay()
 
 
 	def validate_dates(self):
@@ -134,7 +134,7 @@ class MonthlySalarySlip(TransactionBase):
 		self.social_insurance_amount = amount or 0
 
 		if amount:
-			salary_component = frappe.db.get_single_value("HR Settings", 'social_insurance_salary_component')
+			salary_component = frappe.db.get_single_value("Social Insurance Settings", 'social_insurance_salary_component')
 			if salary_component:
 				row = self.get_salary_slip_row(salary_component)
 
@@ -495,7 +495,7 @@ class MonthlySalarySlip(TransactionBase):
 							raise_exception=1)
 				self.hour_rate = total_hourly_salary / (total_working_hours_per_day * total_working_days)
 				self.total_working_days_temp = total_working_days
-				self.daily_rate = total_hourly_salary / (total_working_hours_per_day)
+				self.daily_rate = total_hourly_salary / (total_working_days)
 
 			# frappe.msgprint('total_hourly_salary')
 			# frappe.msgprint(str(total_hourly_salary))
@@ -593,7 +593,6 @@ class MonthlySalarySlip(TransactionBase):
 			self.leave_without_pay += end_month_dates
 
 			# self.payment_days = self.payment_days-self.leave_without_pay
-			
 		self.payment_days = self.payment_days - self.leave_without_pay
 		if self.leave_without_pay :
 			amount = self.leave_without_pay * self.daily_rate or 0
