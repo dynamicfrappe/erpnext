@@ -139,7 +139,7 @@
   },
   {
    "fieldname": "insurance_salary",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "Insurance salary"
   },
   {
