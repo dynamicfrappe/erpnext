@@ -1093,3 +1093,15 @@ def make_inter_company_sales_invoice(source_name, target_doc=None):
 
 def on_doctype_update():
 	frappe.db.add_index("Purchase Invoice", ["supplier", "is_return", "return_against"])
+
+@frappe.whitelist()
+def update_created_since():
+
+	frappe.db.sql("""
+					update `tabPurchase Invoice`
+					set created_since = DATEDIFF(curdate(),posting_date)	""",as_dict=1)
+	frappe.db.sql("""
+					update `tabPurchase Invoice`
+					set over_due_days = DATEDIFF(curdate(),due_date)
+					where status = 'Overdue' """ , as_dict=1)
+	frappe.db.commit()

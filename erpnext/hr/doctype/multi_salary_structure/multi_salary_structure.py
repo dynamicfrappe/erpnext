@@ -36,7 +36,12 @@ class Multisalarystructure(Document):
 			if component_list:
 				component_list= list(set(component_list[0]))
 				exist_list = [d.componentname for d in self.component]
-				check =  all(item in component_list for item in exist_list)
+				check =  all(item in  exist_list for item in component_list)
+				# frappe.msgprint(_(str(component_list)))
+				#
+				# frappe.msgprint(_(str(exist_list)))
+				# frappe.msgprint(_(str(check)))
+
 				if not check:
 					not_exist_component = [("<li>"  + str(d) + "</li>"  ) for d in component_list if d not in exist_list ]
 					message = "<ol>" +  '  '.join(not_exist_component) + "</ol>"
@@ -101,7 +106,7 @@ class Multisalarystructure(Document):
 			row.componentname=d.salary_component
 			row.amount=d.amount
 			# self.update(self.component)
-		self.save()
+		# self.save()
 		return data
 
 	def setSalaryComponent(self,salaryStructure):

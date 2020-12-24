@@ -4,8 +4,35 @@
 // render
 frappe.listview_settings['Purchase Invoice'] = {
 	add_fields: ["supplier", "supplier_name", "base_grand_total", "outstanding_amount", "due_date", "company",
-		"currency", "is_return", "release_date", "on_hold"],
-	get_indicator: function(doc) {
+		"currency", "is_return", "release_date", "on_hold" , "Created_since"],
+	  onload: function(doc) {
+			// triggers once before the list is loaded
+		  // debugger;
+		  //  frappe.call({
+          //       method: "erpnext.accounts.doctype.purchase_invoice.purchase_invoice.update_created_since",
+          //       args :{
+          //       },callback(r){
+          //       	debugger;
+		  //
+          //       }
+          //   });
+
+		},
+	prepare_data: function() {
+		debugger;
+
+	},
+	refresh: function(doclist) {
+
+		// doclist.data.forEach((a)=>{
+		// 	debugger;
+		// 	a.Created_since = 150;
+		// });
+
+
+	},
+		get_indicator: function(doc) {
+		doc.Created_since = '150';
 		if( (flt(doc.outstanding_amount) <= 0) && doc.docstatus == 1 &&  doc.status == 'Debit Note Issued') {
 			return [__("Debit Note Issued"), "darkgrey", "outstanding_amount,<=,0"];
 		} else if(flt(doc.outstanding_amount) > 0 && doc.docstatus==1) {
