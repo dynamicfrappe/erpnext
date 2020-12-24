@@ -230,6 +230,7 @@
    "default": "0",
    "fieldname": "is_paid",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is Paid",
    "print_hide": 1
   },
@@ -1357,7 +1358,7 @@
  "icon": "fa fa-file-text",
  "idx": 204,
  "is_submittable": 1,
- "modified": "2020-12-24 13:10:24.048592",
+ "modified": "2020-12-24 13:44:50.068064",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Purchase Invoice",
