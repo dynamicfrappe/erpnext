@@ -1,10 +1,12 @@
 {
+ "autoname": "naming_series;",
  "creation": "2016-09-03 03:33:27.680331",
  "doctype": "DocType",
  "document_type": "Document",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "license",
   "make",
   "column_break_3",
@@ -196,9 +198,15 @@
    "fieldtype": "Table",
    "label": "Vehicle Drivers",
    "options": "Vehicle Drivers"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "Veh-"
   }
  ],
- "modified": "2020-12-22 14:18:58.767807",
+ "modified": "2020-12-23 16:00:50.100491",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle",
