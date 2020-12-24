@@ -1671,3 +1671,14 @@ def create_invoice_discounting(source_name, target_doc=None):
 	})
 
 	return invoice_discounting
+
+@frappe.whitelist()
+def update_created_since():
+	frappe.db.sql("""
+					update `tabSales Invoice`
+					set created_since = DATEDIFF(curdate(),posting_date)	""",as_dict=1)
+	frappe.db.sql("""
+					update `tabSales Invoice`
+					set over_due_days = DATEDIFF(curdate(),due_date)
+					where status = 'Overdue' """ , as_dict=1)
+	frappe.db.commit()
