@@ -12,6 +12,8 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
 		}
 		this.frm.fields_dict.reports_to.get_query = function(doc, cdt, cdn) {
 			return { query: "erpnext.controllers.queries.employee_query"} }
+
+
 	},
     designation:function(frm){
     	         frappe.call({
@@ -23,6 +25,7 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
     });
 
     },
+
     national_id:function(frm){
     	
     	var nationalID=frm.national_id;
@@ -173,7 +176,59 @@ frappe.ui.form.on('Employee',{
 
 	}
 });
+frappe.ui.form.on('Required Document',"isrecived",function(frm,cdt,cdn){
+		var cur_row = locals [cdt] [cdn] ;
+		if((cur_row.hasperiod==1 || cur_row.ismilitarystatus==1) && cur_row.isrecived==1){
+			var d = new frappe.ui.Dialog({
+			title: __('Document Details'),
+			fields: [
 
+				{
+					"label": "Start Date",
+					"fieldname": "start_date",
+					"fieldtype": "Date",
+					 "reqd": 1
+
+				},
+				{
+					"fieldname": "col_break",
+					"fieldtype": "Column Break",
+				},
+				{
+					"label": "Document Number",
+					"fieldname": "doc_number",
+					"fieldtype": "Data"
+
+				},
+
+
+			],
+			primary_action: function() {
+				var data = d.get_values();
+              // frappe.msgprint("hellooo")
+				frappe.call({
+
+					"method": "createEmployeeDocument",
+					"doc": frm.doc,
+					args:{
+						"startDate":data.start_date ,
+						"attach":cur_row.document || "",
+						 "type":cur_row.document_type,
+						"doc_number":data.doc_number || "",
+						"period":cur_row.documentperiod || ""
+					},
+					callback: function(r) {
+                           d.hide()
+						console.log("hello")
+					}
+				});
+			},
+			primary_action_label: __('Add')
+		});
+			d.show();
+		}
+	}
+);
 
 
 
@@ -207,3 +262,20 @@ frappe.ui.form.on('Employee Medical Insurance Members',"employee_share_ratio",fu
 
 );
 cur_frm.cscript = new erpnext.hr.EmployeeController({frm: cur_frm});
+
+
+frappe.ui.form.on('Required Document',"isrecived",function(frm,cdt,cdn){
+		var grid_row = locals[cdt][cdn];
+		if (grid_row.isrecived==0) {
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', true).prop("disabled", true);
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', true).prop("disabled", true);
+
+		}else {
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', false).prop("disabled", false);
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', false).prop("disabled", false);
+		}
+
+	}
+
+);
+

@@ -6,7 +6,16 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "document_type"
+  "document_type",
+  "hasperiod",
+  "ismilitarystatus",
+  "isrecived",
+  "recivedby",
+  "document",
+  "borrowed",
+  "borowedby",
+  "borroweddate",
+  "documentperiod"
  ],
  "fields": [
   {
@@ -23,10 +32,72 @@
    "in_list_view": 1,
    "label": "Document Type",
    "options": "Employee document type"
+  },
+  {
+   "default": "0",
+   "fieldname": "isrecived",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "is Recived"
+  },
+  {
+   "fetch_from": "document_type.hasperiod",
+   "fieldname": "hasperiod",
+   "fieldtype": "Read Only",
+   "hidden": 1,
+   "label": "Has Period",
+   "print_hide": 1
+  },
+  {
+   "fetch_from": "document_type.ismilitarystatus",
+   "fieldname": "ismilitarystatus",
+   "fieldtype": "Read Only",
+   "label": "is military status"
+  },
+  {
+   "fieldname": "document",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Document"
+  },
+  {
+   "fetch_from": "document_type.documnt_period",
+   "fieldname": "documentperiod",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "documentPeriod",
+   "print_hide": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "borrowed",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "IS Borrowed"
+  },
+  {
+   "fieldname": "borowedby",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Borrowed by",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "recivedby",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Recived by",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "borroweddate",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Borrowed date"
   }
  ],
  "istable": 1,
- "modified": "2020-12-01 11:07:50.690717",
+ "modified": "2020-12-28 09:29:24.056655",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Required Document",
