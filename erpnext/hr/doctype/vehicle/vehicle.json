@@ -1,5 +1,5 @@
 {
- "autoname": "naming_series;",
+ "autoname": "naming_series:",
  "creation": "2016-09-03 03:33:27.680331",
  "doctype": "DocType",
  "document_type": "Document",
@@ -201,12 +201,14 @@
   },
   {
    "fieldname": "naming_series",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "label": "Series",
-   "options": "Veh-"
+   "no_copy": 1,
+   "options": "veh-",
+   "set_only_once": 1
   }
  ],
- "modified": "2020-12-23 16:00:50.100491",
+ "modified": "2020-12-23 16:03:43.202534",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle",
