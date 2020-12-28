@@ -326,7 +326,13 @@ scheduler_events = {
 		"erpnext.accounts.deferred_revenue.convert_deferred_revenue_to_income",
 		"erpnext.accounts.deferred_revenue.convert_deferred_expense_to_expense",
 		"erpnext.hr.utils.allocate_earned_leaves"
-	]
+	],
+	"cron":{
+		"23 * * * *":[
+			"erpnext.accounts.doctype.purchase_invoice.purchase_invoice.update_created_since",
+			"erpnext.accounts.doctype.sales_invoice.sales_invoice.update_created_since"
+		]
+	}
 }
 
 email_brand_image = "assets/erpnext/images/erpnext-logo.jpg"
