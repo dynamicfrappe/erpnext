@@ -13,6 +13,8 @@ from frappe.model.document import Document
 from erpnext.utilities.transaction_base import delete_events
 from frappe.utils.nestedset import NestedSet
 from erpnext.hr.doctype.job_offer.job_offer import get_staffing_plan_detail
+import datetime
+from dateutil.relativedelta import relativedelta
 
 class EmployeeUserDisabledError(frappe.ValidationError): pass
 class EmployeeLeftValidationError(frappe.ValidationError): pass
@@ -50,32 +52,34 @@ class Employee(NestedSet):
 	def validate(self):
 		from erpnext.controllers.status_updater import validate_status
 		validate_status(self.status, ["Active", "Temporary Leave", "Left"])
-		if not frappe.db.exists("Employee",self.name):
-			#frappe.msgprint(str(self.first_name))
-			for document in self.required_document:
-				doc = frappe.new_doc('Employee Document')
-				doc.employee=self.name
-				doc.employeename=str(self.first_name) + str(self.last_name)
-				doc.document_type=document.document_type
-				doc.save()
-		else:
-			employeeDocsfromdb=frappe.db.sql("""select * from `tabRequired Document` where parent='{}'""".format(self.name),as_dict=1)
-			#frappe.msgprint(employeeDocsfromdb)
+		try:
+			employeeDocsfromdb = frappe.db.sql("""select * from `tabEmployee Document` where employee='{}'""".format(self.name), as_dict=1)
 			if employeeDocsfromdb:
 				for empdoc in self.required_document:
-					flag=1
+					flag = 1
 					for dbdoc in employeeDocsfromdb:
-						#frappe.msgprint(dbdoc.name)
-						#frappe.msgprint(empdoc.name)
-						if dbdoc.name==empdoc.name:
-							flag=0
-					if flag==1:
-
+						if dbdoc.document_type == empdoc.document_type and dbdoc.employee==self.name:
+							flag = 0
+					if flag == 1 and empdoc.hasperiod==0 and empdoc.ismilitarystatus==0 and empdoc.isrecived==1:
 						doc = frappe.new_doc('Employee Document')
-						doc.employee=self.name
-						doc.employeename=str(self.first_name) + str(self.last_name)
-						doc.document_type=empdoc.document_type
-						doc.save()					
+						doc.employee = self.name
+						doc.employeename = str(self.first_name) + str(self.last_name)
+						doc.document_type = empdoc.document_type
+						doc.is_recived = 1
+						doc.document = empdoc.document
+						doc.save()
+			else:
+				for empdoc in self.required_document:
+					doc = frappe.new_doc('Employee Document')
+					doc.employee = self.name
+					doc.employeename = str(self.first_name) + str(self.last_name)
+					doc.document_type = empdoc.document_type
+					doc.is_recived = 1
+					doc.document = empdoc.document
+					doc.save()
+		except:
+			print("exist")
+
 
 
 
@@ -290,6 +294,22 @@ class Employee(NestedSet):
 			self.get('user_id') != prev_doc.get('user_id')):
 			frappe.cache().hdel('employees_with_number', cell_number)
 			frappe.cache().hdel('employees_with_number', prev_number)
+
+	def createEmployeeDocument(self,startDate,attach,type,doc_number,period):
+		self.save()
+		sdate=datetime.datetime.strptime(startDate, '%Y-%m-%d')
+		doc = frappe.new_doc('Employee Document')
+		doc.employee = self.name
+		doc.employeename = str(self.first_name) + str(self.last_name)
+		doc.document_type = type
+		doc.is_recived=1
+		doc.document=attach
+		doc.doc_number=doc_number
+		doc.start_date=startDate
+		doc.end_date=str(sdate+relativedelta(months=+int(period)))
+
+		doc.save()
+
 
 def get_timeline_data(doctype, name):
 	'''Return timeline for attendance'''
