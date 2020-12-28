@@ -3,6 +3,7 @@
 
 frappe.provide("erpnext.hr");
 erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
+
 	setup: function() {
 		this.frm.fields_dict.user_id.get_query = function(doc, cdt, cdn) {
 			return {
@@ -12,6 +13,7 @@ erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
 		}
 		this.frm.fields_dict.reports_to.get_query = function(doc, cdt, cdn) {
 			return { query: "erpnext.controllers.queries.employee_query"} }
+
 
 
 	},
@@ -269,10 +271,12 @@ frappe.ui.form.on('Required Document',"isrecived",function(frm,cdt,cdn){
 		if (grid_row.isrecived==0) {
 			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', true).prop("disabled", true);
 			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', true).prop("disabled", true);
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borroweddate']").prop('readonly', true).prop("disabled", true);
 
 		}else {
 			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', false).prop("disabled", false);
 			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', false).prop("disabled", false);
+			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borroweddate']").prop('readonly', false).prop("disabled", false);
 		}
 
 	}

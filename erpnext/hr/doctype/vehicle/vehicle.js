@@ -2,7 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Vehicle', {
-	refresh: function(frm) {
+	setup: function(frm) {
+		var max = new Date().getFullYear()
+		  var min = max - 20
+		  var years = []
 
+		  for (var i = max; i >= min; i--) {
+			years.push(i)
+		  }
+		  
 	}
 });
