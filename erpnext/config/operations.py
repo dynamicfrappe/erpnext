@@ -119,5 +119,21 @@ def get_data():
        
       ]
     },
-   
+   {
+      "label":_("Operation Monthly"),
+      "icon": "fa fa-table",
+      "items":[
+        {
+          "type": "doctype",
+          "name": "Operation Monthly Invoicing",
+          "onboard": 1
+        },
+        {
+          "type": "doctype",
+          "name": "Operation Settings",
+          "onboard": 1
+        }
+
+      ]
+    }
   ]
