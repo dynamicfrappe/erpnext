@@ -7,6 +7,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 import collections
+from erpnext.controllers.accounts_controller import get_default_taxes_and_charges
 
 class OperationMonthlyInvoicing(Document):
 	def validate (self):
@@ -74,6 +75,10 @@ class OperationMonthlyInvoicing(Document):
 				si.naming_series = 'ACC-SINV-.YYYY.-'
 				si.due_date = self.date
 				si.posting_date = self.date
+				tax = get_default_taxes_and_charges("Sales Taxes and Charges Template", company=self.company)
+				if tax :
+					si.taxes_and_charges = str(tax['taxes_and_charges'])
+					si.set_taxes()
 				si.debit_to = debit_to
 				si.append("items", {
 					"item_code": item_code,
@@ -83,11 +88,11 @@ class OperationMonthlyInvoicing(Document):
 					"amount":total
 				})
 
-				si.set_missing_values()
+				# si.set_missing_values()
 				si.save()
 				frappe.db.sql (""" update `tabMonthly Details` set sales_invoice = '{sales_invoice}' where name in ({names})  """.format(sales_invoice=si.name , names = names))
 				frappe.db.commit()
-				frappe.msgprint(_("Sales Invoice {} Was Created".format(si.name)))
+				frappe.msgprint(_("Sales Invoice {0} Was Created").format("<a href='#Form/Sales Invoice/{0}'>{0}</a>".format(si.name)))
 
 		elif self.invoicing_type == 'Detailed Invoicing':
 			for i in invoiced_items:
@@ -109,6 +114,10 @@ class OperationMonthlyInvoicing(Document):
 				si.due_date = self.date
 				si.posting_date = self.date
 				si.debit_to = debit_to
+				tax = get_default_taxes_and_charges("Sales Taxes and Charges Template", company=self.company)
+				if tax :
+					si.taxes_and_charges = str(tax['taxes_and_charges'])
+					si.set_taxes()
 				si.append("items", {
 					"item_code": item_code,
 					"income_account": income_account,
@@ -119,7 +128,7 @@ class OperationMonthlyInvoicing(Document):
 				si.set_missing_values()
 				si.save()
 				i.sales_invoice = si.name
-				frappe.msgprint(_("Sales Invoice {} Was Created for Employee {}".format(si.name,i.employee)))
+				frappe.msgprint(_("Sales Invoice {0} Was Created for Employee {1}").format("<a href='#Form/Sales Invoice/{0}'>{0}</a>".format(si.name),i.employee))
 				frappe.db.sql (""" update `tabMonthly Details` set sales_invoice = '{sales_invoice}' where name = '{name}'  """.format(sales_invoice=si.name , name = i.name))
 				frappe.db.commit()
 		self.monthly_details_data = frappe.get_doc("Operation Monthly Invoicing",self.name).monthly_details_data
