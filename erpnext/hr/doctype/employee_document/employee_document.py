@@ -59,6 +59,21 @@ def checkNotification(*args,**kwargs):
 			doc.save()
 			frappe.db.commit()
 
+
+# @frappe.whitelist()
+# def checkBorrowedDocument(*args,**kwargs):
+# 	documents=frappe.db.sql("""select * from `tabRequired Document` where borrowed=1 and   curdate()- borroweddate >15""",as_dict=1)
+# 	for d in documents:
+# 		doc=frappe.new_doc("Notification")
+# 		doc.enabled=1
+# 		doc.channel="Email"
+# 		doc.subject="document borrowed"
+# 		doc.document_type="Employee Document"
+# 		doc.
+
+
+
+
 @frappe.whitelist()
 def notifyContctEnd(*args,**kwargs):
 	period=frappe.db.get_single_value("HR Settings", "notificationperiod")
