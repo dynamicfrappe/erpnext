@@ -133,6 +133,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "fetch_from": "employee.assign_date",
    "fieldname": "from_date",
    "fieldtype": "Date",
    "label": "From Date",
@@ -182,7 +183,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-27 12:47:25.388817",
+ "modified": "2020-12-30 16:25:52.408654",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",

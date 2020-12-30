@@ -59,7 +59,7 @@ class Multisalarystructure(Document):
 						"employee" : self.employee
 					})
 				self.getAllSalaryStructureComponent()
-				self.save()
+				# self.save()
 
 
 	def validate_dates(self):
@@ -124,7 +124,7 @@ class Multisalarystructure(Document):
 			row.componentname=d.salary_component
 			row.amount=d.amount
 			row.update(d)
-		self.save()
+		# self.save()
 		return data
 
 	def setSalaryComponent(self,salaryStructure):

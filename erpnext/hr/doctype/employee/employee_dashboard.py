@@ -33,7 +33,7 @@ def get_data():
 			},
 			{
 				'label': _('Payroll'),
-				'items': ['Multi salary structure', 'Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus']
+				'items': ['Multi salary structure', 'Monthly Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus']
 			},
 			{
 				'label': _('Training'),

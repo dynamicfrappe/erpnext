@@ -10,10 +10,13 @@ frappe.ui.form.on('Monthly Salary Slip', {
             return {
                 filters: {
                     docstatus: 1,
-                    is_closed: 0
+                    is_closed: 0,
+                    company:frm.doc.company
                 }
             }
-        })
+        });
+       
+
     },
     start_date: function(frm) {
 

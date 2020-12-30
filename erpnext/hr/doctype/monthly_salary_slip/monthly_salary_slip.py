@@ -203,7 +203,8 @@ class MonthlySalarySlip(TransactionBase):
 		try :
 			return (eval(func))
 		except:
-			return("error")
+
+			return 0
 		
 
 	def set_salary_component_first_time(self):
@@ -329,9 +330,9 @@ class MonthlySalarySlip(TransactionBase):
 
 		if value:
 			if (float(value[0][0])) > 0  :
-				return(value[0][0])
+				return float(value[0][0])
 			else:
-				return False
+				return 0
 
 	def set_component(self,i,typ):
 		# self.set(typ,[])
@@ -404,12 +405,15 @@ class MonthlySalarySlip(TransactionBase):
 			SC = frappe.get_doc("Salary Component", e.salary_component)
 			if SC:
 				if not SC.exempted_from_income_tax:
-					total_taxable_amount += e.amount
+					total_taxable_amount += float(e.amount)
+
 		for e in self.get("deductions"):
 			SC = frappe.get_doc("Salary Component", e.salary_component)
 			if SC:
 				if not SC.exempted_from_income_tax:
-					total_taxable_amount -= e.amount
+					
+					# frappe.msgprint(e.amount)
+					total_taxable_amount -= float(e.amount)
 		# total_taxable_amount -= self.social_insurance_amount
 		self.tax_pool = total_taxable_amount or 0
 		has_disability , is_consultant = frappe.db.get_value("Employee" , self.employee , ['has_disability','is_consultant'])

@@ -19,6 +19,7 @@ frappe.ui.form.on('Multi salary structure', {
 	   }
         ,
         refresh:function(frm){
+        	debugger;
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
 			  frm.add_custom_button(__("close"),function(){
 			  		  frappe.call({
