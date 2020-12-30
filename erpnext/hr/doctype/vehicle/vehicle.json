@@ -8,17 +8,24 @@
  "field_order": [
   "naming_series",
   "vehicle_type",
-  "make",
+  "vehichle_brand",
   "color",
+  "plate_number",
   "column_break_3",
   "fuel_type",
   "uom",
   "model",
+  "vehichle_model",
+  "vehichle_number",
+  "vehichle_plate_number",
   "ownership",
   "vehichle_drivers_section",
   "drivers",
   "section_break_12",
   "vehicle_services",
+  "vehichle_photoes",
+  "section_break_15",
+  "licences",
   "vehicle_details",
   "acquisition_date",
   "location",
@@ -32,7 +39,6 @@
   "start_date",
   "end_date",
   "additional_details",
-  "carbon_check_date",
   "wheels",
   "doors",
   "column_break_21",
@@ -40,13 +46,6 @@
   "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "make",
-   "fieldtype": "Link",
-   "label": "Brand",
-   "options": "Vehicle Brand",
-   "reqd": 1
-  },
   {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
@@ -56,8 +55,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Model",
-   "reqd": 1
+   "label": "Model Year"
   },
   {
    "fieldname": "vehicle_details",
@@ -130,21 +128,14 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Fuel Type",
-   "options": "Petrol\nDiesel\nNatural Gas\nElectric",
-   "reqd": 1
+   "options": "Petrol\nDiesel\nNatural Gas\nElectric"
   },
   {
    "fieldname": "uom",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Fuel UOM",
-   "options": "UOM",
-   "reqd": 1
-  },
-  {
-   "fieldname": "carbon_check_date",
-   "fieldtype": "Date",
-   "label": "Last Carbon Check"
+   "options": "UOM"
   },
   {
    "fieldname": "column_break_21",
@@ -188,7 +179,7 @@
   },
   {
    "fieldname": "naming_series",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Vehicle code",
    "no_copy": 1,
    "options": "veh-",
@@ -217,12 +208,55 @@
   },
   {
    "fieldname": "vehicle_services",
-   "fieldtype": "Table",
+   "fieldtype": "Section Break",
    "label": "Vehicle services",
    "options": "Vehicle services"
+  },
+  {
+   "fieldname": "vehichle_photoes",
+   "fieldtype": "Table",
+   "label": "Vehichle photoes",
+   "options": "Vehichle photoes"
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "licences",
+   "fieldtype": "Table",
+   "label": "Licences",
+   "options": "Licence Grid"
+  },
+  {
+   "fieldname": "vehichle_model",
+   "fieldtype": "Link",
+   "label": "Vehichle Model",
+   "options": "Vehichle Model"
+  },
+  {
+   "fieldname": "plate_number",
+   "fieldtype": "Data",
+   "label": "Plate Number"
+  },
+  {
+   "fieldname": "vehichle_number",
+   "fieldtype": "Data",
+   "label": "Vehichle Number"
+  },
+  {
+   "fieldname": "vehichle_brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Vehicle Brand"
+  },
+  {
+   "fieldname": "vehichle_plate_number",
+   "fieldtype": "Data",
+   "label": "Vehichle Plate Number"
   }
  ],
- "modified": "2020-12-28 16:29:09.308667",
+ "modified": "2020-12-29 14:37:23.401608",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle",
