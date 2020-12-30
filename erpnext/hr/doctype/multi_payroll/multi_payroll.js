@@ -2,6 +2,47 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Multi Payroll', {
+    onload: function(frm) {
+		frm.set_query('payroll_month', function(doc) {
+			return {
+				filters: {
+					"docstatus": 1,
+					"company": doc.company,
+					"is_closed":0
+				}
+			};
+		});
+	},
+	payroll_month : function(frm) {
+	      frm.events.validate_payroll_month (frm);
+	},
+	company:function(frm){
+         frm.events.validate_payroll_month (frm);
+	}
+	,
+    validate_payroll_month:function(frm){
+      if (frm.doc.payroll_month)
+	        {
+	            	frappe.call({
+
+					method:"frappe.client.get" ,
+					args:{
+   						doctype: "Payroll Month",
+   						name : frm.doc.payroll_month
+
+
+   				   			},callback:function(r){
+   				   				if (r.message){
+   				   				    if ((r.message.is_closed) || (!r.message.docstatus) || (r.message.company != frm.doc.company))
+   				   				    {
+   				   				       frm.set_value("payroll_month", "" );
+   				   				       refresh_field("payroll_month");
+   				   				    }
+   				   				}
+   				   			}
+				})
+	        }
+    },
 	refresh: function(frm) {
 		debugger;
 		if (frm.doc.docstatus == 0 && (frm.doc.employees || []).length == 0) {
@@ -66,7 +107,7 @@ frappe.ui.form.on('Multi Payroll', {
 			doc: frm.doc,
 			method: 'create_salary_slips',
 			callback: function(r) {
-
+                debugger;
 				// frappe.msgprint(__("Done"));
 				frm.refresh();
 			}

@@ -14,7 +14,10 @@ frappe.ui.form.on('Multi salary structure', {
 			  }
 		  })
 	   },
-
+	   onload : function (frm){
+	            frm.events.get_employee_salary_structure(frm)
+	   }
+        ,
         refresh:function(frm){
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
 			  frm.add_custom_button(__("close"),function(){
@@ -176,10 +179,30 @@ frappe.ui.form.on('Multi salary structure', {
 					}
 				}
 			});
+
+
+            frm.events.get_employee_salary_structure(frm);
+
+
+
 		}
 		else{
 			// frm.set_value("company", null);
 		}
+	}
+	,
+	get_employee_salary_structure:function(frm){
+
+			frappe.call({
+				method: "get_employee_salary_structure",
+				doc : frm.doc,
+				callback: function(data) {
+
+							refresh_field("salary_structure");
+							refresh_field('component');
+
+				}
+			});
 	}
 
 });

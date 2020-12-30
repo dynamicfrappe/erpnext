@@ -1,0 +1,162 @@
+{
+ "autoname": "Mon-Det-.#####",
+ "creation": "2020-12-28 11:40:58.612126",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "gross_salary",
+  "social_insurance",
+  "laptop",
+  "ohs_courses",
+  "column_break_6",
+  "designation",
+  "department",
+  "net_salary",
+  "medical_insurance",
+  "mobile_package",
+  "ohs_tools",
+  "total",
+  "sales_invoice"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.employee",
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Read Only",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.employee",
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Read Only",
+   "label": "Designation"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "net_salary",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Net Salary"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "gross_salary",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Gross Salary"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "social_insurance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Social Insurance",
+   "width": "1"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "medical_insurance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Medical Insurance"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "laptop",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Laptop",
+   "width": "1"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "mobile_package",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Mobile Package"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "ohs_courses",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "OHS Courses",
+   "width": "1"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "columns": 1,
+   "default": "0",
+   "fieldname": "ohs_tools",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "OHS Tools"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.department",
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Read Only",
+   "label": "Department"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-30 11:45:35.216089",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Monthly Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

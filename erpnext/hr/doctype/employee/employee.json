@@ -65,6 +65,10 @@
   "default_shift",
   "leave_approver",
   "salary_information",
+  "assign_date",
+  "get_grade_salary_structure",
+  "employee_salary_structure_detail",
+  "salary_information_column_break",
   "salary_mode",
   "bank_name",
   "bank_ac_no",
@@ -140,7 +144,8 @@
   "employee_tax_setting_section",
   "has_disability",
   "column_break_131",
-  "is_consultant"
+  "is_consultant",
+  "item_code"
  ],
  "fields": [
   {
@@ -1005,12 +1010,43 @@
    "fieldname": "is_consultant",
    "fieldtype": "Check",
    "label": "Is Consultant"
+  },
+  {
+   "fieldname": "employee_salary_structure_detail",
+   "fieldtype": "Table",
+   "label": "Employee Salary Structure Detail",
+   "options": "Employee Salary Structure Detail",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "assign_date",
+   "fieldtype": "Date",
+   "label": "Assign Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "salary_information_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "get_grade_salary_structure",
+   "fieldtype": "Button",
+   "label": "Get Grade Salary Structure"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Item Code",
+   "options": "Item",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-22 11:49:46.073068",
+ "modified": "2020-12-28 16:03:46.382420",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
