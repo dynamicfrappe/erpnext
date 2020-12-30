@@ -43,7 +43,7 @@ class PayrollMonth(Document):
 		year_list.reverse()
 		return "\n".join(str(x) for x in year_list)
 	def month_for_year(self):
-		dublicated = frappe.db.sql("""SELECT name FROM `tabPayroll Month` WHERE month='%s' AND year='%s' and docstatus=1"""%(self.month ,self.year))
+		dublicated = frappe.db.sql("""SELECT name FROM `tabPayroll Month` WHERE month='%s' AND year='%s' and company = '%s' and name <> '%s' """%(self.month ,self.year,self.company,self.name))
 		if dublicated:
 			return False
 		else:
@@ -61,8 +61,8 @@ class PayrollMonth(Document):
 		start_date = None
 		attendance_start_date = None
 		last_doc = frappe.db.sql("""
-		 select * from `tabPayroll Month`  where company = '{company}'  order by start_date desc LIMIT 1
-					""".format(company=self.company),as_dict=1)
+		 select * from `tabPayroll Month`  where company = '{company}' and name <> '{name}'  order by start_date desc LIMIT 1
+					""".format(company=self.company , name = self.name),as_dict=1)
 
 		if not last_doc:
 
@@ -100,6 +100,7 @@ def make_payroll_entry(name ,type,frcv, department=None,*args,**kwargs):
 	doc.payroll_frequency = "Monthly"
 	doc.payroll_type = frcv
 	doc.start_date = frm.start_date
+	doc.company = frm.company
 	doc.end_date = frm.end_date
 	if department :
 		doc.department = department
