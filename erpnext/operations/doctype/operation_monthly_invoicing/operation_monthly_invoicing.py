@@ -125,7 +125,7 @@ class OperationMonthlyInvoicing(Document):
 					"rate" : i.total,
 					"amount":i.total
 				})
-				si.set_missing_values()
+				# si.set_missing_values()
 				si.save()
 				i.sales_invoice = si.name
 				frappe.msgprint(_("Sales Invoice {0} Was Created for Employee {1}").format("<a href='#Form/Sales Invoice/{0}'>{0}</a>".format(si.name),i.employee))
