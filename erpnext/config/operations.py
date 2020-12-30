@@ -130,7 +130,7 @@ def get_data():
         },
         {
           "type": "doctype",
-          "name": "Operation Settings",
+          "name": "Operations Settings",
           "onboard": 1
         }
 
