@@ -52,8 +52,7 @@ def get_data():
 			"type": "module",
 			"description": "Asset movement, maintainance and tools."
 		},
-		
-		
+
 		{
 			"module_name": "HR",
 			"category": "Modules",
