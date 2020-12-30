@@ -3,6 +3,23 @@
 
 frappe.provide("erpnext.hr");
 erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
+get_grade_salary_structure : function(frm) {
+
+
+    if (!frm.grade)
+    {
+        frappe.throw(__("Please Set Employee Grade First"));
+        return;
+    }
+         frappe.call({
+    	         doc:frm,
+                 method:'get_grade_SalaryStructure',
+                 callback(r) {
+                 refresh_field("employee_salary_structure_detail");
+                }
+          });
+
+    },
 	setup: function() {
 		this.frm.fields_dict.user_id.get_query = function(doc, cdt, cdn) {
 			return {
@@ -65,16 +82,16 @@ frappe.ui.form.on('Employee',{
 		});
 	},
 	onload:function(frm) {
-		if (!frm.doc.total_working_hours_per_day){
-			frappe.db.get_single_value("HR Settings", "total_hours_per_day").then(duration => {
-				if (duration) {
-					debugger;
-					frm.doc.total_working_hours_per_day = duration;
-					refresh_field("total_working_hours_per_day");
-				}
-
-			});
-		}
+		// if (!frm.doc.total_working_hours_per_day){
+		// 	frappe.db.get_single_value("HR Settings", "total_hours_per_day").then(duration => {
+		// 		if (duration) {
+		// 			debugger;
+		// 			frm.doc.total_working_hours_per_day = duration;
+		// 			refresh_field("total_working_hours_per_day");
+		// 		}
+		//
+		// 	});
+		// }
 
 
 		frm.set_query("department", function() {

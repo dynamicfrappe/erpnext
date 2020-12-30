@@ -43,30 +43,32 @@ class MultiPayroll(Document):
 		return  data
 	
 	def create_salary_slips(self ):
-		try :
 			if self.employees:
-				for salary_structure in self.employees:
-					salary_slip_name = frappe.db.get_value('Monthly Salary Slip', {
-
-						'payroll_type': self.payroll_type,
-						'month': self.payroll_month,
-						'employee': salary_structure.employee,
-					}, ['name'])
-
-					if not salary_slip_name:
-						salary_slip = frappe.new_doc('Monthly Salary Slip')
-						salary_slip.posting_date = datetime.today()
-						salary_slip.employee = salary_structure.employee
-						employe = frappe.get_doc("Employee", str(salary_structure.employee))
-						salary_slip.month = self.payroll_month
-						salary_slip.payroll_type = self.payroll_type
-						salary_slip.start_date = self.start_date
-						salary_slip.end_date = self.end_date
-						salary_slip.save()
 				self.salary_slips_created = 1
-		except:
-			self.salary_slips_created = 0
-		self.save()
+				for salary_structure in self.employees:
+					# try:
+						salary_slip_name = frappe.db.get_value('Monthly Salary Slip', {
+
+							'payroll_type': self.payroll_type,
+							'month': self.payroll_month,
+							'employee': salary_structure.employee,
+						}, ['name'])
+
+						if not salary_slip_name:
+							salary_slip = frappe.new_doc('Monthly Salary Slip')
+							salary_slip.posting_date = datetime.today()
+							salary_slip.employee = salary_structure.employee
+							employe = frappe.get_doc("Employee", str(salary_structure.employee))
+							salary_slip.month = self.payroll_month
+							salary_slip.payroll_type = self.payroll_type
+							salary_slip.start_date = self.start_date
+							salary_slip.end_date = self.end_date
+							salary_slip.save()
+					# except Exception as e:
+					# 	frappe.msgprint( str(e),title=_("Error in Employee {}'s Salary Slip"), indicator='red')
+					# 	self.salary_slips_created = 0
+
+			self.save()
 
 
 	def calculate_salary_slip (self):

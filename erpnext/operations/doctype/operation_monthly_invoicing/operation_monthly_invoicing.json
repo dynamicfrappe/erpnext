@@ -1,0 +1,146 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2020-12-28 11:52:17.498997",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "transaction_no",
+  "date",
+  "company",
+  "customer",
+  "customer_name",
+  "income_account",
+  "column_break_4",
+  "naming_series",
+  "status",
+  "invoicing_type",
+  "debit_to",
+  "monthly_details_section",
+  "monthly_details_data",
+  "total"
+ ],
+ "fields": [
+  {
+   "fieldname": "transaction_no",
+   "fieldtype": "Data",
+   "label": "Transaction No",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "default": "OP-INV-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Sereis",
+   "options": "OP-INV-.#####",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:{{doc.customer}}",
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Read Only",
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "monthly_details_section",
+   "fieldtype": "Section Break",
+   "label": "Monthly Details"
+  },
+  {
+   "fieldname": "monthly_details_data",
+   "fieldtype": "Table",
+   "label": "Monthly Details",
+   "options": "Monthly Details",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "One Invoice",
+   "fieldname": "invoicing_type",
+   "fieldtype": "Select",
+   "label": "Invoicing Type",
+   "options": "One Invoice\nDetailed Invoicing"
+  },
+  {
+   "default": "0",
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInvoiced\npartially Invoiced\nClosed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "income_account",
+   "fieldtype": "Link",
+   "label": "Income Account",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "debit_to",
+   "fieldtype": "Link",
+   "label": "Debit To Account",
+   "options": "Account",
+   "reqd": 1
+  }
+ ],
+ "modified": "2020-12-30 10:23:11.664134",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Operation Monthly Invoicing",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
