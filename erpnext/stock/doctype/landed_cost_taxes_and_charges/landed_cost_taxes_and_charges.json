@@ -6,11 +6,11 @@
  "field_order": [
   "expense_account",
   "description",
-  "tax_class",
   "col_break3",
   "amount",
   "party_type",
-  "party"
+  "party",
+  "refrence"
  ],
  "fields": [
   {
@@ -56,16 +56,13 @@
    "read_only": 1
   },
   {
-   "fieldname": "tax_class",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Tax Class",
-   "options": "Tax Class",
-   "reqd": 1
+   "fieldname": "refrence",
+   "fieldtype": "Data",
+   "label": "refrence"
   }
  ],
  "istable": 1,
- "modified": "2020-12-14 16:22:56.937523",
+ "modified": "2020-12-24 10:03:42.775209",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Landed Cost Taxes and Charges",

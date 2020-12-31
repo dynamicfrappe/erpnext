@@ -144,7 +144,17 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 	amount: function(frm) {
 		this.set_total_taxes_and_charges();
 		this.set_applicable_charges_for_item();
+		frappe.call({
+				method : "update_allocated_amount",
+				doc:this.frm.doc ,
+				callback:function(r){
+					refresh_field("landed_cost_voucher_expenses")
+				}
+			})
+
+		
 	},
+	
 
 	set_total_taxes_and_charges: function() {
 		var total_taxes_and_charges = 0.0;
@@ -183,6 +193,16 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 	distribute_charges_based_on: function (frm) {
 		this.set_applicable_charges_for_item();
 	},
+	taxes_remove(frm){
+		frappe.call({
+				method : "update_allocated_amount",
+				doc:this.frm.doc ,
+				callback:function(r){
+				
+					refresh_field("landed_cost_voucher_expenses")
+				}
+			})
+	},
 
 	items_remove: () => {
 		this.trigger('set_applicable_charges_for_item');
@@ -192,6 +212,13 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 		this.set_total_taxes_and_charges();
 		this.set_applicable_charges_for_item();
 	},
+	// taxes_add:function(frm){
+	// 	var i = 0 
+	// 	for(i =0 ; i < frm.doc.taxes.length ;i++){
+	// 		console.log(i.refrence , i.amount)
+	// 	} 
+
+	// },
 	landed_cost_voucher_expenses_remove:function(frm){
 		
 		this.frm.clear_table("taxes")
@@ -214,11 +241,19 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 					
 					var e = 0 
 					for (e=0;e < r.message.length ; e++){
+
+
+
+
+						// 
+
+						// 
 						var child = me.frm.add_child("taxes")
-						
+						// console.log(r.message[e].name)
 						child.description = r.message[e].desc
 						child.expense_account = r.message[e].account
 						child.amount = r.message[e].amount	
+						child.refrence = r.message[e].name
 						if (r.message[e].party){
 												child.party = r.message[e].party
 												child.party_type= r.message[e].party_type}
@@ -234,7 +269,18 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 			}
 
 
+			
+
+
 		}
+		frappe.call({
+				method : "update_allocated_amount",
+				doc:this.frm.doc ,
+				callback:function(r){
+					console.log("work")
+					frm.refresh_field("landed_cost_voucher_expenses")
+				}
+			})
 
 	}
 
@@ -247,8 +293,28 @@ frappe.ui.form.on('Landed Cost Voucher',{
 	onload:function(frm){
 		frm.clear_table("taxes");
 		frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,1)
+		// frm.events.show_general_ledger(frm)
 
-	}, 
+	},
+	refresh:function(frm){
+		if(frm.doc.docstatus===1) {
+
+			var i = 0 
+			for(i =0 ; i < frm.doc.purchase_receipts.length ; i ++){
+				
+						frm.add_custom_button(__('Accounting Ledger'), function() {
+							frappe.route_options = {
+								voucher_no: frm.doc.purchase_receipts[0].receipt_document,
+								from_date: frm.doc.purchase_receipts[0].posting_date,
+								to_date: frm.doc.purchase_receipts[0].posting_date,
+								company: frm.doc.company,
+								group_by: "Group by Voucher (Consolidated)"
+							};
+							frappe.set_route("query-report", "General Ledger");
+						}, __("View"));}
+		}
+
+	} ,
 	
 
 landed_cost_details:function(frm){
@@ -257,23 +323,63 @@ landed_cost_details:function(frm){
 	frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,num)
 	frm.refresh_field("landed_cost_voucher_expenses")
 
-}
+},
+
+show_general_ledger: function(frm) {
+		// var me = this;
+		if(frm.doc.docstatus===1) {
+			frm.add_custom_button(__('Accounting Ledger'), function() {
+
+
+				frappe.route_options = {
+					voucher_no: frm.doc.name,
+					from_date: frm.doc.posting_date,
+					to_date: frm.doc.posting_date,
+					company: frm.doc.company,
+					group_by: "Group by Voucher (Consolidated)"
+				};
+				frappe.set_route("query-report", "General Ledger");
+			}, __("View"));
+		}
+	}
 
 
 	})
 
 
 
+// frappe.ui.form.on('Landed Cost Taxes and Charges', {
+// 	amount:function(frm ,cdt,cdn){
+// 		var local = locals[cdt][cdn]
+// 		// console.log(local.amount)
+// 	}
+// })
 frappe.ui.form.on('Landed Cost Voucher Expenses', {
 
 type:function(frm ,cdt,cdn){
 	var local = locals[cdt][cdn] },
-
+allocated:function(frm,cdt,cdn){
+		var local = locals[cdt][cdn]
+		console.log(local.allocated)
+	}	,
 reference:function(frm,cdt,cdn){
-	// 
+	// frm.doc
+	// console.log(frm.doc)
 	var local = locals[cdt][cdn] 
 	if (local.reference.length ){
-		
+			frappe.call({ 
+				method :'erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.complete_data',
+				args:{
+					"refre":local.reference,
+					"typ":local.type
+				},
+				callback:function(r){
+					local.amount = r.message['grand_total']
+					local.outstanding = r.message['unallocated_amount']
+					console.log(r.message['unallocated_amount'])
+					frm.refresh_field('landed_cost_voucher_expenses')
+				}
+			})
 			frappe.call({
 				method:'erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.set_frm_query',
 				args:{
@@ -287,16 +393,36 @@ reference:function(frm,cdt,cdn){
 						var child = frm.add_child("taxes")
 						child.description = r.message[i].desc
 						child.expense_account = r.message[i].account
-						child.amount = r.message[i].amount	
+						
+						var tot = local.allocated + local.outstanding 
+						var available = local.amount - tot
+						child.refrence = r.message[i].name
+						if (available < r.message[i].amount)  {
+							child.amount = available
+						}
+						else{
+							child.amount = r.message[i].amount
+						}
+						local.allocated += child.amount
 						if (r.message[i].party){
 												child.party = r.message[i].party
 												child.party_type= r.message[i].party_type}
 						frm.refresh_field("taxes")
+						frm.refresh_field("landed_cost_voucher_expenses")
 					}
 				}
 			
 	
 	})}
+
+
+		// 	frappe.call({
+		// 	doc:frm.doc,
+		// 	method:"update_allocated_amount",
+		// 	callback:function(r){
+		// 		refresh_field('landed_cost_voucher_expenses')
+		// 	}
+		// })
 
 } })
 
