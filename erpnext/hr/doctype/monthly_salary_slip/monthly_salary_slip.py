@@ -7,6 +7,7 @@ from frappe.model.naming import make_autoname
 
 from frappe import msgprint, _
 from erpnext.hr.doctype.payroll_entry.payroll_entry import get_start_end_dates
+from erpnext.hr.doctype.payroll_entry.payroll_entry import PayrollEntry
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils.background_jobs import enqueue
@@ -30,6 +31,7 @@ employee_status = {"""  Present
 				"""}
 class MonthlySalarySlip(TransactionBase):
 	def __init__(self, *args, **kwargs):
+
 		super(MonthlySalarySlip, self).__init__(*args, **kwargs)
 		self.series = 'Sal Slip/{0}/.#####'.format(self.employee)
 		self.social_insurance_amount = 0
@@ -666,3 +668,5 @@ class MonthlySalarySlip(TransactionBase):
 				l.name = rps.parent and rps.payment_date between %s and %s and
 				l.repay_from_salary = 1 and l.docstatus = 1 and l.applicant = %s""",
 			(self.start_date, self.end_date, self.employee), as_dict=True) or []
+
+# MonthlySalarySlip.validate = PayrollEntry.validate
