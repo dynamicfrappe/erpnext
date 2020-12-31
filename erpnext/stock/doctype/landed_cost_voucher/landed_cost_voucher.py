@@ -46,6 +46,7 @@ class LandedCostVoucher(Document):
 		self.validate_purchase_receipts()
 		self.validate_expense_accounts()
 		self.set_total_taxes_and_charges()
+		self.update_allocated_amount()
 
 	def check_mandatory(self):
 		if not self.get("purchase_receipts"):
@@ -80,6 +81,11 @@ class LandedCostVoucher(Document):
 				frappe.throw(msg=_(""" Row {0}: Expense account currency should be same as company's default currency.
 					Please select expense account with account currency as {1}""")
 					.format(account.idx, frappe.bold(company_currency)), title=_("Invalid Account Currency"))
+
+
+	def get_invoice_date(self):
+		invoice = frappe.det_doc("Purchase Invoice" , self.purchase_receipts[0].receipt_document)
+		return(invoice.posting_date)
 
 	def set_total_taxes_and_charges(self):
 		self.total_taxes_and_charges = sum([flt(d.amount) for d in self.get("taxes")])
@@ -160,6 +166,35 @@ class LandedCostVoucher(Document):
 							frappe.throw(_('{2} <b>{0}</b> has submitted Assets.\
 								Remove Item <b>{1}</b> from table to continue.').format(
 									item.receipt_document, item.item_code, item.receipt_document_type))
+	def update_allocated_amount(self):
+		# data = []
+		if self.landed_cost_details == 1:
+			# refrences = [i.refrence for i in self.landed_cost_voucher_expenses] 
+			for i in  self.landed_cost_voucher_expenses :
+				total = 0
+				for e in self.taxes:
+					if e.refrence == i.reference :
+						total += e.amount
+				if (i.amount - i.outstanding) < total :
+					available = i.amount - i.outstanding
+
+					frappe.throw("Invalid Value For Transaction '%s' Available Amount is '%s' and You Try To Add '%s' "%(i.reference ,
+																			 str(available) , str(total)))
+				else :
+					i.allocated =total
+
+
+	# def recaculate_all_values(self):
+	# 	if self.landed_cost_details == 1:
+	# 		for i in  self.landed_cost_voucher_expenses :
+	# 			allocated = 0 
+	# 			for e in self.taxes:
+	# 					if e.refrence == i.reference :
+	# 						allocated += e.amount
+
+
+
+
 
 	def update_rate_in_serial_no_for_non_asset_items(self, receipt_document):
 		for item in receipt_document.get("items"):
@@ -180,25 +215,25 @@ def set_frm_query(tpe =None , refrence= None ,*args , **kwargs):
 		accounts = []
 		for item in invoice.items:
 			accounts_dic = {"account" : item.expense_account ,"desc":item.item_name ,
-			"amount":item.amount  , "party":None , 'party_type': None}
+			"amount":item.amount  , "party":None , 'party_type': None ,"name" :invoice.name}
 			accounts.append(accounts_dic)
 		return(accounts)
 
 	if tpe =='Payment Entry' :
 			invoice = frappe.get_doc("Payment Entry" , refrence)
 			accounts=[{"account" : invoice.paid_to , "desc":invoice.remarks ,
-			 "amount":invoice.paid_amount , "party_type":invoice.party_type , "party":invoice.party}]
+			 "amount":invoice.paid_amount , "party_type":invoice.party_type , "party":invoice.party ,"name" :invoice.name}]
 			return(accounts)
 
 	if tpe =='Journal Entry' :
 		accounts=[]
-		pay = frappe.db.sql(""" SELECT account  ,party_type ,party  ,debit
+		pay = frappe.db.sql(""" SELECT account  ,party_type ,party  ,debit,parent
 		 FROM `tabJournal Entry Account` WHERE parent ='%s'  AND debit > 0 
 		 """%str(refrence)) 
 
 		accounts += [{"account": account[0] , "desc": account[1] ,
 					"party":account[2],"party_type":account[1] ,
-					"amount":account[3]}for account in pay ]
+					"amount":account[3],"name" :account[4]}for account in pay ]
 		
 		return accounts
 
@@ -227,3 +262,32 @@ def get_purchase_items(invoice=None , *args , **kwargs):
 @frappe.whitelist()
 def get_query_type (*args,**kwargs):
 	return[[ "Purchase Invoice"],["Payment Entry"] , ["Journal Entry"]]
+
+
+
+@frappe.whitelist()
+def complete_data(refre , typ,*args, **kwargs):
+	unallocated_amount = frappe.db.sql(""" SELECT SUM(allocated) FROM `tabLanded Cost Voucher Expenses`  INNER JOIN `tabLanded Cost Voucher` 
+	on `tabLanded Cost Voucher Expenses`.parent = `tabLanded Cost Voucher`.name 
+	WHERE `tabLanded Cost Voucher Expenses`.reference = '%s'  AND `tabLanded Cost Voucher`.docstatus= 1 """%refre) 
+	# frappe.throw(str(unallocated_amount))
+	try :
+		un_allocate = int(unallocated_amount[0][0])
+	except:
+		un_allocate = 0 
+	if typ == "Purchase Invoice":
+		invoice = frappe.get_doc("Purchase Invoice" , refre )
+		data = {"unallocated_amount" :un_allocate,"grand_total" : invoice.grand_total}
+		return (data)
+	if typ == "Journal Entry" :
+
+		journal = frappe.get_doc("Journal Entry" , refre)
+		data = {"unallocated_amount" :un_allocate or 0,"grand_total" : journal.total_credit}
+		return data
+	if typ == "Payment Entry":
+		payment = frappe.get_doc("Payment Entry" , refre)
+		data = {"unallocated_amount" :un_allocate ,"grand_total" : payment.paid_amount}
+		return (data)
+
+
+

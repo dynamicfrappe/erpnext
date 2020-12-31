@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "posting_date",
   "company",
   "purchase_receipts",
   "purchase_receipt_items",
@@ -138,15 +139,17 @@
   {
    "fieldname": "section_break_7",
    "fieldtype": "Section Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
   }
  ],
  "icon": "icon-usd",
  "is_submittable": 1,
-
-
-
- "modified": "2020-11-18 15:07:07.355952",
-
+ "modified": "2020-12-24 15:19:34.872130",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Landed Cost Voucher",
