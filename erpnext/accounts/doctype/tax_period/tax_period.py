@@ -29,7 +29,10 @@ class Taxperiod(Document):
 		doc.docname=self.name
 
 		doc.save()
-		frappe.db.sql("update `tabTax Period Details` set refdoc='{}' where taxclass='{}' and parent='{}'".format(doc.name,type,self.name))
+		if type != "All":
+			frappe.db.sql("update `tabTax Period Details` set refdoc='{}' where taxclass='{}' and parent='{}'".format(doc.name,type,self.name))
+		else:
+			frappe.db.sql("update `tabTax Period Details` set refdoc='{}' where  and parent='{}'".format(doc.name,self.name))
 
 		return doc.name
 

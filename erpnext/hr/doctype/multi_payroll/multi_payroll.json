@@ -163,14 +163,16 @@
    "fieldname": "start_date",
    "fieldtype": "Date",
    "label": "Start Date",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fetch_from": "payroll_month.end_date",
    "fieldname": "end_date",
    "fieldtype": "Date",
    "label": "End Date",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_11",
@@ -276,7 +278,7 @@
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
- "modified": "2020-12-23 10:35:19.198142",
+ "modified": "2020-12-27 15:26:53.550826",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi Payroll",

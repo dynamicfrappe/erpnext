@@ -47,6 +47,19 @@ class Multisalarystructure(Document):
 					message = "<ol>" +  '  '.join(not_exist_component) + "</ol>"
 					frappe.msgprint( _(message) , title=_("This Salary Component must be exist in salary structure") , indicator='red' , raise_exception=1)
 
+	def get_employee_salary_structure(self):
+		if self.employee:
+			emp = frappe.get_doc("Employee" , self.employee)
+			if emp.employee_salary_structure_detail :
+				self.set("salary_structure",[])
+				for i in emp.employee_salary_structure_detail :
+					self.append("salary_structure",{
+						"salary_structure": i.salary_structure,
+						"type" : i.type,
+						"employee" : self.employee
+					})
+				self.getAllSalaryStructureComponent()
+				# self.save()
 
 
 	def validate_dates(self):
@@ -99,13 +112,18 @@ class Multisalarystructure(Document):
 		return salarycomponentValue
 	def getAllSalaryStructureComponent(self):
 		data=[]
-		for ss in self.salary_structure:
-			data +=frappe.db.sql("select salary_component,amount from `tabSalary Detail` where parent='{}'".format(ss.salary_structure),as_dict=1)
+		t = ','.join (["'"+str(ss.salary_structure) +"'"  for ss in self.salary_structure])
+		data =frappe.db.sql("select salary_component,amount from `tabSalary Detail` where parent in ({}) group by salary_component ".format(str(t)),as_dict=1)
+			# frappe.msgprint(
+			# 	"select salary_component,amount from `tabSalary Detail` where parent in ({}) group by salary component".format(
+			# 		str(t)))
+
+		self.set("component", [])
 		for d in data:
 			row=self.append("component",{})
 			row.componentname=d.salary_component
 			row.amount=d.amount
-			# self.update(self.component)
+			row.update(d)
 		# self.save()
 		return data
 

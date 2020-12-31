@@ -13,6 +13,7 @@ from frappe.model.document import Document
 from erpnext.utilities.transaction_base import delete_events
 from frappe.utils.nestedset import NestedSet
 from erpnext.hr.doctype.job_offer.job_offer import get_staffing_plan_detail
+import collections
 import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -108,13 +109,14 @@ class Employee(NestedSet):
 			if itemCode:
 				pass
 			else:
-				existing_outsource = frappe.db.sql("select outsource from tabEmployee where name={}".format(self.name),as_dict=1)
+				existing_outsource = frappe.db.sql("select outsource from tabEmployee where name='{}'".format(self.name),as_dict=1)
 				if existing_outsource:
 					if existing_outsource[0]["outsource"]==0:
 						self.checkoutsource()
 
 				else:
 					self.checkoutsource()
+		self.validate_salary_structure()
 
 					
 	def checkoutsource(self):
@@ -129,6 +131,48 @@ class Employee(NestedSet):
 
 	def set_employee_name(self):
 		self.employee_name = ' '.join(filter(lambda x: x, [self.first_name, self.middle_name, self.last_name]))
+
+	def validate_salary_structure(self):
+		if self.employee_salary_structure_detail :
+			salary_structure_list = [x.salary_structure for x in self.employee_salary_structure_detail]
+			salary_structure_type_list = [x.type for x in self.employee_salary_structure_detail]
+
+			duplicated_salary_structure = [item for item, count in collections.Counter(salary_structure_list).items() if count > 1]
+			duplicated_salary_structure_type= [item for item, count in collections.Counter(salary_structure_type_list).items() if count > 1]
+
+			if len(duplicated_salary_structure):
+				message = '<br/> <ol>' + " ".join(
+					[str('<li>' + str(item) + '</li>') for item in duplicated_salary_structure])
+				frappe.throw(_("Salary Structure is duplicated {} ".format(message)))
+			if len(duplicated_salary_structure_type):
+				message = '<br/> <ol>' + " ".join([str('<li>' + str(item) + '</li>')for item in duplicated_salary_structure_type])
+				frappe.throw(_("Salary Structure Type is duplicated {} ".format(message)))
+			is_main = 0
+			for i in self.employee_salary_structure_detail:
+				type = frappe.get_doc("Salary Structure Type" , i.type)
+				if type.is_main:
+					is_main = 1
+					break
+			if not is_main:
+				frappe.throw(_("Salary Structure Type is must have main".format()))
+
+
+	def get_grade_SalaryStructure(self):
+		if self.grade :
+			grade = frappe.get_doc("Employee Grade" , self.grade)
+			if not grade.default_salary_structure:
+				frappe.throw(_("Please Set Default Salary Strucutre in grade {}".format(self.grade)))
+				return
+			type = frappe.db.get_value("Salary Structure Type" , {"is_main":1} , ['name'])
+			d = {
+				"salary_structure":grade.default_salary_structure
+					,"type": type
+			}
+			if d.get('salary_structure') not in [item.salary_structure for item in self.employee_salary_structure_detail] and d.get('type') not in [item.type for item in self.employee_salary_structure_detail] :
+				self.append("employee_salary_structure_detail", d)
+			else :
+				frappe.throw(_("Salary Structure {} or type {} is already added".format(d.get('salary_structure') , d.get('type'))))
+
 
 	def validate_user_details(self):
 		data = frappe.db.get_value('User',
