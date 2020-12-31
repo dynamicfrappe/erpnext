@@ -331,8 +331,7 @@ class MonthlySalarySlip(TransactionBase):
 		if value:
 			if (float(value[0][0])) > 0  :
 				return float(value[0][0])
-			else:
-				return 0
+		return 0
 
 	def set_component(self,i,typ):
 		# self.set(typ,[])
