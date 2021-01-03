@@ -4,6 +4,7 @@
  "creation": "2013-03-07 14:48:38",
  "doctype": "DocType",
  "document_type": "Document",
+ "engine": "InnoDB",
  "field_order": [
   "type_section",
   "naming_series",
@@ -31,7 +32,8 @@
   "tc_name",
   "terms",
   "reference",
-  "job_card"
+  "job_card",
+  "material_plan"
  ],
  "fields": [
   {
@@ -40,13 +42,14 @@
    "options": "fa fa-pushpin"
   },
   {
+   "default": "Plan-PO-",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "MAT-MR-.YYYY.-",
+   "options": "Plan-PO-\nPlan-TR-\nPlan-MFG-",
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
@@ -270,12 +273,19 @@
    "options": "Job Card",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "material_plan",
+   "fieldtype": "Link",
+   "label": "Material Plan",
+   "options": "Material Plan",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-ticket",
  "idx": 70,
  "is_submittable": 1,
- "modified": "2019-04-29 11:45:07.570292",
+ "modified": "2021-01-03 12:54:32.380060",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Material Request",

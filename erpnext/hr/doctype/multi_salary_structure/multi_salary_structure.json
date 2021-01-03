@@ -82,11 +82,13 @@
    "fieldtype": "Table",
    "label": "Salary Structure",
    "options": "Salary structure Template",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "income_tax_slab",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Income Tax Slab",
    "options": "Income Tax Slab"
   },
@@ -183,7 +185,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-30 16:25:52.408654",
+ "modified": "2020-12-31 10:43:34.069803",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",

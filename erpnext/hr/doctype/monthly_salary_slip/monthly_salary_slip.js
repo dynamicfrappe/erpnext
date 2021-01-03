@@ -15,9 +15,17 @@ frappe.ui.form.on('Monthly Salary Slip', {
                 }
             }
         });
+        frm.set_query("employee", () => {
+            return {
+                filters: {
+                    company:frm.doc.company
+                }
+            }
+        });
        
 
     },
+
     start_date: function(frm) {
 
         if (frm.doc.employee && frm.doc.month) {
@@ -39,7 +47,13 @@ frappe.ui.form.on('Monthly Salary Slip', {
         }
 
     },
+    company:function(frm) {
+        frm.events.validate_employee(frm);
+        frm.events.validate_month(frm);
+    },
     month: function(frm) {
+        //  frm.events.validate_employee(frm);
+        // frm.events.validate_month(frm);
 
         frappe.call({
             doc: frm.doc,
@@ -75,6 +89,8 @@ frappe.ui.form.on('Monthly Salary Slip', {
     },
 
     employee: function(frm) {
+        // frm.events.validate_employee(frm);
+        // frm.events.validate_month(frm);
         if (frm.doc.employee)
 		frm.events.get_Employee_Salary_Details(frm);
 	},
@@ -109,6 +125,59 @@ frappe.ui.form.on('Monthly Salary Slip', {
 
 		    frm.events.get_Employee_Salary_Details(frm);
 	},
+    validate_employee: function(frm) {
+        if (frm.doc.employee)
+        {
+
+                    frappe.call({
+                    method: "frappe.client.get",
+                    args: {
+                        doctype: "Employee",
+                        name: frm.doc.employee,
+                    },
+                    callback(r) {
+                        if(r.message) {
+                                
+                               if (r.message.company != frm.doc.company)
+                                frm.set_value("employee" , '');
+
+                            
+                            refresh_field("employee");
+            
+                        }
+                    }
+                });
+        
+        }
+
+    },
+    validate_month: function(frm) {
+        if (frm.doc.month)
+        {
+
+                    frappe.call({
+                    method: "frappe.client.get",
+                    args: {
+                        doctype: "Payroll Month",
+                        name: frm.doc.month,
+                    },
+                    callback(r) {
+                        if(r.message) {
+                                
+                               if (r.message.company != frm.doc.company)
+                                frm.set_value("month" , '');
+
+                            
+                            refresh_field("month");
+            
+                        }
+                    }
+                });
+        
+        }
+
+    }
+    ,
     get_Employee_Salary_Details: function(frm) {
         debugger;
         // alert(frm.doc.is_main);
