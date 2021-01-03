@@ -26,6 +26,8 @@
   "sales_order",
   "users_section",
   "users",
+  "project_resources_section",
+  "project_resources",
   "copied_from",
   "section_break0",
   "notes",
@@ -446,12 +448,23 @@
    "fieldtype": "Link",
    "label": "Location",
    "options": "Location"
+  },
+  {
+   "fieldname": "project_resources_section",
+   "fieldtype": "Section Break",
+   "label": " Project Resources"
+  },
+  {
+   "fieldname": "project_resources",
+   "fieldtype": "Table",
+   "label": " Project Resources",
+   "options": "Project Employee"
   }
  ],
  "icon": "fa fa-puzzle-piece",
  "idx": 29,
  "max_attachments": 4,
- "modified": "2020-10-20 16:25:28.938764",
+ "modified": "2021-01-03 14:34:27.784533",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",
