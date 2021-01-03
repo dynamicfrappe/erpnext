@@ -4,6 +4,7 @@
  "creation": "2013-03-07 14:48:38",
  "doctype": "DocType",
  "document_type": "Document",
+ "engine": "InnoDB",
  "field_order": [
   "type_section",
   "naming_series",
@@ -31,7 +32,8 @@
   "tc_name",
   "terms",
   "reference",
-  "job_card"
+  "job_card",
+  "matrial_plan"
  ],
  "fields": [
   {
@@ -270,12 +272,20 @@
    "options": "Job Card",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "matrial_plan",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Matrial Plan",
+   "options": "Matrial Plan",
+   "print_hide": 1
   }
  ],
  "icon": "fa fa-ticket",
  "idx": 70,
  "is_submittable": 1,
- "modified": "2019-04-29 11:45:07.570292",
+ "modified": "2020-12-31 10:19:38.971276",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Material Request",
