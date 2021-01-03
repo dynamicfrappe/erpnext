@@ -12,6 +12,8 @@ from erpnext.accounts.utils import get_fiscal_year
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 
 class PayrollEntry(Document):
+	# def validate(self):
+	# 	frappe.msgprint(str(self.employee))
 	def onload(self):
 		if not self.docstatus==1 or self.salary_slips_submitted:
     			return

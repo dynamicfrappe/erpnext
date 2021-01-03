@@ -3,7 +3,12 @@
 
 frappe.ui.form.on('Multi salary structure', {
        getcomponent:function (frm){
-      
+      		if (frm.doc.salary_structure.length == 0){
+      			frappe.throw(__("Please Set Salary Structures In Employee "));
+      			return;
+      		}
+      		
+      	
            frm.clear_table("component")
        		  frappe.call({
 			  method:"getAllSalaryStructureComponent",
@@ -19,6 +24,7 @@ frappe.ui.form.on('Multi salary structure', {
 	   }
         ,
         refresh:function(frm){
+        	debugger;
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
 			  frm.add_custom_button(__("close"),function(){
 			  		  frappe.call({

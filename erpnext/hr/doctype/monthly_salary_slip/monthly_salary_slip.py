@@ -7,6 +7,7 @@ from frappe.model.naming import make_autoname
 
 from frappe import msgprint, _
 from erpnext.hr.doctype.payroll_entry.payroll_entry import get_start_end_dates
+from erpnext.hr.doctype.payroll_entry.payroll_entry import PayrollEntry
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils.background_jobs import enqueue
@@ -30,6 +31,7 @@ employee_status = {"""  Present
 				"""}
 class MonthlySalarySlip(TransactionBase):
 	def __init__(self, *args, **kwargs):
+
 		super(MonthlySalarySlip, self).__init__(*args, **kwargs)
 		self.series = 'Sal Slip/{0}/.#####'.format(self.employee)
 		self.social_insurance_amount = 0
@@ -203,7 +205,8 @@ class MonthlySalarySlip(TransactionBase):
 		try :
 			return (eval(func))
 		except:
-			return("error")
+
+			return 0
 		
 
 	def set_salary_component_first_time(self):
@@ -329,9 +332,8 @@ class MonthlySalarySlip(TransactionBase):
 
 		if value:
 			if (float(value[0][0])) > 0  :
-				return(value[0][0])
-			else:
-				return False
+				return float(value[0][0])
+		return 0
 
 	def set_component(self,i,typ):
 		# self.set(typ,[])
@@ -404,12 +406,15 @@ class MonthlySalarySlip(TransactionBase):
 			SC = frappe.get_doc("Salary Component", e.salary_component)
 			if SC:
 				if not SC.exempted_from_income_tax:
-					total_taxable_amount += e.amount
+					total_taxable_amount += float(e.amount)
+
 		for e in self.get("deductions"):
 			SC = frappe.get_doc("Salary Component", e.salary_component)
 			if SC:
 				if not SC.exempted_from_income_tax:
-					total_taxable_amount -= e.amount
+					
+					# frappe.msgprint(e.amount)
+					total_taxable_amount -= float(e.amount)
 		# total_taxable_amount -= self.social_insurance_amount
 		self.tax_pool = total_taxable_amount or 0
 		has_disability , is_consultant = frappe.db.get_value("Employee" , self.employee , ['has_disability','is_consultant'])
@@ -663,3 +668,5 @@ class MonthlySalarySlip(TransactionBase):
 				l.name = rps.parent and rps.payment_date between %s and %s and
 				l.repay_from_salary = 1 and l.docstatus = 1 and l.applicant = %s""",
 			(self.start_date, self.end_date, self.employee), as_dict=True) or []
+
+# MonthlySalarySlip.validate = PayrollEntry.validate

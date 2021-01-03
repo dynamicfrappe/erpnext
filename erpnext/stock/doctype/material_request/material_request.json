@@ -34,6 +34,7 @@
   "reference",
   "job_card",
   "matrial_plan"
+
  ],
  "fields": [
   {
@@ -42,13 +43,14 @@
    "options": "fa fa-pushpin"
   },
   {
+   "default": "Plan-PO-",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
    "no_copy": 1,
    "oldfieldname": "naming_series",
    "oldfieldtype": "Select",
-   "options": "MAT-MR-.YYYY.-",
+   "options": "Plan-PO-\nPlan-TR-\nPlan-MFG-",
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
@@ -274,12 +276,12 @@
    "read_only": 1
   },
   {
-   "fieldname": "matrial_plan",
+   "fieldname": "material_plan",
    "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Matrial Plan",
-   "options": "Matrial Plan",
-   "print_hide": 1
+   "label": "Material Plan",
+   "options": "Material Plan",
+   "read_only": 1
+
   }
  ],
  "icon": "fa fa-ticket",
