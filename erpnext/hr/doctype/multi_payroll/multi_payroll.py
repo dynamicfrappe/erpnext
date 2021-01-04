@@ -29,12 +29,13 @@ class MultiPayroll(Document):
 		assignment = """SELECT  distinct t1.employee , t2.salary_structure  , em.date_of_joining , em.relieving_date
 		 FROM `tabMulti salary structure` AS t1   join  `tabSalary structure Template` AS t2
 		 ON t1.name = t2.parent 
-		 join `tabEmployee` AS em on   t1.employee_name = em.employee_name and ifnull(em.attendance_role , '') <> ''
+		 join `tabEmployee` AS em on   t1.employee = em.name 
 		 WHERE type = '%s' 
 		 and t2.docstatus = 1 and t1.status='open' """%self.payroll_type 
 		if self.department : 
 		 	department_con = """ and  t1.department = '%s'  """%self.department
 		 	assignment += department_con
+		frappe.msgprint(assignment)
 		self.employee_data = frappe.db.sql(assignment)
 		try :
 			data =[ i for i in self.employee_data ]

@@ -83,10 +83,10 @@ class SalarySlip(TransactionBase):
 			if (frappe.db.get_single_value("HR Settings", "email_salary_slip_to_employee")) and not frappe.flags.via_payroll_entry:
 				self.email_salary_slip()
 			# self.update_attendance_logs (status = 1)
-	def update_attendance_logs (self , status = 1):
-		frappe.db.sql (""" 
-		update `tabEmployee Attendance Logs` set docstatus = {status} , is_calculated = {status} where employee = '{employee}' and  date(date) between date('{from_date}') and date ('{to_date}') ;
-		""".format(status=status , employee = self.employee , from_date = self.start_date , to_date = self.end_date ))
+	# def update_attendance_logs (self , status = 1):
+	# 	frappe.db.sql ("""
+	# 	update `tabEmployee Attendance Logs` set docstatus = {status} , is_calculated = {status} where employee = '{employee}' and  date(date) between date('{from_date}') and date ('{to_date}') ;
+	# 	""".format(status=status , employee = self.employee , from_date = self.start_date , to_date = self.end_date ))
 	def on_cancel(self):
 		self.update_loans()
 		self.set_status()
@@ -316,7 +316,7 @@ class SalarySlip(TransactionBase):
 
 			self.get_leave_details(joining_date, relieving_date)
 			if struct :
-				self.calculate_attendance()
+				# self.calculate_attendance()
 				# self.calculate_Tax()
 				self.calculate_net_pay()
 	def calculate_Tax (self):
@@ -388,8 +388,8 @@ class SalarySlip(TransactionBase):
 						total_hourly_salary += item.amount
 			total_working_days = self.total_working_days
 
-			if self.payroll_frequency == "Monthly":
-				total_working_days = frappe.db.get_single_value("HR Settings" , "total_working_days") or self.total_working_days
+			# if self.payroll_frequency == "Monthly":
+			# 	total_working_days = frappe.db.get_single_value("HR Settings" , "total_working_days") or self.total_working_days
 			total_working_hours_per_day = frappe.db.get_value("Employee" , self.employee , "total_working_hours_per_day")
 			if not total_working_hours_per_day:
 					frappe.msgprint(

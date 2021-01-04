@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import frappe, erpnext
 import datetime, math
-
+from datetime import datetime
 from frappe.utils import add_days, cint, cstr, flt, getdate, rounded, date_diff, money_in_words
 from frappe.model.naming import make_autoname
 
@@ -266,7 +266,7 @@ class MonthlySalarySlip(TransactionBase):
 
 	def update_dates_for_employee(self):
 		employe = frappe.get_doc("Employee" ,str(self.employee) )
-		if employe.date_of_joining <= datetime.datetime.strptime( str(self.start_date), "%Y-%m-%d").date():
+		if employe.date_of_joining <= datetime.strptime( str(self.start_date), "%Y-%m-%d").date():
 			pass
 		else:
 			self.start_date=employe.date_of_joining
