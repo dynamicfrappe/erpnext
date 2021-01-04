@@ -453,7 +453,7 @@ def get_employees_who_are_born_today():
 		as_dict=True
 	)
 
-
+@frappe.whitelist()
 def get_holiday_list_for_employee(employee, raise_exception=True):
 	if employee:
 		holiday_list, company = frappe.db.get_value("Employee", employee, ["holiday_list", "company"])

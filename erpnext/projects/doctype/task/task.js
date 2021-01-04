@@ -49,7 +49,40 @@ frappe.ui.form.on("Task", {
 			}
 		})
 	},
+	assigned:function(frm){
 
+	if(frm.doc.project){
+		var project = frm.doc.project
+		frm.set_query("assigned_to" , function(frm) {
+			return {
+				query:"erpnext.projects.doctype.task.task.get_project_employee",
+				filters: {
+					"project" : project
+
+				}
+			}
+		})
+	}
+
+	},
+
+
+project:function(frm){
+
+	if(frm.doc.assigned){
+		var project = frm.doc.project
+		frm.set_query("assigned_to" , function(frm) {
+			return {
+				query:"erpnext.projects.doctype.task.task.get_project_employee",
+				filters: {
+					"project" : project
+
+				}
+			}
+		})
+	}
+
+	},
 	validate: function (frm) {
 		frm.doc.project && frappe.model.remove_from_locals("Project",
 			frm.doc.project);

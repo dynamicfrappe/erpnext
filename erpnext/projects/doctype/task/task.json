@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "autoname": "TASK-.YYYY.-.#####",
  "creation": "2013-01-29 19:25:50",
@@ -12,6 +11,8 @@
   "issue",
   "type",
   "is_group",
+  "assigned",
+  "assigned_to",
   "column_break0",
   "status",
   "priority",
@@ -361,14 +362,26 @@
    "label": "Completed By",
    "no_copy": 1,
    "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "assigned",
+   "fieldtype": "Check",
+   "label": "Assigned"
+  },
+  {
+   "depends_on": "eval:doc.assigned== 1  ;",
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "Employee"
   }
  ],
  "icon": "fa fa-check",
  "idx": 1,
  "is_tree": 1,
- "links": [],
  "max_attachments": 5,
- "modified": "2020-07-03 12:36:04.960457",
+ "modified": "2021-01-03 14:38:39.291329",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
