@@ -5,7 +5,7 @@
 
 from __future__ import unicode_literals
 import frappe
-
+from datetime import timedelta , date , datetime
 from frappe.utils import cstr, flt, getdate, new_line_sep, nowdate, add_days
 from frappe import msgprint, _
 from frappe.model.mapper import get_mapped_doc
@@ -58,26 +58,31 @@ class MaterialRequest(BuyingController):
 	# Validate
 	# ---------------------
 	def validate(self):
-		super(MaterialRequest, self).validate()
+		try:
+			super(MaterialRequest, self).validate()
 
-		self.validate_schedule_date()
-		self.check_for_on_hold_or_closed_status('Sales Order', 'sales_order')
-		self.validate_uom_is_integer("uom", "qty")
+			self.validate_schedule_date()
+			self.check_for_on_hold_or_closed_status('Sales Order', 'sales_order')
+			self.validate_uom_is_integer("uom", "qty")
 
-		if not self.status:
-			self.status = "Draft"
+			if not self.status:
+				self.status = "Draft"
 
-		from erpnext.controllers.status_updater import validate_status
-		validate_status(self.status,
-			["Draft", "Submitted", "Stopped", "Cancelled", "Pending",
-			"Partially Ordered", "Ordered", "Issued", "Transferred", "Received"])
+			from erpnext.controllers.status_updater import validate_status
+			validate_status(self.status,
+				["Draft", "Submitted", "Stopped", "Cancelled", "Pending",
+				"Partially Ordered", "Ordered", "Issued", "Transferred", "Received" , "Error"])
 
-		validate_for_items(self)
+			# validate_for_items(self)
 
-		self.set_title()
-		# self.validate_qty_against_so()
-		# NOTE: Since Item BOM and FG quantities are combined, using current data, it cannot be validated
-		# Though the creation of Material Request from a Production Plan can be rethought to fix this
+			self.set_title()
+			# self.validate_qty_against_so()
+			# NOTE: Since Item BOM and FG quantities are combined, using current data, it cannot be validated
+			# Though the creation of Material Request from a Production Plan can be rethought to fix this
+		except Exception as e :
+			self.status = "Error"
+			self.error = str(e)
+
 
 	def set_title(self):
 		'''Set title as comma separated list of items'''
@@ -210,6 +215,105 @@ class MaterialRequest(BuyingController):
 			doc = frappe.get_doc('Production Plan', production_plan)
 			doc.set_status()
 			doc.db_set('status', doc.status)
+
+@frappe.whitelist()
+def get_items():
+	# if not self.is_created:
+	sql = frappe.db.sql("""
+            select
+                   t.warehouse,
+                   t.warehouse_reorder_qty,
+                   t.material_request_type,
+                   t.item_code,
+                    w.company,
+                    item.stock_uom
+            from ( SELECT
+                                   item.warehouse ,
+                                   item.warehouse_reorder_qty,
+                                   item.material_request_type,
+                                   item.warehouse_reorder_level,
+                                  
+                   item.parent as item_code  ,
+                   ifnull((SELECT IFNULL(qty_after_transaction,0) as qty_after_transaction  from `tabStock Ledger Entry`
+                            WHERE item_code = item.parent AND warehouse = item.warehouse and docstatus = 1
+                            ORDER BY posting_date DESC , posting_time  DESC Limit 1),0) as warehouse_qty ,
+                   ifnull((select sum(po_item.qty) from `tabPurchase Order Item` po_item inner join `tabPurchase Order` po on po.name = po_item.parent
+                   where item_code = item.parent and po_item.warehouse = item.warehouse and  po.docstatus <> 2  and DATEDIFF(curdate(),po.transaction_date) < {po_duration}),0) as po_qty
+                   ,
+                   ifnull((select sum(mr_item.qty) from `tabMaterial Request Item` mr_item inner join `tabMaterial Request` mr on mr.name = mr_item.parent
+                   where item_code = item.parent and mr_item.warehouse = item.warehouse and  mr.docstatus <> 2 and DATEDIFF(curdate(),mr.transaction_date) < {mr_duration} ),0) as mr_qty
+                    from `tabItem Reorder` item
+                        ) t inner join tabWarehouse w on w.name = t.warehouse   
+                        	inner join tabItem item on item.name = t.item_code
+                    where (t.warehouse_qty + t.po_qty +t.mr_qty) < t.warehouse_reorder_level ;""".format(
+		po_duration=7,
+		 mr_duration=7),
+						as_dict=1)
+	if len(sql) == 0:
+		frappe.throw(_("No Data found"))
+
+
+
+	createMaterialRequest(sql)
+
+@frappe.whitelist()
+def createMaterialRequest(material_plan_item):
+	if material_plan_item:
+		count = 0
+		total = len(material_plan_item)
+		for item in material_plan_item:
+			count += 1
+
+			frappe.publish_realtime('update_material_plan_progress', {
+				'progress': count,
+				'total': total,
+				'title': _("Creating Plans")
+			})
+
+			doc = frappe.new_doc("Material Request")
+			doc.company = item.company
+			doc.transaction_date = date.today()
+			doc.schedule_date = date.today()
+			doc.material_request_type = item.material_request_type
+			if item.material_request_type == "Purchase":
+				doc.naming_series = "Plan-PO-"
+			elif item.material_request_type == "Material Transfer":
+				doc.naming_series = "Plan-TR-"
+			elif item.material_request_type == "Manufacture":
+				doc.naming_series = "Plan-MFG-"
+
+			# doc.material_plan = self.name
+			row = doc.append("items", {})
+			row.item_code = item.item_code
+			row.qty = item.warehouse_reorder_qty
+			row.uom = item.stock_uom
+			row.stock_uom = item.stock_uom
+			row.conversion_factor = 1
+			row.schedule_date = doc.schedule_date
+			row.warehouse = item.warehouse
+			row.description = "Plan for item {} with type {}".format(item.item_code , item.material_request_type)
+
+			# item.rquested = 1
+			# item.material_request = doc.name
+
+			try :
+				doc.save()
+			except Exception as e:
+				doc.status = "Error"
+				doc.error = e
+				# doc.save()
+			doc.submit()
+			frappe.msgprint(_("Material Plan {} Was Created ".format(
+				"<a href='#Form/Material Request/{0}'>{0}</a>".format(doc.name))))
+				# item.rquested = 0
+	# frappe.db.sql("delete from `tabMaterial Plan Item` where parent='{}'".format(self.name))
+	# if all([x.rquested for x in self.material_plan_item]):
+	# 	self.is_created = 1
+	# else:
+	# 	self.is_created = 0
+	# self.save()
+	# return self.material_plan_item
+
 
 def update_completed_and_requested_qty(stock_entry, method):
 	if stock_entry.doctype == "Stock Entry":

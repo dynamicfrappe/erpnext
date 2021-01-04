@@ -1,5 +1,8 @@
+// ["Error","Submitted","Draft","Pending"]
 frappe.listview_settings['Material Request'] = {
 	add_fields: ["material_request_type", "status", "per_ordered", "per_received"],
+
+
 	get_indicator: function(doc) {
 		if(doc.status=="Stopped") {
 			return [__("Stopped"), "red", "status,=,Stopped"];
@@ -24,5 +27,33 @@ frappe.listview_settings['Material Request'] = {
 				return [__("Manufactured"), "green", "per_ordered,=,100"];
 			}
 		}
+	},
+	onload: function(listview) {
+		frappe.route_options = {"status":["in", ["Pending" ,"Draft" , "Submitted"],false]};
+		listview.page.add_action_item(__('Make Action'), function() {
+			const selected = listview.get_checked_items();
+			debugger;
+						alert(selected);
+
+		});
+		this.add_button(__("Run"), "primary", function() {
+
+			frappe.call({
+				method:"erpnext.stock.doctype.material_request.material_request.get_items",
+				freeze: true,
+				callback:function (r){
+					listview.page.refresh();
+				}
+			});
+		});
+
+
+	},
+	add_button(name, type, action, wrapper_class=".page-actions") {
+		const button = document.createElement("button");
+		button.classList.add("btn", "btn-" + type, "btn-sm", "ml-2");
+		button.innerHTML = name;
+		button.onclick = action;
+		document.querySelector(wrapper_class).prepend(button);
 	}
 };
