@@ -42,10 +42,10 @@ class Multisalarystructure(Document):
 				# frappe.msgprint(_(str(exist_list)))
 				# frappe.msgprint(_(str(check)))
 
-				if not check:
-					not_exist_component = [("<li>"  + str(d) + "</li>"  ) for d in component_list if d not in exist_list ]
-					message = "<ol>" +  '  '.join(not_exist_component) + "</ol>"
-					frappe.msgprint( _(message) , title=_("This Salary Component must be exist in salary structure") , indicator='red' , raise_exception=1)
+				# if not check:
+				# 	not_exist_component = [("<li>"  + str(d) + "</li>"  ) for d in component_list if d not in exist_list ]
+				# 	message = "<ol>" +  '  '.join(not_exist_component) + "</ol>"
+				# 	frappe.msgprint( _(message) , title=_("This Salary Component must be exist in salary structure") , indicator='red' , raise_exception=1)
 
 	def get_employee_salary_structure(self):
 		if self.employee:

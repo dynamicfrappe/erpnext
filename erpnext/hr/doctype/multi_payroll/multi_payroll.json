@@ -77,6 +77,7 @@
    "width": "50%"
   },
   {
+   "fetch_from": "payroll_month.company",
    "fieldname": "company",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -278,7 +279,7 @@
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
- "modified": "2020-12-27 15:26:53.550826",
+ "modified": "2021-01-04 14:38:42.323228",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi Payroll",
