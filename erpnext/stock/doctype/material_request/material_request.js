@@ -4,6 +4,13 @@
 {% include 'erpnext/public/js/controllers/buying.js' %};
 
 frappe.ui.form.on('Material Request', {
+	refresh:function (listview){
+		// console.log(frappe.get_route())
+		// console.log(frappe.route_options)
+		// console.log(frappe.get_prev_route())
+		//  alert(sessionStorage.getItem("name"));
+
+	},
 	setup: function(frm) {
 		frm.custom_make_buttons = {
 			'Stock Entry': 'Issue Material',

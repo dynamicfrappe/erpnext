@@ -5,7 +5,17 @@ frappe.listview_settings['Material Request'] = {
 		// console.log(frappe.route_options)
 		// console.log(frappe.get_prev_route())
 		//  alert(sessionStorage.getItem("name"));
-
+		// 	frappe.realtime.on('update_material_plan_progress', (data) => {
+		// 			debugger
+	 	// 			frappe.show_progress(__(data.title),  data.progress , data.total,__(data.title))
+		//
+		//
+		// });
+		// 	frappe.realtime.on('update_material_plan', (data) => {
+	 	// 			frappe.show_progress(__(data.title),  data.progress , data.total,__(data.title))
+		//
+		//
+		// });
 	},
 	add_fields: ["material_request_type", "status", "per_ordered", "per_received"],
 
@@ -36,6 +46,7 @@ frappe.listview_settings['Material Request'] = {
 		}
 	},
 	onload: function(listview) {
+
 		frappe.route_options = {"status":["in", ["Pending" ,"Draft" , "Submitted"],false]};
 		listview.page.add_action_item(__('Make Action'), function() {
 			const selected = listview.get_checked_items();
