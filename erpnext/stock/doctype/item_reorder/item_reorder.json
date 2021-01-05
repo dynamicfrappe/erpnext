@@ -9,6 +9,7 @@
   "item_code",
   "warehouse_group",
   "warehouse",
+  "destination",
   "warehouse_reorder_level",
   "warehouse_reorder_qty",
   "material_request_type"
@@ -55,12 +56,18 @@
    "in_list_view": 1,
    "label": "Item Code",
    "options": "Item"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Link",
+   "label": "Destination",
+   "options": "Warehouse"
   }
  ],
  "idx": 1,
  "in_create": 1,
  "istable": 1,
- "modified": "2021-01-03 10:07:22.911208",
+ "modified": "2021-01-04 10:32:24.589034",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Item Reorder",

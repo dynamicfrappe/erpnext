@@ -1,4 +1,11 @@
 frappe.listview_settings['Material Request'] = {
+	onload:function (listview){
+		// console.log(frappe.get_route())
+		// console.log(frappe.route_options)
+		// console.log(frappe.get_prev_route())
+		//  alert(sessionStorage.getItem("name"));
+
+	},
 	add_fields: ["material_request_type", "status", "per_ordered", "per_received"],
 	get_indicator: function(doc) {
 		if(doc.status=="Stopped") {
