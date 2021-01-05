@@ -10,12 +10,11 @@
   "vehicle_type",
   "vehichle_brand",
   "color",
-  "plate_number",
+  "vehichle_model",
+  "model",
   "column_break_3",
   "fuel_type",
   "uom",
-  "model",
-  "vehichle_model",
   "vehichle_number",
   "vehichle_plate_number",
   "ownership",
@@ -235,11 +234,6 @@
    "options": "Vehichle Model"
   },
   {
-   "fieldname": "plate_number",
-   "fieldtype": "Data",
-   "label": "Plate Number"
-  },
-  {
    "fieldname": "vehichle_number",
    "fieldtype": "Data",
    "label": "Vehichle Number"
@@ -256,9 +250,8 @@
    "label": "Vehichle Plate Number"
   }
  ],
-
- "modified": "2020-12-23 16:03:43.202534",
- "modified_by": "Administrator",
+ "modified": "2021-01-05 16:18:09.644484",
+ "modified_by": "asd@gmail.com",
  "module": "HR",
  "name": "Vehicle",
  "owner": "Administrator",
