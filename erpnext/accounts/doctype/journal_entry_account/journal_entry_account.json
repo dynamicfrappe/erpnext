@@ -200,7 +200,7 @@
    "fieldname": "reference_type",
    "fieldtype": "Select",
    "label": "Reference Type",
-   "options": "\nSales Invoice\nPurchase Invoice\nJournal Entry\nSales Order\nPurchase Order\nExpense Claim\nAsset\nLoan\nPayroll Entry\nEmployee Advance\nExchange Rate Revaluation\nInvoice Discounting"
+   "options": "\nSales Invoice\nPurchase Invoice\nJournal Entry\nSales Order\nPurchase Order\nExpense Claim\nAsset\nLoan\nPayroll Entry\nEmployee Advance\nExchange Rate Revaluation\nInvoice Discounting\nMulti Payroll\nMonthly Salary Slip"
   },
   {
    "fieldname": "reference_name",
@@ -271,7 +271,7 @@
  ],
  "idx": 1,
  "istable": 1,
- "modified": "2020-01-13 12:41:33.968025",
+ "modified": "2021-01-05 12:56:06.080646",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Journal Entry Account",

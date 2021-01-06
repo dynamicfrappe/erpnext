@@ -475,7 +475,57 @@ class MonthlySalarySlip(TransactionBase):
 					row = self.get_salary_slip_row(Tax_Sc)
 
 					self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)
+	def email_salary_slip(self):
+		receiver = frappe.db.get_value("Employee", self.employee, "prefered_email")
+		hr_settings = frappe.get_single("HR Settings")
+		message = "Please see attachment"
+		password = None
+		if hr_settings.encrypt_salary_slips_in_emails:
+			password = generate_password_for_pdf(hr_settings.password_policy, self.employee)
+			message += """<br>Note: Your salary slip is password protected,
+				the password to unlock the PDF is of the format {0}. """.format(hr_settings.password_policy)
 
+		if receiver:
+			email_args = {
+				"recipients": [receiver],
+				"message": _(message),
+				"subject": 'Salary Slip - from {0} to {1}'.format(self.start_date, self.end_date),
+				"attachments": [frappe.attach_print(self.doctype, self.name, file_name=self.name, password=password)],
+				"reference_doctype": self.doctype,
+				"reference_name": self.name
+				}
+			if not frappe.flags.in_test:
+				enqueue(method=frappe.sendmail, queue='short', timeout=300, is_async=True, **email_args)
+			else:
+				frappe.sendmail(**email_args)
+		else:
+			msgprint(_("{0}: Employee email not found, hence email not sent").format(self.employee_name))
+
+	def update_status(self, salary_slip=None):
+		for data in self.timesheets:
+			if data.time_sheet:
+				timesheet = frappe.get_doc('Timesheet', data.time_sheet)
+				timesheet.salary_slip = salary_slip
+				timesheet.flags.ignore_validate_update_after_submit = True
+				timesheet.set_status()
+				timesheet.save()
+
+	def update_loans(self):
+		for loan in self.get_loan_details():
+			doc = frappe.get_doc("Loan", loan.name)
+
+			#setting repayment schedule and updating total amount to pay
+			repayment_status = 1 if doc.docstatus == 1 else 0
+			frappe.db.set_value("Repayment Schedule", loan.repayment_name, "paid", repayment_status)
+			doc.reload()
+			doc.update_total_amount_paid()
+			doc.set_status()
+
+	def set_status(self, status=None):
+		'''Get and update status'''
+		if not status:
+			status = self.get_status()
+		self.db_set("status", status)
 	def calculate_hour_rate(self):
 
 
@@ -670,3 +720,6 @@ class MonthlySalarySlip(TransactionBase):
 			(self.start_date, self.end_date, self.employee), as_dict=True) or []
 
 # MonthlySalarySlip.validate = PayrollEntry.validate
+def generate_password_for_pdf(policy_template, employee):
+		employee = frappe.get_doc("Employee", employee)
+		return policy_template.format(**employee.as_dict())
