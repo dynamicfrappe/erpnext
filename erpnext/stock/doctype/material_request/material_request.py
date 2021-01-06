@@ -264,11 +264,11 @@ def createMaterialRequest(material_plan_item):
 		for item in material_plan_item:
 			count += 1
 
-			# frappe.publish_realtime('update_material_plan_progress', {
-			# 	'progress': count,
-			# 	'total': total,
-			# 	'title': _("Creating Plans")
-			# })
+			frappe.publish_realtime('update_material_plan_progress', {
+				'progress': count,
+				'total': total,
+				'title': _("Creating Plans")
+			})
 
 			doc = frappe.new_doc("Material Request")
 			doc.company = item.company

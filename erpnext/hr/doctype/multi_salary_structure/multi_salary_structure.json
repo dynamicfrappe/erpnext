@@ -18,6 +18,7 @@
   "status",
   "section_break_8",
   "salary_structure",
+  "get_employee_salary_strucuture",
   "getcomponent",
   "section_break_13",
   "component",
@@ -182,10 +183,15 @@
    "fieldtype": "Date",
    "label": "Posting Date",
    "read_only": 1
+  },
+  {
+   "fieldname": "get_employee_salary_strucuture",
+   "fieldtype": "Button",
+   "label": "Get Employee Salary Strucuture"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-31 10:43:34.069803",
+ "modified": "2021-01-06 11:04:17.368492",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Multi salary structure",
