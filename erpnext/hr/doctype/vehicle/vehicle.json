@@ -250,8 +250,9 @@
    "label": "Vehichle Plate Number"
   }
  ],
- "modified": "2021-01-05 16:18:09.644484",
- "modified_by": "asd@gmail.com",
+ "modified": "2021-01-05 10:30:09.085342",
+ "modified_by": "Administrator",
+
  "module": "HR",
  "name": "Vehicle",
  "owner": "Administrator",
@@ -264,7 +265,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Fleet Manager",
+   "role": "Administrator",
    "share": 1,
    "write": 1
   }
