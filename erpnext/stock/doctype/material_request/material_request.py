@@ -298,13 +298,16 @@ def createMaterialRequest(material_plan_item):
 
 			try :
 				doc.save()
+				doc.submit()
+				frappe.msgprint(_("Material Plan {} Was Created ".format(
+					"<a href='#Form/Material Request/{0}'>{0}</a>".format(doc.name))))
 			except Exception as e:
 				doc.status = "Error"
 				doc.error = e
+				frappe.msgprint(_("Material Plan {} has a problem <br {} >".format(doc.name,str(e))))
 				# doc.save()
-			doc.submit()
-			frappe.msgprint(_("Material Plan {} Was Created ".format(
-				"<a href='#Form/Material Request/{0}'>{0}</a>".format(doc.name))))
+
+
 				# item.rquested = 0
 	# frappe.db.sql("delete from `tabMaterial Plan Item` where parent='{}'".format(self.name))
 	# if all([x.rquested for x in self.material_plan_item]):
