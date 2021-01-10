@@ -36,6 +36,12 @@ frappe.ui.form.on("Sales Order", {
 		})
 	},
 	refresh: function(frm) {
+		if (!frm.is_new() && frm.doc.docstatus == 0)
+		{
+			frm.add_custom_button(__("Check Delivery Date"), function() {
+				frm.events.check_delivery_date(frm)
+			});
+		}
 		 
 		 	frm.add_custom_button(__("Check customer credit"), function() {
                 frm.events.check_customer_credit(frm)
@@ -91,7 +97,18 @@ frappe.ui.form.on("Sales Order", {
        		alert("please enter customer name")
        	}
     },
+	check_delivery_date: function(frm) {
+		frm.save();
+		         	     frappe.call({
+        	'doc':frm.doc,
+            'method': "validate_due_date",
 
+            callback(r) {
+        		frm .refresh();
+                }
+            })
+
+	},
     Items_stock_in_hand: function(frm) {
     	var text ="<table><tr><th>Item Name</th><th>Item Quantity</th></tr>"
         
