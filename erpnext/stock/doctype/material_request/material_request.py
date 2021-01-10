@@ -245,7 +245,8 @@ def get_items():
                     from `tabItem Reorder` item
                         ) t inner join tabWarehouse w on w.name = t.warehouse   
                         	inner join tabItem item on item.name = t.item_code
-                    where (t.warehouse_qty + t.po_qty +t.mr_qty) < t.warehouse_reorder_level ;""".format(
+                    where (t.warehouse_qty + t.po_qty +t.mr_qty) < t.warehouse_reorder_level
+                     	and  ( ifnull(item.end_of_life , 0) = 0 or item.end_of_life > curdate()) ;""".format(
 		po_duration=7,
 		 mr_duration=7),
 						as_dict=1)
