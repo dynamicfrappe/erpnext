@@ -188,101 +188,89 @@ class SalesOrder(SellingController):
 
 	def validate_po_qty(self):
 		for i in self.items:
-			ordered_qty = frappe.db.sql("""select sum(qty-received_qty) from `tabPurchase Order Item`
-			where  item_code = '{item_code}'  and warehouse = '{warehouse}' 
-			and docstatus = 1 and schedule_date >= {date}""".format(date=i.delivery_date, item_code=i.item_code,
-																	warehouse=i.warehouse))
+			i.duration = frappe.db.get_value("Item",i.item_code,"planning_horizon") or 7
+			i.selled_qty = 0
+			ordered_qty = frappe.db.sql("""
+						
+						select ifnull( (select sum(qty-received_qty) from `tabPurchase Order Item`
+						where  item_code = '{item_code}'  and warehouse = '{warehouse}' 
+						and docstatus = 1 and schedule_date between DATE_ADD('{date}', INTERVAL -1*{duration} DAY)  and DATE_ADD('{date}', INTERVAL {duration} DAY) 
+						) ,0)
+						""".format(date=i.delivery_date, item_code=i.item_code, warehouse=i.warehouse,duration=i.duration))
+			selled_qty = frappe.db.sql("""
+						select ifnull( (select sum(qty-delivered_qty) from `tabSales Order Item`
+						where  item_code = '{item_code}'  and warehouse = '{warehouse}' 
+						and docstatus = 1 and delivery_date between DATE_ADD('{date}', INTERVAL -1*{duration} DAY)  and DATE_ADD('{date}', INTERVAL {duration} DAY) 
+						and name <> '{name}'
+						),0)
+						""".format(name=i.name ,date=i.delivery_date, item_code=i.item_code, warehouse=i.warehouse,duration=i.duration))
+
 			if ordered_qty:
 				i. ordered_qty = ordered_qty [0] [0] or 0
 
-			if i.ordered_qty + i.actual_qty < i.qty:
-					sql = frappe.db.sql("""
-					            select
-					                   t.warehouse,
-					                   t.warehouse_reorder_qty,
-					                   t.material_request_type,
-					                   t.item_code,
-					                    w.company,
-					                    item.stock_uom
-					            from ( SELECT
-					                                   item.warehouse ,
-					                                   item.warehouse_reorder_qty,
-					                                   item.material_request_type,
-					                                   item.warehouse_reorder_level,
+			if selled_qty:
+				i. selled_qty = selled_qty [0] [0] or 0
 
-					                   item.parent as item_code  ,
-					                   ifnull((SELECT IFNULL(qty_after_transaction,0) as qty_after_transaction  from `tabStock Ledger Entry`
-					                            WHERE item_code = item.parent AND warehouse = item.warehouse and docstatus = 1
-					                            ORDER BY posting_date DESC , posting_time  DESC Limit 1),0) as warehouse_qty ,
-					                   ifnull((select sum(po_item.qty) from `tabPurchase Order Item` po_item inner join `tabPurchase Order` po on po.name = po_item.parent
-					                   where item_code = item.parent and po_item.warehouse = item.warehouse and  po.docstatus <> 2  and DATEDIFF(curdate(),po.transaction_date) < {po_duration}),0) as po_qty
-					                   ,
-					                   ifnull((select sum(mr_item.qty) from `tabMaterial Request Item` mr_item inner join `tabMaterial Request` mr on mr.name = mr_item.parent
-					                   where item_code = item.parent  and mr_item.warehouse = item.warehouse and  mr.docstatus <> 2 and DATEDIFF(curdate(),mr.transaction_date) < {mr_duration} ),0) as mr_qty
-					                    from `tabItem Reorder` item
-					                        ) t inner join tabWarehouse w on w.name = t.warehouse   
-					                        	inner join tabItem item on item.name = t.item_code
-					                    where (t.warehouse_qty + t.po_qty +t.mr_qty) < t.warehouse_reorder_level
-					                    and   t.item_code = '{item_code}' and t.warehouse = '{warehouse}'
-					                     	and  ( ifnull(item.end_of_life , 0) = 0 or item.end_of_life > curdate()) 
-					                     	;""".format(
-														item_code=i.item_code,
-														warehouse=i.warehouse,
-														po_duration=7,
-														mr_duration=7),
-														as_dict=1)
+
+			if i.ordered_qty + i.actual_qty - i.selled_qty < i.qty:
+
 					# if not sql :
 					# 	frappe.msgprint(_("Item {} have no item planing with warehouse {}".format(i.item_code,i.warehouse)),indicator='red')
-					for item in sql:
-						qty = item.warehouse_reorder_qty + i.qty
-						old_doc = frappe.db.sql("""
-						
-						select MRI.name , MRI.parent from `tabMaterial Request Item` MRI inner join `tabMaterial Request` MR on MR.name = MRI.parent
-						 where MRI.item_code = '{item_code}' and MRI.warehouse = '{warehouse}' and MR.status in ('Pending')
-						 order by MR.creation  desc limit 1
-												""".format(item_code=i.item_code,warehouse=i.warehouse),as_dict=1)
+						item = frappe.db.sql("select * from `tabItem Reorder` where parent = '{item_code}' and warehouse = '{warehouse}' limit 1 ".format(item_code= i.item_code , warehouse = i.warehouse) ,as_dict = 1)
+						if item :
+							# frappe.msgprint("True")
+							item = item [0]
+							qty = item.warehouse_reorder_qty + i.qty
+							old_doc = frappe.db.sql("""
+							
+							select MRI.name , MRI.parent from `tabMaterial Request Item` MRI inner join `tabMaterial Request` MR on MR.name = MRI.parent
+							 where MRI.item_code = '{item_code}' and MRI.warehouse = '{warehouse}' and MR.status in ('Pending')
+							 order by MR.creation  desc limit 1
+													""".format(item_code=i.item_code,warehouse=i.warehouse),as_dict=1)
 
-						if old_doc :
-							# doc = frappe.get_doc("Material Request",old_doc[0].parent)
-							frappe .db.sql("""update `tabMaterial Request Item`  set qty = {}   where name = '{}' """.format(qty,old_doc[0].name))
-							frappe.msgprint(_("Material Plan {} Was updated ".format(
-								"<a href='#Form/Material Request/{0}'>{0}</a>".format(old_doc[0].parent))))
+							if old_doc :
+								# doc = frappe.get_doc("Material Request",old_doc[0].parent)
+								frappe .db.sql("""update `tabMaterial Request Item`  set qty = {}   where name = '{}' """.format(qty,old_doc[0].name))
+								frappe.msgprint(_("Material Plan {} Was updated ".format(
+									"<a href='#Form/Material Request/{0}'>{0}</a>".format(old_doc[0].parent))))
+							else :
+								doc = frappe.new_doc("Material Request")
+								doc.company = self.company
+								doc.transaction_date = date.today()
+								doc.schedule_date = i.delivery_date
+								doc.material_request_type = item.material_request_type
+								if item.material_request_type == "Purchase":
+									doc.naming_series = "Plan-PO-"
+								elif item.material_request_type == "Material Transfer":
+									doc.naming_series = "Plan-TR-"
+								elif item.material_request_type == "Manufacture":
+									doc.naming_series = "Plan-MFG-"
+
+								# doc.material_plan = self.name
+								row = doc.append("items", {})
+								row.item_code = i.item_code
+								row.qty = qty
+								row.uom = i.stock_uom
+								row.stock_uom = i.stock_uom
+								row.conversion_factor = i.conversion_factor
+								row.schedule_date = i.delivery_date
+								row.warehouse = i.warehouse
+								row.description = "Plan for item {} with type {}".format(item.item_code, item.material_request_type)
+
+								# item.rquested = 1
+								# item.material_request = doc.name
+
+								try:
+									doc.save()
+									doc.submit()
+									frappe.msgprint(_("Material Plan {} Was Created ".format(
+										"<a href='#Form/Material Request/{0}'>{0}</a>".format(doc.name))))
+								except Exception as e:
+									doc.status = "Error"
+									doc.error = e
+									frappe.msgprint(_("Material Plan {} has a problem <br {} >".format(doc.name, str(e))))
 						else :
-							doc = frappe.new_doc("Material Request")
-							doc.company = self.company
-							doc.transaction_date = date.today()
-							doc.schedule_date = i.delivery_date
-							doc.material_request_type = item.material_request_type
-							if item.material_request_type == "Purchase":
-								doc.naming_series = "Plan-PO-"
-							elif item.material_request_type == "Material Transfer":
-								doc.naming_series = "Plan-TR-"
-							elif item.material_request_type == "Manufacture":
-								doc.naming_series = "Plan-MFG-"
-
-							# doc.material_plan = self.name
-							row = doc.append("items", {})
-							row.item_code = item.item_code
-							row.qty = qty
-							row.uom = i.stock_uom
-							row.stock_uom = i.stock_uom
-							row.conversion_factor = i.conversion_factor
-							row.schedule_date = i.delivery_date
-							row.warehouse = i.warehouse
-							row.description = "Plan for item {} with type {}".format(item.item_code, item.material_request_type)
-
-							# item.rquested = 1
-							# item.material_request = doc.name
-
-							try:
-								doc.save()
-								doc.submit()
-								frappe.msgprint(_("Material Plan {} Was Created ".format(
-									"<a href='#Form/Material Request/{0}'>{0}</a>".format(doc.name))))
-							except Exception as e:
-								doc.status = "Error"
-								doc.error = e
-								frappe.msgprint(_("Material Plan {} has a problem <br {} >".format(doc.name, str(e))))
+							frappe.msgprint(_("Item {} have no item planning setting with warehosue {}".format(i.item_code,i.warehouse )),indicator="red")
 
 
 
@@ -290,12 +278,32 @@ class SalesOrder(SellingController):
 	def validate_due_date(self):
 		for i in self.items:
 			if not i.ordered_qty:
-				ordered_qty = frappe.db.sql ("""select sum(qty-received_qty) from `tabPurchase Order Item`
-				where  item_code = '{item_code}'  and warehouse = '{warehouse}'
-				and docstatus = 1 and schedule_date >= {date}""".format(date = i.delivery_date , item_code = i.item_code , warehouse = i.warehouse))
+				ordered_qty = frappe.db.sql("""
+
+										select ifnull( (select sum(qty-received_qty) from `tabPurchase Order Item`
+										where  item_code = '{item_code}'  and warehouse = '{warehouse}' 
+										and docstatus = 1 and schedule_date between DATE_ADD('{date}', INTERVAL -1*{duration} DAY)  and DATE_ADD('{date}', INTERVAL {duration} DAY) 
+										) ,0)
+										""".format(date=i.delivery_date, item_code=i.item_code, warehouse=i.warehouse,duration=i.duration))
+
 				if ordered_qty:
-					i.ordered_qty = ordered_qty [0][0] or 0
-			if i.actual_qty < i.qty and  i.ordered_qty + i.actual_qty >= i.qty :
+					i.ordered_qty = ordered_qty[0][0] or 0
+
+
+			if not i.selled_qty:
+				selled_qty = frappe.db.sql("""
+										select ifnull( (select sum(qty-delivered_qty) from `tabSales Order Item`
+										where  item_code = '{item_code}'  and warehouse = '{warehouse}' 
+										and docstatus = 1 and delivery_date between DATE_ADD('{date}', INTERVAL -1*{duration} DAY)  and DATE_ADD('{date}', INTERVAL {duration} DAY) 
+										and name <> '{name}'
+										),0)
+										""".format(name=i.name, date=i.delivery_date, item_code=i.item_code,
+												   warehouse=i.warehouse, duration=i.duration))
+
+				if selled_qty:
+					i.selled_qty = selled_qty[0][0] or 0
+
+			if   i.ordered_qty + i.actual_qty - i.selled_qty >= i.qty :
 				result = self.get_due_date(i.item_code,i.delivery_date)
 				if result and result > datetime.strptime(i.delivery_date, '%Y-%m-%d').date() :
 					frappe.msgprint (_("Delivery Date  for Item {} cann't be before the Incoming Purchase Order Date {}".format(i.item_code,result)) , indicator='red')
