@@ -83,7 +83,7 @@ class Device(Document):
 									'log_date': record['timestamp'].date()
 								})
 								log.save()
-								frappe.msgprint("log.inseet employee" )
+								# frappe.msgprint("log.inseet employee" )
 
 								old_user = user
 								old_timestamp = record['timestamp']
@@ -102,7 +102,7 @@ class Device(Document):
 								})
 								log.save()
 								frappe.db.commit()
-								frappe.msgprint("log.inseet")
+								# frappe.msgprint("log.inseet")
 
 
 								old_user = user
