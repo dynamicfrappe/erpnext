@@ -43,6 +43,15 @@ class StockEntry(StockController):
 			item.update(get_bin_details(item.item_code, item.s_warehouse))
 
 	def validate(self):
+		try:
+			if self.rejected==1:
+				if not self.rejected_warehouse:
+					frappe.throw("You Must Enter Rejected Warehouse")
+				if	self.rejected_quantity <=0:
+					frappe.throw("Enter Rejected Quantity")
+		except:
+			print("Error")
+
 		self.pro_doc = frappe._dict()
 		if self.work_order:
 			self.pro_doc = frappe.get_doc('Work Order', self.work_order)
@@ -153,6 +162,11 @@ class StockEntry(StockController):
 		self.update_quality_inspection()
 		if self.work_order and self.purpose == "Manufacture":
 			self.update_so_in_serial_number()
+		try:
+			if self.rejected_quantity >0:
+				self.moveItems()
+		except:
+			print("error")
 
 	def on_cancel(self):
 
@@ -297,6 +311,27 @@ class StockEntry(StockController):
 					frappe.throw(_("Finished product quantity <b>{0}</b> and For Quantity <b>{1}</b> cannot be different")
 						.format(item.qty, self.fg_completed_qty))
 
+	def moveItems(self):
+		index=len(self.items)-1
+		frappe.msgprint(index)
+		stock_entry = frappe.new_doc("Stock Entry")
+		# stock_entry.naming_series="MAT-STE-2021-00016"
+		stock_entry.stock_entry_type="Material Transfer"
+		stock_entry.company=erpnext.get_default_company()
+		stock_entry.from_warehouse=self.items[index].t_warehouse
+		stock_entry.to_warehouse=self.rejected_warehouse
+		row=stock_entry.append("items",{})
+		row.item_code=self.items[index].item_code
+		row.qty=self.rejected_quantity
+		row.uom=self.items[index].uom
+		row.conversion_factor=self.items[index].conversion_factor
+		row.stock_uom=self.items[index].stock_uom
+		row.transfer_qty=self.rejected_quantity
+		stock_entry.save()
+		stock_entry.run_method('submit')
+		#frappe.db.sql("update `tabStock Entry` set docstatus=1 , workflow_state='Completed' where name='{}'".format(stock_entry.name))
+		frappe.db.commit()
+
 	def validate_difference_account(self):
 		if not cint(erpnext.is_perpetual_inventory_enabled(self.company)):
 			return
@@ -413,9 +448,9 @@ class StockEntry(StockController):
 				where parent in (%s)
 					and item_code = %s
 					and ifnull(s_warehouse,'')='' """ % (", ".join(["%s" * len(other_ste)]), "%s"), args)[0][0]
-			if fg_qty_already_entered and fg_qty_already_entered >= qty:
-				frappe.throw(_("Stock Entries already created for Work Order ")
-					+ self.work_order + ":" + ", ".join(other_ste), DuplicateEntryForWorkOrderError)
+			# if fg_qty_already_entered and fg_qty_already_entered >= qty:
+			# 	frappe.throw(_("Stock Entries already created for Work Order ")
+			# 		+ self.work_order + ":" + ", ".join(other_ste), DuplicateEntryForWorkOrderError)
 
 	def set_incoming_rate(self):
 		if self.purpose == "Repack":
