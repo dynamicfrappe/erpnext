@@ -113,6 +113,23 @@ frappe.ui.form.on('Stock Entry', {
 			}
 		});
 	},
+		// rejected_quantity:function(frm){
+	// 	if(frm.doc.rejected_quantity >0){
+	// 		console.log(frm.doc.items[0].uom)
+	// 		var child = cur_frm.add_child("items");
+	// 		child.s_warehouse=frm.doc.items[0].s_warehouse
+	// 		child.t_warehouse=frm.doc.rejected_warehouse
+	// 		child.uom=frm.doc.items[frm.doc.items.length -2].uom
+	// 		child.conversion_factor=frm.doc.items[frm.doc.items.length -2].conversion_factor
+	// 		child.stock_uom=frm.doc.items[frm.doc.items.length -2].stock_uom
+	// 		child.transfer_qty=frm.doc.rejected_quantity
+	// 		child.item_code=frm.doc.items[frm.doc.items.length -2].item_code
+	// 		child.qty=frm.doc.rejected_quantity
+	// 		frm.doc.items[frm.doc.items.length -2]["qty"]-=frm.doc.rejected_quantity
+	// 		cur_frm.refresh_fields("items");
+	//
+	// 	}
+	// },
 
 	outgoing_stock_entry: function(frm) {
 		frappe.call({
@@ -124,6 +141,15 @@ frappe.ui.form.on('Stock Entry', {
 		});
 	},
 
+	rejected_quantity:function(frm){
+
+		if(frm.doc.rejected_quantity >frm.doc.fg_completed_qty){
+
+			frm.set_value("rejected_quantity"," ")
+			frm.refresh_field("rejected_quantity")
+			frappe.throw("Rejected Quantity Must Be Less Than Manufacuring Quantity")
+		}
+	},
 	refresh: function(frm) {
 		if(!frm.doc.docstatus) {
 			frm.trigger('validate_purpose_consumption');
