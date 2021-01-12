@@ -87,7 +87,7 @@ def getdata(filters):
             inner join
                 `tabStock Entry`
                 on `tabStock Entry Detail`.parent=`tabStock Entry`.name
-            where `tabStock Entry`.rejected=1
+            where `tabStock Entry`.rejected=1 and `tabStock Entry Detail`.t_warehouse !=`tabStock Entry`.rejected_warehouse
                     {conditions}
 			""".format(conditions =conditions))
         return results
