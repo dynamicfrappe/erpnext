@@ -8,16 +8,33 @@
  "engine": "InnoDB",
  "field_order": [
   "applicant_name",
-  "test",
   "email_id",
-  "status",
+  "address",
+  "military_status",
   "column_break_3",
+  "social_status",
+  "status",
+  "national_id",
   "job_title",
   "source",
   "source_name",
+  "qualification_section",
+  "degree",
+  "university",
+  "column_break_18",
+  "graduation_date",
+  "grade",
+  "courses_section",
+  "courses",
+  "work_experience_section",
+  "work_experience",
+  "additional_section",
+  "has_license",
+  "has_laptop",
+  "has_car",
   "section_break_6",
-  "cover_letter",
-  "resume_attachment"
+  "resume_attachment",
+  "cover_letter"
  ],
  "fields": [
   {
@@ -72,7 +89,8 @@
   },
   {
    "fieldname": "section_break_6",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Upload Your CV"
   },
   {
    "fieldname": "cover_letter",
@@ -82,18 +100,123 @@
   {
    "fieldname": "resume_attachment",
    "fieldtype": "Attach",
-   "label": "Resume Attachment"
+   "label": "Resume Attachment",
+   "reqd": 1
   },
   {
-   "fieldname": "test",
+   "fieldname": "address",
    "fieldtype": "Data",
-   "label": "test",
+   "label": "Address"
+  },
+  {
+   "default": "Married",
+   "fieldname": "social_status",
+   "fieldtype": "Select",
+   "label": "Social Status",
+   "options": "Married\nSingle\nEngaged",
+   "reqd": 1
+  },
+  {
+   "fieldname": "national_id",
+   "fieldtype": "Data",
+   "label": "National ID"
+  },
+  {
+   "fieldname": "qualification_section",
+   "fieldtype": "Section Break",
+   "label": "Qualification"
+  },
+  {
+   "fieldname": "degree",
+   "fieldtype": "Data",
+   "label": "Degree",
+   "reqd": 1
+  },
+  {
+   "fieldname": "university",
+   "fieldtype": "Data",
+   "label": "University",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "graduation_date",
+   "fieldtype": "Date",
+   "label": "Graduation Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "grade",
+   "fieldtype": "Select",
+   "label": "Grade",
+   "options": "Excellent\nVery Good\nGood",
+   "reqd": 1
+  },
+  {
+   "fieldname": "courses_section",
+   "fieldtype": "Section Break",
+   "label": "Courses"
+  },
+  {
+   "fieldname": "courses",
+   "fieldtype": "Table",
+   "label": "Courses",
+   "options": "Job Applicants Courses",
+   "reqd": 1
+  },
+  {
+   "fieldname": "work_experience_section",
+   "fieldtype": "Section Break",
+   "label": "Work Experience"
+  },
+  {
+   "fieldname": "work_experience",
+   "fieldtype": "Table",
+   "label": "Work Experience",
+   "options": "job Applicant work experiances",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "has_license",
+   "fieldtype": "Check",
+   "label": "Has License",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "has_laptop",
+   "fieldtype": "Check",
+   "label": "Has Laptop",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "has_car",
+   "fieldtype": "Check",
+   "label": "Has Car",
+   "reqd": 1
+  },
+  {
+   "fieldname": "additional_section",
+   "fieldtype": "Section Break",
+   "label": "Additional"
+  },
+  {
+   "default": "Finished",
+   "fieldname": "military_status",
+   "fieldtype": "Select",
+   "label": "Military Status",
+   "options": "Exempted\nFinished\nPostponed\nnot yet",
    "reqd": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 1,
- "modified": "2021-01-12 09:23:24.038362",
+ "modified": "2021-01-12 10:26:07.453783",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Job Applicant",

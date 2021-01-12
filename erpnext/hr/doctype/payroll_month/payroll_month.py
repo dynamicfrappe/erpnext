@@ -58,19 +58,22 @@ class PayrollMonth(Document):
 		a=  frappe.db.sql(""" SELECT type FROM `tabSalary Structure Type` """)
 		return([i[0] for i in a])
 	def set_start_date (self):
+		if not self.year:
+			return 
 		start_date = None
 		attendance_start_date = None
 		last_doc = frappe.db.sql("""
 		 select * from `tabPayroll Month`  where company = '{company}' and name <> '{name}'  order by start_date desc LIMIT 1
 					""".format(company=self.company , name = self.name),as_dict=1)
 
-		if not last_doc:
+		if not last_doc :
 
 			start_day = frappe.db.get_single_value("HR Settings","payroll_month_start_day") or 0
 			if not start_day:
 				frappe.throw(_("Please Set Payroll Month Start Day in HR Settings"))
 			attendance_start_day = frappe.db.get_single_value("HR Settings","attendance_month_start_day") or start_day
 			month = datetime.strptime(str(self.month),  "%B").month
+
 			self.start_date = datetime(int(self.year), month, start_day).date()
 			self.attendance_start_date = datetime(int(self.year), month, attendance_start_day).date()
 			self.end_date = datetime.strptime(str(self.start_date), "%Y-%m-%d").date() + relativedelta(
