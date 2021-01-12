@@ -48,6 +48,15 @@ class MonthlySalarySlip(TransactionBase):
 		self.real_month = None
 		self.salary_slip_based_on_timesheet = None
 		# self.total_working_days = self.get_monthly_working_days_from_attendence_rule()
+	def add_additional_salary_components(self, component_type):
+		additional_components = get_additional_salary_component(self.employee,
+			self.start_date, self.end_date, component_type)
+		if additional_components:
+			for additional_component in additional_components:
+				amount = additional_component.amount
+				overwrite = additional_component.overwrite
+				row = self.get_salary_slip_row(salary_component)
+				self.update_component_row(row, amount, component_type, adding=1, adding_if_not_exist=1)
 
 	def autoname(self):
 		self.series = 'Sal Slip/{0}/.#####'.format(self.employee)
@@ -90,6 +99,8 @@ class MonthlySalarySlip(TransactionBase):
 		self.calculate_hour_rate()
 		self.set_loan_repayment()
 		if self.is_main:
+			self.add_additional_salary_components ("earnings")
+			self.add_additional_salary_components ("deductions")
 			self.get_Employee_advance()
 			self.get_medical_insurance()
 			self.get_social_insurance()
