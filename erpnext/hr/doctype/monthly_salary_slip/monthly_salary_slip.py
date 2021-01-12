@@ -55,7 +55,7 @@ class MonthlySalarySlip(TransactionBase):
 			for additional_component in additional_components:
 				amount = additional_component.amount
 				overwrite = additional_component.overwrite
-				row = self.get_salary_slip_row(salary_component)
+				row = self.get_salary_slip_row(additional_component.salary_component)
 				self.update_component_row(row, amount, component_type, adding=1, adding_if_not_exist=1)
 
 	def autoname(self):
