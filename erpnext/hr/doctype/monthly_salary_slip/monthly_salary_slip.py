@@ -471,7 +471,7 @@ class MonthlySalarySlip(TransactionBase):
 			total_tax = 0
 
 		self.tax_value = total_tax or 0
-		
+
 		row = self.get_salary_slip_row(Tax_Sc)
 
 		self.update_component_row(row, total_tax, "deductions", adding=1,adding_if_not_exist=1)

@@ -9,8 +9,8 @@ from frappe.model.document import Document
 class DeviceLog(Document):
 	def after_insert (self):
 		# self.map_employees()
-		frappe.msgprint("DDDDONNNNNNNE")
-		# pass
+		# frappe.msgprint("DDDDONNNNNNNE")
+		pass
 	def map_employees(self):
 		frappe.db.sql("""update `tabDevice Log` log set employee = (select name from `tabEmployee` where attendance_device_id = log.enroll_no)
 			where employee is null """)
