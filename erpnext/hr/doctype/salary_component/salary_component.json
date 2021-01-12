@@ -73,12 +73,14 @@
    "depends_on": "eval:doc.type == \"Earning\"",
    "fieldname": "is_tax_applicable",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Is Tax Applicable"
   },
   {
    "default": "1",
    "fieldname": "depends_on_payment_days",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Depends on Payment Days",
    "print_hide": 1
   },
@@ -93,6 +95,7 @@
    "depends_on": "eval:doc.is_tax_applicable && doc.type=='Earning'",
    "fieldname": "deduct_full_tax_on_selected_payroll_date",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Deduct Full Tax on Selected Payroll Date"
   },
   {
@@ -152,6 +155,7 @@
    "depends_on": "eval:doc.is_flexible_benefit == 1 & doc.create_separate_payment_entry_against_benefit_claim !=1",
    "fieldname": "only_tax_impact",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Only Tax Impact (Cannot Claim But Part of Taxable Income)"
   },
   {
@@ -166,6 +170,7 @@
    "depends_on": "eval:doc.type == \"Deduction\"",
    "fieldname": "variable_based_on_taxable_salary",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Variable Based On Taxable Salary"
   },
   {
@@ -224,11 +229,11 @@
    "default": "0",
    "fieldname": "round_to_the_nearest_integer",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Round to the Nearest Integer"
   },
   {
    "default": "0",
-   "depends_on": "eval:doc.type == \"Deduction\" && !doc.variable_based_on_taxable_salary",
    "description": "If checked, the full amount will be deducted from taxable income before calculating income tax without any declaration or proof submission.",
    "fieldname": "exempted_from_income_tax",
    "fieldtype": "Check",
@@ -257,7 +262,7 @@
   }
  ],
  "icon": "fa fa-flag",
- "modified": "2020-12-01 14:52:27.896054",
+ "modified": "2021-01-12 16:59:00.597146",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Salary Component",

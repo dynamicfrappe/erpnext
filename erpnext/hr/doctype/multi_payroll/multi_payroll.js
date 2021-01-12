@@ -89,7 +89,7 @@ frappe.ui.form.on('Multi Payroll', {
 			frm.add_custom_button(__("Submit Salary Slip"), function() {
 				submit_salary_slip(frm);
 			}).addClass("btn-primary");
-			frm.add_custom_button(__("Calculate"),
+			frm.add_custom_button(__("Recalculate"),
 				function() {
 					frm.events.calculate_salary_slip(frm);
 				}

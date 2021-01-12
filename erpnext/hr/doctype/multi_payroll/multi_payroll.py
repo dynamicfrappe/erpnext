@@ -466,7 +466,7 @@ def submit_salary_slips_for_employees(payroll_entry, salary_slips, publish_progr
 			try:
 				ss_obj.submit()
 				submitted_ss.append(ss_obj)
-			except frappe.ValidationError as e:
+			except Exception as e:
 				frappe.msgprint(str(e))
 				not_submitted_ss.append(ss[0])
 

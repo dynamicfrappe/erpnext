@@ -303,31 +303,35 @@ def get_data():
 					"type": "doctype",
 					"name": "Salary Structure",
 					"onboard": 1,
-				},
-				{
+				},{
 					"type": "doctype",
-					"name": "Salary Structure Assignment",
-					"onboard": 1,
-					"dependencies": ["Salary Structure", "Employee"],
-				},
-				{
-					"type": "doctype",
-					"name": "Payroll Entry",
+					"name": "Salary Structure Type",
 					"onboard": 1,
 				},
 				{
 					"type": "doctype",
-					"name": "Salary Slip",
+					"name": "Multi Salary Structure",
+					"onboard": 1,
+					"dependencies": ["Salary Structure", "Employee","Salary Structure Type"],
+				},
+				{
+					"type": "doctype",
+					"name": "Multi Payroll",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Monthly Salary Slip",
 					"onboard": 1,
 				},
 				{
 					"type": "doctype",
 					"name": "Payroll Month",
 				},
-				{
-					"type": "doctype",
-					"name": "Income Tax Slab",
-				},
+				# {
+				# 	"type": "doctype",
+				# 	"name": "Income Tax Slab",
+				# },
 				{
 					"type": "doctype",
 					"name": "Salary Component",
@@ -336,22 +340,22 @@ def get_data():
 					"type": "doctype",
 					"name": "Additional Salary",
 				},
-				{
-					"type": "doctype",
-					"name": "Retention Bonus",
-					"dependencies": ["Employee"]
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Incentive",
-					"dependencies": ["Employee"]
-				},
-				{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Salary Register",
-					"doctype": "Salary Slip"
-				},
+				# {
+				# 	"type": "doctype",
+				# 	"name": "Retention Bonus",
+				# 	"dependencies": ["Employee"]
+				# },
+				# {
+				# 	"type": "doctype",
+				# 	"name": "Employee Incentive",
+				# 	"dependencies": ["Employee"]
+				# },
+				# {
+				# 	"type": "report",
+				# 	"is_query_report": True,
+				# 	"name": "Salary Register",
+				# 	"doctype": "Salary Slip"
+				# },
 			]
 		},
 		{

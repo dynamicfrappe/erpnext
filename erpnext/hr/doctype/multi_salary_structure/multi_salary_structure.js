@@ -26,110 +26,110 @@ frappe.ui.form.on('Multi salary structure', {
         refresh:function(frm){
         	debugger;
         	if(frm.doc.docstatus==1 &&frm.doc.status=="open"){
-			  frm.add_custom_button(__("close"),function(){
-			  		  frappe.call({
-				                method:'updateStatus',
-				                doc:frm.doc,
-				                callback(r) {
-				                	
-				                	frm.page.clear_primary_action();
-				                	frm.refresh();
-				                }
-				              
-				            });
-                       	 
-                        
-               }).addClass('btn-primary')
-			    frm.add_custom_button(__("Update"),function(){
-			  		 var d = new frappe.ui.Dialog({
-					    title: 'Enter details',
-					    fields: [
-					        {
-					            "label": 'Date',
-					            "fieldname": 'date',
-					            "fieldtype": 'Date',
-					             onchange(){
-					             	frappe.call({
-					             		method:"getEmployeeSalaryStructure",
-					             		doc:frm.doc
-					             	}).then(r=>{d.set_df_property("salaryStructure","options",r.message)})
-					             }
-					        },
-					        {
-					            "label": 'Salary Structure',
-					            "fieldname": 'salaryStructure',
-					            "fieldtype": 'Select',
-					            "options":[],
-					            onchange(){
-                                   if((d.get_value('salaryStructure')).length>1){
-                                   	    frappe.call({
-					            		method:"setSalaryComponent",
-					            		doc:frm.doc,
-					            		args:{
-					            			"salaryStructure":d.get_values().salaryStructure
-					            		}
-					            	}).then(r=>{d.set_df_property("salaryDetails","options",r.message)})
-                                   }
-					            }
-					        },
-					        {
-					            "label": 'Salary Component',
-					            "fieldname": 'salaryDetails',
-					            "fieldtype": 'Select',
-					            "options":[],
-					            onchange(){
-					            	
-					            	frappe.call({
-                                	method:"getcomponentValue",
-                                	doc:frm.doc,
-                                	args:{
-                                      "SalayDetails":d.get_values().salaryDetails
-                                	},
-                                    }).then(r=>{
-                                    	//console.log(r.message[0][0])
-                                	   d.set_value("value",r.message.amount)
-                                	})
-					            }	
-
-					        },
-					        {
-					            "label": 'Value',
-					            "fieldname": 'value',
-					            "fieldtype": 'Data',
-					             "read_only": 1
-					        },
-					        {
-					            "label": 'New Value',
-					            "fieldname": 'newValue',
-					            "fieldtype": 'Data'
-					        },
-					    ],
-					    primary_action_label: 'Submit',
-					    primary_action(values) {
-
-
-							frappe.call({
-								method:"updateComponentTable",
-								doc:frm.doc,
-								args:{
-									"component":values.salaryDetails,
-									"amount":values.newValue,
-									"oldValue":values.value,
-									"date":values.date
-
-								}
-							})
-
-                           d.hide();
-							refresh_field('component');
-                            //frappe.set_route("List", "Multi salary structure");
-                           	}
-					});
-
-					d.show();
-                       	 
-                        
-               }).addClass('btn-primary')
+			  // frm.add_custom_button(__("close"),function(){
+			  // 		  frappe.call({
+				//                 method:'updateStatus',
+				//                 doc:frm.doc,
+				//                 callback(r) {
+				//
+				//                 	frm.page.clear_primary_action();
+				//                 	frm.refresh();
+				//                 }
+				//
+				//             });
+              //
+              //
+              //  }).addClass('btn-primary')
+			   //  frm.add_custom_button(__("Update"),function(){
+			  	// 	 var d = new frappe.ui.Dialog({
+				// 	    title: 'Enter details',
+				// 	    fields: [
+				// 	        {
+				// 	            "label": 'Date',
+				// 	            "fieldname": 'date',
+				// 	            "fieldtype": 'Date',
+				// 	             onchange(){
+				// 	             	frappe.call({
+				// 	             		method:"getEmployeeSalaryStructure",
+				// 	             		doc:frm.doc
+				// 	             	}).then(r=>{d.set_df_property("salaryStructure","options",r.message)})
+				// 	             }
+				// 	        },
+				// 	        {
+				// 	            "label": 'Salary Structure',
+				// 	            "fieldname": 'salaryStructure',
+				// 	            "fieldtype": 'Select',
+				// 	            "options":[],
+				// 	            onchange(){
+               //                     if((d.get_value('salaryStructure')).length>1){
+               //                     	    frappe.call({
+				// 	            		method:"setSalaryComponent",
+				// 	            		doc:frm.doc,
+				// 	            		args:{
+				// 	            			"salaryStructure":d.get_values().salaryStructure
+				// 	            		}
+				// 	            	}).then(r=>{d.set_df_property("salaryDetails","options",r.message)})
+               //                     }
+				// 	            }
+				// 	        },
+				// 	        {
+				// 	            "label": 'Salary Component',
+				// 	            "fieldname": 'salaryDetails',
+				// 	            "fieldtype": 'Select',
+				// 	            "options":[],
+				// 	            onchange(){
+				//
+				// 	            	frappe.call({
+               //                  	method:"getcomponentValue",
+               //                  	doc:frm.doc,
+               //                  	args:{
+               //                        "SalayDetails":d.get_values().salaryDetails
+               //                  	},
+               //                      }).then(r=>{
+               //                      	//console.log(r.message[0][0])
+               //                  	   d.set_value("value",r.message.amount)
+               //                  	})
+				// 	            }
+			   //
+				// 	        },
+				// 	        {
+				// 	            "label": 'Value',
+				// 	            "fieldname": 'value',
+				// 	            "fieldtype": 'Data',
+				// 	             "read_only": 1
+				// 	        },
+				// 	        {
+				// 	            "label": 'New Value',
+				// 	            "fieldname": 'newValue',
+				// 	            "fieldtype": 'Data'
+				// 	        },
+				// 	    ],
+				// 	    primary_action_label: 'Submit',
+				// 	    primary_action(values) {
+			   //
+			   //
+				// 			frappe.call({
+				// 				method:"updateComponentTable",
+				// 				doc:frm.doc,
+				// 				args:{
+				// 					"component":values.salaryDetails,
+				// 					"amount":values.newValue,
+				// 					"oldValue":values.value,
+				// 					"date":values.date
+			   //
+				// 				}
+				// 			})
+			   //
+               //             d.hide();
+				// 			refresh_field('component');
+               //              //frappe.set_route("List", "Multi salary structure");
+               //             	}
+				// 	});
+			   //
+				// 	d.show();
+               //
+               //
+               // }).addClass('btn-primary')
 		}
 	},
 	get_employee_salary_strucuture: function(frm) {
