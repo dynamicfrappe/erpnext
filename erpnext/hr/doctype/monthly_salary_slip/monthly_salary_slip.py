@@ -51,11 +51,15 @@ class MonthlySalarySlip(TransactionBase):
 	def add_additional_salary_components(self, component_type):
 		additional_components = get_additional_salary_component(self.employee,
 			self.start_date, self.end_date, component_type)
+
 		if additional_components:
 			for additional_component in additional_components:
+				# frappe.msgprint(str(additional_component))
+				# frappe.msgprint(str(additional_component.struct_row.salary_component))
 				amount = additional_component.amount
 				overwrite = additional_component.overwrite
-				row = self.get_salary_slip_row(additional_component.salary_component)
+
+				row = self.get_salary_slip_row(additional_component.struct_row.salary_component)
 				self.update_component_row(row, amount, component_type, adding=1, adding_if_not_exist=1)
 
 	def autoname(self):
