@@ -3,7 +3,28 @@
 /* eslint-disable */
 
 frappe.query_reports["Rejected Items"] = {
-	"filters": [
+		"filters": [
+		{
+			"fieldname":"Wo",
+			"label": __("Work Order"),
+			"fieldtype": "Link",
+			"options":"Work Order"
+
+		},
+		{
+			"fieldname":"fromdate",
+			"label": __("From Date"),
+			"fieldtype": "Date",
+
+
+		},
+		{
+
+			"fieldname":"todate",
+			"label": __("To Date"),
+			"fieldtype": "Date",
+
+		},
 
 	]
 };

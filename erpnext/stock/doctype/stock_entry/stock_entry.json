@@ -36,6 +36,7 @@
   "source_warehouse_address",
   "source_address_display",
   "rejected",
+  "reason_of_rejection",
   "cb0",
   "to_warehouse",
   "target_warehouse_address",
@@ -636,7 +637,7 @@
    "depends_on": "eval:doc.stock_entry_type=='Manufacture'",
    "fieldname": "rejected",
    "fieldtype": "Check",
-   "label": "Rejected",
+   "label": "Add Rejected",
    "print_hide": 1
   },
   {
@@ -651,12 +652,18 @@
    "fieldname": "rejected_quantity",
    "fieldtype": "Int",
    "label": "Rejected Quantity"
+  },
+  {
+   "depends_on": "rejected",
+   "fieldname": "reason_of_rejection",
+   "fieldtype": "Small Text",
+   "label": "Reason of Rejection"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 1,
  "is_submittable": 1,
- "modified": "2021-01-11 10:28:19.969212",
+ "modified": "2021-01-12 10:10:20.221483",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock Entry",
