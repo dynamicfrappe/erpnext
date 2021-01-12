@@ -44,7 +44,7 @@ class AdditionalSalary(Document):
 		if not payroll_date :
 			frappe.throw("validation error in date")
 		salary_structure = frappe.db.sql(""" 
-			SELECT   max(from_date), salary_structure FROM `tabSalary Structure Assignment` WHERE
+			SELECT    name FROM `tabMulti salary structure` WHERE
 			employee = '%s' and docstatus=1 and from_date <= '%s'
 
 			"""%(self.employee ,self.payroll_date))
@@ -52,8 +52,9 @@ class AdditionalSalary(Document):
 			frappe.throw("validation error in Salary Structure")
 		data ={}
 		for i in component.based_on_componant :
-			value = frappe.db.sql(""" SELECT amount FROM `tabSalary Detail` WHERE parent ='%s' and
-				abbr = '%s' """ %(str(salary_structure[0][1]) , i.component_short_name))
+			# frappe.msgprint(str(""" SELECT amount FROM `tabSalary Detail` WHERE parent ='%s' and
+			# 	abbr = '%s' """ %(str(salary_structure[0][0]) , i.component_short_name)))
+			value = frappe.db.sql(""" select t1.amount from `tabSalary Components` t1 inner join `tabSalary Component` t2 on t1.componentname = t2.name where t1.parent  ='%s' and t2.salary_component_abbr = '%s' """ %(str(salary_structure[0][0]) , i.component_short_name))
 			if value :
 				data[str(i.component_short_name)] = float(value[0][0])
 			else :
@@ -77,9 +78,10 @@ class AdditionalSalary(Document):
 			d.remove(max(d ,key=len))
 			
 		try :
+			# frappe.throw(str(func))
 			return (eval(func))
 		except:
-			return("error")
+			return	0
 	
 
 		
