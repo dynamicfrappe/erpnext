@@ -59,7 +59,7 @@ class Multisalarystructure(Document):
 						"employee" : self.employee
 					})
 				self.getAllSalaryStructureComponent()
-				self.save()
+				# self.save()
 
 
 	def validate_dates(self):

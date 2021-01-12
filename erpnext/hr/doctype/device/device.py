@@ -64,6 +64,7 @@ class Device(Document):
 							if old_timestamp:
 								period = record['timestamp'] - old_timestamp
 								if user == old_user and period <= timedelta(minutes=miniutes_period):
+									# frappe.msgprint("Continue" + str(record['timestamp']))
 									continue
 
 							if employee:
@@ -81,7 +82,9 @@ class Device(Document):
 									'device': device_name,
 									'log_date': record['timestamp'].date()
 								})
-								log.insert()
+								log.save()
+								frappe.msgprint("log.inseet employee" )
+
 								old_user = user
 								old_timestamp = record['timestamp']
 							else:
@@ -97,7 +100,11 @@ class Device(Document):
 									'device': device_name,
 									'log_date': record['timestamp'].date()
 								})
-								log.insert()
+								log.save()
+								frappe.db.commit()
+								frappe.msgprint("log.inseet")
+
+
 								old_user = user
 								old_timestamp = record['timestamp']
 
@@ -107,7 +114,7 @@ class Device(Document):
 						frappe.msgprint(_("No Data Found After {}".format(doc.last_log_date)) , indicator='blue')
 
 					# Test Voice: Say Thank You
-					conn.test_voice()
+					# conn.test_voice()
 				# re-enable device after all commands already executed
 				# conn.enable_device()
 				except Exception as e:

@@ -134,7 +134,7 @@ frappe.ui.form.on('Multi salary structure', {
 	},
 	get_employee_salary_strucuture: function(frm) {
        	frm.events.get_employee_salary_structure(frm);
-       	frm.save();
+
 	},
 		setup: function(frm) {
 
@@ -210,7 +210,7 @@ frappe.ui.form.on('Multi salary structure', {
 
 							refresh_field("salary_structure");
 							refresh_field('component');
-
+							frm.save();
 				}
 			});
 	}

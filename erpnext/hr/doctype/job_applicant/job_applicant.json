@@ -14,6 +14,7 @@
   "column_break_3",
   "social_status",
   "status",
+  "workflow_status",
   "national_id",
   "job_title",
   "source",
@@ -59,7 +60,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Open\nReplied\nRejected\nHold\nAccepted",
+   "options": "Open\nReplied\nRejected\nHold\nAccepted\nDataBank",
    "reqd": 1
   },
   {
@@ -212,11 +213,19 @@
    "label": "Military Status",
    "options": "Exempted\nFinished\nPostponed\nnot yet",
    "reqd": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "workflow_status",
+   "fieldtype": "Select",
+   "label": "Workflow Status",
+   "options": "Pending\nHR Accepted\nHR Rejected\nTechnical Accepted\nTechnical Rejected\nMangerial Accepted\nMangerial Rejected",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 1,
- "modified": "2021-01-12 10:26:07.453783",
+ "modified": "2021-01-12 11:31:39.293135",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Job Applicant",

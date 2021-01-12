@@ -65,7 +65,7 @@
   }
  ],
  "in_create": 1,
- "modified": "2020-11-25 11:10:07.558809",
+ "modified": "2021-01-12 15:16:55.742647",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Device Log",
@@ -79,6 +79,28 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
    "share": 1,
    "write": 1
   }

@@ -59,7 +59,7 @@ class PayrollMonth(Document):
 		return([i[0] for i in a])
 	def set_start_date (self):
 		if not self.year:
-			return 
+			return
 		start_date = None
 		attendance_start_date = None
 		last_doc = frappe.db.sql("""
