@@ -60,6 +60,12 @@ def getColumns(filters):
             'fieldtype': "Data",
             "width": 100
         },
+        {
+            'fieldname': "value",
+            'label': _("Value"),
+            'fieldtype': "Data",
+            "width": 100
+        },
 
 
     ]
@@ -82,7 +88,8 @@ def getdata(filters):
                  ,posting_date as 'date',
                    `tabStock Entry`.rejected_warehouse as 'rejWarehouse',
                    rejected_quantity as 'rejectedQ',
-                   reason_of_rejection as 'reason'
+                   reason_of_rejection as 'reason',
+                   rejected_quantity * `tabStock Entry Detail`.valuation_rate as 'value'
             from `tabStock Entry Detail`
             inner join
                 `tabStock Entry`
