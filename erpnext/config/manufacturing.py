@@ -158,6 +158,12 @@ def get_data():
 					"is_query_report": True,
 					"name": "BOM Stock Report",
 					"doctype": "BOM"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Rejected Items",
+					"doctype": "Stock Entry"
 				}
 			]
 		},
