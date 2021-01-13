@@ -56,14 +56,12 @@
    "fieldname": "start_date",
    "fieldtype": "Date",
    "label": "Start Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
    "label": "End Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -138,7 +136,6 @@
    "fieldname": "attendance_start_date",
    "fieldtype": "Date",
    "label": "Start Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -149,7 +146,6 @@
    "fieldname": "attendance_end_date",
    "fieldtype": "Date",
    "label": "End Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -162,7 +158,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-27 15:47:30.063277",
+ "modified": "2021-01-13 09:58:31.058286",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Payroll Month",
