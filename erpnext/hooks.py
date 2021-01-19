@@ -551,7 +551,7 @@ global_search_doctypes = {
 
 jenv = {
 	"methods": [
-		"get_jinja_data:erpnext.hr.doctype.insurance_organization.insurance_organization.get_jinja_data",
+		#"get_jinja_data:erpnext.hr.doctype.insurance_organization.insurance_organization.get_jinja_data",
 
 	]
 }

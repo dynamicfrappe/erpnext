@@ -10,15 +10,6 @@ frappe.ui.form.on('Job Opening', {
 				}
 			};
 		});
-		if (frm.is_new())
-		{
-			var row = frm.add_child("approvrers");
-			row.agreement_type = "HR Agreement"
-			var row1 = frm.add_child("approvrers");
-			row1.agreement_type = "Technical Agreement"
-			var row2 = frm.add_child("approvrers");
-			row2.agreement_type = "Mangerial Agreement"
-		}
 	},
 	designation: function(frm) {
 		if(frm.doc.designation && frm.doc.company){

@@ -1,41 +1,25 @@
 {
+ "actions": [],
  "allow_rename": 1,
  "autoname": "HR-APP-.YYYY.-.#####",
  "creation": "2013-01-29 19:25:37",
  "description": "Applicant for a Job",
  "doctype": "DocType",
  "document_type": "Document",
+ "email_append_to": 1,
  "engine": "InnoDB",
  "field_order": [
   "applicant_name",
   "email_id",
-  "address",
-  "military_status",
-  "column_break_3",
-  "social_status",
   "status",
-  "workflow_status",
-  "national_id",
+  "column_break_3",
   "job_title",
   "source",
   "source_name",
-  "qualification_section",
-  "degree",
-  "university",
-  "column_break_18",
-  "graduation_date",
-  "grade",
-  "courses_section",
-  "courses",
-  "work_experience_section",
-  "work_experience",
-  "additional_section",
-  "has_license",
-  "has_laptop",
-  "has_car",
   "section_break_6",
-  "resume_attachment",
-  "cover_letter"
+  "notes",
+  "cover_letter",
+  "resume_attachment"
  ],
  "fields": [
   {
@@ -60,7 +44,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Open\nReplied\nRejected\nHold\nAccepted\nDataBank",
+   "options": "Open\nReplied\nRejected\nHold\nAccepted",
    "reqd": 1
   },
   {
@@ -90,8 +74,7 @@
   },
   {
    "fieldname": "section_break_6",
-   "fieldtype": "Section Break",
-   "label": "Upload Your CV"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "cover_letter",
@@ -101,131 +84,19 @@
   {
    "fieldname": "resume_attachment",
    "fieldtype": "Attach",
-   "label": "Resume Attachment",
-   "reqd": 1
+   "label": "Resume Attachment"
   },
   {
-   "fieldname": "address",
+   "fieldname": "notes",
    "fieldtype": "Data",
-   "label": "Address"
-  },
-  {
-   "default": "Married",
-   "fieldname": "social_status",
-   "fieldtype": "Select",
-   "label": "Social Status",
-   "options": "Married\nSingle\nEngaged",
-   "reqd": 1
-  },
-  {
-   "fieldname": "national_id",
-   "fieldtype": "Data",
-   "label": "National ID"
-  },
-  {
-   "fieldname": "qualification_section",
-   "fieldtype": "Section Break",
-   "label": "Qualification"
-  },
-  {
-   "fieldname": "degree",
-   "fieldtype": "Data",
-   "label": "Degree",
-   "reqd": 1
-  },
-  {
-   "fieldname": "university",
-   "fieldtype": "Data",
-   "label": "University",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_18",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "graduation_date",
-   "fieldtype": "Date",
-   "label": "Graduation Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "grade",
-   "fieldtype": "Select",
-   "label": "Grade",
-   "options": "Excellent\nVery Good\nGood",
-   "reqd": 1
-  },
-  {
-   "fieldname": "courses_section",
-   "fieldtype": "Section Break",
-   "label": "Courses"
-  },
-  {
-   "fieldname": "courses",
-   "fieldtype": "Table",
-   "label": "Courses",
-   "options": "Job Applicants Courses",
-   "reqd": 1
-  },
-  {
-   "fieldname": "work_experience_section",
-   "fieldtype": "Section Break",
-   "label": "Work Experience"
-  },
-  {
-   "fieldname": "work_experience",
-   "fieldtype": "Table",
-   "label": "Work Experience",
-   "options": "job Applicant work experiances",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "has_license",
-   "fieldtype": "Check",
-   "label": "Has License",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "has_laptop",
-   "fieldtype": "Check",
-   "label": "Has Laptop",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "has_car",
-   "fieldtype": "Check",
-   "label": "Has Car",
-   "reqd": 1
-  },
-  {
-   "fieldname": "additional_section",
-   "fieldtype": "Section Break",
-   "label": "Additional"
-  },
-  {
-   "default": "Finished",
-   "fieldname": "military_status",
-   "fieldtype": "Select",
-   "label": "Military Status",
-   "options": "Exempted\nFinished\nPostponed\nnot yet",
-   "reqd": 1
-  },
-  {
-   "default": "Pending",
-   "fieldname": "workflow_status",
-   "fieldtype": "Select",
-   "label": "Workflow Status",
-   "options": "Pending\nHR Accepted\nHR Rejected\nTechnical Accepted\nTechnical Rejected\nMangerial Accepted\nMangerial Rejected",
+   "label": "Notes",
    "read_only": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 1,
- "modified": "2021-01-12 11:31:39.293135",
+ "links": [],
+ "modified": "2020-01-13 16:19:39.113330",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Job Applicant",
@@ -244,7 +115,9 @@
   }
  ],
  "search_fields": "applicant_name",
+ "sender_field": "email_id",
  "sort_field": "modified",
  "sort_order": "ASC",
+ "subject_field": "notes",
  "title_field": "applicant_name"
 }

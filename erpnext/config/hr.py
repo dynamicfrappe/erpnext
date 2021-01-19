@@ -33,14 +33,6 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Employee Contract",
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Contract Type",
-				},
-				{
-					"type": "doctype",
 					"name": "Employee Group",
 					"dependencies": ["Employee"]
 				},
@@ -48,25 +40,6 @@ def get_data():
 					"type": "doctype",
 					"name": "Employee Health Insurance"
 				},
-				{
-					"type": "doctype",
-					"name": "Employee Document"
-				},
-				{
-					"type": "doctype",
-					"name": "Employee document type"
-				},
-				{
-				"label":"Document Designation Templates",
-					"type": "doctype",
-
-					"name": "Employee Designation Templates"
-				},
-					{
-					"type": "doctype",
-					"name": "Employee Documents Notification"
-				},
-
 			]
 		},
 		{
@@ -78,10 +51,6 @@ def get_data():
 					"hide_count": True,
 					"onboard": 1,
 					"dependencies": ["Employee"]
-				},
-				{
-					"type": "doctype",
-					"name": "Attendance Rule"
 				},
 				{
 					"type": "doctype",
@@ -107,38 +76,6 @@ def get_data():
 					"dependencies": ["Employee"]
 				},
 				{
-					"type": "doctype",
-					"name": "Device",
-					"hide_count": True,
-					"dependencies": ["Employee"]
-				},
-				{
-					"type": "doctype",
-					"name": "Device Log",
-					"hide_count": True,
-					"dependencies": ["Device"]
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Attendance Logs",
-					"hide_count": True,
-					"dependencies": ["Device Log"]
-				},
-				{
-					"type": "doctype",
-					"name": "Attendance Calculation",
-					"hide_count": True,
-					"dependencies": ["Device Log"]
-				},
-				{
-					"label" : "Monthly Attendance Sheet Details" ,
-					"type": "report",
-					"is_query_report": True,
-					"name": "Attendance Sheet",
-					"doctype": "Employee Attendance Logs"
-				},
-				{
-					"label" : "Monthly Attendance Sheet" ,
 					"type": "report",
 					"is_query_report": True,
 					"name": "Monthly Attendance Sheet",
@@ -146,98 +83,6 @@ def get_data():
 				},
 			]
 		},
-		{
-		 "label":_("Business Trips And Mission"),
-		 "items": [
-				 {
-					"type": "doctype",
-					"name": "Business Trip"
-				},
-				{
-					"type": "doctype",
-					"name": "Mission",
-					"dependencies": ["Mission Destination"]
-				},
-				{
-					"type": "doctype",
-					"name": "Mission Destination"
-				},
-				{
-					"type": "doctype",
-					"name": "Permission",
-					"dependencies": ["Permission Type"]
-
-				},
-				{
-					"type": "doctype",
-					"name": "Permission Type"
-				}
-				
-		 ]
-		}
-		# ,
-		# {
-		#  "label":_("New PayRoll "),
-		#  "items": [
-		#  		{
-		# 			"type": "doctype",
-		# 			"name": "Payroll Month"
-		#
-		# 		},
-		# 		 {
-		# 			"type": "doctype",
-		# 			"name": "Multi Payroll"
-		# 		},
-		# 		{
-		# 			"type": "doctype",
-		# 			"name": "Salary Structure Type",
-		# 		},
-		#
-		# 		{
-		# 			"type": "doctype",
-		# 			"name": "Multi salary structure"
-		# 		},
-		# 		{
-		# 			"type": "doctype",
-		# 			"name": "Monthly Salary Slip",
-		# 			"dependencies": ["Permission Type"]
-		#
-		# 		},
-		#
-		#
-		#  ]
-		# }
-		,
-		{
-		 "label":_("Employee Penalties"),
-		 "items": [
-				 {
-					"type": "doctype",
-					"name": "Employee Penality"
-				},
-				{
-					"type": "doctype",
-					"name": "Penality Type"
-				},
-				{
-					"type": "doctype",
-					"name": "Warnings",
-					"dependencies": ["Warnings Types"]
-				},
-				{
-					"type": "doctype",
-					"name": "Warnings Types"
-				},
-				{
-					"type": "doctype",
-					"name": "Violations",
-					"dependencies": ["Penality Type"]
-
-				}
-				
-		 ]
-		}
-		,
 		{
 			"label": _("Leaves"),
 			"items": [
@@ -304,35 +149,31 @@ def get_data():
 					"type": "doctype",
 					"name": "Salary Structure",
 					"onboard": 1,
-				},{
+				},
+				{
 					"type": "doctype",
-					"name": "Salary Structure Type",
+					"name": "Salary Structure Assignment",
+					"onboard": 1,
+					"dependencies": ["Salary Structure", "Employee"],
+				},
+				{
+					"type": "doctype",
+					"name": "Payroll Entry",
 					"onboard": 1,
 				},
 				{
 					"type": "doctype",
-					"name": "Multi salary structure",
-					"onboard": 1,
-					"dependencies": ["Salary Structure", "Employee","Salary Structure Type"],
-				},
-				{
-					"type": "doctype",
-					"name": "Multi Payroll",
+					"name": "Salary Slip",
 					"onboard": 1,
 				},
 				{
 					"type": "doctype",
-					"name": "Monthly Salary Slip",
-					"onboard": 1,
+					"name": "Payroll Period",
 				},
 				{
 					"type": "doctype",
-					"name": "Payroll Month",
+					"name": "Income Tax Slab",
 				},
-				# {
-				# 	"type": "doctype",
-				# 	"name": "Income Tax Slab",
-				# },
 				{
 					"type": "doctype",
 					"name": "Salary Component",
@@ -341,22 +182,22 @@ def get_data():
 					"type": "doctype",
 					"name": "Additional Salary",
 				},
-				# {
-				# 	"type": "doctype",
-				# 	"name": "Retention Bonus",
-				# 	"dependencies": ["Employee"]
-				# },
-				# {
-				# 	"type": "doctype",
-				# 	"name": "Employee Incentive",
-				# 	"dependencies": ["Employee"]
-				# },
-				# {
-				# 	"type": "report",
-				# 	"is_query_report": True,
-				# 	"name": "Salary Register",
-				# 	"doctype": "Salary Slip"
-				# },
+				{
+					"type": "doctype",
+					"name": "Retention Bonus",
+					"dependencies": ["Employee"]
+				},
+				{
+					"type": "doctype",
+					"name": "Employee Incentive",
+					"dependencies": ["Employee"]
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Salary Register",
+					"doctype": "Salary Slip"
+				},
 			]
 		},
 		{
@@ -455,6 +296,10 @@ def get_data():
 					"type": "doctype",
 					"name": "Job Offer",
 					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Appointment Letter",
 				},
 				{
 					"type": "doctype",
@@ -560,49 +405,6 @@ def get_data():
 				},
 			]
 		},
-			{
-			"label": _("Social Insurance"),
-			"items": [
-				{
-					"type": "doctype",
-					"name": "Insurance Office",
-				},
-				{
-					"type": "doctype",
-					"name": "Insurance Organization",
-				},
-				{
-					"type": "doctype",
-					"name": "Job insurance codes",
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Social Insurance Data",
-				},
-				{
-					"type": "doctype",
-					"name": "Social Insurance Settings",
-				},
-					{
-					"type": "doctype",
-					"name": "Government",
-				},
-			]
-		},
-					{
-			"label": _("Medical Insurance"),
-			"items": [
-				{
-					"type": "doctype",
-					"name": "Medical Insurance Document",
-				},
-				{
-					"type": "doctype",
-					"name": "Employee Medical Insurance Document",
-				},
-			
-			]
-		},
 		{
 			"label": _("Fleet Management"),
 			"items": [
@@ -629,10 +431,6 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "HR Settings",
-				},
-				{
-					"type": "doctype",
-					"name": "Medical Insurance Document",
 				},
 				{
 					"type": "doctype",
@@ -667,23 +465,6 @@ def get_data():
 					"name": "Department Analytics",
 					"doctype": "Employee"
 				},
-				{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Employee Documents Report",
-					"doctype": "Employee Document"
-				},{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Income Tax Settlement",
-					"doctype": "Monthly Salary Slip"
-				},{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Social Insurance Value",
-					"doctype": "Employee Social Insurance Data"
-				}
 			]
 		},
 	]
-

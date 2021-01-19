@@ -3,25 +3,6 @@
 
 frappe.provide("erpnext.hr");
 erpnext.hr.EmployeeController = frappe.ui.form.Controller.extend({
-
-get_grade_salary_structure : function(frm) {
-
-
-    if (!frm.grade)
-    {
-        frappe.throw(__("Please Set Employee Grade First"));
-        return;
-    }
-         frappe.call({
-    	         doc:frm,
-                 method:'get_grade_SalaryStructure',
-                 callback(r) {
-                 refresh_field("employee_salary_structure_detail");
-                }
-          });
-
-    },
-
 	setup: function() {
 		this.frm.fields_dict.user_id.get_query = function(doc, cdt, cdn) {
 			return {
@@ -31,29 +12,8 @@ get_grade_salary_structure : function(frm) {
 		}
 		this.frm.fields_dict.reports_to.get_query = function(doc, cdt, cdn) {
 			return { query: "erpnext.controllers.queries.employee_query"} }
-
-
-
 	},
-    designation:function(frm){
-    	         frappe.call({
-    	         doc:frm,
-                 method:'gettemp',
-                callback(r) {
-                  refresh_field("required_document");
-                }
-    });
 
-    },
-
-    national_id:function(frm){
-    	
-    	var nationalID=frm.national_id;
-    	if((nationalID.length!=14 || isNaN(nationalID)) && nationalID.length!=0){
-    		frappe.msgprint("please enter valid ID")
-    		cur_frm.set_value("national_id","")
-    	}
-    },
 	refresh: function() {
 		var me = this;
 		erpnext.toggle_naming_series();
@@ -65,7 +25,6 @@ get_grade_salary_structure : function(frm) {
 			args: {date_of_birth: this.frm.doc.date_of_birth}
 		});
 	},
-
 
 	salutation: function() {
 		if(this.frm.doc.salutation) {
@@ -88,18 +47,6 @@ frappe.ui.form.on('Employee',{
 		});
 	},
 	onload:function(frm) {
-		// if (!frm.doc.total_working_hours_per_day){
-		// 	frappe.db.get_single_value("HR Settings", "total_hours_per_day").then(duration => {
-		// 		if (duration) {
-		// 			debugger;
-		// 			frm.doc.total_working_hours_per_day = duration;
-		// 			refresh_field("total_working_hours_per_day");
-		// 		}
-		//
-		// 	});
-		// }
-
-
 		frm.set_query("department", function() {
 			return {
 				"filters": {
@@ -108,8 +55,8 @@ frappe.ui.form.on('Employee',{
 			};
 		});
 	},
-	prefered_contact_email:function(frm){		
-		frm.events.update_contact(frm)		
+	prefered_contact_email:function(frm){
+		frm.events.update_contact(frm)
 	},
 	personal_email:function(frm){
 		frm.events.update_contact(frm)
@@ -147,157 +94,6 @@ frappe.ui.form.on('Employee',{
 				frm.set_value("user_id", r.message)
 			}
 		});
-	},
-	get_members:function(frm) {
-		if (frm.doc.family_members){
-				frm.clear_table("members");
-				for (var j = 0; j < frm.doc.family_members.length; j++) {
-
-					var cur_row = frm.doc.family_members[j] ;
-					if (cur_row.include_in_medical_insurance){
-						var new_row = frm.add_child("members");
-				    	new_row.member = cur_row.name1;
-				        new_row.age = cur_row.age;
-				        new_row.company_share_ratio = 50 ;
-				        new_row.employee_share_ratio = 50 ;
-
-				        new_row.relation = cur_row.relation;
-
-					}
-
-				}
-			    frm.refresh_field("members");
-
-      	}
-	}
-	,
-	company_share_ratio:function (frm){
-		var cur_row = frm.doc ;
-		console.log(cur_row);
-		debugger;
-		if (cur_row.company_share_ratio > 100)
-			cur_row.company_share_ratio = 100 ;
-		if (cur_row.company_share_ratio < 0)
-			cur_row.company_share_ratio = 0 ;
-		cur_row.employee_share_ratio = 100 - cur_row.company_share_ratio ;
-		refresh_field("company_share_ratio");
-		refresh_field("employee_share_ratio");
-	}
-	,
-	employee_share_ratio:function (frm){
-		var cur_row = frm.doc ;
-		if (cur_row.employee_share_ratio > 100)
-			cur_row.employee_share_ratio = 100 ;
-		if (cur_row.employee_share_ratio < 0)
-			cur_row.employee_share_ratio = 0 ;
-		cur_row.company_share_ratio = 100 - cur_row.employee_share_ratio ;
-		refresh_field("company_share_ratio");
-		refresh_field("employee_share_ratio");
-
 	}
 });
-frappe.ui.form.on('Required Document',"isrecived",function(frm,cdt,cdn){
-		var cur_row = locals [cdt] [cdn] ;
-		if((cur_row.hasperiod==1 || cur_row.ismilitarystatus==1) && cur_row.isrecived==1){
-			var d = new frappe.ui.Dialog({
-			title: __('Document Details'),
-			fields: [
-
-				{
-					"label": "Start Date",
-					"fieldname": "start_date",
-					"fieldtype": "Date",
-					 "reqd": 1
-
-				},
-				{
-					"fieldname": "col_break",
-					"fieldtype": "Column Break",
-				},
-				{
-					"label": "Document Number",
-					"fieldname": "doc_number",
-					"fieldtype": "Data"
-
-				},
-
-
-			],
-			primary_action: function() {
-				var data = d.get_values();
-              // frappe.msgprint("hellooo")
-				frappe.call({
-
-					"method": "createEmployeeDocument",
-					"doc": frm.doc,
-					args:{
-						"startDate":data.start_date ,
-						"attach":cur_row.document || "",
-						 "type":cur_row.document_type,
-						"doc_number":data.doc_number || "",
-						"period":cur_row.documentperiod || ""
-					},
-					callback: function(r) {
-                           d.hide()
-						console.log("hello")
-					}
-				});
-			},
-			primary_action_label: __('Add')
-		});
-			d.show();
-		}
-	}
-);
-
-
-
-frappe.ui.form.on('Employee Medical Insurance Members',"company_share_ratio",function(frm,cdt,cdn){
-		var cur_row = locals [cdt] [cdn] ;
-		console.log(cur_row);
-		debugger;
-		if (cur_row.company_share_ratio > 100)
-			cur_row.company_share_ratio = 100 ;
-		if (cur_row.company_share_ratio < 0)
-			cur_row.company_share_ratio = 0 ;
-		cur_row.employee_share_ratio = 100 - cur_row.company_share_ratio ;
-		refresh_field("company_share_ratio", cur_row.name, cur_row.parentfield);
-		refresh_field("employee_share_ratio", cur_row.name, cur_row.parentfield);
-
-
-
-	}
-);
-frappe.ui.form.on('Employee Medical Insurance Members',"employee_share_ratio",function(frm,cdt,cdn){
-		var cur_row = locals [cdt] [cdn] ;
-		if (cur_row.employee_share_ratio > 100)
-			cur_row.employee_share_ratio = 100 ;
-		if (cur_row.employee_share_ratio < 0)
-			cur_row.employee_share_ratio = 0 ;
-		cur_row.company_share_ratio = 100 - cur_row.employee_share_ratio ;
-		refresh_field("company_share_ratio", cur_row.name, cur_row.parentfield);
-		refresh_field("employee_share_ratio", cur_row.name, cur_row.parentfield);
-
-	}
-
-);
 cur_frm.cscript = new erpnext.hr.EmployeeController({frm: cur_frm});
-
-
-frappe.ui.form.on('Required Document',"isrecived",function(frm,cdt,cdn){
-		var grid_row = locals[cdt][cdn];
-		if (grid_row.isrecived==0) {
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', true).prop("disabled", true);
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', true).prop("disabled", true);
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borroweddate']").prop('readonly', true).prop("disabled", true);
-
-		}else {
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borowedby']").prop('readonly', false).prop("disabled", false);
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borrowed']").prop('readonly', false).prop("disabled", false);
-			$("div[data-idx='" + grid_row.idx + "']").find("input[data-fieldname='borroweddate']").prop('readonly', false).prop("disabled", false);
-		}
-
-	}
-
-);
-

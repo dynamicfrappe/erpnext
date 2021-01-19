@@ -6,6 +6,9 @@ def get_data():
 		'heatmap': True,
 		'heatmap_message': _('This is based on the attendance of this Employee'),
 		'fieldname': 'employee',
+		'non_standard_fieldnames': {
+			'Bank Account': 'party'
+		},
 		'transactions': [
 			{
 				'label': _('Leave and Attendance'),
@@ -13,7 +16,7 @@ def get_data():
 			},
 			{
 				'label': _('Lifecycle'),
-				'items': ['Employee Contract','Employee Transfer', 'Employee Promotion', 'Employee Separation']
+				'items': ['Employee Transfer', 'Employee Promotion', 'Employee Separation']
 			},
 			{
 				'label': _('Shift'),
@@ -29,11 +32,11 @@ def get_data():
 			},
 			{
 				'label': _('Evaluation'),
-				'items': ['Appraisal' , 'Employee Document']
+				'items': ['Appraisal']
 			},
 			{
 				'label': _('Payroll'),
-				'items': ['Multi salary structure', 'Monthly Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus']
+				'items': ['Salary Structure Assignment', 'Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus', 'Bank Account']
 			},
 			{
 				'label': _('Training'),

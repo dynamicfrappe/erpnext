@@ -13,9 +13,6 @@ from frappe.model.document import Document
 from erpnext.utilities.transaction_base import delete_events
 from frappe.utils.nestedset import NestedSet
 from erpnext.hr.doctype.job_offer.job_offer import get_staffing_plan_detail
-import collections
-import datetime
-from dateutil.relativedelta import relativedelta
 
 class EmployeeUserDisabledError(frappe.ValidationError): pass
 class EmployeeLeftValidationError(frappe.ValidationError): pass
@@ -37,52 +34,10 @@ class Employee(NestedSet):
 				self.name = self.employee_name
 
 		self.employee = self.name
-	def gettemp(self):
-		#frappe.throw(str(self.designation))
-		self.set("required_document",[])
-		templateItem=[]
-		template=frappe.db.sql("""select * from `tabEmployee Designation Templates` where designation='{}'""".format(self.designation),as_dict=1)
-		if template:
-			templateItem=frappe.db.sql("""select * from `tabDesignation Templates` where parent='{}'""".format(template[0]["name"]),as_dict=1)
-		
-		if templateItem:
-			for item in templateItem:
-			
-				self.append("required_document", {"document_type": item.employee_document})
 
 	def validate(self):
 		from erpnext.controllers.status_updater import validate_status
 		validate_status(self.status, ["Active", "Temporary Leave", "Left"])
-		try:
-			employeeDocsfromdb = frappe.db.sql("""select * from `tabEmployee Document` where employee='{}'""".format(self.name), as_dict=1)
-			if employeeDocsfromdb:
-				for empdoc in self.required_document:
-					flag = 1
-					for dbdoc in employeeDocsfromdb:
-						if dbdoc.document_type == empdoc.document_type and dbdoc.employee==self.name:
-							flag = 0
-					if flag == 1 and empdoc.hasperiod==0 and empdoc.ismilitarystatus==0 and empdoc.isrecived==1:
-						doc = frappe.new_doc('Employee Document')
-						doc.employee = self.name
-						doc.employeename = str(self.first_name) + str(self.last_name)
-						doc.document_type = empdoc.document_type
-						doc.is_recived = 1
-						doc.document = empdoc.document
-						doc.save()
-			else:
-				for empdoc in self.required_document:
-					doc = frappe.new_doc('Employee Document')
-					doc.employee = self.name
-					doc.employeename = str(self.first_name) + str(self.last_name)
-					doc.document_type = empdoc.document_type
-					doc.is_recived = 1
-					doc.document = empdoc.document
-					doc.save()
-		except:
-			print("exist")
-
-
-
 
 		self.employee = self.name
 		self.set_employee_name()
@@ -96,83 +51,17 @@ class Employee(NestedSet):
 
 		if self.user_id:
 			self.validate_user_details()
-
-
 		else:
 			existing_user_id = frappe.db.get_value("Employee", self.name, "user_id")
 			if existing_user_id:
 				remove_user_permission(
 					"Employee", self.name, existing_user_id)
-		if self.outsource==1:
-			name="Item"+str(self.employee_name)
-			itemCode=frappe.db.sql("""select item_name from tabItem where name='{}'""".format(name),as_dict=1)
-			if itemCode:
-				pass
-			else:
-				existing_outsource = frappe.db.sql("select outsource from tabEmployee where name='{}'".format(self.name),as_dict=1)
-				if existing_outsource:
-					if existing_outsource[0]["outsource"]==0:
-						self.checkoutsource()
 
-				else:
-					self.checkoutsource()
-		self.validate_salary_structure()
-
-					
-	def checkoutsource(self):
-		doc = frappe.new_doc('Item')
-		doc.item_group="Services"
-		doc.item_code="Item " + str(self.employee_name)
-		doc.item_name="Item " + str(self.employee_name)
-		doc.is_stock_item=0
-		doc.include_item_in_manufacturing=0
-		doc.save()
-		frappe.db.commit()
+	def after_rename(self, old, new, merge):
+		self.db_set("employee", new)
 
 	def set_employee_name(self):
 		self.employee_name = ' '.join(filter(lambda x: x, [self.first_name, self.middle_name, self.last_name]))
-
-	def validate_salary_structure(self):
-		if self.employee_salary_structure_detail :
-			salary_structure_list = [x.salary_structure for x in self.employee_salary_structure_detail]
-			salary_structure_type_list = [x.type for x in self.employee_salary_structure_detail]
-
-			duplicated_salary_structure = [item for item, count in collections.Counter(salary_structure_list).items() if count > 1]
-			duplicated_salary_structure_type= [item for item, count in collections.Counter(salary_structure_type_list).items() if count > 1]
-
-			if len(duplicated_salary_structure):
-				message = '<br/> <ol>' + " ".join(
-					[str('<li>' + str(item) + '</li>') for item in duplicated_salary_structure])
-				frappe.throw(_("Salary Structure is duplicated {} ".format(message)))
-			if len(duplicated_salary_structure_type):
-				message = '<br/> <ol>' + " ".join([str('<li>' + str(item) + '</li>')for item in duplicated_salary_structure_type])
-				frappe.throw(_("Salary Structure Type is duplicated {} ".format(message)))
-			is_main = 0
-			for i in self.employee_salary_structure_detail:
-				type = frappe.get_doc("Salary Structure Type" , i.type)
-				if type.is_main:
-					is_main = 1
-					break
-			if not is_main:
-				frappe.throw(_("Salary Structure Type is must have main".format()))
-
-
-	def get_grade_SalaryStructure(self):
-		if self.grade :
-			grade = frappe.get_doc("Employee Grade" , self.grade)
-			if not grade.default_salary_structure:
-				frappe.throw(_("Please Set Default Salary Strucutre in grade {}".format(self.grade)))
-				return
-			type = frappe.db.get_value("Salary Structure Type" , {"is_main":1} , ['name'])
-			d = {
-				"salary_structure":grade.default_salary_structure
-					,"type": type
-			}
-			if d.get('salary_structure') not in [item.salary_structure for item in self.employee_salary_structure_detail] and d.get('type') not in [item.type for item in self.employee_salary_structure_detail] :
-				self.append("employee_salary_structure_detail", d)
-			else :
-				frappe.throw(_("Salary Structure {} or type {} is already added".format(d.get('salary_structure') , d.get('type'))))
-
 
 	def validate_user_details(self):
 		data = frappe.db.get_value('User',
@@ -266,8 +155,8 @@ class Employee(NestedSet):
 		elif self.date_of_retirement and self.date_of_joining and (getdate(self.date_of_retirement) <= getdate(self.date_of_joining)):
 			throw(_("Date Of Retirement must be greater than Date of Joining"))
 
-		elif self.relieving_date and self.date_of_joining and (getdate(self.relieving_date) <= getdate(self.date_of_joining)):
-			throw(_("Relieving Date must be greater than Date of Joining"))
+		elif self.relieving_date and self.date_of_joining and (getdate(self.relieving_date) < getdate(self.date_of_joining)):
+			throw(_("Relieving Date must be greater than or equal to Date of Joining"))
 
 		elif self.contract_end_date and self.date_of_joining and (getdate(self.contract_end_date) <= getdate(self.date_of_joining)):
 			throw(_("Contract End Date must be greater than Date of Joining"))
@@ -278,6 +167,12 @@ class Employee(NestedSet):
 		if self.personal_email:
 			validate_email_address(self.personal_email, True)
 
+	def set_preferred_email(self):
+		preferred_email_field = frappe.scrub(self.prefered_contact_email)
+		if preferred_email_field:
+			preferred_email = self.get(preferred_email_field)
+			self.prefered_email = preferred_email
+
 	def validate_status(self):
 		if self.status == 'Left':
 			reports_to = frappe.db.get_all('Employee',
@@ -286,8 +181,11 @@ class Employee(NestedSet):
 			)
 			if reports_to:
 				link_to_employees = [frappe.utils.get_link_to_form('Employee', employee.name, label=employee.employee_name) for employee in reports_to]
-				throw(_("Employee status cannot be set to 'Left' as following employees are currently reporting to this employee:&nbsp;")
-					+ ', '.join(link_to_employees), EmployeeLeftValidationError)
+				message = _("The following employees are currently still reporting to {0}:").format(frappe.bold(self.employee_name))
+				message += "<br><br><ul><li>" + "</li><li>".join(link_to_employees)
+				message += "</li></ul><br>"
+				message += _("Please make sure the employees above report to another Active employee.")
+				throw(message, EmployeeLeftValidationError, _("Cannot Relieve Employee"))
 			if not self.relieving_date:
 				throw(_("Please enter relieving date."))
 
@@ -320,7 +218,7 @@ class Employee(NestedSet):
 
 	def validate_preferred_email(self):
 		if self.prefered_contact_email and not self.get(scrub(self.prefered_contact_email)):
-			frappe.msgprint(_("Please enter " + self.prefered_contact_email))
+			frappe.msgprint(_("Please enter {0}").format(self.prefered_contact_email))
 
 	def validate_onboarding_process(self):
 		employee_onboarding = frappe.get_all("Employee Onboarding",
@@ -338,22 +236,6 @@ class Employee(NestedSet):
 			self.get('user_id') != prev_doc.get('user_id')):
 			frappe.cache().hdel('employees_with_number', cell_number)
 			frappe.cache().hdel('employees_with_number', prev_number)
-
-	def createEmployeeDocument(self,startDate,attach,type,doc_number,period):
-		self.save()
-		sdate=datetime.datetime.strptime(startDate, '%Y-%m-%d')
-		doc = frappe.new_doc('Employee Document')
-		doc.employee = self.name
-		doc.employeename = str(self.first_name) + str(self.last_name)
-		doc.document_type = type
-		doc.is_recived=1
-		doc.document=attach
-		doc.doc_number=doc_number
-		doc.start_date=startDate
-		doc.end_date=str(sdate+relativedelta(months=+int(period)))
-
-		doc.save()
-
 
 def get_timeline_data(doctype, name):
 	'''Return timeline for attendance'''
@@ -453,7 +335,7 @@ def get_employees_who_are_born_today():
 		as_dict=True
 	)
 
-@frappe.whitelist()
+
 def get_holiday_list_for_employee(employee, raise_exception=True):
 	if employee:
 		holiday_list, company = frappe.db.get_value("Employee", employee, ["holiday_list", "company"])
@@ -537,7 +419,11 @@ def get_employee_emails(employee_list):
 
 @frappe.whitelist()
 def get_children(doctype, parent=None, company=None, is_root=False, is_tree=False):
-	filters = [['company', '=', company]]
+
+	filters = [['status', '!=', 'Left']]
+	if company and company != 'All Companies':
+		filters.append(['company', '=', company])
+
 	fields = ['name as value', 'employee_name as title']
 
 	if is_root:

@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_import": 1,
  "autoname": "EMP-CKIN-.MM.-.YYYY.-.######",
  "creation": "2019-06-10 11:56:34.536413",
@@ -17,8 +18,7 @@
   "shift_start",
   "shift_end",
   "shift_actual_start",
-  "shift_actual_end",
-  "amended_from"
+  "shift_actual_end"
  ],
  "fields": [
   {
@@ -41,8 +41,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Log Type",
-   "options": "\nIN\nOUT",
-   "reqd": 1
+   "options": "\nIN\nOUT"
   },
   {
    "fieldname": "shift",
@@ -105,20 +104,11 @@
    "fieldtype": "Datetime",
    "hidden": 1,
    "label": "Shift Actual End"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Employee Checkin",
-   "print_hide": 1,
-   "read_only": 1
   }
  ],
- "is_submittable": 1,
- "modified": "2020-12-29 17:50:58.517958",
- "modified_by": "ahmed.awad@dynamiceg.com",
+ "links": [],
+ "modified": "2020-07-08 11:02:32.660986",
+ "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Checkin",
  "owner": "Administrator",
@@ -134,7 +124,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "submit": 1,
    "write": 1
   },
   {

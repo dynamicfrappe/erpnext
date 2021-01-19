@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
@@ -12,27 +13,25 @@
   "basic_information",
   "employee",
   "naming_series",
-  "salutation",
   "first_name",
   "middle_name",
   "last_name",
+  "salutation",
   "employee_name",
-  "arabic_name",
+  "employment_type",
   "image",
   "column_break1",
   "company",
   "status",
-  "employee_number",
-  "employment_type",
-  "national_id",
   "gender",
-  "outsource",
   "date_of_birth",
   "date_of_joining",
+  "employee_number",
   "emergency_contact_details",
-  "emergency_phone_number",
   "person_to_be_contacted",
   "relation",
+  "column_break_19",
+  "emergency_phone_number",
   "erpnext_user",
   "user_id",
   "create_user",
@@ -52,47 +51,35 @@
   "column_break_31",
   "grade",
   "branch",
-  "required_document_section",
-  "required_document",
+  "approvers_section",
+  "expense_approver",
+  "leave_approver",
+  "column_break_45",
+  "shift_request_approver",
   "attendance_and_leave_details",
-  "leave_policy",
   "attendance_device_id",
-  "attendance_role",
-  "enable_overtime",
-  "total_working_hours_per_day",
   "column_break_44",
   "holiday_list",
   "default_shift",
-  "leave_approver",
   "salary_information",
-  "assign_date",
-  "get_grade_salary_structure",
-  "employee_salary_structure_detail",
-  "salary_information_column_break",
   "salary_mode",
+  "payroll_cost_center",
+  "column_break_52",
   "bank_name",
   "bank_ac_no",
   "health_insurance_section",
-  "insured",
-  "medical_insurance_number",
-  "column_break_60",
-  "form_111",
-  "form_date",
-  "medical_examination",
-  "medical_examination_date",
-  "result_of_the_medical_examination",
-  "medical_examination_notes",
-  "section_break_65",
+  "health_insurance_provider",
+  "health_insurance_no",
   "contact_details",
   "cell_number",
-  "prefered_contact_email",
   "prefered_email",
-  "company_email",
   "personal_email",
   "unsubscribed",
-  "column_break4",
   "permanent_accommodation_type",
   "permanent_address",
+  "column_break4",
+  "prefered_contact_email",
+  "company_email",
   "current_accommodation_type",
   "current_address",
   "sb53",
@@ -102,9 +89,9 @@
   "date_of_issue",
   "valid_upto",
   "place_of_issue",
-  "column_break6",
   "marital_status",
   "blood_group",
+  "column_break6",
   "family_background",
   "health_details",
   "educational_qualification",
@@ -121,31 +108,11 @@
   "encashment_date",
   "exit_interview_details",
   "held_on",
-  "reason_for_resignation",
   "new_workplace",
   "feedback",
   "lft",
   "rgt",
-  "old_parent",
-  "family_details_section",
-  "family_members",
-  "medical_insurance_section",
-  "provider",
-  "document",
-  "insurance_start_date",
-  "medication_card_number",
-  "column_break_109",
-  "medication_card_recieving_date",
-  "company_share_ratio",
-  "employee_share_ratio",
-  "medical__insurance_members_section",
-  "get_members",
-  "members",
-  "employee_tax_setting_section",
-  "has_disability",
-  "column_break_131",
-  "is_consultant",
-  "item_code"
+  "old_parent"
  ],
  "fields": [
   {
@@ -240,7 +207,7 @@
    "label": "Status",
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "\nActive\nLeft",
+   "options": "Active\nLeft",
    "reqd": 1,
    "search_index": 1
   },
@@ -271,7 +238,6 @@
    "reqd": 1
   },
   {
-   "description": "You can enter any date manually",
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "label": "Date of Birth",
@@ -289,7 +255,6 @@
   },
   {
    "allow_in_quick_entry": 1,
-   "collapsible": 1,
    "fieldname": "emergency_contact_details",
    "fieldtype": "Section Break",
    "label": "Emergency Contact"
@@ -298,7 +263,8 @@
    "bold": 1,
    "fieldname": "emergency_phone_number",
    "fieldtype": "Data",
-   "label": "Emergency Phone"
+   "label": "Emergency Phone",
+   "options": "Phone"
   },
   {
    "bold": 1,
@@ -315,7 +281,7 @@
    "collapsible": 1,
    "fieldname": "erpnext_user",
    "fieldtype": "Section Break",
-   "label": "Related User"
+   "label": "ERPNext User"
   },
   {
    "description": "System User (login) ID. If set, it will become default for all HR forms.",
@@ -445,12 +411,6 @@
    "options": "Branch"
   },
   {
-   "fieldname": "leave_policy",
-   "fieldtype": "Link",
-   "label": "Leave Policy",
-   "options": "Leave Policy"
-  },
-  {
    "description": "Applicable Holiday List",
    "fieldname": "holiday_list",
    "fieldtype": "Link",
@@ -496,7 +456,19 @@
    "collapsible": 1,
    "fieldname": "health_insurance_section",
    "fieldtype": "Section Break",
-   "label": "Goverment Health Insurance"
+   "label": "Health Insurance"
+  },
+  {
+   "fieldname": "health_insurance_provider",
+   "fieldtype": "Link",
+   "label": "Health Insurance Provider",
+   "options": "Employee Health Insurance"
+  },
+  {
+   "depends_on": "eval:doc.health_insurance_provider",
+   "fieldname": "health_insurance_no",
+   "fieldtype": "Data",
+   "label": "Health Insurance No"
   },
   {
    "collapsible": 1,
@@ -507,7 +479,8 @@
   {
    "fieldname": "cell_number",
    "fieldtype": "Data",
-   "label": "Mobile"
+   "label": "Mobile",
+   "options": "Phone"
   },
   {
    "fieldname": "prefered_contact_email",
@@ -693,12 +666,13 @@
    "fieldname": "relieving_date",
    "fieldtype": "Date",
    "label": "Relieving Date",
+   "mandatory_depends_on": "eval:doc.status == \"Left\"",
    "oldfieldname": "relieving_date",
    "oldfieldtype": "Date"
   },
   {
    "fieldname": "reason_for_leaving",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Reason for Leaving",
    "oldfieldname": "reason_for_leaving",
    "oldfieldtype": "Data"
@@ -712,6 +686,7 @@
    "options": "\nYes\nNo"
   },
   {
+   "depends_on": "eval:doc.leave_encashed ==\"Yes\"",
    "fieldname": "encashment_date",
    "fieldtype": "Date",
    "label": "Encashment Date",
@@ -721,7 +696,6 @@
   {
    "fieldname": "exit_interview_details",
    "fieldtype": "Column Break",
-   "label": "Exit Interview Details",
    "oldfieldname": "col_brk6",
    "oldfieldtype": "Column Break",
    "width": "50%"
@@ -729,17 +703,9 @@
   {
    "fieldname": "held_on",
    "fieldtype": "Date",
-   "label": "Held On",
+   "label": "Exit Interview Held On",
    "oldfieldname": "held_on",
    "oldfieldtype": "Date"
-  },
-  {
-   "fieldname": "reason_for_resignation",
-   "fieldtype": "Select",
-   "label": "Reason for Resignation",
-   "oldfieldname": "reason_for_resignation",
-   "oldfieldtype": "Select",
-   "options": "\nBetter Prospects\nHealth Concerns"
   },
   {
    "fieldname": "new_workplace",
@@ -806,247 +772,48 @@
    "options": "User"
   },
   {
-   "default": "0",
-   "fieldname": "outsource",
-   "fieldtype": "Check",
-   "label": "OutSource"
-  },
-  {
-   "depends_on": "designation",
-   "fieldname": "required_document_section",
-   "fieldtype": "Section Break",
-   "label": "Required Document"
-  },
-  {
-   "fieldname": "required_document",
-   "fieldtype": "Table",
-   "label": "Required Document",
-   "options": "Required Document"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "family_details_section",
-   "fieldtype": "Section Break",
-   "label": "Family Details"
-  },
-  {
-   "fieldname": "family_members",
-   "fieldtype": "Table",
-   "label": "Family Members",
-   "options": "Employee Family Details"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "medical_insurance_section",
-   "fieldtype": "Section Break",
-   "label": "Medical Insurance"
-  },
-  {
-   "depends_on": "eval:doc.document",
-   "fetch_from": "document.insurance_provider",
-   "fieldname": "provider",
-   "fieldtype": "Link",
-   "label": "Provider",
-   "options": "Supplier"
-  },
-  {
-   "fieldname": "document",
-   "fieldtype": "Data",
-   "label": "Document"
-  },
-  {
-   "fieldname": "insurance_start_date",
-   "fieldtype": "Date",
-   "label": "Insurance Start Date"
-  },
-  {
-   "fieldname": "members",
-   "fieldtype": "Table",
-   "label": "Members",
-   "options": "Employee Medical Insurance Members",
-   "read_only": 1,
-   "width": "300%  !important"
-  },
-  {
-   "columns": 2,
-   "fieldname": "get_members",
-   "fieldtype": "Button",
-   "label": "Get Members"
-  },
-  {
-   "fieldname": "medication_card_number",
-   "fieldtype": "Data",
-   "label": "Medication card number"
-  },
-  {
-   "fieldname": "medication_card_recieving_date",
-   "fieldtype": "Date",
-   "label": "Medication card recieving date"
-  },
-  {
-   "fieldname": "company_share_ratio",
-   "fieldtype": "Float",
-   "label": "Company Share Ratio"
-  },
-  {
-   "fieldname": "employee_share_ratio",
-   "fieldtype": "Float",
-   "label": "Employee Share Ratio"
-  },
-  {
-   "fieldname": "column_break_109",
-   "fieldtype": "Column Break",
-   "width": "1%"
-  },
-  {
-   "fieldname": "national_id",
-   "fieldtype": "Data",
-   "label": "National id",
-   "reqd": 1
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "medical__insurance_members_section",
-   "fieldtype": "Section Break",
-   "label": "Medical  Insurance Members"
-  },
-  {
-   "fieldname": "total_working_hours_per_day",
-   "fieldtype": "Float",
-   "label": "Total Working Hours Per Day"
-  },
-  {
-   "fieldname": "attendance_role",
-   "fieldtype": "Link",
-   "label": "Attendance Rule",
-   "options": "Attendance Rule",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "insured",
-   "fieldtype": "Check",
-   "label": "Insured"
-  },
-  {
-   "depends_on": "eval:doc.insured",
-   "fieldname": "medical_insurance_number",
-   "fieldtype": "Data",
-   "label": "Medical Insurance Number"
-  },
-  {
-   "fieldname": "column_break_60",
+   "fieldname": "column_break_19",
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
-   "fieldname": "form_111",
-   "fieldtype": "Check",
-   "label": "FORM (111)"
-  },
-  {
-   "depends_on": "eval:doc.form_111 ;",
-   "fieldname": "form_date",
-   "fieldtype": "Date",
-   "label": "Receved Date"
-  },
-  {
-   "depends_on": "eval:doc.medical_examination;",
-   "fieldname": "result_of_the_medical_examination",
-   "fieldtype": "Small Text",
-   "label": "result of the medical examination"
-  },
-  {
-   "depends_on": "eval:doc.medical_examination ;",
-   "fieldname": "medical_examination_notes",
-   "fieldtype": "Small Text",
-   "label": " medical examination Notes"
-  },
-  {
-   "fieldname": "section_break_65",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "arabic_name",
-   "fieldtype": "Data",
-   "label": "Arabic Name"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.form_111;",
-   "fieldname": "medical_examination",
-   "fieldtype": "Check",
-   "label": "Medical Examination"
-  },
-  {
-   "depends_on": "eval:doc.medical_examination;",
-   "fieldname": "medical_examination_date",
-   "fieldtype": "Date",
-   "label": "Medical Examination Date"
-  },
-  {
-   "default": "0",
-   "fieldname": "enable_overtime",
-   "fieldtype": "Check",
-   "label": "Enable Overtime"
-  },
-  {
-   "fieldname": "employee_tax_setting_section",
-   "fieldtype": "Section Break",
-   "label": "Employee Tax Setting"
-  },
-  {
-   "default": "0",
-   "fieldname": "has_disability",
-   "fieldtype": "Check",
-   "label": "Has Disability"
-  },
-  {
-   "fieldname": "column_break_131",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_consultant",
-   "fieldtype": "Check",
-   "label": "Is Consultant"
-  },
-  {
-   "fieldname": "employee_salary_structure_detail",
-   "fieldtype": "Table",
-   "label": "Employee Salary Structure Detail",
-   "options": "Employee Salary Structure Detail",
-   "reqd": 1
-  },
-  {
-   "default": "Today",
-   "fieldname": "assign_date",
-   "fieldtype": "Date",
-   "label": "Assign Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "salary_information_column_break",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "get_grade_salary_structure",
-   "fieldtype": "Button",
-   "label": "Get Grade Salary Structure"
-  },
-  {
-   "fieldname": "item_code",
+   "fetch_from": "department.payroll_cost_center",
+   "fetch_if_empty": 1,
+   "fieldname": "payroll_cost_center",
    "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Item Code",
-   "options": "Item",
-   "read_only": 1
+   "label": "Payroll Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "column_break_52",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expense_approver",
+   "fieldtype": "Link",
+   "label": "Expense Approver",
+   "options": "User"
+  },
+  {
+   "fieldname": "approvers_section",
+   "fieldtype": "Section Break",
+   "label": "Approvers"
+  },
+  {
+   "fieldname": "column_break_45",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shift_request_approver",
+   "fieldtype": "Link",
+   "label": "Shift Request Approver",
+   "options": "User"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
- "modified": "2020-12-28 16:03:46.382420",
+ "links": [],
+ "modified": "2020-10-16 15:02:04.283657",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee",
@@ -1088,10 +855,10 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "search_fields": "employee_name",
  "show_name_in_global_search": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "employee_name",
- "track_changes": 1
+ "title_field": "employee_name"
 }

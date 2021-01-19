@@ -9,48 +9,9 @@ import frappe
 from frappe import _
 from frappe.utils import comma_and, validate_email_address
 
-sender_field = "email_id"
-
 class DuplicationError(frappe.ValidationError): pass
 
 class JobApplicant(Document):
-	def get_user_roles(self):
-		status_no = 0
-		list = frappe.db.sql("""
-			select user , agreement_type from `tabJob openening Approvrer` where parent = '{parent}' order by idx asc
-		""".format(parent = self.job_title),as_dict=1)
-		if list:
-			status_list = [x.agreement_type for x in list]
-			frappe.msgprint(str(status_list))
-			frappe.msgprint(self.workflow_status)
-			# user_list =  [x.user for x in list]
-			if self.workflow_status == 'Pending' :
-				status_no = 0
-			else:
-				if self.workflow_status in status_list:
-
-					status_no = status_list.index(self.workflow_status)
-				if status_no == len(status_list) -1 :
-					return
-			return  list [status_no]
-	def update_action (self, status , user , action):
-		if action == "Approve":
-			if status == "HR":
-				self.workflow_status = "HR Accepted"
-			if status == "Technical":
-				self.workflow_status = "Technical Accepted"
-			if status == "Mangerial":
-				self.workflow_status = "Mangerial Accepted"
-		else :
-
-			if status == "HR":
-				self.workflow_status = "HR Rejected"
-			if status == "Technical":
-				self.workflow_status = "Technical Rejected"
-			if status == "Mangerial":
-				self.workflow_status = "Mangerial Rejected"
-		self.save()
-
 	def onload(self):
 		job_offer = frappe.get_all("Job Offer", filters={"job_applicant": self.name})
 		if job_offer:
@@ -70,7 +31,6 @@ class JobApplicant(Document):
 		if not self.applicant_name and self.email_id:
 			guess = self.email_id.split('@')[0]
 			self.applicant_name = ' '.join([p.capitalize() for p in guess.split('.')])
-
 
 	def check_email_id_is_unique(self):
 		if self.email_id:
