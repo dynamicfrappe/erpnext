@@ -1233,31 +1233,33 @@ def unlink_ref_doc_from_salary_slip(ref_no):
 def generate_password_for_pdf(policy_template, employee):
 	employee = frappe.get_doc("Employee", employee)
 	return policy_template.format(**employee.as_dict())
+try:
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_emp_and_working_day_details
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import calculate_Tax
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_Employee_advance
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_social_insurance
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_medical_insurance
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import add_structure_components
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import check_sal_struct
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import calculate_component_amounts
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import add_additional_salary_components
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  get_data_for_eval
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  eval_condition_and_formula
 
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_emp_and_working_day_details
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import calculate_Tax
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_Employee_advance
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_social_insurance
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import get_medical_insurance
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import add_structure_components
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import check_sal_struct
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import calculate_component_amounts
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import add_additional_salary_components
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  get_data_for_eval
-from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  eval_condition_and_formula
-
-SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
-SalarySlip.calculate_Tax = calculate_Tax
-SalarySlip.get_Employee_advance = get_Employee_advance
-SalarySlip.get_social_insurance = get_social_insurance
-SalarySlip.get_medical_insurance = get_medical_insurance
-SalarySlip.add_structure_components = add_structure_components
-SalarySlip.check_sal_struct = check_sal_struct
-SalarySlip.calculate_component_amounts = calculate_component_amounts
-SalarySlip.pull_sal_struct = pull_sal_struct
-SalarySlip.add_additional_salary_components = add_additional_salary_components
-SalarySlip.eval_condition_and_formula = eval_condition_and_formula
-SalarySlip.get_data_for_eval = get_data_for_eval
+	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
+	SalarySlip.calculate_Tax = calculate_Tax
+	SalarySlip.get_Employee_advance = get_Employee_advance
+	SalarySlip.get_social_insurance = get_social_insurance
+	SalarySlip.get_medical_insurance = get_medical_insurance
+	SalarySlip.add_structure_components = add_structure_components
+	SalarySlip.check_sal_struct = check_sal_struct
+	SalarySlip.calculate_component_amounts = calculate_component_amounts
+	SalarySlip.pull_sal_struct = pull_sal_struct
+	SalarySlip.add_additional_salary_components = add_additional_salary_components
+	SalarySlip.eval_condition_and_formula = eval_condition_and_formula
+	SalarySlip.get_data_for_eval = get_data_for_eval
+except :
+	pass

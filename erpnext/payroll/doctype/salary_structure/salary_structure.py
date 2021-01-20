@@ -149,6 +149,12 @@ def create_salary_structures_assignment(employee, salary_structure, payroll_paya
 	assignment.submit()
 	return assignment.name
 
+try:
+	from dynamicerp.dynamic_payroll.doctype.salary_structure.salary_structure import create_salary_structures_assignment
+	create_salary_structures_assignment = create_salary_structures_assignment
+except:
+	# frappe.throw(_("Error"))
+	pass
 
 def get_existing_assignments(employees, salary_structure, from_date):
 	salary_structures_assignments = frappe.db.sql_list("""

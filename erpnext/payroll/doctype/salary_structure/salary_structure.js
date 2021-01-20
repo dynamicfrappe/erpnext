@@ -120,45 +120,46 @@ frappe.ui.form.on('Salary Structure', {
 		});
 	},
 
-	assign_to_employees:function (frm) {
-		var d = new frappe.ui.Dialog({
-			title: __("Assign to Employees"),
-			fields: [
-				{fieldname: "sec_break", fieldtype: "Section Break", label: __("Filter Employees By (Optional)")},
-				{fieldname: "company", fieldtype: "Link", options: "Company", label: __("Company"), default: frm.doc.company, read_only:1},
-				{fieldname: "currency", fieldtype: "Link", options: "Currency", label: __("Currency"), default: frm.doc.currency, read_only:1},
-				{fieldname: "grade", fieldtype: "Link", options: "Employee Grade", label: __("Employee Grade")},
-				{fieldname:'department', fieldtype:'Link', options: 'Department', label: __('Department')},
-				{fieldname:'designation', fieldtype:'Link', options: 'Designation', label: __('Designation')},
-				{fieldname:"employee", fieldtype: "Link", options: "Employee", label: __("Employee")},
-				{fieldname:"payroll_payable_account", fieldtype: "Link", options: "Account", filters: {"company": frm.doc.company, "root_type": "Liability", "is_group": 0, "account_currency": frm.doc.currency}, label: __("Payroll Payable Account")},
-				{fieldname:'base_variable', fieldtype:'Section Break'},
-				{fieldname:'from_date', fieldtype:'Date', label: __('From Date'), "reqd": 1},
-				{fieldname:'income_tax_slab', fieldtype:'Link', label: __('Income Tax Slab'), options: 'Income Tax Slab'},
-				{fieldname:'base_col_br', fieldtype:'Column Break'},
-				{fieldname:'base', fieldtype:'Currency', label: __('Base')},
-				{fieldname:'variable', fieldtype:'Currency', label: __('Variable')}
-			],
-			primary_action: function() {
-				var data = d.get_values();
-				frappe.call({
-					doc: frm.doc,
-					method: "assign_salary_structure",
-					args: data,
-					callback: function(r) {
-						if(!r.exc) {
-							d.hide();
-							frm.reload_doc();
+		assign_to_employees:function (frm) {
+			var d = new frappe.ui.Dialog({
+				title: __("Assign to Employees"),
+				fields: [
+					{fieldname: "sec_break", fieldtype: "Section Break", label: __("Filter Employees By (Optional)")},
+					// {fieldname: "company", fieldtype: "Link", options: "Company", label: __("Company"), default: frm.doc.company, read_only:1},
+					// {fieldname: "currency", fieldtype: "Link", options: "Currency", label: __("Currency"), default: frm.doc.currency, read_only:1},
+					{fieldname: "grade", fieldtype: "Link", options: "Employee Grade", label: __("Employee Grade")},
+					{fieldname:'department', fieldtype:'Link', options: 'Department', label: __('Department')},
+					{fieldname:'designation', fieldtype:'Link', options: 'Designation', label: __('Designation')},
+					{fieldname:"employee", fieldtype: "Link", options: "Employee", label: __("Employee")},
+					{fieldname:"payroll_payable_account", fieldtype: "Link", options: "Account", filters: {"company": frm.doc.company, "root_type": "Liability", "is_group": 0, "account_currency": frm.doc.currency}, label: __("Payroll Payable Account")},
+					{fieldname:'base_variable', fieldtype:'Section Break'},
+					{fieldname:'from_date', fieldtype:'Date', label: __('From Date'), "reqd": 1},
+					{fieldname:'income_tax_slab', fieldtype:'Link', label: __('Income Tax Slab'), options: 'Income Tax Slab'},
+					{fieldname:'base_col_br', fieldtype:'Column Break'},
+					{fieldname:'base', fieldtype:'Currency', label: __('Base')},
+					{fieldname:'variable', fieldtype:'Currency', label: __('Variable')}
+				],
+				primary_action: function() {
+					var data = d.get_values();
+					debugger;
+					frappe.call({
+						doc: frm.doc,
+						method: "assign_salary_structure",
+						args: data,
+						callback: function(r) {
+							if(!r.exc) {
+								d.hide();
+								frm.reload_doc();
+							}
 						}
-					}
-				});
-			},
-			primary_action_label: __('Assign')
-		});
-
-
-		d.show();
-	},
+					});
+				},
+				primary_action_label: __('Assign')
+			});
+	
+	
+			d.show();
+		},
 
 	salary_slip_based_on_timesheet: function(frm) {
 		frm.trigger("toggle_fields")

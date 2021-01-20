@@ -169,6 +169,9 @@ def get_additional_salary_component(employee, start_date, end_date, component_ty
 		existing_salary_components.append(d.salary_component)
 
 	return salary_components_details, additional_salary_details
-from dynamicerp.dynamic_payroll.doctype.additional_salary.additional_salary import get_additional_salary_component
+try :
+	from dynamicerp.dynamic_payroll.doctype.additional_salary.additional_salary import get_additional_salary_component
 
-get_additional_salary_component = get_additional_salary_component
+	get_additional_salary_component = get_additional_salary_component
+except :
+	pass

@@ -676,8 +676,7 @@ def get_data():
                 }, {
                     "type": "report",
                     "is_query_report": True,
-                    "name": "Income Tax Settlement",
-                    "doctype": "Monthly Salary Slip"
+                    "name": "Income Tax Settlement"
                 }, {
                     "type": "report",
                     "is_query_report": True,
