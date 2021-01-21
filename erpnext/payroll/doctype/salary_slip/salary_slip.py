@@ -1248,6 +1248,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import pull_sal_struct
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  get_data_for_eval
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  eval_condition_and_formula
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  update_component_row
 
 	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
 	SalarySlip.calculate_Tax = calculate_Tax
@@ -1261,5 +1262,6 @@ try:
 	SalarySlip.add_additional_salary_components = add_additional_salary_components
 	SalarySlip.eval_condition_and_formula = eval_condition_and_formula
 	SalarySlip.get_data_for_eval = get_data_for_eval
+	SalarySlip.update_component_row = update_component_row
 except :
 	pass
