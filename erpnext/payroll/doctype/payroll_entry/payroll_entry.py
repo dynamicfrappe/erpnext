@@ -335,6 +335,7 @@ class PayrollEntry(Document):
 				self.create_journal_entry(salary_slip_total, "salary")
 
 	def create_journal_entry(self, je_payment_amount, user_remark):
+
 		payroll_payable_account = self.payroll_payable_account
 		precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
 
@@ -619,3 +620,21 @@ def get_payroll_entries_for_jv(doctype, txt, searchfield, start, page_len, filte
 			'txt': "%%%s%%" % frappe.db.escape(txt),
 			'start': start, 'page_len': page_len
 		})
+
+
+try:
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import make_payment_entry
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_journal_entry
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import make_accrual_jv_entry
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_sal_slip_list
+
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import payroll_entry_has_bank_entries
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips_for_employees
+	PayrollEntry.make_payment_entry = make_payment_entry
+	PayrollEntry.create_journal_entry = create_journal_entry
+	PayrollEntry.make_accrual_jv_entry = make_accrual_jv_entry
+	create_salary_slips_for_employees = create_salary_slips_for_employees
+	PayrollEntry.get_sal_slip_list = get_sal_slip_list
+	payroll_entry_has_bank_entries = payroll_entry_has_bank_entries
+except:
+	pass
