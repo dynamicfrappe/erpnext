@@ -161,6 +161,7 @@ class PayrollEntry(Document):
 		""" % ('%s', '%s', '%s','%s', cond), (ss_status, self.start_date, self.end_date, self.salary_slip_based_on_timesheet), as_dict=as_dict)
 		return ss_list
 
+
 	def submit_salary_slips(self):
 		self.check_permission('write')
 		ss_list = self.get_sal_slip_list(ss_status=0)
