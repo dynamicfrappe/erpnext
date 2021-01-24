@@ -17,6 +17,27 @@ status_map = {
 	"Work From Home": "WFH"
 	}
 
+status_map = { "Working On Weekend":"<b style='color : green'>WoWend </b>"
+	, "Week End":"<b style='color : blue'>Off </b>"
+	,"Working On Holiday":"<b style='color : green'>WH </b>"
+	,"Present": "<b style='color : green'>P </b>  "
+	, "Absent": "<b style='color : red '>A </b> "
+	, "Half Day": "<b style='color : deeppink '>HD </b> "
+	, "Leave": "<b style='color : deeppink '>L </b> "
+	, "None": "", "Holiday":"<b style='color : blue '>H</b>"
+	, "Business Trip" :"<b style='color : darkblue '>BT </b> "
+	, "Mission":"<b style='color : darkblue '>M </b> "
+	,"Mission All Day":"<b style='color : darkblue '>MA </b> "
+,	"Weekly Off": "<b>WO</b>",
+	 "Work From Home": "WFH" ,
+
+			   }
+
+
+
+
+
+
 day_abbr = [
 	"Mon",
 	"Tue",

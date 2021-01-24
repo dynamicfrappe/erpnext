@@ -51,7 +51,7 @@
    "options": "Payroll Period Date"
   }
  ],
- "modified": "2021-01-18 09:35:17.383574",
+ "modified": "2021-01-21 15:40:04.018733",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Payroll Period",
@@ -94,7 +94,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1
