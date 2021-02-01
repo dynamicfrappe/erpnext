@@ -8,6 +8,11 @@ from frappe.utils import formatdate, format_datetime, getdate, get_datetime, now
 from frappe.model.document import Document
 from frappe.desk.form import assign_to
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
+import xlwt
+from pymysql import*
+import pandas.io.sql as sql
+import xlsxwriter
+
 
 class DuplicateDeclarationError(frappe.ValidationError): pass
 
@@ -481,3 +486,91 @@ def grant_leaves_automatically():
 		lpa = frappe.db.get_all("Leave Policy Assignment", filters={"effective_from": getdate(), "docstatus": 1, "leaves_allocated":0})
 		for assignment in lpa:
 			frappe.get_doc("Leave Policy Assignment", assignment.name).grant_leave_alloc_for_employee()
+
+@frappe.whitelist()
+def bankSheet(fromDate,toDate):
+	header_font = xlwt.Font()
+	header_font.name = 'Arial'
+	header_font.bold = True
+	header_font.height=250
+	header_style = xlwt.XFStyle()
+	header_style.font = header_font
+	pattern_top = xlwt.Pattern()
+	pattern_top.pattern = xlwt.Pattern.SOLID_PATTERN
+	pattern_top.pattern_fore_colour = 5
+	header_style.pattern = pattern_top
+	data=frappe.db.sql("select * from `tabSalary Slip` where start_date >= '{}' and end_date <= '{}'".format(fromDate,toDate),as_dict=1)
+	qnbtitle = ['BRANCH CODE', 'cid', 'ACCOUNT Number', 'name','EMP Code', 'Reason', 'Amount']
+	workbook = xlwt.Workbook()
+	worksheet = workbook.add_sheet('Student')
+	excel_file_path = '/home/my_user/google/cib.xls'
+
+	for j in range(0,len(qnbtitle)):
+		worksheet.write(0,j, qnbtitle[j],header_style)
+	for i in range(0, len(data)):
+
+		worksheet.write(i+1, 0, data[i]["employee_name"])
+		worksheet.write(i+1, 1, data[i]["name"])
+		worksheet.write(i+1, 2, data[i]["net_pay"])
+		# worksheet.write(i, 3, data[i][3])
+		# worksheet.write(i, 4, data[i][4])
+	workbook.save(excel_file_path)
+
+# con = connect(user="root", password="root", host="localhost", database="asd")
+# df = sql.read_sql('select * from tabEmployee', con)
+# frappe.msgprint(str(df))
+# df.to_excel('ds.xls')
+
+
+
+# def export(query):
+#     # Create an new Excel file and add a worksheet.
+#     workbook = xlsxwriter.Workbook("table_name" + '.xlsx')
+#     worksheet = workbook.add_worksheet('MENU')
+#
+#     # Create style for cells
+#     header_cell_format = workbook.add_format({'bold': True, 'border': True, 'bg_color': 'yellow'})
+#     body_cell_format = workbook.add_format({'border': True})
+#
+#     header, rows = fetch_table_data(query)
+#
+#     row_index = 0
+#     column_index = 0
+#
+#     for column_name in header:
+#         worksheet.write(row_index, column_index, column_name, header_cell_format)
+#         column_index += 1
+#
+#     row_index += 1
+#     for row in rows:
+#         column_index = 0
+#         for column in row:
+#             worksheet.write(row_index, column_index, column, body_cell_format)
+#             column_index += 1
+#         row_index += 1
+#
+#     print(str(row_index) + ' rows written successfully to ' + workbook.filename)
+#
+#     # Closing workbook
+#     workbook.close()
+#
+# def fetch_table_data(query):
+# 	# The connect() constructor creates a connection to the MySQL server and returns a MySQLConnection object.
+# 	cnx = mysql.connector.connect(
+# 		host='localhost',
+# 		database='asd',
+# 		user='root',
+# 		password='root'
+# 	)
+#
+# 	cursor = cnx.cursor()
+# 	cursor.execute(query)
+#
+# 	header = [row[0] for row in cursor.description]
+#
+# 	rows = cursor.fetchall()
+#
+# 	# Closing connection
+# 	cnx.close()
+#
+# 	return header, rows

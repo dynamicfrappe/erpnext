@@ -153,3 +153,8 @@ def get_ss_ded_map(salary_slips, currency, company_currency):
 			ss_ded_map[d.parent][d.salary_component] = flt(d.amount)
 
 	return ss_ded_map
+
+
+# @frappe.whitelist()
+# def bankSheet(fromDate,toDate):
+# 	return "ok"

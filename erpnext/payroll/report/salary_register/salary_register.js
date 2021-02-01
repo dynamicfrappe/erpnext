@@ -51,5 +51,72 @@ frappe.query_reports["Salary Register"] = {
 			"default": "Submitted",
 			"width": "100px"
 		}
-	]
+	],
+	"onload": function(report) {
+		// let date = new Date();
+		// date.setDate(1)
+		// frappe.query_report.set_filter_value('from_date',date)
+		report.page.add_inner_button(__("Export to Exel"), function() {
+			// printAttendanceSheetDetails(report);
+			let d = new frappe.ui.Dialog({
+    title: 'Enter details',
+    fields: [
+    	  {
+            label: 'From Date',
+            fieldname: 'fromDate',
+            fieldtype: 'Date',
+
+        },
+		{
+            label: 'Bank',
+            fieldname: 'bank',
+            fieldtype: 'Link',
+			 "options":"Bank"
+        },
+
+		{
+
+            fieldname: 'cbreak',
+            fieldtype: 'Column Break',
+
+        },
+			 {
+            label: 'To Date',
+            fieldname: 'toDate',
+            fieldtype: 'Date',
+
+        },
+
+        {
+            label: 'Bank Template',
+            fieldname: 'template',
+            fieldtype: 'Select',
+			 "options": "QNB\nCIB\nHSBC",
+        },
+
+    ],
+			primary_action_label: 'Export',
+			primary_action(values) {
+				frappe.call({
+					method: "erpnext.hr.utils.bankSheet",
+					args:{
+						"fromDate":values.fromDate,
+						"toDate":values.toDate,
+					},
+					callback(r){
+						console.log(r.message)
+					}
+				})
+
+				d.hide();
+			}
+		});
+
+		d.show();
+
+		});
+
+	}
+
 }
+
