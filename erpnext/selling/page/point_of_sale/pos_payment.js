@@ -214,6 +214,7 @@ erpnext.PointOfSale.Payment = class {
 		})
 
 		frappe.ui.form.on('POS Invoice', 'paid_amount', (frm) => {
+
 			this.update_totals_section(frm.doc);
 
 			// need to re calculate cash shortcuts after discount is applied
@@ -228,11 +229,16 @@ erpnext.PointOfSale.Payment = class {
 		});
 
 		frappe.ui.form.on("Sales Invoice Payment", "amount", (frm, cdt, cdn) => {
+
 			// for setting correct amount after loyalty points are redeemed
 			const default_mop = locals[cdt][cdn];
+
 			const mode = default_mop.mode_of_payment.replace(/ +/g, "_").toLowerCase();
+			// this[`${mode}_control`].set_value(123456);
+			frm.set_value("paid_amount",parseFloat(default_mop.amount))
 			if (this[`${mode}_control`] && this[`${mode}_control`].get_value() != default_mop.amount) {
 				this[`${mode}_control`].set_value(default_mop.amount);
+
 			}
 		});
 

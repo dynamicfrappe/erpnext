@@ -195,6 +195,7 @@ def create_opening_voucher(pos_profile, company, balance_details):
 		"user": frappe.session.user,
 		"pos_profile": pos_profile,
 		"company": company,
+		"status":"Open"
 	})
 	new_pos_opening.set("balance_details", balance_details)
 	new_pos_opening.submit()

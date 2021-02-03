@@ -138,6 +138,15 @@ class SalesInvoice(SellingController):
 		if self.redeem_loyalty_points and self.loyalty_program and self.loyalty_points:
 			validate_loyalty_points(self, self.loyalty_points)
 
+	def validate_item_cost_centers(self):
+		for item in self.items:
+			cost_center_company = frappe.get_cached_value("Cost Center", item.cost_center, "company")
+			if cost_center_company != self.company:
+				frappe.throw(_("Row #{0}: Cost Center {1} does not belong to company {2}").format(frappe.bold(item.idx),
+																								  frappe.bold(
+																									  item.cost_center),
+																								  frappe.bold(
+																									  self.company)))
 	def validate_holding_qty(self):
 
 			for item in self.get("items"):
@@ -561,10 +570,10 @@ class SalesInvoice(SellingController):
 					You can change the parent account to a Balance Sheet account or select a different account.")
 				.format(frappe.bold("Debit To")), title=_("Invalid Account"))
 
-		if self.customer and account.account_type != "Receivable":
-			frappe.throw(_("Please ensure {} account is a Receivable account. \
-					Change the account type to Receivable or select a different account.")
-				.format(frappe.bold("Debit To")), title=_("Invalid Account"))
+		# if self.customer and account.account_type != "Receivable":
+		# 	frappe.throw(_("Please ensure {} account is a Receivable account. \
+		# 			Change the account type to Receivable or select a different account.")
+		# 		.format(frappe.bold("Debit To")), title=_("Invalid Account"))
 
 		self.party_account_currency = account.account_currency
 

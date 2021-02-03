@@ -386,11 +386,14 @@ class calculate_taxes_and_totals(object):
 		else:
 			self.doc.taxes_and_charges_added = self.doc.taxes_and_charges_deducted = 0.0
 			for tax in self.doc.get("taxes"):
-				if tax.category in ["Valuation and Total", "Total"]:
-					if tax.add_deduct_tax == "Add":
-						self.doc.taxes_and_charges_added += flt(tax.tax_amount_after_discount_amount)
-					else:
-						self.doc.taxes_and_charges_deducted += flt(tax.tax_amount_after_discount_amount)
+				try:
+					if tax.category in ["Valuation and Total", "Total"]:
+						if tax.add_deduct_tax == "Add":
+							self.doc.taxes_and_charges_added += flt(tax.tax_amount_after_discount_amount)
+						else:
+							self.doc.taxes_and_charges_deducted += flt(tax.tax_amount_after_discount_amount)
+				except:
+					print("Error in taxes and totals in line 396")
 
 			self.doc.round_floats_in(self.doc, ["taxes_and_charges_added", "taxes_and_charges_deducted"])
 

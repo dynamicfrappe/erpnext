@@ -70,6 +70,8 @@ class POSClosingEntry(Document):
 		opening_entry.pos_closing_entry = self.name
 		opening_entry.set_status()
 		opening_entry.save()
+		frappe.db.sql("update `tabPOS Opening Entry` set status='Closed' where name='{}'".format(self.pos_opening_entry))
+		frappe.db.commit()
 
 	def get_payment_reconciliation_details(self):
 		currency = frappe.get_cached_value('Company', self.company,  "default_currency")
