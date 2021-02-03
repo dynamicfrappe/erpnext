@@ -22,6 +22,12 @@ def get_data():
 					"dependencies": ["POS Profile"]
                 },
                 {
+                    "label": _("POS Invoice"),
+                    "name": "POS Invoice",
+                    "type": "doctype"
+
+                },
+                {
                     "type": "doctype",
                     "name": "Cashier Closing",
                     "description": _("Cashier Closing"),
