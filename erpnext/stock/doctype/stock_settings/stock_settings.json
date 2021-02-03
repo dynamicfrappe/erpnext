@@ -192,17 +192,18 @@
    "label": "Naming Series Prefix"
   },
   {
-   "default": "7.00",
+   "default": "1.000",
    "fieldname": "item_holding_duration",
    "fieldtype": "Float",
    "label": "Holding items Duration (In Days)",
+   "precision": "3",
    "reqd": 1
   }
  ],
  "icon": "icon-cog",
  "idx": 1,
  "issingle": 1,
- "modified": "2020-10-27 14:44:55.924484",
+ "modified": "2021-02-03 14:12:32.379763",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock Settings",
