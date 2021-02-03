@@ -91,7 +91,7 @@ frappe.query_reports["Salary Register"] = {
             label: 'Bank Template',
             fieldname: 'template',
             fieldtype: 'Select',
-			 "options": "QNB\nCIB\nHSBC",
+			 "options": "QNB\nCIB\nHSBC\nMisr Bank\nNBE\nEG Bank\nNBE Eng\nUNB\nQNB Ar",
         },
 
     ],
@@ -102,6 +102,7 @@ frappe.query_reports["Salary Register"] = {
 					args:{
 						"fromDate":values.fromDate,
 						"toDate":values.toDate,
+						"bank":values.template
 					},
 					callback(r){
 						console.log(r.message)

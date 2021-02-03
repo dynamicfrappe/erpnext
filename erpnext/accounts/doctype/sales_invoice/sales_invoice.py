@@ -570,10 +570,10 @@ class SalesInvoice(SellingController):
 					You can change the parent account to a Balance Sheet account or select a different account.")
 				.format(frappe.bold("Debit To")), title=_("Invalid Account"))
 
-		if self.customer and account.account_type != "Receivable":
-			frappe.throw(_("Please ensure {} account is a Receivable account. \
-					Change the account type to Receivable or select a different account.")
-				.format(frappe.bold("Debit To")), title=_("Invalid Account"))
+		# if self.customer and account.account_type != "Receivable":
+		# 	frappe.throw(_("Please ensure {} account is a Receivable account. \
+		# 			Change the account type to Receivable or select a different account.")
+		# 		.format(frappe.bold("Debit To")), title=_("Invalid Account"))
 
 		self.party_account_currency = account.account_currency
 

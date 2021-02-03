@@ -488,89 +488,151 @@ def grant_leaves_automatically():
 			frappe.get_doc("Leave Policy Assignment", assignment.name).grant_leave_alloc_for_employee()
 
 @frappe.whitelist()
-def bankSheet(fromDate,toDate):
-	header_font = xlwt.Font()
-	header_font.name = 'Arial'
-	header_font.bold = True
-	header_font.height=250
-	header_style = xlwt.XFStyle()
-	header_style.font = header_font
-	pattern_top = xlwt.Pattern()
-	pattern_top.pattern = xlwt.Pattern.SOLID_PATTERN
-	pattern_top.pattern_fore_colour = 5
-	header_style.pattern = pattern_top
-	data=frappe.db.sql("select * from `tabSalary Slip` where start_date >= '{}' and end_date <= '{}'".format(fromDate,toDate),as_dict=1)
-	qnbtitle = ['BRANCH CODE', 'cid', 'ACCOUNT Number', 'name','EMP Code', 'Reason', 'Amount']
+def bankSheet(fromDate,toDate,bank):
 	workbook = xlwt.Workbook()
-	worksheet = workbook.add_sheet('Student')
-	excel_file_path = '/home/my_user/google/cib.xls'
+	worksheet = workbook.add_sheet('bank sheet')
+	excel_file_path = '/home/my_user/google/qnb.xls'
+	worksheet.row(0).height_mismatch = True
+	worksheet.row(0).height = 20 * 20
+	if bank=="qnb":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		# header_font.height=250
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		pattern_top = xlwt.Pattern()
+		pattern_top.pattern = xlwt.Pattern.SOLID_PATTERN
+		# pattern_top.pattern_fore_colour = 5
+		header_style.pattern = pattern_top
+		data=frappe.db.sql("select *,tabEmployee.bank_ac_no from `tabSalary Slip` inner join tabEmployee on `tabSalary Slip`.employee =tabEmployee.name where tabEmployee.bank_name='{}' and `tabSalary Slip`.start_date >= '{}' and `tabSalary Slip`.end_date <= '{}'".format(bank,fromDate,toDate),as_dict=1)
+		qnbtitle = ['BRANCH CODE', 'cid', 'ACCOUNT Number', 'name','EMP Code', 'Reason', 'Amount']
 
-	for j in range(0,len(qnbtitle)):
-		worksheet.write(0,j, qnbtitle[j],header_style)
-	for i in range(0, len(data)):
+		for j in range(0,len(qnbtitle)):
+			worksheet.write(0,j, qnbtitle[j],header_style)
+		for i in range(0, len(data)):
+			worksheet.write(i + 1, 0, i)
+			worksheet.write(i + 1, 1, data[i]["name"])
+			worksheet.write(i + 1, 2, data[i]["bank_ac_no"])
+			worksheet.write(i + 1, 3, data[i]["employee_name"])
+			worksheet.write(i + 1, 4, data[i]["name"])
+			worksheet.write(i + 1, 5, "Salary")
+			worksheet.write(i + 1, 6, data[i]["net_pay"])
+		workbook.save(excel_file_path)
+	if bank=="Misr Bank":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		pattern_top = xlwt.Pattern()
+		pattern_top.pattern = xlwt.Pattern.SOLID_PATTERN
+		pattern_top.pattern_fore_colour =xlwt.Style.colour_map['gray25']
+		header_style.pattern = pattern_top
+		qnbtitle = ['مسلسل', 'رقم الحساب', 'الاسم', 'جيروكود', 'المبلغ']
+		for j in range(0,len(qnbtitle)):
+			worksheet.write(0,j, qnbtitle[j],header_style)
+		workbook.save(excel_file_path)
+	if bank == "HSBC":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		# pattern_top = xlwt.Pattern()
+		# pattern_top.pattern = xlwt.Pattern.SOLID_PATTERN
+		# # pattern_top.pattern_fore_colour = xlwt.Style.colour_map['gray25']
+		# header_style.pattern = pattern_top
+		qnbtitle = ['Payment type', 'Debit Account Number', 'Debit Account Country', 'Debit Account Currency', 'Transaction currency','Transaction Amount','Value Date','First Party Reference','Payment Set Code','Bene Name','Address 1','Address 2','Address 3','Bene Account No','Bene Country Code','Second Party Reference','Second Party ID','LCC code/CBID code','ADVICE-TEXT','E-mail ID-1','Name of EM recepient 1','E-mail ID-2','Name of EM recepient 2','E-mail ID-3','Name of EM recepient 3','E-mail ID-4','Name of EM recepient 4','E-mail ID-5','Name of EM recepient 5','E-mail ID-6','Name of EM recepient 6','Remittance Information 1','Remittance Information 2','Remittance Information 3','Remittance Information 4','Charges Code','Purpose of Payment','SWIFT BIC / LCC Code Indicator']
+		for j in range(0,len(qnbtitle)):
+			worksheet.write(0,j, qnbtitle[j],header_style)
+		workbook.save(excel_file_path)
+	if bank == "NBE":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		workbook.cols_right_to_left = True
+		qnbtitle = ['مسلسل', 'رقم الحساب', 'الاسم', 'جيروكود', 'المبلغ']
+		for j in range(0, len(qnbtitle)):
+			worksheet.write(0, j, qnbtitle[j], header_style)
 
-		worksheet.write(i+1, 0, data[i]["employee_name"])
-		worksheet.write(i+1, 1, data[i]["name"])
-		worksheet.write(i+1, 2, data[i]["net_pay"])
-		# worksheet.write(i, 3, data[i][3])
-		# worksheet.write(i, 4, data[i][4])
-	workbook.save(excel_file_path)
+		workbook.save(excel_file_path)
+	if bank == "EG Bank":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		qnbtitle = ['PREBR', 'PRESRLEC', 'SFX', 'Amount',
+					'Transaction Code', 'PRENAME', 'code']
+		for j in range(0, len(qnbtitle)):
+			worksheet.write(0, j, qnbtitle[j], header_style)
+		workbook.save(excel_file_path)
 
-# con = connect(user="root", password="root", host="localhost", database="asd")
-# df = sql.read_sql('select * from tabEmployee', con)
-# frappe.msgprint(str(df))
-# df.to_excel('ds.xls')
+	if bank =="NBE Eng":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		qnbtitle = ['branch number', 'current account', 'name', 'salary',
+					'employee number', 'swift code']
+		for j in range(0, len(qnbtitle)):
+			worksheet.write(0, j, qnbtitle[j], header_style)
+		workbook.save(excel_file_path)
+
+	if bank =="UNB":
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		worksheet.col(1).width = 5000
+		worksheet.col(2).width = 5000
+		worksheet.col(3).width = 6000
+		worksheet.col(4).width = 5000
+		worksheet.col(5).width = 5000
+		worksheet.col(6).width = 5000
+		worksheet.row(7).height = 20 * 40
+		header_style=xlwt.easyxf('pattern: pattern solid, fore_colour purple_ega;''font: colour black, bold True;')
+		# header_style.pattern = pattern_top
+		qnbtitle = ['To', 'Date', 'Company Name', 'Company Account Number',
+					'Value Date', 'Total EGP Amount']
+		for j in range(0, len(qnbtitle)):
+			worksheet.write(j, 3, qnbtitle[j])
+		unb=['#','Company Name','Client Name','Account Number','Amount']
+		for j in range(0,len(unb)):
+			worksheet.write(7, j, qnbtitle[j],header_style)
+		workbook.save(excel_file_path)
+
+	if bank == "QNB Ar":
+		worksheet.col(0).width = 5000
+		worksheet.col(1).width = 5000
+		worksheet.col(2).width = 6000
+		worksheet.col(3).width = 5000
+		worksheet.col(4).width = 5000
+		worksheet.col(5).width = 5000
+		header_font = xlwt.Font()
+		header_font.name = 'Arial'
+		header_font.height=200
+		header_font.bold = True
+		header_style = xlwt.XFStyle()
+		header_style.font = header_font
+		worksheet.cols_right_to_left = 1
+		worksheet.write(0, 0, "السادة بنك قطر الوطني",header_style)
+		worksheet.write(1, 0, "يرجى التكرم بخصم",header_style)
+		worksheet.write(2, 0, "من حسابنا لديكم رقم",header_style)
+		worksheet.write(2, 2, "وأضافة الى الحسابات ادناه حسب الجدول التالي :",header_style)
+		workbook.save(excel_file_path)
 
 
 
-# def export(query):
-#     # Create an new Excel file and add a worksheet.
-#     workbook = xlsxwriter.Workbook("table_name" + '.xlsx')
-#     worksheet = workbook.add_worksheet('MENU')
-#
-#     # Create style for cells
-#     header_cell_format = workbook.add_format({'bold': True, 'border': True, 'bg_color': 'yellow'})
-#     body_cell_format = workbook.add_format({'border': True})
-#
-#     header, rows = fetch_table_data(query)
-#
-#     row_index = 0
-#     column_index = 0
-#
-#     for column_name in header:
-#         worksheet.write(row_index, column_index, column_name, header_cell_format)
-#         column_index += 1
-#
-#     row_index += 1
-#     for row in rows:
-#         column_index = 0
-#         for column in row:
-#             worksheet.write(row_index, column_index, column, body_cell_format)
-#             column_index += 1
-#         row_index += 1
-#
-#     print(str(row_index) + ' rows written successfully to ' + workbook.filename)
-#
-#     # Closing workbook
-#     workbook.close()
-#
-# def fetch_table_data(query):
-# 	# The connect() constructor creates a connection to the MySQL server and returns a MySQLConnection object.
-# 	cnx = mysql.connector.connect(
-# 		host='localhost',
-# 		database='asd',
-# 		user='root',
-# 		password='root'
-# 	)
-#
-# 	cursor = cnx.cursor()
-# 	cursor.execute(query)
-#
-# 	header = [row[0] for row in cursor.description]
-#
-# 	rows = cursor.fetchall()
-#
-# 	# Closing connection
-# 	cnx.close()
-#
-# 	return header, rows
+
+
+
+
+
+
+
