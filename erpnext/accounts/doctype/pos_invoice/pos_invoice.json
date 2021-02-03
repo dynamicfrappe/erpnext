@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_auto_repeat": 1,
  "allow_import": 1,
  "autoname": "naming_series:",
@@ -40,6 +39,7 @@
   "address_and_contact",
   "customer_address",
   "address_display",
+  "cus_address",
   "contact_person",
   "contact_display",
   "contact_mobile",
@@ -1576,12 +1576,19 @@
    "label": "Consolidated Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "fetch_from": "customer_address.address_line1",
+   "fieldname": "cus_address",
+   "fieldtype": "Read Only",
+   "hidden": 1,
+   "label": "Cus Address",
+   "print_hide": 1
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "links": [],
- "modified": "2020-10-30 13:56:51.056083",
+ "modified": "2021-02-03 17:33:23.074095",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Invoice",
