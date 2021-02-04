@@ -24,7 +24,8 @@ class POSInvoice(SalesInvoice):
 	def validate(self):
 		if not cint(self.is_pos):
 			frappe.throw(_("POS Invoice should have {} field checked.").format(frappe.bold("Include Payment")))
-
+		if self.paid_amount==0 and self.is_return==1:
+			self.paid_amount=(flt(self.total) + flt(self.total_taxes_and_charges))
 		# run on validate method of selling controller
 		super(SalesInvoice, self).validate()
 		self.validate_auto_set_posting_time()
@@ -45,6 +46,7 @@ class POSInvoice(SalesInvoice):
 		self.validate_pos()
 		self.validate_payment_amount()
 		self.validate_loyalty_transaction()
+
 
 	def on_submit(self):
 		# create the loyalty point ledger entry if the customer is enrolled in any loyalty program
