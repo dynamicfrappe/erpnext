@@ -4,6 +4,34 @@
 
 frappe.query_reports["Assets Movements Report"] = {
 	"filters": [
+			{
+			"fieldname":"asset_name",
+			"label": __("Asset Name"),
+			"fieldtype": "Link",
+			"options":"Asset"
 
+		},
+		{
+			"fieldname":"employee_name",
+			"label": __("Employee Name"),
+			"fieldtype": "Link",
+			"options":"Employee"
+
+		},
+		{
+			"fieldname":"Department",
+			"label": __("Department"),
+			"fieldtype": "Link",
+			"options":"Department"
+
+		},
+		{
+			"fieldname":"Project",
+			"label": __("Project"),
+			"fieldtype": "Link",
+			"options":"Project"
+
+		},
+	
 	]
 };

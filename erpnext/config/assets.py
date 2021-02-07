@@ -97,7 +97,7 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "Assts Movement Report",
+					"name": "Assets Movements Report",
 					"doctype": "Asset",
 					"is_query_report": True,
 				},
