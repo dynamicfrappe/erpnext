@@ -64,6 +64,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 	},
 
 	customer() {
+
 		if (!this.frm.doc.customer) return
 		const pos_profile = this.frm.doc.pos_profile;
 		if(this.frm.updating_party_details) return;
@@ -78,6 +79,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 			}, () => {
 				this.apply_pricing_rule();
 			});
+
 	},
 
 	amount: function(){

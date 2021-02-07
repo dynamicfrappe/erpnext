@@ -26,6 +26,11 @@ class POSInvoice(SalesInvoice):
 			frappe.throw(_("POS Invoice should have {} field checked.").format(frappe.bold("Include Payment")))
 		if self.paid_amount==0 and self.is_return==1:
 			self.paid_amount=(flt(self.total) + flt(self.total_taxes_and_charges))
+		if not self.debit_to:
+			self.debit_to = get_party_account("Customer", self.customer, self.company)
+			self.party_account_currency = frappe.db.get_value("Account", self.debit_to, "account_currency", cache=True)
+			if not self.debit_to:
+				frappe.msgprint("Debit to is mandatory")
 		# run on validate method of selling controller
 		super(SalesInvoice, self).validate()
 		self.validate_auto_set_posting_time()
@@ -326,6 +331,8 @@ class POSInvoice(SalesInvoice):
 
 		return profile
 
+
+
 	def set_missing_values(self, for_validate=False):
 		profile = self.set_pos_fields(for_validate)
 
@@ -355,6 +362,7 @@ class POSInvoice(SalesInvoice):
 				pay.account = get_bank_cash_account(pay.mode_of_payment, self.company).get("account")
 
 	def create_payment_request(self):
+
 		for pay in self.payments:
 			if pay.type == "Phone":
 				if pay.amount <= 0:
