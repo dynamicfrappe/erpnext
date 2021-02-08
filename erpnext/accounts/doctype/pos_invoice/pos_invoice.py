@@ -31,6 +31,13 @@ class POSInvoice(SalesInvoice):
 			self.party_account_currency = frappe.db.get_value("Account", self.debit_to, "account_currency", cache=True)
 			if not self.debit_to:
 				frappe.msgprint("Debit to is mandatory")
+		try:
+			if self.is_return==1:
+				self.payments[0].amount=self.rounded_total
+				self.paid_amount =self.rounded_total
+		except:
+			pass
+
 		# run on validate method of selling controller
 		super(SalesInvoice, self).validate()
 		self.validate_auto_set_posting_time()
@@ -53,6 +60,8 @@ class POSInvoice(SalesInvoice):
 		self.validate_loyalty_transaction()
 
 
+
+
 	def on_submit(self):
 		# create the loyalty point ledger entry if the customer is enrolled in any loyalty program
 		if self.loyalty_program:
@@ -65,6 +74,20 @@ class POSInvoice(SalesInvoice):
 			self.apply_loyalty_points()
 		self.check_phone_payments()
 		self.set_status(update=True)
+		try:
+
+			if(self.updatestock==1):
+				frappe.db.sql("""update `tabPOS Invoice` set update_stock=0 where name='{}'""".format(self.name))
+				frappe.db.commit()
+				self.update_stock_ledger()
+		except:
+			pass
+		try:
+			if self.is_return ==1:
+				frappe.db.sql("""update `tabPOS Invoice` set returned=1 where name='{}'""".format(self.return_against))
+				frappe.db.commit()
+		except:
+			pass
 
 	def on_cancel(self):
 		# run on cancel method of selling controller

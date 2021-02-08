@@ -184,7 +184,9 @@
   "auto_repeat",
   "update_auto_repeat_reference",
   "against_income_account",
-  "pos_total_qty"
+  "pos_total_qty",
+  "updatestock",
+  "returned"
  ],
  "fields": [
   {
@@ -1583,11 +1585,25 @@
    "hidden": 1,
    "label": "Cus Address",
    "print_hide": 1
+  },
+  {
+   "fetch_from": "pos_profile.updateStock",
+   "fieldname": "updatestock",
+   "fieldtype": "Read Only",
+   "hidden": 1,
+   "label": "Update Stock",
+   "print_hide": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "returned",
+   "fieldtype": "Check",
+   "label": "Returned"
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "modified": "2021-02-04 15:52:46.523653",
+ "modified": "2021-02-08 17:10:43.307449",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Invoice",

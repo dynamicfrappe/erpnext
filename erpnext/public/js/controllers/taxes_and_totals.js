@@ -33,12 +33,12 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 		this.calculate_discount_amount();
 
 		// Advance calculation applicable to Sales /Purchase Invoice
-		if(in_list(["Sales Invoice", "Purchase Invoice"], this.frm.doc.doctype)
+		if(in_list(["Sales Invoice", "POS Invoice", "Purchase Invoice"], this.frm.doc.doctype)
 			&& this.frm.doc.docstatus < 2 && !this.frm.doc.is_return) {
 			this.calculate_total_advance(update_paid_amount);
 		}
 
-		if (this.frm.doc.doctype == "Sales Invoice" && this.frm.doc.is_pos &&
+		if (in_list(["Sales Invoice", "POS Invoice"], this.frm.doc.doctype) && this.frm.doc.is_pos &&
 			this.frm.doc.is_return) {
 			this.update_paid_amount_for_return();
 		}
@@ -433,7 +433,7 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 			? this.frm.doc["taxes"][tax_count - 1].total + flt(this.frm.doc.rounding_adjustment)
 			: this.frm.doc.net_total);
 
-		if(in_list(["Quotation", "Sales Order", "Delivery Note", "Sales Invoice"], this.frm.doc.doctype)) {
+		if(in_list(["Quotation", "Sales Order", "Delivery Note", "Sales Invoice","POS Invoice"], this.frm.doc.doctype)) {
 			this.frm.doc.base_grand_total = (this.frm.doc.total_taxes_and_charges) ?
 				flt(this.frm.doc.grand_total * this.frm.doc.conversion_rate) : this.frm.doc.base_net_total;
 		} else {
@@ -612,7 +612,7 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 		// NOTE:
 		// paid_amount and write_off_amount is only for POS/Loyalty Point Redemption Invoice
 		// total_advance is only for non POS Invoice
-		if(this.frm.doc.doctype == "Sales Invoice" && this.frm.doc.is_return){
+		if(in_list(["Sales Invoice", "POS Invoice"], this.frm.doc.doctype) && this.frm.doc.is_return){
 			this.calculate_paid_amount();
 		}
 
@@ -620,7 +620,7 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 
 		frappe.model.round_floats_in(this.frm.doc, ["grand_total", "total_advance", "write_off_amount"]);
 
-		if(in_list(["Sales Invoice", "Purchase Invoice"], this.frm.doc.doctype)) {
+		if(in_list(["Sales Invoice","POS Invoice", "Purchase Invoice"], this.frm.doc.doctype)) {
 			var grand_total = this.frm.doc.rounded_total || this.frm.doc.grand_total;
 
 			if(this.frm.doc.party_account_currency == this.frm.doc.currency) {
@@ -642,7 +642,7 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 				this.frm.refresh_field("base_paid_amount");
 			}
 
-			if(this.frm.doc.doctype == "Sales Invoice") {
+			if(in_list(["Sales Invoice", "POS Invoice"], this.frm.doc.doctype)) {
 				let total_amount_for_payment = (this.frm.doc.redeem_loyalty_points && this.frm.doc.loyalty_amount)
 					? flt(total_amount_to_pay - this.frm.doc.loyalty_amount, precision("base_grand_total"))
 					: total_amount_to_pay;
@@ -734,7 +734,7 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 	calculate_change_amount: function(){
 		this.frm.doc.change_amount = 0.0;
 		this.frm.doc.base_change_amount = 0.0;
-		if(this.frm.doc.doctype == "Sales Invoice"
+		if(in_list(["Sales Invoice", "POS Invoice"], this.frm.doc.doctype)
 			&& this.frm.doc.paid_amount > this.frm.doc.grand_total && !this.frm.doc.is_return) {
 
 			var payment_types = $.map(this.frm.doc.payments, function(d) { return d.type; });

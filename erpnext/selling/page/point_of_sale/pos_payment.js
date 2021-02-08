@@ -234,8 +234,15 @@ erpnext.PointOfSale.Payment = class {
 			const default_mop = locals[cdt][cdn];
 
 			const mode = default_mop.mode_of_payment.replace(/ +/g, "_").toLowerCase();
-			// this[`${mode}_control`].set_value(123456);
-			frm.set_value("paid_amount",parseFloat(default_mop.amount))
+			var paidAmount =0;
+			try {if(this[`cash_control`].get_value()) paidAmount += this[`cash_control`].get_value()}catch (ex){}
+			try {if(this[`credit_card_control`].get_value()) paidAmount +=this[`credit_card_control`].get_value()}catch (ex){}
+			try {if(this[`bank_draft_control`].get_value()) paidAmount +=this[`bank_draft_control`].get_value()}catch (ex){}
+			try {if(this[`wire_transfer_control`].get_value()) paidAmount +=this[`wire_transfer_control`].get_value()}catch (ex){}
+			try {if(this[`cheque_control`].get_value()) paidAmount +=this[`cheque_control`].get_value()}catch (ex){}
+
+
+			frm.set_value("paid_amount",parseFloat(paidAmount))
 			if (this[`${mode}_control`] && this[`${mode}_control`].get_value() != default_mop.amount) {
 				this[`${mode}_control`].set_value(default_mop.amount);
 

@@ -409,6 +409,7 @@ cur_frm.cscript.tax_table = "Sales Taxes and Charges";
         },
 
         qty: function(doc, cdt, cdn) {
+
             this._super(doc, cdt, cdn);
 
             if (in_list(['Delivery Note', 'Sales Invoice'], doc.doctype)) {

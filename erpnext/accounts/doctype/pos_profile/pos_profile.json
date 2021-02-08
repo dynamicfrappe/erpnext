@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_rename": 1,
  "autoname": "Prompt",
  "creation": "2013-05-24 12:15:51",
@@ -11,6 +10,7 @@
   "customer",
   "company",
   "country",
+  "updatestock",
   "column_break_9",
   "update_stock",
   "ignore_pricing_rule",
@@ -329,13 +329,17 @@
    "fieldname": "auto_add_item_to_cart",
    "fieldtype": "Check",
    "label": "Automatically Add Filtered Item To Cart"
+  },
+  {
+   "default": "0",
+   "fieldname": "updatestock",
+   "fieldtype": "Check",
+   "label": "Update Stock"
   }
  ],
  "icon": "icon-cog",
  "idx": 1,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2020-12-20 13:59:28.877572",
+ "modified": "2021-02-08 16:16:42.423827",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Profile",

@@ -7,6 +7,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 	setup(doc) {
 		this.setup_posting_date_time_check();
 		this._super(doc);
+
 	},
 
 	onload(doc) {
@@ -83,10 +84,13 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 	},
 
 	amount: function(){
+
 		this.write_off_outstanding_amount_automatically()
+
 	},
 
 	change_amount: function(){
+
 		if(this.frm.doc.paid_amount > this.frm.doc.grand_total){
 			this.calculate_write_off_amount();
 		}else {
@@ -105,6 +109,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 	},
 
 	write_off_outstanding_amount_automatically: function() {
+
 		if(cint(this.frm.doc.write_off_outstanding_amount_automatically)) {
 			frappe.model.round_floats_in(this.frm.doc, ["grand_total", "paid_amount"]);
 			// this will make outstanding amount 0
@@ -125,13 +130,18 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 		frappe.model.open_mapped_doc({
 			method: "erpnext.accounts.doctype.pos_invoice.pos_invoice.make_sales_return",
 			frm: cur_frm
-		})
+		});
 	},
 })
 
 $.extend(cur_frm.cscript, new erpnext.selling.POSInvoiceController({ frm: cur_frm }))
 
 frappe.ui.form.on('POS Invoice', {
+	refresh:function(frm){
+		if(frm.doc.returned==1){
+			frm.remove_custom_button("Return", 'Create');
+		}
+	},
 	redeem_loyalty_points: function(frm) {
 		frm.events.get_loyalty_details(frm);
 	},
@@ -203,5 +213,41 @@ frappe.ui.form.on('POS Invoice', {
 					frappe.msgprint('Payment request sent successfully');
 				});
 		});
-	}
+	},
+	// set_om_altotal:function (frm){
+	// 	// frm.refresh_field("taxes")
+	// 	// console.log(frm.doc.taxes)
+	// 	const taxes=frm.doc.taxes;
+	//
+	// 	frappe.call({
+	// 		doc:frm.doc,
+	// 		method:"updatepaidamounr",
+	// 		args:{
+	// 			taxes:taxes
+	// 		},
+	// 		callback(r){
+	// 			console.log(r.message)
+	// 		}
+	// 	})
+	// 	// var paid_amount= 0;
+	// 	// for(var i=0 ;i<frm.doc.items.length;i++){
+	// 	// 	paid_amount +=(Math.abs(frm.doc.items[i]['qty']) * Math.abs(frm.doc.items[i]['rate']))
+	// 	// 	// console.log(paid_amount)
+	// 	// }
+	// 	// for(var i=0 ;i<taxes.length;i++){
+	// 	// 	paid_amount +=Math.abs(taxes[i]['tax_amount'])
+    //     // 	// console.log(Math.abs(taxes[i].tax_amount))
+	// 	// }
+	// 	// // paid_amount = Math.round(paid_amount)
+	// 	// // paid_amount = -1* paid_amount;
+	// 	// frm.set_value("paid_amount", paid_amount)
+	// 	// frm.refresh_field("paid_amount")
+	// 	// // console.log(paid_amount)
+	// }
 });
+
+// frappe.ui.form.on('POS Invoice Item', {
+// 	qty:function (frm,cdt,cdn){
+// 		// frm.events.calculate_paid_amount()
+// 	}
+// })
