@@ -24,19 +24,17 @@ class POSInvoice(SalesInvoice):
 	def validate(self):
 		if not cint(self.is_pos):
 			frappe.throw(_("POS Invoice should have {} field checked.").format(frappe.bold("Include Payment")))
-		if self.paid_amount==0 and self.is_return==1:
-			self.paid_amount=(flt(self.total) + flt(self.total_taxes_and_charges))
 		if not self.debit_to:
 			self.debit_to = get_party_account("Customer", self.customer, self.company)
 			self.party_account_currency = frappe.db.get_value("Account", self.debit_to, "account_currency", cache=True)
 			if not self.debit_to:
 				frappe.msgprint("Debit to is mandatory")
-		try:
-			if self.is_return==1:
-				self.payments[0].amount=self.rounded_total
-				self.paid_amount =self.rounded_total
-		except:
-			pass
+		# try:
+		# 	if self.is_return:
+		# 		self.payments[0].amount=self.rounded_total
+		# 		self.paid_amount =self.rounded_total
+		# except:
+		# 	pass
 
 		# run on validate method of selling controller
 		super(SalesInvoice, self).validate()
@@ -58,12 +56,15 @@ class POSInvoice(SalesInvoice):
 		self.validate_pos()
 		self.validate_payment_amount()
 		self.validate_loyalty_transaction()
-
+		self.validate_paid()
 
 
 
 	def on_submit(self):
 		# create the loyalty point ledger entry if the customer is enrolled in any loyalty program
+		if self.is_return:
+			frappe.db.sql("""update `tabPOS Invoice` set returned=1 where name='{}'""".format(self.return_against))
+			frappe.db.commit()
 		if self.loyalty_program:
 			self.make_loyalty_point_entry()
 		elif self.is_return and self.return_against and self.loyalty_program:
@@ -82,12 +83,7 @@ class POSInvoice(SalesInvoice):
 				self.update_stock_ledger()
 		except:
 			pass
-		try:
-			if self.is_return ==1:
-				frappe.db.sql("""update `tabPOS Invoice` set returned=1 where name='{}'""".format(self.return_against))
-				frappe.db.commit()
-		except:
-			pass
+
 
 	def on_cancel(self):
 		# run on cancel method of selling controller
@@ -98,6 +94,10 @@ class POSInvoice(SalesInvoice):
 			against_psi_doc = frappe.get_doc("POS Invoice", self.return_against)
 			against_psi_doc.delete_loyalty_point_entry()
 			against_psi_doc.make_loyalty_point_entry()
+	def validate_paid(self):
+		grand_total = flt(self.rounded_total) or flt(self.grand_total)
+		if grand_total-(abs(self.rounded_total-self.grand_total)) > flt(self.paid_amount):
+			frappe.throw("Paid amount must be equal total amount")
 
 	def check_phone_payments(self):
 		for pay in self.payments:

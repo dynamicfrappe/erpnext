@@ -20,7 +20,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 
 	refresh(doc) {
 		this._super();
-		if (doc.docstatus == 1 && !doc.is_return && frappe.perm.has_perm(doc.doctype, 1, 'write')) {
+		if (doc.docstatus == 1 && doc.returned==0 && !doc.is_return && frappe.perm.has_perm(doc.doctype, 1, 'write')) {
 			this.frm.add_custom_button(__('Return'), this.make_sales_return, __('Create'));
 			this.frm.page.set_inner_btn_group_as_primary(__('Create'));
 		}
@@ -137,11 +137,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 $.extend(cur_frm.cscript, new erpnext.selling.POSInvoiceController({ frm: cur_frm }))
 
 frappe.ui.form.on('POS Invoice', {
-	refresh:function(frm){
-		if(frm.doc.returned==1){
-			frm.remove_custom_button("Return", 'Create');
-		}
-	},
+
 	redeem_loyalty_points: function(frm) {
 		frm.events.get_loyalty_details(frm);
 	},
@@ -214,40 +210,6 @@ frappe.ui.form.on('POS Invoice', {
 				});
 		});
 	},
-	// set_om_altotal:function (frm){
-	// 	// frm.refresh_field("taxes")
-	// 	// console.log(frm.doc.taxes)
-	// 	const taxes=frm.doc.taxes;
-	//
-	// 	frappe.call({
-	// 		doc:frm.doc,
-	// 		method:"updatepaidamounr",
-	// 		args:{
-	// 			taxes:taxes
-	// 		},
-	// 		callback(r){
-	// 			console.log(r.message)
-	// 		}
-	// 	})
-	// 	// var paid_amount= 0;
-	// 	// for(var i=0 ;i<frm.doc.items.length;i++){
-	// 	// 	paid_amount +=(Math.abs(frm.doc.items[i]['qty']) * Math.abs(frm.doc.items[i]['rate']))
-	// 	// 	// console.log(paid_amount)
-	// 	// }
-	// 	// for(var i=0 ;i<taxes.length;i++){
-	// 	// 	paid_amount +=Math.abs(taxes[i]['tax_amount'])
-    //     // 	// console.log(Math.abs(taxes[i].tax_amount))
-	// 	// }
-	// 	// // paid_amount = Math.round(paid_amount)
-	// 	// // paid_amount = -1* paid_amount;
-	// 	// frm.set_value("paid_amount", paid_amount)
-	// 	// frm.refresh_field("paid_amount")
-	// 	// // console.log(paid_amount)
-	// }
+
 });
 
-// frappe.ui.form.on('POS Invoice Item', {
-// 	qty:function (frm,cdt,cdn){
-// 		// frm.events.calculate_paid_amount()
-// 	}
-// })
