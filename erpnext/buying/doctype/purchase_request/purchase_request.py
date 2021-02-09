@@ -134,3 +134,22 @@ def make_request_for_quotation(source_name, target_doc=None):
 	}, target_doc)
 
 	return doclist
+
+
+
+
+
+@frappe.whitelist()	
+def query_set(purchase_requests= None ,*args ,**kwargs):
+	
+	
+	
+	# if not args : frappe.throw(str(args))
+	if purchase_requests  :
+		# pass
+		# frappe.throw(str(purchase_requests))
+		user = frappe.session.user
+		return """( (`tabMaterial Request`.owner = '{user}' )or (`tabMaterial Request`.docstatus= '1' AND 
+				`tabMaterial Request`.material_request_type = 'Purchase'))""".format(user=user)
+	else:
+		return None

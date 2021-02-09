@@ -558,3 +558,6 @@ jenv = {
 
 
 
+permission_query_conditions = {
+    "Material Request": "erpnext.buying.doctype.purchase_request.purchase_request.query_set",
+}
