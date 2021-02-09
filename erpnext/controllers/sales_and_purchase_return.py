@@ -255,8 +255,8 @@ def make_return_doc(doctype, source_name, target_doc=None):
 					base_paid_amount += data.base_amount
 					if data.mode_of_payment=='Cash':
 						doc.append('payments', {
-							'mode_of_payment': 'Cash',
-							'type':'Cash',
+							'mode_of_payment': data.mode_of_payment,
+							'type': data.type,
 							'amount': -1 * source.rounded_total,
 							'base_amount': -1 * source.rounded_total,
 							'account': data.account,

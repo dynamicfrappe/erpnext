@@ -181,7 +181,7 @@ erpnext.PointOfSale.Controller = class {
 
 		this.page.add_menu_item(__("Save as Draft"), this.save_draft_invoice.bind(this), false, 'Ctrl+S');
 
-		this.page.add_menu_item(__(''), this.close_pos.bind(this), false, 'Shift+Ctrl+C');
+		this.page.add_menu_item(__('Close the POS'), this.close_pos.bind(this), false, 'Shift+Ctrl+C');
 	}
 
 	open_form_view() {
