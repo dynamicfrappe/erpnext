@@ -254,7 +254,6 @@ def make_return_doc(doctype, source_name, target_doc=None):
 					paid_amount += data.amount
 					base_paid_amount += data.base_amount
 					if data.mode_of_payment=='Cash':
-						frappe.msgprint("from if in return" +" " +str(data.mode_of_payment))
 						doc.append('payments', {
 							'mode_of_payment': data.mode_of_payment,
 							'type': data.type,
