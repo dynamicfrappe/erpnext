@@ -61,8 +61,10 @@ class POSClosingEntry(Document):
 		for row in invalid_rows:
 			for msg in row.get('msg'):
 				error_list.append(_("Row #{}: {}").format(row.get('idx'), msg))
-
-		frappe.throw(error_list, title=_("Invalid POS Invoices"), as_list=True)
+		try:
+			frappe.throw(error_list, title=_("Invalid POS Invoices"), as_list=True)
+		except:
+			pass
 
 	def on_submit(self):
 		merge_pos_invoices(self.pos_transactions)
