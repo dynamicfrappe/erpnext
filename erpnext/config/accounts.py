@@ -13,6 +13,13 @@ def get_data():
 					"name": "Sales Invoice",
 					"description": _("Bills raised to Customers."),
 					"onboard": 1,
+				},\
+				{
+					"type": "doctype",
+					"label": _("Update Bank Transaction Dates"),
+					"name": "Bank Reconciliation",
+					"description": _("Update bank payment dates with journals."),
+					"onboard": 1,
 				},
 				{
 					"type": "doctype",
@@ -185,6 +192,12 @@ def get_data():
 					"type": "doctype",
 					"label": _("Invoice Discounting"),
 					"name": "Invoice Discounting",
+				},
+				{
+					"type": "page",
+					"label": _("Bank Reconciliation"),
+					"name": "bank-reconciliation",
+					"description": _("Match non-linked Invoices and Payments.")
 				},
 				{
 					"type": "doctype",
