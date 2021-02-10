@@ -25,7 +25,7 @@ class POSInvoice(SalesInvoice):
 
 	#create return adjustment 
 	def update_values_for_return(self):
-		time.sleep(1)
+
 		if  self.is_return:
 			self.paid_amount             = self.rounded_total or self.grand_total 
 			self.payments[0].base_amount = self.rounded_total or self.grand_total 
@@ -33,8 +33,14 @@ class POSInvoice(SalesInvoice):
 			return "done"
 
 
-
+	def get_pos_profile_wahrehouse(self):
+		pos_profile = frappe.get_doc("POS Profile" , self.pos_profile)
+		if pos_profile.warehouse : 
+			whare_house = pos_profile.warehouse
+			for i in self.items :
+				i.warehouse = whare_house
 	def validate(self):
+		self.get_pos_profile_wahrehouse()
 		if self.is_pos and self.is_return :
 			self.update_values_for_return()
 		if not cint(self.is_pos):
