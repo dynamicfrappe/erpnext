@@ -230,7 +230,6 @@ frappe.ui.form.on('POS Invoice', {
 frappe.ui.form.on('POS Invoice Item', {
 
 	qty:function(frm,cdt,cdn){
-
 		if (frm.doc.is_return)
 
     {
@@ -240,6 +239,7 @@ frappe.ui.form.on('POS Invoice Item', {
       			method:"update_values_for_return",
       			callback:function(r){
       				if (r.message){
+
       								refresh_field("payment")
       								refresh_field("paid_amount")
       								console.log(frm.doc.paid_amount)}
@@ -251,4 +251,18 @@ frappe.ui.form.on('POS Invoice Item', {
 					frm.refresh()
 			}
 	
+}) ; 
+
+
+
+
+
+frappe.ui.form.on('Sales Invoice Payment', {
+
+
+	mode_of_payment:function(frm, cdt,cdn){
+		console.log("setup")
+		// frm.set_df_property('mode_of_payment',"reqd", 0 , cdn, cdn);
+		frm.get_field("payments").grid.toggle_reqd("mode_of_payment", false);
+	}
 })

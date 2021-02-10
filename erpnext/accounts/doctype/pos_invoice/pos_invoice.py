@@ -30,6 +30,7 @@ class POSInvoice(SalesInvoice):
 			self.paid_amount             = self.rounded_total or self.grand_total 
 			self.payments[0].base_amount = self.rounded_total or self.grand_total 
 			self.payments[0].amount = self.rounded_total or self.grand_total
+
 			return "done"
 
 
@@ -39,6 +40,8 @@ class POSInvoice(SalesInvoice):
 			whare_house = pos_profile.warehouse
 			for i in self.items :
 				i.warehouse = whare_house
+		if not self.payments[0].mode_of_payment :
+				self.payments[0].mode_of_payment= pos_profile.payments[0].mode_of_payment
 	def validate(self):
 		self.get_pos_profile_wahrehouse()
 		if self.is_pos and self.is_return :
