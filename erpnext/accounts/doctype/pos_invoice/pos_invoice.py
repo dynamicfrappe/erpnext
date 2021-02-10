@@ -14,14 +14,29 @@ from erpnext.accounts.doctype.payment_request.payment_request import make_paymen
 from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
 from erpnext.stock.doctype.serial_no.serial_no import get_pos_reserved_serial_nos, get_serial_nos
 from erpnext.accounts.doctype.sales_invoice.sales_invoice import SalesInvoice, get_bank_cash_account, update_multi_mode_option
-
+import time
 from six import iteritems
 
 class POSInvoice(SalesInvoice):
 	def __init__(self, *args, **kwargs):
 		super(POSInvoice, self).__init__(*args, **kwargs)
 
+
+
+	#create return adjustment 
+	def update_values_for_return(self):
+		time.sleep(1)
+		if  self.is_return:
+			self.paid_amount             = self.rounded_total or self.grand_total 
+			self.payments[0].base_amount = self.rounded_total or self.grand_total 
+			self.payments[0].amount = self.rounded_total or self.grand_total
+			return "done"
+
+
+
 	def validate(self):
+		if self.is_pos and self.is_return :
+			self.update_values_for_return()
 		if not cint(self.is_pos):
 			frappe.throw(_("POS Invoice should have {} field checked.").format(frappe.bold("Include Payment")))
 		if not self.debit_to:

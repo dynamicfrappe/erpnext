@@ -18,6 +18,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 		}
 	},
 
+
 	refresh(doc) {
 		this._super();
 		if (doc.docstatus == 1 && doc.returned==0 && !doc.is_return && frappe.perm.has_perm(doc.doctype, 1, 'write')) {
@@ -29,6 +30,15 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 			this.frm.return_print_format = "Sales Invoice Return";
 			this.frm.set_value('consolidated_invoice', '');
 		}
+
+			
+
+
+			frappe.call({
+				method: "update_values_for_return" ,
+				"doc" : doc
+			})
+  			
 	},
 
 	is_pos: function() {
@@ -210,6 +220,35 @@ frappe.ui.form.on('POS Invoice', {
 				});
 		});
 	},
+	
 
 });
 
+
+
+
+frappe.ui.form.on('POS Invoice Item', {
+
+	qty:function(frm,cdt,cdn){
+
+		if (frm.doc.is_return)
+
+    {
+      		
+  				frappe.call({
+      			doc:frm.doc,
+      			method:"update_values_for_return",
+      			callback:function(r){
+      				if (r.message){
+      								refresh_field("payment")
+      								refresh_field("paid_amount")
+      								console.log(frm.doc.paid_amount)}
+      								frm.refresh()
+      			}
+      						})}
+				refresh_field("payment")
+				refresh_field("paid_amount")
+					frm.refresh()
+			}
+	
+})

@@ -145,7 +145,7 @@ def query_set(purchase_requests= None ,*args ,**kwargs):
 	
 	
 	# if not args : frappe.throw(str(args))
-	if purchase_requests  :
+	if purchase_requests != frappe.session.usergit  :
 		# pass
 		# frappe.throw(str(purchase_requests))
 		user = frappe.session.user
