@@ -21,7 +21,7 @@ erpnext.selling.POSInvoiceController = erpnext.selling.SellingController.extend(
 
 	refresh(doc) {
 		this._super();
-		if (doc.docstatus == 1 && doc.returned==0 && !doc.is_return && frappe.perm.has_perm(doc.doctype, 1, 'write')) {
+		if ( !doc.consolidated_invoice && doc.docstatus == 1 && doc.returned==0 && !doc.is_return && frappe.perm.has_perm(doc.doctype, 1, 'write')) {
 			this.frm.add_custom_button(__('Return'), this.make_sales_return, __('Create'));
 			this.frm.page.set_inner_btn_group_as_primary(__('Create'));
 		}

@@ -1,5 +1,4 @@
 {
- "actions": [],
  "autoname": "POS-OPE-.YYYY.-.#####",
  "creation": "2020-03-05 16:58:53.083708",
  "doctype": "DocType",
@@ -32,11 +31,11 @@
    "reqd": 1
   },
   {
+   "fetch_from": "pos_closing_entry.period_end_date",
    "fieldname": "period_end_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
-   "label": "Period End Date",
-   "read_only": 1
+   "label": "Period End Date"
   },
   {
    "fieldname": "column_break_3",
@@ -113,8 +112,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "pos_closing_entry",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "POS Closing Entry",
+   "options": "POS Closing Entry",
    "read_only": 1
   },
   {
@@ -130,8 +130,7 @@
   }
  ],
  "is_submittable": 1,
- "links": [],
- "modified": "2020-05-29 15:08:40.955310",
+ "modified": "2021-02-10 16:04:23.766203",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Opening Entry",
