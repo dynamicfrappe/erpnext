@@ -309,6 +309,7 @@
    "default": "1",
    "fieldname": "update_stock",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Update Stock",
    "read_only": 1
   },
@@ -339,7 +340,7 @@
  ],
  "icon": "icon-cog",
  "idx": 1,
- "modified": "2021-02-08 16:16:42.423827",
+ "modified": "2021-02-10 16:27:09.745700",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Profile",
