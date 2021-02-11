@@ -135,6 +135,7 @@
    "precision": "2"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "earnings",
    "fieldtype": "Table",
    "label": "Earnings",
@@ -143,6 +144,7 @@
    "options": "Salary Detail"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "deductions",
    "fieldtype": "Table",
    "label": "Deductions",
@@ -161,6 +163,7 @@
    "width": "50%"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_earning",
    "fieldtype": "Currency",
    "hidden": 1,
@@ -169,6 +172,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_deduction",
    "fieldtype": "Currency",
    "hidden": 1,
@@ -177,6 +181,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "net_pay",
    "fieldtype": "Currency",
    "hidden": 1,
@@ -230,7 +235,7 @@
  "icon": "fa fa-file-text",
  "idx": 1,
  "is_submittable": 1,
- "modified": "2021-01-18 14:36:08.236897",
+ "modified": "2021-02-11 10:12:23.041295",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Salary Structure",
