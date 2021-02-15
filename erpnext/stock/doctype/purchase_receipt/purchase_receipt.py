@@ -647,3 +647,7 @@ def get_item_account_wise_additional_cost(purchase_document):
 
 	return item_account_wise_cost
 
+domains = frappe.get_active_domains()
+if "Auto Plus" in domains :
+	from dynamicerp.auto_plus.doctype.purchase_receipt.purchase_receipt import validate
+	PurchaseReceipt.validate = validate

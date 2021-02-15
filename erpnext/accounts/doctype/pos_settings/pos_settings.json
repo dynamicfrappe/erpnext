@@ -1,5 +1,4 @@
 {
- "actions": [],
  "creation": "2017-08-28 16:46:41.732676",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -16,8 +15,7 @@
   }
  ],
  "issingle": 1,
- "links": [],
- "modified": "2020-06-01 15:46:41.478928",
+ "modified": "2021-02-15 11:45:13.194411",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Settings",
