@@ -803,8 +803,8 @@ def get_pos_profile(company, pos_profile=None, user=None):
 		""", {
 			'company': company
 		}, as_dict=1)
-
-	return pos_profile and pos_profile[0] or None
+	open_pos_profile = frappe.db.sql("""SELECT pos_profile FROM `tabPOS Opening Entry` WHERE status= 'Open'  """)
+	return pos_profile and pos_profile[0] or open_pos_profile[0]
 
 def get_serial_nos_by_fifo(args, sales_order=None):
 	if frappe.db.get_single_value("Stock Settings", "automatically_set_serial_nos_based_on_fifo"):

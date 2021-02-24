@@ -15,6 +15,8 @@ frappe.pages['point-of-sale'].on_page_load = function(wrapper) {
 };
 
 frappe.pages['point-of-sale'].refresh = function(wrapper) {
+	// wrapper.pos = new erpnext.PointOfSale.Controller(wrapper);
+	window.cur_pos = wrapper.pos;
 	if (document.scannerDetectionData) {
 		onScan.detachFrom(document);
 		wrapper.pos.wrapper.html("");

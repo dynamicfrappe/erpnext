@@ -33,7 +33,7 @@ frappe.ui.form.CustomerQuickEntryForm = frappe.ui.form.QuickEntryForm.extend({
 		{
 			fieldtype: "Section Break",
 			label: __("Primary Address Details"),
-			collapsible: 1
+			collapsible: 0
 		},
 		{
 			label: __("Address Line 1"),
@@ -73,7 +73,7 @@ frappe.ui.form.CustomerQuickEntryForm = frappe.ui.form.QuickEntryForm.extend({
 			label: __("Customer POS Id"),
 			fieldname: "customer_pos_id",
 			fieldtype: "Data",
-			hidden: 1
+			hidden: 0
 		}];
 
 		return variant_fields;

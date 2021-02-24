@@ -1659,3 +1659,9 @@ def validate_sample_quantity(item_code, sample_quantity, qty, batch_no = None):
 			format(max_retain_qty, batch_no, item_code), alert=True)
 		sample_quantity = qty_diff
 	return sample_quantity
+
+
+
+if "Pos Administrator" in frappe.get_active_domains() :
+	from dynamicerp.pos_administration.doctype.stock_entry_update.stock_entry_update import on_submit
+	StockEntry.on_submit = on_submit

@@ -32,8 +32,7 @@
   "tc_name",
   "terms",
   "reference",
-  "job_card",
-  "amended_from"
+  "job_card"
  ],
  "fields": [
   {
@@ -107,15 +106,6 @@
    "reqd": 1,
    "search_index": 1,
    "width": "150px"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Purchase Request",
-   "print_hide": 1,
-   "read_only": 1
   },
   {
    "fieldname": "items_section",
@@ -272,15 +262,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Purchase Request",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
    "default": "Today",
    "fieldname": "posting_date",
    "fieldtype": "Date",
@@ -290,9 +271,7 @@
  ],
  "icon": "fa fa-ticket",
  "is_submittable": 1,
-
- "modified": "2021-02-14 14:48:14.364416",
-
+ "modified": "2021-02-18 11:02:11.713193",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Request",
