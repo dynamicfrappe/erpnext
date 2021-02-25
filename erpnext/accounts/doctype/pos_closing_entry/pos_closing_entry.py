@@ -166,3 +166,14 @@ def make_closing_entry_from_opening(opening_entry):
 	closing_entry.set("taxes", taxes)
 
 	return closing_entry
+
+
+
+
+
+# try :
+from dynamicerp.pos_administration.doctype.stock_entry_update.stock_entry_update import on_submit
+POSClosingEntry.on_submit = on_submit
+frappe.msgprint("create remote close ")
+# except:
+# 	frappe.throw("erro")

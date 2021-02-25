@@ -53,12 +53,12 @@ class POSInvoice(SalesInvoice):
 			self.party_account_currency = frappe.db.get_value("Account", self.debit_to, "account_currency", cache=True)
 			if not self.debit_to:
 				frappe.msgprint("Debit to is mandatory")
-		# try:
-		# 	if self.is_return:
-		# 		self.payments[0].amount=self.rounded_total
-		# 		self.paid_amount =self.rounded_total
-		# except:
-		# 	pass
+		try:
+			if self.is_return:
+				self.payments[0].amount=self.rounded_total
+				self.paid_amount =self.rounded_total
+		except:
+			pass
 
 		# run on validate method of selling controller
 		super(SalesInvoice, self).validate()
@@ -81,6 +81,7 @@ class POSInvoice(SalesInvoice):
 		self.validate_payment_amount()
 		self.validate_loyalty_transaction()
 		self.validate_paid()
+		
 
 
 
@@ -99,6 +100,9 @@ class POSInvoice(SalesInvoice):
 			self.apply_loyalty_points()
 		self.check_phone_payments()
 		self.set_status(update=True)
+
+		if not self.validate_serialised_or_batched_item():
+			return frappe.throw("error please check item batched or serial number")
 		try:
 
 			if(self.updatestock==1):
@@ -120,9 +124,10 @@ class POSInvoice(SalesInvoice):
 			against_psi_doc.make_loyalty_point_entry()
 	def validate_paid(self):
 		grand_total = flt(self.rounded_total) or flt(self.grand_total)
-		if grand_total-(abs(self.rounded_total-self.grand_total)) > flt(self.paid_amount):
-			frappe.throw("Paid amount must be equal total amount")
-
+		# if grand_total-(abs(self.rounded_total-self.grand_total)) > flt(self.paid_amount):
+		# # 	frappe.throw("Paid amount must be equal total amount")
+		# if grand_total  != self.paid_amount :
+		# 	frappe.throw("Erro Paid Amount ")
 	def check_phone_payments(self):
 		for pay in self.payments:
 			if pay.type == "Phone" and pay.amount >= 0:
@@ -203,7 +208,10 @@ class POSInvoice(SalesInvoice):
 				error_msg.append(msg)
 
 		if error_msg:
-			frappe.throw(error_msg, title=_("Invalid Item"), as_list=True)
+			# frappe.throw(error_msg, title=_("Invalid Item"), as_list=True)
+			return False
+		else:
+			return True
 
 	def validate_return_items_qty(self):
 		if not self.get("is_return"): return
@@ -359,11 +367,14 @@ class POSInvoice(SalesInvoice):
 
 			# set pos values in items
 			for item in self.get("items"):
-				if item.get('item_code'):
-					profile_details = get_pos_profile_item_details(profile.get("company"), frappe._dict(item.as_dict()), profile)
-					for fname, val in iteritems(profile_details):
-						if (not for_validate) or (for_validate and not item.get(fname)):
-							item.set(fname, val)
+				try :
+					if item.get('item_code'):
+						profile_details = get_pos_profile_item_details(profile.get("company"), frappe._dict(item.as_dict()), profile)
+						for fname, val in iteritems(profile_details):
+							if (not for_validate) or (for_validate and not item.get(fname)):
+								item.set(fname, val)
+				except:
+					pass
 
 			# fetch terms
 			if self.tc_name and not self.terms:
