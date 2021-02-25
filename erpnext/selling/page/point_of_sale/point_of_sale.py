@@ -170,7 +170,9 @@ def item_group_query(doctype, txt, searchfield, start, page_len, filters):
 			{'txt': '%%%s%%' % txt})
 
 @frappe.whitelist()
-def check_opening_entry(user):
+def check_opening_entry(user= None):
+	if not user :
+		user = frappe.session.user
 	open_vouchers = frappe.db.get_all("POS Opening Entry",
 		filters = {
 			"user": user,
@@ -203,27 +205,31 @@ def create_opening_voucher(pos_profile, company, balance_details):
 	return new_pos_opening.as_dict()
 
 @frappe.whitelist()
-def get_past_order_list(search_term, status, limit=20):
-	fields = ['name', 'grand_total', 'currency', 'customer', 'posting_time', 'posting_date']
+def get_past_order_list(search_term=None, status =None, limit=20):
 	invoice_list = []
+	try :
+		fields = ['name', 'grand_total', 'currency', 'customer', 'posting_time', 'posting_date']
+		invoice_list = []
 
-	if search_term and status:
-		invoices_by_customer = frappe.db.get_all('POS Invoice', filters={
-			'customer': ['like', '%{}%'.format(search_term)],
-			'status': status
-		}, fields=fields)
-		invoices_by_name = frappe.db.get_all('POS Invoice', filters={
-			'name': ['like', '%{}%'.format(search_term)],
-			'status': status
-		}, fields=fields)
+		if search_term and status:
+			invoices_by_customer = frappe.db.get_all('POS Invoice', filters={
+				'customer': ['like', '%{}%'.format(search_term)],
+				'status': status
+			}, fields=fields)
+			invoices_by_name = frappe.db.get_all('POS Invoice', filters={
+				'name': ['like', '%{}%'.format(search_term)],
+				'status': status
+			}, fields=fields)
 
-		invoice_list = invoices_by_customer + invoices_by_name
-	elif status:
-		invoice_list = frappe.db.get_all('POS Invoice', filters={
-			'status': status
-		}, fields=fields)
+			invoice_list = invoices_by_customer + invoices_by_name
+		elif status:
+			invoice_list = frappe.db.get_all('POS Invoice', filters={
+				'status': status
+			}, fields=fields)
 
-	return invoice_list
+		return invoice_list
+	except: 
+		return invoice_list
 
 @frappe.whitelist()
 def set_customer_info(fieldname, customer, value=""):

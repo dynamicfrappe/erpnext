@@ -88,7 +88,7 @@ erpnext.PointOfSale.PastOrderList = class {
 		const status = this.status_field.get_value();
 
 		this.$invoices_container.html('');
-
+		try {
 		return frappe.call({
 			method: "erpnext.selling.page.point_of_sale.point_of_sale.get_past_order_list",
 			freeze: true,
@@ -100,7 +100,11 @@ erpnext.PointOfSale.PastOrderList = class {
 					this.$invoices_container.append(invoice_html);
 				});
 			}
-		});
+		})	}
+
+		 catch(err) {
+		 	console.log(err)
+		 };
 	}
 
 	get_invoice_html(invoice) {

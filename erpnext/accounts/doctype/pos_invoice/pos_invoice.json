@@ -1603,7 +1603,7 @@
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
- "modified": "2021-02-08 17:10:43.307449",
+ "modified": "2021-02-20 14:17:54.652770",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Invoice",

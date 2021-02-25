@@ -168,35 +168,37 @@ def apply_pricing_rule(args, doc=None):
 			"ignore_pricing_rule": "something"
 		}
 	"""
+	try :
+		if isinstance(args, string_types):
+			args = json.loads(args)
 
-	if isinstance(args, string_types):
-		args = json.loads(args)
+		args = frappe._dict(args)
 
-	args = frappe._dict(args)
+		if not args.transaction_type:
+			set_transaction_type(args)
 
-	if not args.transaction_type:
-		set_transaction_type(args)
+		# list of dictionaries
+		out = []
 
-	# list of dictionaries
-	out = []
+		if args.get("doctype") == "Material Request": return out
 
-	if args.get("doctype") == "Material Request": return out
+		item_list = args.get("items")
+		args.pop("items")
 
-	item_list = args.get("items")
-	args.pop("items")
+		set_serial_nos_based_on_fifo = frappe.db.get_single_value("Stock Settings",
+			"automatically_set_serial_nos_based_on_fifo")
 
-	set_serial_nos_based_on_fifo = frappe.db.get_single_value("Stock Settings",
-		"automatically_set_serial_nos_based_on_fifo")
+		for item in item_list:
+			args_copy = copy.deepcopy(args)
+			args_copy.update(item)
+			data = get_pricing_rule_for_item(args_copy, item.get('price_list_rate'), doc=doc)
+			out.append(data)
+			if not item.get("serial_no") and set_serial_nos_based_on_fifo and not args.get('is_return'):
+				out[0].update(get_serial_no_for_item(args_copy))
 
-	for item in item_list:
-		args_copy = copy.deepcopy(args)
-		args_copy.update(item)
-		data = get_pricing_rule_for_item(args_copy, item.get('price_list_rate'), doc=doc)
-		out.append(data)
-		if not item.get("serial_no") and set_serial_nos_based_on_fifo and not args.get('is_return'):
-			out[0].update(get_serial_no_for_item(args_copy))
-
-	return out
+		return out
+	except:
+		return 0
 
 def get_serial_no_for_item(args):
 	from erpnext.stock.get_item_details import get_serial_no
