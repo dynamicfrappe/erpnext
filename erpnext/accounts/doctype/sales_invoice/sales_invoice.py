@@ -96,6 +96,7 @@ class SalesInvoice(SellingController):
 
 		if cint(self.is_pos):
 			self.validate_pos()
+			self.update_stock = 1 
 
 		if cint(self.update_stock):
 			self.validate_dropship_item()
