@@ -36,6 +36,7 @@ class Employee(NestedSet):
 		self.employee = self.name
 
 	def validate(self):
+
 		from erpnext.controllers.status_updater import validate_status
 		validate_status(self.status, ["Active", "Temporary Leave", "Left"])
 

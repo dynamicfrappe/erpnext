@@ -1,5 +1,4 @@
 {
- "actions": [],
  "creation": "2013-08-02 13:45:23",
  "doctype": "DocType",
  "document_type": "Other",
@@ -23,7 +22,9 @@
   "restrict_backdated_leave_application",
   "automatically_allocate_leaves_based_on_leave_policy",
   "hiring_settings",
-  "check_vacancies"
+  "check_vacancies",
+  "administration_section",
+  "max_of_employees"
  ],
  "fields": [
   {
@@ -132,13 +133,25 @@
    "fieldname": "automatically_allocate_leaves_based_on_leave_policy",
    "fieldtype": "Check",
    "label": "Automatically Allocate Leaves Based On Leave Policy"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "administration_section",
+   "fieldtype": "Section Break",
+   "label": "Administration",
+   "permlevel": 1
+  },
+  {
+   "default": "10",
+   "fieldname": "max_of_employees",
+   "fieldtype": "Int",
+   "label": "Max of Employees"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
- "links": [],
- "modified": "2020-08-27 14:30:28.995324",
+ "modified": "2021-03-06 11:42:41.106454",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",
