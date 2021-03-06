@@ -69,8 +69,112 @@ def get_data():
 
             ]
         },
-       
-       
+        {
+            "label": _("Attendance"),
+            "items": [
+                {
+                    "type": "doctype",
+                    "name": "Employee Attendance Tool",
+                    "hide_count": True,
+                    "onboard": 1,
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Attendance Rule"
+                },
+                {
+                    "type": "doctype",
+                    "name": "Attendance",
+                    "onboard": 1,
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Attendance Request",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Upload Attendance",
+                    "hide_count": True,
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Employee Checkin",
+                    "hide_count": True,
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Device",
+                    "hide_count": True,
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Device Log",
+                    "hide_count": True,
+                    "dependencies": ["Device"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Employee Attendance Logs",
+                    "hide_count": True,
+                    "dependencies": ["Device Log"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Attendance Calculation",
+                    "hide_count": True,
+                    "dependencies": ["Device Log"]
+                },
+                {
+                    "label": "Monthly Attendance Sheet Details",
+                    "type": "report",
+                    "is_query_report": True,
+                    "name": "Attendance Sheet",
+                    "doctype": "Employee Attendance Logs"
+                },
+                {
+                    "label": "Monthly Attendance Sheet",
+                    "type": "report",
+                    "is_query_report": True,
+                    "name": "Monthly Attendance Sheet",
+                    "doctype": "Attendance"
+                },
+            ]
+        },
+        {
+            "label": _("Business Trips And Mission"),
+            "items": [
+                {
+                    "type": "doctype",
+                    "name": "Business Trip"
+                },
+                {
+                    "type": "doctype",
+                    "name": "Mission",
+                    "dependencies": ["Mission Destination"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Mission Destination"
+                },
+                {
+                    "type": "doctype",
+                    "name": "Permission",
+                    "dependencies": ["Permission Type"]
+
+                },
+                {
+                    "type": "doctype",
+                    "name": "Permission Type"
+                }
+
+            ]
+        }
         # ,
         # {
         #  "label":_("New PayRoll "),
@@ -103,7 +207,7 @@ def get_data():
         #
         #  ]
         # }
-        
+        ,
         {
             "label": _("Employee Penalties"),
             "items": [
@@ -132,8 +236,67 @@ def get_data():
                 }
 
             ]
+        }
+        ,
+        {
+            "label": _("Leaves"),
+            "items": [
+                {
+                    "type": "doctype",
+                    "name": "Leave Application",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Allocation",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Policy",
+                    "dependencies": ["Leave Type"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Period",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Type",
+                },
+                {
+                    "type": "doctype",
+                    "name": "Holiday List",
+                },
+                {
+                    "type": "doctype",
+                    "name": "Compensatory Leave Request",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Encashment",
+                    "dependencies": ["Employee"]
+                },
+                {
+                    "type": "doctype",
+                    "name": "Leave Block List",
+                },
+                {
+                    "type": "report",
+                    "is_query_report": True,
+                    "name": "Employee Leave Balance",
+                    "doctype": "Leave Application"
+                },
+                {
+                    "type": "report",
+                    "is_query_report": True,
+                    "name": "Leave Ledger Entry",
+                    "doctype": "Leave Ledger Entry"
+                },
+            ]
         },
-       
         # {
         #     "label": _("Payroll"),
         #     "items": [
