@@ -2,6 +2,15 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Department', {
+	setup:function(frm){
+		frm.set_query("type","department_managment",function(){
+			return{
+					filters: {
+					name: ["in", ["Department Managment Roles", "Role"]]
+				}
+			}
+		})
+	},
 	onload: function(frm) {
 		frm.set_query("parent_department", function(){
 			return {"filters": [["Department", "is_group", "=", 1]]};
