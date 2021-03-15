@@ -41,7 +41,7 @@ class SalarySlip(TransactionBase):
 		for i in self.get("earnings") +  self.get("deductions") :
 			if i.additional_salary :
 				ad_sal = frappe.get_doc("Additional Salary" , i.additional_salary)
-				if ad_sal and ad_sal != self.name :
+				if ad_sal and ad_sal.salary_slip != self.name :
 					frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
 				names.append(i.additional_salary)
 		names = tuple(names)
