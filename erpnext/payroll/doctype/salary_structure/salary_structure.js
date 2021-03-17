@@ -141,7 +141,6 @@ frappe.ui.form.on('Salary Structure', {
 				],
 				primary_action: function() {
 					var data = d.get_values();
-					debugger;
 					frappe.call({
 						doc: frm.doc,
 						method: "assign_salary_structure",

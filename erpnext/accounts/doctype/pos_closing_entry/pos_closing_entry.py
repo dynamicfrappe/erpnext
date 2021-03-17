@@ -172,7 +172,7 @@ def make_closing_entry_from_opening(opening_entry):
 
 
 try :
- 	from dynamicerp.pos_administration.doctype.stock_entry_update.stock_entry_update import submit_o
+	from dynamicerp.pos_administration.doctype.stock_entry_update.stock_entry_update import submit_o
 	POSClosingEntry.on_submit = submit_o
 # frappe.msgprint("create remote close ")
 except:
