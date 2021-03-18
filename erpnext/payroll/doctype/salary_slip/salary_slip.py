@@ -41,7 +41,8 @@ class SalarySlip(TransactionBase):
 		for i in self.get("earnings") +  self.get("deductions") :
 			if i.additional_salary :
 				ad_sal = frappe.get_doc("Additional Salary" , i.additional_salary)
-				if ad_sal and ad_sal.salary_slip != self.name :
+				if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name :
+					frappe.msgprint(str(ad_sal.salary_slip))
 					frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
 				names.append(i.additional_salary)
 		names = tuple(names)
@@ -1190,10 +1191,11 @@ class SalarySlip(TransactionBase):
 			self.calculate_total_for_salary_slip_based_on_timesheet()
 		else:
 			self.total_deduction = 0
-			if self.earnings:
+			if hasattr (self,"earnings"):
 				for earning in self.earnings:
 					self.gross_pay += flt(earning.amount)
-			if self.deductions:
+			if hasattr(self, "deductions"):
+
 				for deduction in self.deductions:
 					self.total_deduction += flt(deduction.amount)
 			self.net_pay = flt(self.gross_pay) - flt(self.total_deduction) - flt(self.total_loan_repayment)
