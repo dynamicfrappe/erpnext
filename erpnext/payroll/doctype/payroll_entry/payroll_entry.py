@@ -628,6 +628,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_journal_entry
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import make_accrual_jv_entry
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_sal_slip_list
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_filter_condition
 
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import payroll_entry_has_bank_entries
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips_for_employees
@@ -637,5 +638,6 @@ try:
 	create_salary_slips_for_employees = create_salary_slips_for_employees
 	PayrollEntry.get_sal_slip_list = get_sal_slip_list
 	payroll_entry_has_bank_entries = payroll_entry_has_bank_entries
+	PayrollEntry.get_filter_condition = get_filter_condition
 except:
 	pass
