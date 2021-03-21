@@ -42,7 +42,6 @@ class SalarySlip(TransactionBase):
 			if i.additional_salary :
 				ad_sal = frappe.get_doc("Additional Salary" , i.additional_salary)
 				if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name :
-					frappe.msgprint(str(ad_sal.salary_slip))
 					frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
 				names.append(i.additional_salary)
 		names = tuple(names)
@@ -1075,6 +1074,7 @@ class SalarySlip(TransactionBase):
 				amounts = calculate_amounts(loan.name, self.posting_date, "Regular Payment")
 
 				if amounts['interest_amount'] or amounts['payable_principal_amount']:
+
 					self.append('loans', {
 						'loan': loan.name,
 						'total_payment': amounts['interest_amount'] + amounts['payable_principal_amount'],
