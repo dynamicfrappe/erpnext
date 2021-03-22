@@ -89,7 +89,8 @@ class PayrollEntry(Document):
 				error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
 			if self.end_date:
 				error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
-			frappe.throw(error_msg, title=_("No employees found"))
+			frappe.msgprint(error_msg, title=_("No employees found"),indicator='red')
+			return
 
 		for d in employees:
 			self.append('employees', d)
@@ -629,6 +630,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import make_accrual_jv_entry
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_sal_slip_list
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_filter_condition
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_emp_list
 
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import payroll_entry_has_bank_entries
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips_for_employees
@@ -639,5 +641,6 @@ try:
 	PayrollEntry.get_sal_slip_list = get_sal_slip_list
 	payroll_entry_has_bank_entries = payroll_entry_has_bank_entries
 	PayrollEntry.get_filter_condition = get_filter_condition
+	PayrollEntry.get_emp_list = get_emp_list
 except:
 	pass
