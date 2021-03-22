@@ -22,18 +22,18 @@ def execute():
 
 def add_salary_component():
 	earnings = ["Overtime" , "Weekend Overtime" , "Holiday Overtime" , "Staying Up Late"]
-	deductions = ["Less Time","Delays" , "Delays Penality" , "Absnet" , "Absent Penality" , "Loan" , "Advance" , "Medical Insurance" , "Social Insurance" , "Fingerprint Forgetten Penality"]
+	deductions = ["Holding","Less Time","Delays" , "Delays Penality" , "Absnet" , "Absent Penality" , "Loan" , "Advance" , "Medical Insurance" , "Social Insurance" , "Fingerprint Forgetten Penality"]
 	for i in earnings:
 		if  not frappe.db.exists('Salary Component', str(i)):
 				abbr = ''.join([ s[0].upper()+s[-1].lower() + '_' for s in i.split() ])+"E"
-				frappe.db.sql(""" insert into `tabSalary Component` (name,salary_component , type , salary_component_abbr ) 
-				values ('{name}' , '{name}' , 'Earning' , '{abbr}' )
+				frappe.db.sql(""" insert into `tabSalary Component` (name,salary_component , type , salary_component_abbr,is_additional_salary ) 
+				values ('{name}' , '{name}' , 'Earning' , '{abbr}',1 )
 				""".format(name = i , abbr = abbr))
 	for i in deductions:
 		if  not frappe.db.exists('Salary Component', str(i)):
 				abbr = ''.join([ s[0].upper()+s[-1].lower() + '_' for s in i.split() ])+"D"
-				frappe.db.sql(""" insert into `tabSalary Component` (name,salary_component , type , salary_component_abbr ) 
-				values ('{name}' , '{name}' , 'Deduction' , '{abbr}' )
+				frappe.db.sql(""" insert into `tabSalary Component` (name,salary_component , type , salary_component_abbr,is_additional_salary ) 
+				values ('{name}' , '{name}' , 'Deduction' , '{abbr}' , 1 )
 				""".format(name = i , abbr = abbr))
 
 
