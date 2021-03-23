@@ -63,3 +63,21 @@ class AttendanceRequest(Document):
 			return True
 
 		return False
+
+
+try:
+	from dynamicerp.dynamic_hr.doctype.attendance_request.attendance_request import validate
+	from dynamicerp.dynamic_hr.doctype.attendance_request.attendance_request import on_submit
+	from dynamicerp.dynamic_hr.doctype.attendance_request.attendance_request import on_cancel
+	from dynamicerp.dynamic_hr.doctype.attendance_request.attendance_request import create_attendance
+	from dynamicerp.dynamic_hr.doctype.attendance_request.attendance_request import validate_if_attendance_not_applicable
+	
+	AttendanceRequest.validate = validate
+	AttendanceRequest.on_submit = on_submit
+	AttendanceRequest.on_cancel = on_cancel
+	AttendanceRequest.create_attendance = create_attendance
+	AttendanceRequest.validate_if_attendance_not_applicable = validate_if_attendance_not_applicable
+
+
+except :
+	pass
