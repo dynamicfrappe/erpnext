@@ -15,7 +15,7 @@ class EmployeePromotion(Document):
 			frappe.throw(_("Cannot promote Employee with status Left"))
 
 	def before_submit(self):
-		if getdate(self.promotion_date) > getdate():
+		if getdate(self.promotion_date) > getdate() and False:
 			frappe.throw(_("Employee Promotion cannot be submitted before Promotion Date "),
 				frappe.DocstatusTransitionError)
 
