@@ -43,12 +43,12 @@ def create_asset_movement(name , *args,**kwargs):
 
 		doc.reference_doctype = "Custody request"
 		doc.reference_name = name
-		for i in frm.get('custody_request_item'):
-			for x in range(0,i.qty):
-				row=doc.append('assets',{})
-				row.asset=i.item
-				if frm.reference_document_type == "Employee":
-					row.to_employee = frm.reference_document_name
+		# for i in frm.get('custody_request_item'):
+		# 	for x in range(0,i.qty):
+		# 		row=doc.append('assets',{})
+		# 		row.asset=i.item
+		# 		if frm.reference_document_type == "Employee":
+		# 			row.to_employee = frm.reference_document_name
 
 
 
