@@ -36,7 +36,7 @@ def get_data():
 			},
 			{
 				'label': _('Payroll'),
-				'items': ['Salary Structure Assignment', 'Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus', 'Bank Account']
+				'items': ['Salary Structure Assignment', 'Salary Slip', 'Additional Salary', 'Timesheet','Employee Incentive', 'Retention Bonus']
 			},
 			{
 				'label': _('Training'),
