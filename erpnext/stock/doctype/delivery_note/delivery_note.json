@@ -1,5 +1,4 @@
 {
- "actions": [],
  "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2013-05-24 19:29:09",
@@ -13,6 +12,9 @@
   "naming_series",
   "customer",
   "customer_name",
+  "is_custdy",
+  "employee",
+  "employee_name",
   "column_break1",
   "amended_from",
   "company",
@@ -1247,14 +1249,34 @@
   {
    "fieldname": "section_break_18",
    "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_custdy",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Is Custudy"
+  },
+  {
+   "depends_on": "eval:doc.is_custdy==1;",
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-truck",
  "idx": 146,
  "is_submittable": 1,
- "modified": "2020-11-12 12:09:06.377496",
- "links": [],
- "modified": "2020-05-19 17:03:45.880106",
+ "modified": "2021-03-18 11:03:08.043224",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Delivery Note",
