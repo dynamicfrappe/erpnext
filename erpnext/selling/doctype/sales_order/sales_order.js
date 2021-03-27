@@ -36,6 +36,7 @@ frappe.ui.form.on("Sales Order", {
 		})
 	},
 	refresh: function(frm) {
+
 		if (!frm.is_new() && frm.doc.docstatus == 0)
 		{
 			frm.add_custom_button(__("Check Delivery Date"), function() {
@@ -174,8 +175,8 @@ frappe.ui.form.on("Sales Order", {
 			frm.refresh_field("delivery_date")
 			frappe.throw(__("Order date can not be in past date"))
 		}
-		}
-	
+		},
+
 });
 
 frappe.ui.form.on("Sales Order Item", {
