@@ -14,7 +14,7 @@ from frappe.desk.notifications import clear_doctype_notifications
 from frappe.model.mapper import get_mapped_doc
 from frappe.model.utils import get_fetch_values
 from frappe.utils import cint, flt
-
+import datetime
 form_grid_templates = {
 	"items": "templates/form_grid/item_grid.html"
 }
@@ -53,7 +53,7 @@ class DeliveryNote(SellingController):
 			'overflow_type': 'delivery',
 			'no_allowance': 1
 		}]
-		if cint(self.is_return):
+		if cint(self.is_return ):
 			self.status_updater.append({
 				'source_dt': 'Delivery Note Item',
 				'target_dt': 'Sales Order Item',
@@ -250,8 +250,11 @@ class DeliveryNote(SellingController):
 		frappe.get_doc('Authorization Control').validate_approving_authority(self.doctype, self.company, self.base_grand_total, self)
 
 		# update delivered qty in sales order
-		self.update_prevdoc_status()
-		self.update_billing_status()
+		if self.is_return == 1  and self.is_custdy ==0 :
+			pass
+		else:
+			self.update_prevdoc_status()
+			self.update_billing_status()
 
 		if not self.is_return:
 			self.check_credit_limit()
@@ -261,6 +264,135 @@ class DeliveryNote(SellingController):
 		# because updating reserved qty in bin depends upon updated delivered qty in SO
 		self.update_stock_ledger()
 		self.make_gl_entries()
+		if self.is_custdy == 1 and self.employee:
+			self.craete_custudy_dl()
+	def craete_custudy_dl(self):
+		if self.is_return :
+			self.create_sales_invoice()
+		is_exis = frappe.db.sql(""" SELECT name FROM `tabEmployee Tools` WHERE employee ='%s' """%self.employee)
+		if len(is_exis) <  1 :
+			employee_tools = frappe.new_doc("Employee Tools")
+			employee_tools.employee = self.employee 
+			for item in self.items :
+				if self.is_return :
+					frappe.throw(""" Item dont belong to Employee""")
+				else:
+					tools = employee_tools.append("items")
+					tools.item_code = item.item_code
+					tools.item_name = item.item_name
+					tools.serial_number = item.serial_no
+					tools.qty = item.qty
+					tools.status = "Delivered"
+					tools.delivery_date = self.posting_date
+					tools.customer =self.customer
+					tools.delivery_note = self.name
+					employee_tools.save()
+					return employee_tools.name
+		else:
+			exist_tool = frappe.db.sql(""" SELECT name FROM `tabEmployee Tools` 
+		 				 WHERE employee = '%s' """%self.employee)
+			for item in self.items :
+				if self.is_return :
+					# try : 
+						parent = str(exist_tool[0][0])
+						if item.serial_no :
+							dl_items = frappe.db.sql(""" UPDATE `tabEmployee Tools Item`   SET 
+								        status = 'Returned' , return_date='%s' , 
+								        delivery_note = '%s' 
+								        WHERE parent = '%s' and item_code = '%s' and delivery_note ='%s' and serial_number = '%s'
+								         """%(self.posting_date , self.name , parent ,item.item_code ,self.return_against ,item.serial_no))
+							frappe.db.commit()
+						else :
+
+							dl_items = frappe.db.sql(""" UPDATE `tabEmployee Tools Item`   SET 
+								        status = 'Returned' , return_date='%s' , 
+								        delivery_note = '%s' 
+								        WHERE parent = '%s' and item_code = '%s' and delivery_note ='%s' 
+								         """%(self.posting_date , self.name , parent ,item.item_code ,self.return_against ))
+							frappe.db.commit()
+
+					# except :
+						# frappe.throw(""" Unknown parent""")
+
+				else :
+					noe= datetime.datetime.now()
+					parent = str(exist_tool[0][0])
+					if item.serial_no :
+
+						new_item = frappe.db.sql(""" INSERT INTO `tabEmployee Tools Item`  
+							(name, parent , parentfield ,parenttype, item_code , item_name , qty ,status,delivery_date,customer,delivery_note , serial_number) 
+							values ('%s','%s' , '%s' ,'%s' , '%s','%s' , %s,'%s','%s' ,'%s','%s','%s')"""
+							%(str(noe) , parent ,"items" ,"Employee Tools",item.item_code ,
+							  item.item_name,item.qty,"Delivered",self.posting_date,self.customer,  self.name ,item.serial_no))
+						frappe.db.commit()
+					else:
+						new_item = frappe.db.sql(""" INSERT INTO `tabEmployee Tools Item`  
+							(name, parent , parentfield ,parenttype, item_code , item_name , qty ,status,delivery_date,customer,delivery_note) 
+							values ('%s','%s' , '%s' ,'%s' , '%s','%s' , %s,'%s','%s' ,'%s','%s')"""
+							%(str(noe) , parent ,"items" ,"Employee Tools",item.item_code ,
+							  item.item_name,item.qty,"Delivered",self.posting_date,self.customer,  self.name))
+						frappe.db.commit()
+			
+
+
+
+
+
+
+	def create_sales_invoice (self):
+		sales_order_list = frappe.db.sql(""" 
+		select Distinct against_sales_order from `tabDelivery Note Item` where parent = '{}' and against_sales_order is not null
+		""".format(self.name),as_dict=1)
+		for i in sales_order_list :
+			list_item = [item for item in self.items if item.against_sales_order == i.against_sales_order and item.item_group != "Services"]
+			# rate = 0
+			# for item in list_item :
+			# 	rate += get_item_rate_percent (i.against_sales_order,item.item_code)
+			
+
+			sales_order = frappe.get_doc("Sales Order" ,  i.against_sales_order)
+			rate =sales_order.advance_paid
+			items = frappe.db.sql("""select * from `tabSales Order Item` where parent = '{}' and item_group = 'Services'""".format(i.against_sales_order),as_dict=1)
+			si = frappe.new_doc("Sales Invoice")
+			si.company = self.company
+			si.currency = self.currency
+			si.customer = self.customer
+			si.naming_series = 'ACC-SINV-.YYYY.-'
+			si.due_date = self.posting_date
+			si.posting_date = self.posting_date
+			debit_to = frappe.db.get_value("Company",self.company,"default_receivable_account")
+			si.debit_to = debit_to
+			for item in items :
+				si.append("items", {
+					"item_code": item.item_code,
+					"qty": 1,
+					"rate": rate,
+					"amount": rate,
+					"sales_order" :  i.against_sales_order
+				})
+			advanced_paid = frappe.db.sql("""SELECT parent ,allocated_amount FROM `tabPayment Entry Reference`
+			WHERE  reference_doctype='Sales Order' and  reference_name='%s' 
+			"""%(i.against_sales_order ),as_dict=1)
+			# for paid in advanced_paid:
+			# 		si.append("advances", {
+			# 			"reference_type":"Sales Order",
+			# 			"reference_name":i.against_sales_order,
+			# 			"advance_amount":paid.allocated_amount,
+			# 			"allocated_amount":paid.allocated_amount,
+
+
+			# 			})
+			si.allocate_advances_automatically=1
+			# sales_order.status = "Closed"
+			frappe.db.sql(""" UPDATE `tabSales Invoice` SET status = "Closed"
+			 WHERE name ='%s' """%sales_order.name)
+			frappe.db.commit()
+			si.save()
+			
+			# for item in list_item :
+			# 	item.against_sales_invoice = si.name
+
+
 
 	def on_cancel(self):
 		super(DeliveryNote, self).on_cancel()
@@ -640,3 +772,15 @@ def make_sales_return(source_name, target_doc=None):
 def update_delivery_note_status(docname, status):
 	dn = frappe.get_doc("Delivery Note", docname)
 	dn.update_status(status)
+
+
+
+@frappe.whitelist()
+def get_item_rate_percent(so,item_code):
+	res = frappe.db.sql (""" 
+	select ((i.rate/ s.total)*s.advance_paid) as percent from `tabSales Order Item`  i inner join `tabSales Order` s on s.name = i.parent
+	where i.item_code = '{}' and s.name = '{}'
+	""".format(str(item_code) , str(so)))
+	if res :
+		return res [0][0]
+	return 0
