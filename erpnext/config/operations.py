@@ -11,45 +11,39 @@ def get_data():
       "items":[
         {
           "type": "doctype",
-          "name": "Assets Return",
+          "name": "Employee Tools",
           "onboard": 1
         },
         {
           "type": "doctype",
-          "name": "Custody request",
+          "name": "Delivery Note",
           "onboard": 1
         },
-        {
-                                        "type": "report",
-                                        "name": "Assts Movement Report",
-          "label" : "Custudy Movement",
-                                        "doctype": "Asset",
-                                        "is_query_report": True,
-                                },
+        
 
       ]
     },
-    {
-      "label": _("Training"),
-      "items": [
-        {
-          "type": "doctype",
-          "name": "Training Program"
-        },
-        {
-          "type": "doctype",
-          "name": "Training Event"
-        },
-        {
-          "type": "doctype",
-          "name": "Training Result"
-        },
-        {
-          "type": "doctype",
-          "name": "Training Feedback"
-        },
-      ]
-    },
+    # {
+    #   "label": _("Training"),
+    #   "items": [
+    #     {
+    #       "type": "doctype",
+    #       "name": "Training Program"
+    #     },
+    #     {
+    #       "type": "doctype",
+    #       "name": "Training Event"
+    #     },
+    #     {
+    #       "type": "doctype",
+    #       "name": "Training Result"
+    #     },
+    #     {
+    #       "type": "doctype",
+    #       "name": "Training Feedback"
+    #     },
+    #   ]
+    # },
     {
       "label": _("Expense Claims"),
       "items": [
@@ -75,57 +69,14 @@ def get_data():
         },
       ]
     },
-    {
-      "label": _("Projects"),
-      "icon": "fa fa-star",
-      "items": [
-        {
-          "type": "doctype",
-          "name": "Project",
-          "description": _("Project master."),
-          "onboard": 1,
-        },
-        {
-          "type": "doctype",
-          "name": "Task",
-          "route": "#List/Task",
-          "description": _("Project activity / task."),
-          "onboard": 1,
-        },
-        {
-          "type": "report",
-          "route": "#List/Task/Gantt",
-          "doctype": "Task",
-          "name": "Gantt Chart",
-          "description": _("Gantt chart of all tasks."),
-          "onboard": 1,
-        },
-        {
-          "type": "doctype",
-          "name": "Project Template",
-          "description": _("Make project from a template."),
-        },
-        {
-          "type": "doctype",
-          "name": "Project Type",
-          "description": _("Define Project type."),
-        },
-        {
-          "type": "doctype",
-          "name": "Project Update",
-          "description": _("Project Update."),
-          "dependencies": ["Project"],
-        },
-       
-      ]
-    },
+
    {
       "label":_("Operation Monthly"),
       "icon": "fa fa-table",
       "items":[
         {
-          "type": "doctype",
-          "name": "Operation Monthly Invoicing",
+          "type": "report",
+          "name": "Operations Management",
           "onboard": 1
         },
         {
