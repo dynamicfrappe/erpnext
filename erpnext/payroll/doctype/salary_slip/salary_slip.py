@@ -41,18 +41,31 @@ class SalarySlip(TransactionBase):
 		for i in self.get("earnings") +  self.get("deductions") :
 			if i.additional_salary :
 				ad_sal = frappe.get_doc("Additional Salary" , i.additional_salary)
-				if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name :
-					frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
-				names.append(i.additional_salary)
-		names = tuple(names)
+				if not ad_sal.is_recurring:
+					if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name :
+						frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
+
+					names.append(i.additional_salary)
+					names = tuple(names)
+					# frappe.msgprint(sql)
+					frappe.db.sql( """
+						update `tabAdditional Salary` set salary_slip=%s
+						where employee=%s and docstatus=1 and name in %s
+					""", (salary_slip, self.employee , names))
+				else :
+					if salary_slip:
+						frappe.db.sql ("""insert into  `tabAdditional Salary Salary Slips` value (salary_slip,parent,parenttype ,parentfield) values ('{}','{}','Additional Salary' , 'Salary Slips')""".format(self.name,ad_sal.name))
+
+						ad_sal.append('salary_slips',{
+							'salary_slip' : salary_slip
+						})
+						ad_sal.save()
+					else :
+						frappe.db.sql ("""delete from `tabAdditional Salary Salary Slips` where parent = '{}' and salary_slips = '{}' """.format(ad_sal.name,self.name))
 
 
-		# frappe.msgprint(sql)
 
-		frappe.db.sql( """
-			update `tabAdditional Salary` set salary_slip=%s
-			where employee=%s and docstatus=1 and name in %s
-		""", (salary_slip, self.employee , names))
+
 	def validate(self):
 		self.status = self.get_status()
 		self.validate_dates()
@@ -1257,6 +1270,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  on_submit
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  calculate_net_pay
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  set_totals
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  update_salary_slip_in_additional_salary
 
 	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
 	SalarySlip.calculate_Tax = calculate_Tax
@@ -1274,5 +1288,6 @@ try:
 	SalarySlip.on_submit = on_submit
 	SalarySlip.calculate_net_pay = calculate_net_pay
 	SalarySlip.set_totals = set_totals
+	SalarySlip.update_salary_slip_in_additional_salary = update_salary_slip_in_additional_salary
 except :
 	pass
