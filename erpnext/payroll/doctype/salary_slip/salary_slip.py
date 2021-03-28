@@ -34,37 +34,40 @@ class SalarySlip(TransactionBase):
 
 	def autoname(self):
 		self.name = make_autoname(self.series)
+
 	def update_salary_slip_in_additional_salary(self):
-		salary_slip = self.name if self.docstatus==1 else None
+		salary_slip = self.name if self.docstatus == 1 else None
 		names = []
 		names.append('')
-		for i in self.get("earnings") +  self.get("deductions") :
-			if i.additional_salary :
-				ad_sal = frappe.get_doc("Additional Salary" , i.additional_salary)
+		for i in self.get("earnings") + self.get("deductions"):
+			if i.additional_salary:
+				ad_sal = frappe.get_doc("Additional Salary", i.additional_salary)
 				if not ad_sal.is_recurring:
-					if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name :
-						frappe.throw(_("Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(self.name,i.additional_salary)))
+					if ad_sal and ad_sal.salary_slip and ad_sal.salary_slip != self.name:
+						frappe.throw(_(
+							"Please Recalculate Salary Slip {} <br> Additional Salary {} is duplicated in more than one Salary Slip".format(
+								self.name, i.additional_salary)))
 
 					names.append(i.additional_salary)
 					names = tuple(names)
 					# frappe.msgprint(sql)
-					frappe.db.sql( """
+					frappe.db.sql("""
 						update `tabAdditional Salary` set salary_slip=%s
 						where employee=%s and docstatus=1 and name in %s
-					""", (salary_slip, self.employee , names))
-				else :
+					""", (salary_slip, self.employee, names))
+				else:
 					if salary_slip:
-						frappe.db.sql ("""insert into  `tabAdditional Salary Salary Slips` value (salary_slip,parent,parenttype ,parentfield) values ('{}','{}','Additional Salary' , 'Salary Slips')""".format(self.name,ad_sal.name))
+						# frappe.db.sql(
+						#     """insert into  `tabAdditional Salary Salary Slips`  (salary_slip,parent,parenttype ,parentfield) values ('{}','{}','Additional Salary' , 'Salary Slips')""".format(self.name, ad_sal.name))
 
-						ad_sal.append('salary_slips',{
-							'salary_slip' : salary_slip
+						ad_sal.append('salary_slips', {
+							'salary_slip': salary_slip
 						})
 						ad_sal.save()
-					else :
-						frappe.db.sql ("""delete from `tabAdditional Salary Salary Slips` where parent = '{}' and salary_slips = '{}' """.format(ad_sal.name,self.name))
-
-
-
+					else:
+						frappe.db.sql(
+							"""delete from `tabAdditional Salary Salary Slips` where parent = '{}' and salary_slip = '{}' """.format(
+								ad_sal.name, self.name))
 
 	def validate(self):
 		self.status = self.get_status()
