@@ -1255,6 +1255,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  eval_condition_and_formula
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  update_component_row
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  on_submit
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  calculate_net_pay
 
 	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
 	SalarySlip.calculate_Tax = calculate_Tax
@@ -1270,5 +1271,6 @@ try:
 	SalarySlip.get_data_for_eval = get_data_for_eval
 	SalarySlip.update_component_row = update_component_row
 	SalarySlip.on_submit = on_submit
+	SalarySlip.calculate_net_pay = calculate_net_pay
 except :
 	pass

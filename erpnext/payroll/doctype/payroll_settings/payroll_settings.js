@@ -2,6 +2,35 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Payroll Settings', {
+	setup: function(frm) {
+		frm.set_query("advance_salary_component", () => {
+			return {
+				filters: {
+					type: "Deduction",
+					is_additional_salary : 0
+				}
+			};
+
+		})
+		frm.set_query("medical_insurance_salary_component", () => {
+			return {
+				filters: {
+					type: "Deduction",
+					is_additional_salary : 0
+				}
+			};
+
+		})
+		frm.set_query("loan_salary_component", () => {
+			return {
+				filters: {
+					type: "Deduction",
+					is_additional_salary : 0
+				}
+			};
+
+		})
+	},
 	encrypt_salary_slips_in_emails: function(frm) {
 		let encrypt_state = frm.doc.encrypt_salary_slips_in_emails;
 		frm.set_df_property('password_policy', 'reqd', encrypt_state);

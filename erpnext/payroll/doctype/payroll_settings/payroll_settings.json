@@ -12,6 +12,7 @@
   "disable_rounded_total",
   "advance_salary_component",
   "medical_insurance_salary_component",
+  "loan_salary_component",
   "column_break_11",
   "daily_wages_fraction_for_half_day",
   "email_salary_slip_to_employee",
@@ -142,11 +143,17 @@
    "fieldtype": "Link",
    "label": "Medical Insurance Salary Component",
    "options": "Salary Component"
+  },
+  {
+   "fieldname": "loan_salary_component",
+   "fieldtype": "Link",
+   "label": "Loan Salary Component",
+   "options": "Salary Component"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
- "modified": "2021-01-18 10:11:32.976662",
+ "modified": "2021-03-28 09:41:32.416556",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Payroll Settings",
