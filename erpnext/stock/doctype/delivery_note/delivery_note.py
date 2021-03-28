@@ -269,10 +269,19 @@ class DeliveryNote(SellingController):
 	def craete_custudy_dl(self):
 		if self.is_return :
 			self.create_sales_invoice()
-		is_exis = frappe.db.sql(""" SELECT name FROM `tabEmployee Tools` WHERE employee ='%s' """%self.employee)
+		is_driver = getattr(self,'is_driver',0)
+		driver = getattr(self,'driver','') if is_driver else  ''
+		is_exis = frappe.db.sql(""" SELECT name FROM `tabEmployee Tools` WHERE employee ='%s' and (is_driver = %s and driver = '%s' )"""%(self.employee,is_driver,driver))
+
+
 		if len(is_exis) <  1 :
 			employee_tools = frappe.new_doc("Employee Tools")
-			employee_tools.employee = self.employee 
+			employee_tools.employee = self.employee
+			employee_tools.employee_name = self.employee_name
+
+			employee_tools.is_driver = is_driver
+			employee_tools.driver = driver
+			employee_tools.driver_name = self.driver_name
 			for item in self.items :
 				if self.is_return :
 					frappe.throw(""" Item dont belong to Employee""")
@@ -289,8 +298,7 @@ class DeliveryNote(SellingController):
 					employee_tools.save()
 					return employee_tools.name
 		else:
-			exist_tool = frappe.db.sql(""" SELECT name FROM `tabEmployee Tools` 
-		 				 WHERE employee = '%s' """%self.employee)
+			exist_tool = is_exis
 			for item in self.items :
 				if self.is_return :
 					# try : 

@@ -213,10 +213,11 @@ def get_items_from_custody_request(request,*args,**kwargs):
 def get_department_location(request ,*args ,**kwargs):
 	pass
 try:
-	from dynamicerp.fleet.doctype.asset_movement.asset_movement import set_latest_location_in_asset
-	from dynamicerp.fleet.doctype.asset_movement.asset_movement import on_submit
-	AssetMovement.set_latest_location_in_asset = set_latest_location_in_asset
-	AssetMovement.on_submit = on_submit
+	if 'fleet' in frappe.get_active_domains():
+		from dynamicerp.fleet.doctype.asset_movement.asset_movement import set_latest_location_in_asset
+		from dynamicerp.fleet.doctype.asset_movement.asset_movement import on_submit
+		AssetMovement.set_latest_location_in_asset = set_latest_location_in_asset
+		AssetMovement.on_submit = on_submit
 except :
 	pass
 

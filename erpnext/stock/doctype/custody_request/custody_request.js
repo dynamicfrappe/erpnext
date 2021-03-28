@@ -17,36 +17,34 @@ frappe.ui.form.on('Custody request', {
 	
 	refresh: function(frm) {
 
-try{
-		if(frm.doc.workflow_state == (__("Stock Audit Agreement"))){
+		if(frm.doc.docstatus == 1){
 		
 				frm.add_custom_button(__("Create Asset Movement"), function() {
 					frm.events.create_asset_movement(frm)
 						
 					}).addClass("btn-primary");
 		}
-		if(frm.doc.workflow_state == (__("Created")) && frm.doc.reference_document_type =="Employee"  ){
-		frm.add_custom_button(__("Get Employee Custody"), function() {
-			frm.events.get_employee_custody(frm)
-				
-			}).addClass("btn-secondary");}
+		if( frm.doc.docstatus == 0 &&frm.doc.reference_document_type == "Employee") {
+			frm.add_custom_button(__("Get Employee Custody"), function () {
+				frm.events.get_employee_custody(frm)
+
+			}).addClass("btn-secondary");
+		}
 
 
 
-		if( frm.doc.workflow_state == "Created"  &&frm.doc.reference_document_type == "Department"){
+		if( frm.doc.docstatus == 0 &&frm.doc.reference_document_type == "Department"){
 		frm.add_custom_button(__("Get Department Custody"), function() {
 			frm.events.get_department_custody(frm)
 				
 			}).addClass("btn-secondary");}
 
-			if( frm.doc.workflow_state == "Created"  &&frm.doc.reference_document_type == "Project"){
+			if( frm.doc.docstatus == 0  &&frm.doc.reference_document_type == "Project"){
 		frm.add_custom_button(__("Get Project Custody"), function() {
 			frm.events.get_project_custody(frm)
 				
-			}).addClass("btn-secondary");} }
-                catch(err) {
-         console.log(err)
-        }
+			}).addClass("btn-secondary");}
+
 	},
 
 

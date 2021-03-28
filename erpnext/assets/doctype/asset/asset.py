@@ -750,3 +750,13 @@ def get_total_days(date, frequency):
 		cint(frequency) * -1)
 
 	return date_diff(date, period_start_date)
+
+try:
+	if 'fleet' in frappe.get_active_domains():
+		from dynamicerp.fleet.doctype.asset.asset import Asset as asset_class
+		from dynamicerp.fleet.doctype.asset.asset import make_asset_movement as make_asset_movement_class
+		Asset.make_asset_movement =   asset_class.make_asset_movement
+		make_asset_movement = make_asset_movement_class
+
+except:
+	pass
