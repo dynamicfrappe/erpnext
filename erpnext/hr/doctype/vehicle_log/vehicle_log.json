@@ -10,23 +10,25 @@
   "naming_series",
   "license_plate",
   "employee",
+  "driver_name",
   "column_break_4",
-  "column_break_7",
+  "supplier",
   "model",
   "make",
   "odometer_reading",
-  "date",
   "odometer",
+  "date",
   "column_break_12",
   "last_odometer",
   "refuelling_details",
   "fuel_qty",
   "price",
   "column_break_15",
-  "supplier",
   "invoice",
   "service_details",
   "service_detail",
+  "section_break_23",
+  "comment",
   "amended_from"
  ],
  "fields": [
@@ -50,7 +52,7 @@
    "fieldtype": "Link",
    "in_global_search": 1,
    "in_list_view": 1,
-   "label": "License Plate",
+   "label": "Vehicle",
    "options": "Vehicle",
    "reqd": 1
   },
@@ -61,8 +63,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Employee",
-   "options": "Employee",
+   "label": "Driver",
+   "options": "Driver",
    "reqd": 1
   },
   {
@@ -70,20 +72,20 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "column_break_7",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "license_plate.model",
+   "fetch_from": "license_plate.vehichle_brand",
    "fieldname": "model",
-   "fieldtype": "Read Only",
-   "label": "Model"
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Vehicle Brand",
+   "read_only": 1
   },
   {
-   "fetch_from": "license_plate.make",
+   "fetch_from": "license_plate.vehichle_model",
    "fieldname": "make",
-   "fieldtype": "Read Only",
-   "label": "Make"
+   "fieldtype": "Link",
+   "label": "Model",
+   "options": "Vehichle Model",
+   "read_only": 1
   },
   {
    "fieldname": "odometer_reading",
@@ -91,22 +93,17 @@
    "label": "Odometer Reading"
   },
   {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date",
-   "reqd": 1
-  },
-  {
    "fieldname": "odometer",
    "fieldtype": "Int",
-   "label": "Current Odometer value ",
-   "reqd": 1
+   "label": "Current Odometer value "
   },
   {
    "collapsible": 1,
    "fieldname": "refuelling_details",
    "fieldtype": "Section Break",
-   "label": "Refuelling Details"
+   "hidden": 1,
+   "label": "Refuelling Details",
+   "print_hide": 1
   },
   {
    "fieldname": "fuel_qty",
@@ -134,7 +131,6 @@
    "label": "Invoice Ref"
   },
   {
-   "collapsible": 1,
    "fieldname": "service_details",
    "fieldtype": "Section Break",
    "label": "Service Details"
@@ -158,17 +154,40 @@
    "fetch_from": "license_plate.last_odometer",
    "fieldname": "last_odometer",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "last Odometer Value ",
-   "read_only": 1,
-   "reqd": 1
+   "print_hide": 1,
+   "read_only": 1
   },
   {
    "fieldname": "column_break_12",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.driver_name",
+   "fieldname": "driver_name",
+   "fieldtype": "Data",
+   "label": "Driver Name",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_23",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Comment"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-03-18 16:45:45.060761",
+ "modified": "2021-03-24 14:53:26.101141",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle Log",

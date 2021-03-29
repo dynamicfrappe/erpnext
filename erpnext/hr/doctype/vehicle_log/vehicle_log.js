@@ -2,6 +2,16 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Vehicle Log", {
+	setup:(frm)=>{
+		frm.set_query("license_plate",function(frm){
+			return {
+				filters:{
+					vehicle_status:'Active',
+					is_passed:1
+				}
+			}
+		})
+	},
 	refresh: function(frm) {
 		if(frm.doc.docstatus == 1) {
 			frm.add_custom_button(__('Expense Claim'), function() {

@@ -8,9 +8,33 @@ from frappe import _
 from frappe.utils import flt, cstr
 from frappe.model.mapper import get_mapped_doc
 from frappe.model.document import Document
+from frappe.utils import getdate, validate_email_address, today, add_years, format_datetime, cstr
 
 class VehicleLog(Document):
 	def validate(self):
+		odoreading=self.odometer or 0
+		for	service in self.service_detail:
+			if float(service.odometer_reading) >float(odoreading):
+				self.odometer=service.odometer_reading
+				self.date=getdate(today())
+		result=frappe.db.sql("""select type, max(odometer_reading) as 'r' 
+		 from `tabVehicle Service` where parent='%s' group by type order by odometer_reading DESC"""%self.name,as_dict=1)
+		card_name = frappe.db.sql("""select name from `tabVehicle Card` where vehicle='%s'""" % self.license_plate, as_dict=1)
+		if card_name:
+			count=0
+			doc = frappe.get_doc("Vehicle Card", card_name[0].name)
+			# frappe.msgprint(str(card_name[0].name))
+			# for s in result:
+			# 	if s.type==doc.maintainance[count].maintainance:
+			# 		doc.maintainance[count].odometer_reading=s.r
+			# 	count+=1
+			for s in result:
+				for d in doc.maintainance:
+					if s.type==d.maintainance and s.r >d.odometer_reading:
+						d.odometer_reading=s.r
+			doc.save()
+
+
 		if flt(self.odometer) < flt(self.last_odometer):
 			frappe.throw(_("Current Odometer Value should be greater than Last Odometer Value {0}").format(self.last_odometer))
 
@@ -25,6 +49,7 @@ class VehicleLog(Document):
 
 @frappe.whitelist()
 def make_expense_claim(docname):
+	pass
 	expense_claim = frappe.db.exists("Expense Claim", {"vehicle_log": docname})
 	if expense_claim:
 		frappe.throw(_("Expense Claim {0} already exists for the Vehicle Log").format(expense_claim))
