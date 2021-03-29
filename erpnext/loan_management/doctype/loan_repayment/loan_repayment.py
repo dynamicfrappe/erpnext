@@ -409,3 +409,10 @@ def calculate_amounts(against_loan, posting_date, payment_type=''):
 
 
 
+try:
+	from dynamicerp.dynamic_payroll.doctype.loan.loan import  get_amounts as get_amounts_1
+
+	get_amounts = get_amounts_1
+except:
+	pass
+

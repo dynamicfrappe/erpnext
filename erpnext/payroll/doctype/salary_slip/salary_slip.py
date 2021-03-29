@@ -1274,6 +1274,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  calculate_net_pay
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  set_totals
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  update_salary_slip_in_additional_salary
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  set_loan_repayment
 
 	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
 	SalarySlip.calculate_Tax = calculate_Tax
@@ -1292,5 +1293,6 @@ try:
 	SalarySlip.calculate_net_pay = calculate_net_pay
 	SalarySlip.set_totals = set_totals
 	SalarySlip.update_salary_slip_in_additional_salary = update_salary_slip_in_additional_salary
+	SalarySlip.set_loan_repayment = set_loan_repayment
 except :
 	pass
