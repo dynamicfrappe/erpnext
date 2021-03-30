@@ -110,6 +110,10 @@ class LoanRepayment(AccountsController):
 		loan = frappe.get_doc("Loan", self.against_loan)
 
 		for payment in self.repayment_details:
+			sql = """ UPDATE `tabLoan Interest Accrual`
+				SET paid_principal_amount = `paid_principal_amount` + %s,
+					paid_interest_amount = `paid_interest_amount` + %s
+				WHERE name = %s""",((flt(payment.paid_principal_amount, precision), flt(payment.paid_interest_amount, precision), payment.loan_interest_accrual))
 			frappe.db.sql(""" UPDATE `tabLoan Interest Accrual`
 				SET paid_principal_amount = `paid_principal_amount` + %s,
 					paid_interest_amount = `paid_interest_amount` + %s
@@ -408,11 +412,11 @@ def calculate_amounts(against_loan, posting_date, payment_type=''):
 	return amounts
 
 
-
-try:
-	from dynamicerp.dynamic_payroll.doctype.loan.loan import  get_amounts as get_amounts_1
-
-	get_amounts = get_amounts_1
-except:
-	pass
+#
+# try:
+# 	from dynamicerp.dynamic_payroll.doctype.loan.loan import  get_amounts as get_amounts_1
+#
+# 	get_amounts = get_amounts_1
+# except:
+# 	pass
 

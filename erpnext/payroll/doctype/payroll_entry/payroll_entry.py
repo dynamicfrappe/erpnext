@@ -204,6 +204,7 @@ class PayrollEntry(Document):
 			component_dict = {}
 			for item in salary_components:
 				add_component_to_accrual_jv_entry = True
+
 				if component_type == "earnings":
 					is_flexible_benefit, only_tax_impact = frappe.db.get_value("Salary Component", item['salary_component'], ['is_flexible_benefit', 'only_tax_impact'])
 					if is_flexible_benefit == 1 and only_tax_impact ==1:
@@ -632,6 +633,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_filter_condition
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_emp_list
 
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_salary_component_total
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import payroll_entry_has_bank_entries
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips_for_employees
 	PayrollEntry.make_payment_entry = make_payment_entry
@@ -642,5 +644,6 @@ try:
 	payroll_entry_has_bank_entries = payroll_entry_has_bank_entries
 	PayrollEntry.get_filter_condition = get_filter_condition
 	PayrollEntry.get_emp_list = get_emp_list
+	PayrollEntry.get_salary_component_total = get_salary_component_total
 except:
 	pass

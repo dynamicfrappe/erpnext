@@ -105,9 +105,10 @@ class SalarySlip(TransactionBase):
 			self.set_status()
 			self.update_status(self.name)
 			self.make_loan_repayment_entry()
+			self.update_salary_slip_in_additional_salary()
+
 			if (frappe.db.get_single_value("Payroll Settings", "email_salary_slip_to_employee")) and not frappe.flags.via_payroll_entry:
 				self.email_salary_slip()
-			self.update_salary_slip_in_additional_salary()
 
 	def on_cancel(self):
 		self.set_status()
@@ -1275,6 +1276,7 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  set_totals
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  update_salary_slip_in_additional_salary
 	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  set_loan_repayment
+	from dynamicerp.dynamic_payroll.doctype.salary_slip.salary_slip import  make_loan_repayment_entry
 
 	SalarySlip.get_emp_and_working_day_details = get_emp_and_working_day_details
 	SalarySlip.calculate_Tax = calculate_Tax
@@ -1294,5 +1296,6 @@ try:
 	SalarySlip.set_totals = set_totals
 	SalarySlip.update_salary_slip_in_additional_salary = update_salary_slip_in_additional_salary
 	SalarySlip.set_loan_repayment = set_loan_repayment
+	SalarySlip.make_loan_repayment_entry = make_loan_repayment_entry
 except :
 	pass

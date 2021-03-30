@@ -1,5 +1,4 @@
 {
- "actions": [],
  "autoname": "LM-REP-.####",
  "creation": "2019-09-03 14:44:39.977266",
  "doctype": "DocType",
@@ -108,7 +107,6 @@
    "fieldname": "amount_paid",
    "fieldtype": "Currency",
    "label": "Amount Paid",
-   "non_negative": 1,
    "options": "Company:company:default_currency",
    "reqd": 1
   },
@@ -208,7 +206,6 @@
   {
    "fieldname": "repayment_details",
    "fieldtype": "Table",
-   "hidden": 1,
    "label": "Repayment Details",
    "options": "Loan Repayment Detail"
   },
@@ -228,10 +225,8 @@
    "read_only": 1
   }
  ],
- "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2020-11-05 10:06:58.792841",
+ "modified": "2021-03-30 12:28:31.070587",
  "modified_by": "Administrator",
  "module": "Loan Management",
  "name": "Loan Repayment",
