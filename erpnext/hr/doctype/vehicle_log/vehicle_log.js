@@ -2,6 +2,15 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Vehicle Log", {
+	onload:(frm)=>{
+		frm.set_query("employee", function() {
+			return{
+				filters:{
+					"vehicle":frm.doc.license_plate
+				}
+			}
+		})
+	},
 	setup:(frm)=>{
 		frm.set_query("license_plate",function(frm){
 			return {
