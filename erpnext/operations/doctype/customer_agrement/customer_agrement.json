@@ -36,9 +36,12 @@
    "reqd": 1
   },
   {
+   "depends_on": "customer",
+   "fetch_from": "customer.customer_name",
    "fieldname": "cutomer_name",
    "fieldtype": "Data",
-   "label": "Cutomer Name"
+   "label": "Cutomer Name",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_3",
@@ -58,6 +61,8 @@
    "read_only": 1
   },
   {
+   "fetch_from": "project.cost_center",
+   "fetch_if_empty": 1,
    "fieldname": "cost_center",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -145,7 +150,7 @@
    "reqd": 1
   }
  ],
- "modified": "2021-04-08 11:48:43.128843",
+ "modified": "2021-04-08 12:45:12.752702",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
