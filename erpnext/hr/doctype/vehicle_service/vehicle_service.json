@@ -7,44 +7,72 @@
  "field_order": [
   "service_item",
   "type",
+  "odometer_reading",
   "frequency",
-  "expense_amount"
+  "expense_amount",
+  "price",
+  "description"
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "service_item",
    "fieldtype": "Select",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Service Item",
    "options": "\nBrake Oil\nBrake Pad\nClutch Plate\nEngine Oil\nOil Change\nWheels",
-   "reqd": 1
+   "print_hide": 1
   },
   {
+   "columns": 2,
    "fieldname": "type",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Type",
-   "options": "\nInspection\nService\nChange",
+   "options": "Maintainance",
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "frequency",
    "fieldtype": "Select",
-   "in_list_view": 1,
+   "hidden": 1,
    "label": "Frequency",
-   "options": "\nMileage\nMonthly\nQuarterly\nHalf Yearly\nYearly",
-   "reqd": 1
+   "options": "\nMileage\nMonthly\nQuarterly\nHalf Yearly\nYearly"
   },
   {
+   "columns": 1,
    "fieldname": "expense_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Expense",
    "reqd": 1
+  },
+  {
+   "columns": 3,
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
+   "columns": 1,
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "odometer_reading",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Odometer Reading"
   }
  ],
  "istable": 1,
- "modified": "2020-03-18 16:49:46.645004",
+ "modified": "2021-03-24 16:10:12.372119",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle Service",
