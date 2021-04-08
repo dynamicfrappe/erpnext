@@ -456,3 +456,10 @@ def has_user_permission_for_employee(user_name, employee_name):
 		'allow': 'Employee',
 		'for_value': employee_name
 	})
+domains = frappe.get_active_domains()
+# if "sky" in domains :
+# 	try:
+from dynamicerp.sky.doctype.Employee.employee import validate
+Employee.validate = validate
+	# except:
+	# 	pass
