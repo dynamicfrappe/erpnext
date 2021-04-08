@@ -1,0 +1,170 @@
+{
+ "creation": "2021-04-08 10:56:37.417970",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cutomer",
+  "cutomer_name",
+  "column_break_3",
+  "project",
+  "project_status",
+  "cost_center",
+  "dates_section_section",
+  "start_date",
+  "end_date",
+  "total_durationin_monthes",
+  "resources_data_section",
+  "resourses",
+  "total_resources",
+  "total_resources_monthly_fee",
+  "tools_section_section",
+  "tools",
+  "tools_qty",
+  "total_monthel_fees_section",
+  "total_resources_fee",
+  "total_equipments_fee",
+  "grand_total_fee"
+ ],
+ "fields": [
+  {
+   "fieldname": "cutomer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Cutomer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cutomer_name",
+   "fieldtype": "Data",
+   "label": "Cutomer Name"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fetch_from": "project.status",
+   "fieldname": "project_status",
+   "fieldtype": "Data",
+   "label": "Project Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Cost Center",
+   "options": "Cost Center",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dates_section_section",
+   "fieldtype": "Section Break",
+   "label": "Dates Section"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "total_durationin_monthes",
+   "fieldtype": "Int",
+   "label": "Total Duration(In monthes)"
+  },
+  {
+   "fieldname": "total_monthel_fees_section",
+   "fieldtype": "Section Break",
+   "label": "Total Monthel Fees"
+  },
+  {
+   "fieldname": "total_resources_fee",
+   "fieldtype": "Currency",
+   "label": "Total Resources Fee"
+  },
+  {
+   "fieldname": "total_equipments_fee",
+   "fieldtype": "Currency",
+   "label": "Total Equipments Fee"
+  },
+  {
+   "fieldname": "grand_total_fee",
+   "fieldtype": "Currency",
+   "label": "Grand Total Fee"
+  },
+  {
+   "fieldname": "resources_data_section",
+   "fieldtype": "Section Break",
+   "label": "Resources Data"
+  },
+  {
+   "fieldname": "resourses",
+   "fieldtype": "Table",
+   "label": "Resourses",
+   "options": "Customer Agrement Resources"
+  },
+  {
+   "fieldname": "total_resources",
+   "fieldtype": "Int",
+   "label": "Total Resources"
+  },
+  {
+   "fieldname": "total_resources_monthly_fee",
+   "fieldtype": "Currency",
+   "label": "Total Resources Monthly Fee"
+  },
+  {
+   "fieldname": "tools_section_section",
+   "fieldtype": "Section Break",
+   "label": "Tools Section"
+  },
+  {
+   "fieldname": "tools",
+   "fieldtype": "Table",
+   "label": "Tools",
+   "options": "Customer Agrement Tools"
+  },
+  {
+   "fieldname": "tools_qty",
+   "fieldtype": "Int",
+   "label": "Tools Qty",
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "modified": "2021-04-08 11:48:43.128843",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Customer Agrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

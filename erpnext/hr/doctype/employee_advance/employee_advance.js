@@ -36,9 +36,12 @@ frappe.ui.form.on('Employee Advance', {
 				}
 			};
 		});
+
+
 	},
 
 	refresh: function(frm) {
+		
 		if (frm.doc.docstatus===1
 			&& (flt(frm.doc.paid_amount) < flt(frm.doc.advance_amount))
 			&& frappe.model.can_create("Payment Entry")) {
