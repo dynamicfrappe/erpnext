@@ -8,7 +8,7 @@
   "item_name",
   "section_break_3",
   "qty",
-  "price",
+  "rate",
   "total_amount",
   "intersest_precentagefor_year",
   "grand_total",
@@ -36,9 +36,12 @@
    "reqd": 1
   },
   {
+   "depends_on": "item_code",
+   "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
-   "label": "Item Name"
+   "label": "Item Name",
+   "read_only": 1
   },
   {
    "default": "1",
@@ -49,18 +52,11 @@
    "reqd": 1
   },
   {
-   "fieldname": "price",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Price",
-   "reqd": 1
-  },
-  {
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Amount",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "default": "1",
@@ -73,7 +69,9 @@
   {
    "fieldname": "monthly_fee",
    "fieldtype": "Currency",
-   "label": "Monthly Fee"
+   "in_list_view": 1,
+   "label": "Monthly Fee",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_3",
@@ -146,11 +144,19 @@
   {
    "fieldname": "grand_total",
    "fieldtype": "Currency",
-   "label": "Grand Total"
+   "label": "Grand Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price",
+   "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-08 11:47:33.562692",
+ "modified": "2021-04-08 15:37:28.418158",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

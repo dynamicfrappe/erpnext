@@ -26,10 +26,11 @@
    "reqd": 1
   },
   {
+   "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
    "label": "Employee Name",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "salary",
@@ -58,6 +59,7 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Monthly Fee",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -87,7 +89,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-04-08 11:03:53.362735",
+ "modified": "2021-04-08 13:46:33.877231",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Resources",

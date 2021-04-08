@@ -3,8 +3,114 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
-# import frappe
+import frappe
+from frappe import _
+from datetime import datetime ,time , timedelta
 from frappe.model.document import Document
+from frappe.utils import flt, cint, getdate, now, date_diff
+from erpnext.accounts.doctype.pricing_rule.pricing_rule import get_pricing_rule_for_item, set_transaction_type
+import json
+
 
 class CustomerAgrement(Document):
-	pass
+	def get_total_durations(self):
+		duration = 0
+
+		if self.start_date and self.end_date :
+			self.start_date =datetime.strptime(str(self.start_date),'%Y-%m-%d').date()
+			self.end_date =datetime.strptime(str(self.end_date),'%Y-%m-%d').date()
+			if (self.start_date > self.end_date):
+				frappe.msgprint(_("Start Date Cann't be after End Date"),indicator='red')
+				self.start_date = self.end_date
+			duration = (self.end_date - self.start_date).days +1
+
+		self.total_duration_in_monthes =  duration
+	def calculate_employee_totals(self):
+		self.resourses = getattr(self,'resourses',[])
+		self.total_resources_fee = 0
+		self.total_resources_monthly_fee = 0
+		self.total_resources = len(self.resourses) or 0
+		self.grand_total_fee = 0
+		for i in self.resourses:
+			i.salary = i.salary if i.salary else 0
+			i.other_ereanings = i.other_ereanings if i.other_ereanings else 0
+			i.company_revenue = flt(i.company_revenue) if i.company_revenue else 1
+			percent = i.company_revenue if i.company_revenue > 1 else 0
+
+
+			i.total_monthly_fee = ((i.salary + i.other_ereanings)+((i.salary + i.other_ereanings)*percent/100) ) or 0
+			self.total_resources_fee += i.total_monthly_fee
+		self.total_resources_monthly_fee = self.total_resources_fee
+		self.grand_total_fee = self.total_resources_fee + getattr(self,'total_equipments_fee',0)
+
+	def calculate_tools_totals(self):
+		self.tools = getattr(self, 'tools', [])
+		self.tools_qty = 0
+		self.total_equipments_fee=0
+		self. grand_total_fee = 0
+		for i in self.tools:
+			i.qty = i.qty or 0
+			i.rate = i.rate or 0
+			i.total_amount = (i.qty * i.rate) or 0
+			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year) or 0
+			i.monthly_installment = i.monthly_installment or 1
+			percent = (i.intersest_precentagefor_year  * i.monthly_installment) /12
+			i.grand_total = i.total_amount
+			if i.monthly_installment > 1:
+				i.grand_total+= (i.total_amount * percent)
+			i.monthly_fee = i.grand_total / i.monthly_installment
+			self.tools_qty += i.qty
+			self.total_equipments_fee += i.grand_total
+
+		self.grand_total_fee = self.total_equipments_fee + getattr(self,'total_resources_fee',0)
+
+
+@frappe.whitelist()
+def get_item_price(args):
+	rate = 0
+	args = json.loads(str(args))
+	args = frappe._dict(args)
+	item = args.item_code
+	customer = args.customer
+	company = args.company
+	price_list = None
+	rate = 0
+
+	if customer :
+		price_list = frappe.db.get_value("Customer",customer , 'default_price_list')
+	if  not price_list :
+		company_cond = ""
+		if company:
+			company_cond =" and company = '{}'".format(company)
+		price_list = frappe.db.sql("""
+		select default_price_list from `tabItem Default` where parent = '{}' {}
+		order by creation desc limit 1
+		""".format(item,company_cond))
+
+	if not price_list:
+		price_list = (frappe.db.get_single_value('Selling Settings', 'selling_price_list')
+					  or frappe.db.get_value('Price List', _('Standard Selling')))
+	sql = """
+					select price_list_rate 
+					from `tabItem Price` 
+					where item_code = '{}' 
+					and (price_list = '{}' or selling = 1)
+					and curdate() >=  ifnull(valid_from,curdate()) 
+					and curdate() <=  ifnull(valid_upto,curdate())
+					order by creation desc limit 1
+	""".format(item,price_list)
+	res = frappe.db.sql(sql)
+
+	if res :
+		rate = res[0][0] or 0
+	return  rate
+
+
+
+
+
+
+
+
+
+
