@@ -105,6 +105,14 @@ def get_item_price(args):
 		rate = res[0][0] or 0
 	return  rate
 
+@frappe.whitelist()
+def get_item_conversion_factor(item,uom):
+	sql = """ select conversion_factor  from `tabUOM Conversion Detail` where parent='{}' and uom = '{}' """.format(item,uom)
+	res = frappe.db.sql(sql,as_dict=1)
+	if res :
+		return res [0].conversion_factor
+	return 1
+
 
 
 

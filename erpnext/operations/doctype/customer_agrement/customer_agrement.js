@@ -59,11 +59,30 @@ frm.events.get_duration(frm)
                     refresh_field('total_resources_fee')
                     refresh_field('total_equipments_fee')
                     refresh_field('grand_total_fee')
+                    refresh_field('tools_qty')
 
 
                 }
             })
         },
+    get_item_conversion_factor (frm,cdt,cdn){
+	     var item = locals [cdt][cdn]
+            if (item.item_code && item.uom)
+            {
+                frappe.call({
+                    method : "erpnext.operations.doctype.customer_agrement.customer_agrement.get_item_conversion_factor"
+                    ,args:{
+                     item: item.item_code,
+                     uom:   item.uom
+                    }
+                    ,callback:function (r) {
+                        item.conversion_rate = r.message
+                        refresh_field('tools')
+                    }
+                })
+            }
+
+    }
 });
 frappe.ui.form.on('Customer Agrement Resources', {
     resourses_add:function(frm,cdt,cdn)
@@ -106,12 +125,14 @@ frappe.ui.form.on('Customer Agrement Tools', {
                     }
                 },
                 callback:function (r) {
-                    debugger
+
                     item.rate = r.message
                     refresh_field('tools')
                     frm.events.calculate_tools_totals(frm)
                 }
             })
+                    frm.events.get_item_conversion_factor(frm,cdt,cdn)
+
 
         }
     },
@@ -130,6 +151,9 @@ frappe.ui.form.on('Customer Agrement Tools', {
      monthly_installment:function(frm,cdt,cdn)
     {
         frm.events.calculate_tools_totals(frm)
+    },
+    uom:function (frm,cdt,cdn){
+        frm.events.get_item_conversion_factor(frm,cdt,cdn)
     },
 
 
