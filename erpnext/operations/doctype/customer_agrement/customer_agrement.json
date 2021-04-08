@@ -6,6 +6,7 @@
  "field_order": [
   "cutomer",
   "cutomer_name",
+  "operation_account_template",
   "column_break_3",
   "project",
   "project_status",
@@ -143,9 +144,15 @@
    "label": "Tools Qty",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "operation_account_template",
+   "fieldtype": "Link",
+   "label": "Operation Account Template",
+   "options": "Operation Account Template"
   }
  ],
- "modified": "2021-04-08 11:48:43.128843",
+ "modified": "2021-04-08 12:48:00.579330",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
