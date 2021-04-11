@@ -3,6 +3,7 @@
 
 frappe.ui.form.on('Customer Agrement', {
 	 refresh:function (frm){
+	     cur_frm.fields_dict["holds"].grid.wrapper.find('.grid-add-row').hide();
             frm.set_query("employee" ,"resourses" ,function(doc){
 				return {
 					filters: {
@@ -82,8 +83,56 @@ frm.events.get_duration(frm)
                 })
             }
 
+    },
+    hold :function(frm,cdt,cdn){
+
+	     var d = locals [cdt][cdn]
+         if (d.status == 'Active')
+         {
+             d.status = 'Hold';
+
+             frappe.call({
+             method:"hold",
+             doc:frm.doc,
+             callback:function (r){
+                frm.refresh()
+             }
+         })
+         }
+
     }
 });
+frappe.ui.form.on('Customer Agreement Holds', {
+    before_holds_remove:function(frm,cdt,cdn){
+        var d = locals [cdt] [cdn]
+        if (d.reference_name)
+             frappe.throw('Cannot Remove')
+    },before_holds_add:function(frm,cdt,cdn){
+        frappe.throw('Cannot Add')
+    },
+    unhold:function(frm,cdt,cdn)
+    {
+         var d = locals [cdt][cdn]
+        var i = locals [d.reference_type ][ d.reference_name]
+
+        if (i.status == 'Hold')
+        {
+            i.status = 'Active';
+
+            frappe.call({
+             method:"hold",
+             doc:frm.doc,
+             callback:function (r){
+                frm.refresh()
+
+             }
+         })
+        }
+
+
+
+    }
+})
 frappe.ui.form.on('Customer Agrement Resources', {
     resourses_add:function(frm,cdt,cdn)
     {
@@ -105,6 +154,9 @@ frappe.ui.form.on('Customer Agrement Resources', {
     {
         frm.events.calculate_employee_totals(frm)
     },
+    hold :function(frm,cdt,cdn){
+        frm.events.hold(frm,cdt,cdn)
+    }
 
 });
 
@@ -155,6 +207,9 @@ frappe.ui.form.on('Customer Agrement Tools', {
     uom:function (frm,cdt,cdn){
         frm.events.get_item_conversion_factor(frm,cdt,cdn)
     },
+    hold :function(frm,cdt,cdn){
+        frm.events.hold(frm,cdt,cdn)
+    }
 
 
 

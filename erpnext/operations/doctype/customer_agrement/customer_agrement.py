@@ -63,6 +63,29 @@ class CustomerAgrement(Document):
 			self.total_equipments_fee += i.grand_total
 
 		self.grand_total_fee = self.total_equipments_fee + getattr(self,'total_resources_fee',0)
+	def hold (self):
+		self.save()
+		self.set('holds',[])
+		for i in getattr(self,'resourses',[]):
+			if i.status == 'Hold':
+				self.append('holds',{
+					'reference_type': i.doctype,
+					'reference_name': i.name,
+					'reference_item': i.employee,
+
+				})
+
+		for i in getattr(self, 'tools', []):
+			if i.status == 'Hold':
+
+				self.append('holds', {
+					'reference_type': i.doctype,
+					'reference_name': i.name,
+					'reference_item': i.item_code,
+
+				})
+
+		self.save()
 
 
 @frappe.whitelist()

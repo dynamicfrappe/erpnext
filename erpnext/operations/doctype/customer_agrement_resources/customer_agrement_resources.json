@@ -14,10 +14,13 @@
   "total_monthly_fee",
   "accounts_section",
   "cost_center",
-  "account"
+  "account",
+  "hold",
+  "status"
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "employee",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -33,6 +36,7 @@
    "read_only": 1
   },
   {
+   "columns": 1,
    "fieldname": "salary",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -40,6 +44,7 @@
    "reqd": 1
   },
   {
+   "columns": 2,
    "default": "0",
    "fieldname": "other_ereanings",
    "fieldtype": "Currency",
@@ -47,6 +52,7 @@
    "label": "Other Ereanings"
   },
   {
+   "columns": 2,
    "default": "0",
    "fieldname": "company_revenue",
    "fieldtype": "Percent",
@@ -55,6 +61,7 @@
    "reqd": 1
   },
   {
+   "columns": 2,
    "fieldname": "total_monthly_fee",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -86,10 +93,26 @@
    "fieldtype": "Link",
    "label": "Account",
    "options": "Account"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval: doc.status == 'Active'",
+   "fieldname": "hold",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "Hold"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nHold\nFinished",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-08 13:46:33.877231",
+ "modified": "2021-04-11 15:04:59.032366",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Resources",

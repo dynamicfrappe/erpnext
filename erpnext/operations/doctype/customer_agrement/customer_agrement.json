@@ -27,7 +27,12 @@
   "total_resources_fee",
   "total_equipments_fee",
   "grand_total_fee",
-  "naming_series"
+  "naming_series",
+  "section_break_24",
+  "holds",
+  "invoice_section_section",
+  "create_invoice",
+  "create_delivery_note"
  ],
  "fields": [
   {
@@ -175,9 +180,34 @@
    "label": "Customer",
    "options": "Customer",
    "reqd": 1
+  },
+  {
+   "fieldname": "invoice_section_section",
+   "fieldtype": "Section Break",
+   "label": "Actions"
+  },
+  {
+   "fieldname": "create_invoice",
+   "fieldtype": "Button",
+   "label": "Create Invoice"
+  },
+  {
+   "fieldname": "section_break_24",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "holds",
+   "fieldtype": "Table",
+   "label": "Holds Resources / Tools",
+   "options": "Customer Agreement Holds"
+  },
+  {
+   "fieldname": "create_delivery_note",
+   "fieldtype": "Button",
+   "label": "Create Delivery Note"
   }
  ],
- "modified": "2021-04-08 16:41:05.521522",
+ "modified": "2021-04-11 15:35:49.179119",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
