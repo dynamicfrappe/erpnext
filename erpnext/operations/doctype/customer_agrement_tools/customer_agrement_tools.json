@@ -28,7 +28,8 @@
   "un_payed_installment",
   "finishedinstallment",
   "status",
-  "hold"
+  "hold",
+  "delivered_qty"
  ],
  "fields": [
   {
@@ -199,10 +200,17 @@
    "fieldtype": "Button",
    "in_list_view": 1,
    "label": "Hold"
+  },
+  {
+   "default": "0",
+   "fieldname": "delivered_qty",
+   "fieldtype": "Int",
+   "label": "Delivered QTY",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-11 15:04:50.993556",
+ "modified": "2021-04-11 16:56:49.404222",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

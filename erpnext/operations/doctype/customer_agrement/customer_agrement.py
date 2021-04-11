@@ -103,18 +103,23 @@ def create_delivery_note(doc):
 	dn.is_return = 0
 	for i in getattr(self,'tools',[]):
 		if i.status == 'Active':
-			dn.append("items", {
-				"item_code": i.item_code,
-				"warehouse": self.warehouse ,
-				"qty": i.qty or 1,
-				"rate": i.rate ,
-				"uom": i.uom ,
-				"stock_uom": i.stock_uom ,
-				"conversion_factor": i.conversion_rate,
-				"allow_zero_valuation_rate":  1,
-				"expense_account": i.account ,
-				"cost_center": i.cost_center
-			})
+			undeliverd_qty = (i.qty - i.delivered_qty) or 0
+			if undeliverd_qty > 0:
+				dn.append("items", {
+					"item_code": i.item_code,
+					"warehouse": self.warehouse ,
+					"qty": undeliverd_qty or 1,
+					"rate": i.rate ,
+					"uom": i.uom ,
+					"stock_uom": i.stock_uom ,
+					"conversion_factor": i.conversion_rate,
+					"allow_zero_valuation_rate":  1,
+					"expense_account": i.account ,
+					"cost_center": i.cost_center ,
+					"customer_tool": i.name
+				})
+	if not getattr(dn,'items',None):
+		frappe.throw(_('There is no Items To Deliver'))
 
 
 	dn.insert()
