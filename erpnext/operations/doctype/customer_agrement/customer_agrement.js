@@ -90,7 +90,6 @@ frm.events.get_duration(frm)
          if (d.status == 'Active')
          {
              d.status = 'Hold';
-
              frappe.call({
              method:"hold",
              doc:frm.doc,
@@ -100,6 +99,15 @@ frm.events.get_duration(frm)
          })
          }
 
+    },
+    create_delivery_note:function(frm){
+	     frm.save()
+	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frappe.model.open_mapped_doc({
+			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_delivery_note",
+			frm: frm
+
+		})
     }
 });
 frappe.ui.form.on('Customer Agreement Holds', {

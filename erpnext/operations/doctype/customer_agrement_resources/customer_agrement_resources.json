@@ -15,8 +15,8 @@
   "accounts_section",
   "cost_center",
   "account",
-  "hold",
-  "status"
+  "status",
+  "hold"
  ],
  "fields": [
   {
@@ -61,7 +61,7 @@
    "reqd": 1
   },
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "total_monthly_fee",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -103,16 +103,18 @@
    "label": "Hold"
   },
   {
+   "columns": 1,
    "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
    "options": "Active\nHold\nFinished",
    "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-11 15:04:59.032366",
+ "modified": "2021-04-11 15:51:34.859518",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Resources",

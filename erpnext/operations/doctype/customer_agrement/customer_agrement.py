@@ -7,7 +7,8 @@ import frappe
 from frappe import _
 from datetime import datetime ,time , timedelta
 from frappe.model.document import Document
-from frappe.utils import flt, cint, getdate, now, date_diff
+from frappe.utils import flt, cint, getdate, now, date_diff , nowdate , nowtime
+
 from erpnext.accounts.doctype.pricing_rule.pricing_rule import get_pricing_rule_for_item, set_transaction_type
 import json
 
@@ -86,6 +87,39 @@ class CustomerAgrement(Document):
 				})
 
 		self.save()
+
+
+
+@frappe.whitelist()
+def create_delivery_note(doc):
+	self = frappe.get_doc('Customer Agrement', doc)
+
+	dn = frappe.new_doc("Delivery Note")
+	dn.posting_date =  nowdate()
+	dn.posting_time =  nowtime()
+	dn.set_posting_time = 1
+
+	dn.customer = self.customer or "_Test Customer"
+	dn.is_return = 0
+	for i in getattr(self,'tools',[]):
+		if i.status == 'Active':
+			dn.append("items", {
+				"item_code": i.item_code,
+				"warehouse": self.warehouse ,
+				"qty": i.qty or 1,
+				"rate": i.rate ,
+				"uom": i.uom ,
+				"stock_uom": i.stock_uom ,
+				"conversion_factor": i.conversion_rate,
+				"allow_zero_valuation_rate":  1,
+				"expense_account": i.account ,
+				"cost_center": i.cost_center
+			})
+
+
+	dn.insert()
+
+	return dn
 
 
 @frappe.whitelist()
