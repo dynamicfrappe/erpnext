@@ -132,10 +132,12 @@ def create_stock_entry(doc):
 
 	stock_entry = frappe.new_doc("Stock Entry")
 
-	stock_entry.stock_entry_type = "Material Issue"
-	stock_entry.from_warehouse = self.warehouse
+	stock_entry.stock_entry_type = "Material Transfer"
+	stock_entry.to_warehouse = self.warehouse
+	stock_entry.from_warehouse  = frappe.db.get_single_value("Stock Settings", "default_warehouse")
 	stock_entry.customer_agreement = self.name
 	stock_entry.is_custody = 1
+	stock_entry.project = self.project
 	for item in getattr(self,'tools',[]):
 		if item.status == 'Active':
 			untransferred_qty = item.qty - item.transferred_qty
@@ -146,7 +148,8 @@ def create_stock_entry(doc):
 				se_child.uom = item.uom
 				se_child.stock_uom = item.stock_uom
 				se_child.qty = untransferred_qty
-				se_child.s_warehouse = self.warehouse
+				se_child.t_warehouse = self.warehouse
+				se_child.s_warehouse = stock_entry.from_warehouse
 				# in stock uom
 				se_child.transfer_qty = flt(untransferred_qty)
 				se_child.conversion_factor = flt(item.conversion_rate)
@@ -157,6 +160,7 @@ def create_stock_entry(doc):
 
 	if not getattr(stock_entry,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
+	
 	stock_entry.insert()
 	return stock_entry
 
