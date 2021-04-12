@@ -6,14 +6,17 @@
  "field_order": [
   "item_code",
   "item_name",
-  "section_break_3",
+  "uom",
   "qty",
-  "price",
+  "rate",
   "total_amount",
   "intersest_precentagefor_year",
-  "grand_total",
-  "section_break_7",
   "monthly_installment",
+  "grand_total",
+  "section_break_3",
+  "stock_uom",
+  "conversion_rate",
+  "section_break_7",
   "monthly_fee",
   "section_break_10",
   "proejct",
@@ -24,10 +27,14 @@
   "payed_installment",
   "un_payed_installment",
   "finishedinstallment",
-  "status"
+  "status",
+  "hold",
+  "delivered_qty",
+  "transferred_qty"
  ],
  "fields": [
   {
+   "columns": 1,
    "fieldname": "item_code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -36,11 +43,15 @@
    "reqd": 1
   },
   {
+   "depends_on": "item_code",
+   "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
-   "label": "Item Name"
+   "label": "Item Name",
+   "read_only": 1
   },
   {
+   "columns": 1,
    "default": "1",
    "fieldname": "qty",
    "fieldtype": "Int",
@@ -49,20 +60,15 @@
    "reqd": 1
   },
   {
-   "fieldname": "price",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Price",
-   "reqd": 1
-  },
-  {
+   "columns": 1,
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Amount",
-   "reqd": 1
+   "read_only": 1
   },
   {
+   "columns": 2,
    "default": "1",
    "fieldname": "monthly_installment",
    "fieldtype": "Int",
@@ -73,7 +79,9 @@
   {
    "fieldname": "monthly_fee",
    "fieldtype": "Currency",
-   "label": "Monthly Fee"
+   "in_list_view": 1,
+   "label": "Monthly Fee",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_3",
@@ -131,12 +139,15 @@
    "label": "FinishedInstallment"
   },
   {
+   "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status ",
-   "options": "Active\nHold\nFinished"
+   "options": "Active\nHold\nFinished",
+   "read_only": 1
   },
   {
+   "columns": 2,
    "default": "0",
    "fieldname": "intersest_precentagefor_year",
    "fieldtype": "Percent",
@@ -146,11 +157,68 @@
   {
    "fieldname": "grand_total",
    "fieldtype": "Currency",
-   "label": "Grand Total"
+   "label": "Grand Total",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "item_code.stock_uom",
+   "fetch_if_empty": 1,
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "UOM",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "item_code.stock_uom",
+   "fieldname": "stock_uom",
+   "fieldtype": "Link",
+   "label": "Stock UOM",
+   "options": "UOM",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "conversion_rate",
+   "fieldtype": "Float",
+   "label": "Conversion Rate",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval: doc.status == 'Active'",
+   "fieldname": "hold",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "Hold"
+  },
+  {
+   "default": "0",
+   "fieldname": "delivered_qty",
+   "fieldtype": "Int",
+   "label": "Delivered QTY",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "transferred_qty",
+   "fieldtype": "Int",
+   "label": "Transferred Qty",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-08 11:47:33.562692",
+ "modified": "2021-04-12 10:18:02.174121",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

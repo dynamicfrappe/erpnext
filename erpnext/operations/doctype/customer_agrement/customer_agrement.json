@@ -1,23 +1,26 @@
 {
+ "autoname": "naming_series:",
  "creation": "2021-04-08 10:56:37.417970",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "cutomer",
+  "naming_series",
+  "customer",
   "cutomer_name",
-  "account_template",
   "column_break_3",
+  "account_template",
+  "customer_installment_account",
+  "revenue_account",
+  "warehouse",
+  "column_break_9",
   "project",
   "project_status",
   "cost_center",
-  "warehouse",
-  "customer_installment_account",
-  "revenue_account",
   "dates_section_section",
   "start_date",
   "end_date",
-  "total_durationin_monthes",
+  "total_duration_in_monthes",
   "resources_data_section",
   "resourses",
   "total_resources",
@@ -28,19 +31,20 @@
   "total_monthel_fees_section",
   "total_resources_fee",
   "total_equipments_fee",
-  "grand_total_fee"
+  "grand_total_fee",
+  "section_break_24",
+  "holds",
+  "invoice_section_section",
+  "create_invoice",
+  "column_break_28",
+  "create_delivery_note",
+  "column_break_30",
+  "create_stock_entry"
  ],
  "fields": [
   {
-   "fieldname": "cutomer",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "cutomer.customer_name",
+   "depends_on": "customer",
+   "fetch_from": "customer.customer_name",
    "fieldname": "cutomer_name",
    "fieldtype": "Data",
    "label": "Cutomer Name",
@@ -48,7 +52,8 @@
   },
   {
    "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break",
+   "label": "Account Section"
   },
   {
    "fieldname": "project",
@@ -64,6 +69,8 @@
    "read_only": 1
   },
   {
+   "fetch_from": "project.cost_center",
+   "fetch_if_empty": 1,
    "fieldname": "cost_center",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -79,7 +86,8 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "label": "Start Date"
+   "label": "Start Date",
+   "reqd": 1
   },
   {
    "fieldname": "end_date",
@@ -87,29 +95,30 @@
    "label": "End Date"
   },
   {
-   "fieldname": "total_durationin_monthes",
-   "fieldtype": "Int",
-   "label": "Total Duration(In monthes)"
-  },
-  {
    "fieldname": "total_monthel_fees_section",
    "fieldtype": "Section Break",
    "label": "Total Monthel Fees"
   },
   {
+   "default": "0",
    "fieldname": "total_resources_fee",
    "fieldtype": "Currency",
-   "label": "Total Resources Fee"
+   "label": "Total Resources Fee",
+   "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "total_equipments_fee",
    "fieldtype": "Currency",
-   "label": "Total Equipments Fee"
+   "label": "Total Equipments Fee",
+   "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "grand_total_fee",
    "fieldtype": "Currency",
-   "label": "Grand Total Fee"
+   "label": "Grand Total Fee",
+   "read_only": 1
   },
   {
    "fieldname": "resources_data_section",
@@ -123,14 +132,18 @@
    "options": "Customer Agrement Resources"
   },
   {
+   "default": "0",
    "fieldname": "total_resources",
    "fieldtype": "Int",
-   "label": "Total Resources"
+   "label": "Total Resources",
+   "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "total_resources_monthly_fee",
    "fieldtype": "Currency",
-   "label": "Total Resources Monthly Fee"
+   "label": "Total Resources Monthly Fee",
+   "read_only": 1
   },
   {
    "fieldname": "tools_section_section",
@@ -151,11 +164,17 @@
    "reqd": 1
   },
   {
-   "fieldname": "account_template",
-   "fieldtype": "Link",
-   "label": "Account Template",
-   "options": "Operation Account Template",
-   "reqd": 1
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CUSTOMER-AGREEMENT-.#####",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_duration_in_monthes",
+   "fieldtype": "Int",
+   "label": "Total Duration(In monthes)",
+   "read_only": 1
   },
   {
    "fetch_from": "account_template.warehouse",
@@ -163,7 +182,59 @@
    "fieldtype": "Link",
    "label": "Custudy Warehouse",
    "options": "Warehouse",
-   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "invoice_section_section",
+   "fieldtype": "Section Break",
+   "label": "Actions"
+  },
+  {
+   "fieldname": "create_invoice",
+   "fieldtype": "Button",
+   "label": "Create Invoice"
+  },
+  {
+   "fieldname": "section_break_24",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "holds",
+   "fieldtype": "Table",
+   "label": "Holds Resources / Tools",
+   "options": "Customer Agreement Holds"
+  },
+  {
+   "fieldname": "create_delivery_note",
+   "fieldtype": "Button",
+   "label": "Create Delivery Note"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "create_stock_entry",
+   "fieldtype": "Button",
+   "label": "Create Stock Entry"
+  },
+  {
+   "fieldname": "account_template",
+   "fieldtype": "Link",
+   "label": "Account Template",
+   "options": "Operation Account Template",
    "reqd": 1
   },
   {
@@ -181,11 +252,14 @@
    "fieldtype": "Link",
    "label": "Revenue Account",
    "options": "Account",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2021-04-12 14:25:43.308875",
+ "modified": "2021-04-12 15:23:49.390358",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",

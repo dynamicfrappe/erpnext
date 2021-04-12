@@ -1,0 +1,54 @@
+{
+ "creation": "2021-04-11 13:54:52.709477",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "reference_type",
+  "reference_name",
+  "reference_item",
+  "unhold"
+ ],
+ "fields": [
+  {
+   "fieldname": "reference_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference Type",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_item",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference Item",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "unhold",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "Unhold"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-04-11 14:44:59.570872",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Customer Agreement Holds",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
