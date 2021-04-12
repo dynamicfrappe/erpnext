@@ -203,7 +203,6 @@ frappe.ui.form.on('Customer Agrement Tools', {
     {
         var item = locals [cdt][cdn]
         if (item.item_code){
-            alert(frm.doc.customer)
             frappe.call({
                 method:"erpnext.operations.doctype.customer_agrement.customer_agrement.get_item_price",
                 args :{
