@@ -29,7 +29,8 @@
   "finishedinstallment",
   "status",
   "hold",
-  "delivered_qty"
+  "delivered_qty",
+  "transferred_qty"
  ],
  "fields": [
   {
@@ -207,10 +208,17 @@
    "fieldtype": "Int",
    "label": "Delivered QTY",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "transferred_qty",
+   "fieldtype": "Int",
+   "label": "Transferred Qty",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-11 16:56:49.404222",
+ "modified": "2021-04-12 10:18:02.174121",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

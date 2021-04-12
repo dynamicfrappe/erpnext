@@ -116,7 +116,8 @@ def create_delivery_note(doc):
 					"allow_zero_valuation_rate":  1,
 					"expense_account": i.account ,
 					"cost_center": i.cost_center ,
-					"customer_tool": i.name
+					"customer_tool": i.name ,
+					"project": self.project
 				})
 	if not getattr(dn,'items',None):
 		frappe.throw(_('There is no Items To Deliver'))
@@ -125,6 +126,73 @@ def create_delivery_note(doc):
 	dn.insert()
 
 	return dn
+@frappe.whitelist()
+def create_stock_entry(doc):
+	self = frappe.get_doc('Customer Agrement', doc)
+
+	stock_entry = frappe.new_doc("Stock Entry")
+
+	stock_entry.stock_entry_type = "Material Issue"
+	stock_entry.from_warehouse = self.warehouse
+	stock_entry.customer_agreement = self.name
+	for item in getattr(self,'tools',[]):
+		if item.status == 'Active':
+			untransferred_qty = item.qty - item.transferred_qty
+			if untransferred_qty > 0 :
+				se_child = stock_entry.append('items')
+				se_child.item_code = item.item_code
+				se_child.item_name = item.item_name
+				se_child.uom = item.uom
+				se_child.stock_uom = item.stock_uom
+				se_child.qty = untransferred_qty
+				se_child.s_warehouse = self.warehouse
+				# in stock uom
+				se_child.transfer_qty = flt(untransferred_qty)
+				se_child.conversion_factor = flt(item.conversion_rate)
+				se_child.project = self.project
+				se_child.cost_center = item.cost_center
+				se_child.expense_account = item.account
+				se_child.customer_tool = item.name
+
+	if not getattr(stock_entry,'items',None):
+		frappe.throw(_('There is no Items To Transfer'))
+	stock_entry.insert()
+	return stock_entry
+
+
+
+@frappe.whitelist()
+def create_invoice(doc):
+	self = frappe.get_doc('Customer Agrement', doc)
+
+	stock_entry = frappe.new_doc("Stock Entry")
+
+	stock_entry.stock_entry_type = "Material Issue"
+	stock_entry.from_warehouse = self.warehouse
+	stock_entry.customer_agreement = self.name
+	for item in getattr(self,'tools',[]):
+		if item.status == 'Active':
+			untransferred_qty = item.qty - item.transferred_qty
+			if untransferred_qty > 0 :
+				se_child = stock_entry.append('items')
+				se_child.item_code = item.item_code
+				se_child.item_name = item.item_name
+				se_child.uom = item.uom
+				se_child.stock_uom = item.stock_uom
+				se_child.qty = untransferred_qty
+				se_child.s_warehouse = self.warehouse
+				# in stock uom
+				se_child.transfer_qty = flt(untransferred_qty)
+				se_child.conversion_factor = flt(item.conversion_rate)
+				se_child.project = self.project
+				se_child.cost_center = item.cost_center
+				se_child.expense_account = item.account
+				se_child.customer_tool = item.name
+
+	if not getattr(stock_entry,'items',None):
+		frappe.throw(_('There is no Items To Transfer'))
+	stock_entry.insert()
+	return stock_entry
 
 
 @frappe.whitelist()

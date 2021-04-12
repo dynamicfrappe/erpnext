@@ -13,6 +13,18 @@ frappe.ui.form.on('Customer Agrement', {
 			    	}
 				};
 			});
+            if (!frm.is_new()){
+                 frm.add_custom_button(__("Invoice"),function() {
+					frm.events.create_invoice (frm);
+				}, __("Create"));
+                frm.add_custom_button(__("Delivery Note"),function() {
+                        frm.events.create_delivery_note (frm);
+                    }, __("Create"));
+                frm.add_custom_button(__("Stock Entry"),function() {
+                        frm.events.create_stock_entry (frm);
+                    }, __("Create"));
+            }
+
         },
     start_date:function (frm) {
         frm.events.get_duration(frm)
@@ -100,11 +112,29 @@ frm.events.get_duration(frm)
          }
 
     },
+    create_invoice:function(frm){
+	     frm.save()
+	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frappe.model.open_mapped_doc({
+			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_invoice",
+			frm: frm
+
+		})
+    },
     create_delivery_note:function(frm){
 	     frm.save()
 	     frm.doc.comapny = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
 			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_delivery_note",
+			frm: frm
+
+		})
+    },
+    create_stock_entry:function(frm){
+	     frm.save()
+	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frappe.model.open_mapped_doc({
+			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_stock_entry",
 			frm: frm
 
 		})

@@ -32,7 +32,10 @@
   "holds",
   "invoice_section_section",
   "create_invoice",
-  "create_delivery_note"
+  "column_break_28",
+  "create_delivery_note",
+  "column_break_30",
+  "create_stock_entry"
  ],
  "fields": [
   {
@@ -205,9 +208,22 @@
    "fieldname": "create_delivery_note",
    "fieldtype": "Button",
    "label": "Create Delivery Note"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "create_stock_entry",
+   "fieldtype": "Button",
+   "label": "Create Stock Entry"
   }
  ],
- "modified": "2021-04-11 15:35:49.179119",
+ "modified": "2021-04-12 09:54:46.367322",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
