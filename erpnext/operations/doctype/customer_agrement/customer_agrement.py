@@ -135,6 +135,7 @@ def create_stock_entry(doc):
 	stock_entry.stock_entry_type = "Material Issue"
 	stock_entry.from_warehouse = self.warehouse
 	stock_entry.customer_agreement = self.name
+	stock_entry.is_custody = 1
 	for item in getattr(self,'tools',[]):
 		if item.status == 'Active':
 			untransferred_qty = item.qty - item.transferred_qty
