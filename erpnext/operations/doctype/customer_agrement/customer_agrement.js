@@ -114,7 +114,7 @@ frm.events.get_duration(frm)
     },
     create_invoice:function(frm){
 	     frm.save()
-	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frm.doc.company = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
 			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_invoice",
 			frm: frm
@@ -123,7 +123,7 @@ frm.events.get_duration(frm)
     },
     create_delivery_note:function(frm){
 	     frm.save()
-	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frm.doc.company = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
 			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_delivery_note",
 			frm: frm
@@ -132,7 +132,7 @@ frm.events.get_duration(frm)
     },
     create_stock_entry:function(frm){
 	     frm.save()
-	     frm.doc.comapny = frappe.defaults.get_default("company")
+	     frm.doc.company = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
 			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_stock_entry",
 			frm: frm

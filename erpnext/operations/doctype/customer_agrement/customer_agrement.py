@@ -53,7 +53,7 @@ class CustomerAgrement(Document):
 			i.qty = i.qty or 0
 			i.rate = i.rate or 0
 			i.total_amount = (i.qty * i.rate) or 0
-			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year) or 0
+			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year/100) or 0
 			i.monthly_installment = i.monthly_installment or 1
 			percent = (i.intersest_precentagefor_year  * i.monthly_installment) /12
 			i.grand_total = i.total_amount
@@ -166,34 +166,68 @@ def create_stock_entry(doc):
 def create_invoice(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
 
-	stock_entry = frappe.new_doc("Stock Entry")
+	invoice = frappe.new_doc("Operation Sales Invoice")
+	invoice.customer = self.customer
+	# invoice.company =  self.company
+	invoice.customer_agreement = self.name
+	invoice.posting_date = nowdate()
+	invoice.payment_date = nowdate()
+	invoice.posting_time = nowtime()
+	invoice.project = self.project
+	invoice.cost_center = self.cost_center
+	invoice.total_qty = 0
+	invoice.total = 0
+	invoice.base_grand_total = 0
+	invoice.grand_total = 0
+	invoice.status = 'Draft'
+	invoice.customer_agreement = self.name
 
-	stock_entry.stock_entry_type = "Material Issue"
-	stock_entry.from_warehouse = self.warehouse
-	stock_entry.customer_agreement = self.name
 	for item in getattr(self,'tools',[]):
 		if item.status == 'Active':
-			untransferred_qty = item.qty - item.transferred_qty
-			if untransferred_qty > 0 :
-				se_child = stock_entry.append('items')
-				se_child.item_code = item.item_code
-				se_child.item_name = item.item_name
-				se_child.uom = item.uom
-				se_child.stock_uom = item.stock_uom
-				se_child.qty = untransferred_qty
-				se_child.s_warehouse = self.warehouse
-				# in stock uom
-				se_child.transfer_qty = flt(untransferred_qty)
-				se_child.conversion_factor = flt(item.conversion_rate)
-				se_child.project = self.project
-				se_child.cost_center = item.cost_center
-				se_child.expense_account = item.account
-				se_child.customer_tool = item.name
+			# untransferred_qty = item.qty - item.transferred_qty
+			# if untransferred_qty > 0 :
+				invoice_child = invoice.append('items')
+				invoice_child.item = item.item_code
+				invoice_child.item_name = item.item_name
+				invoice_child.price = item.monthly_fee / item.qty
+				invoice_child.qty =item.qty
+				invoice_child.total = item.monthly_fee
+				invoice_child.customer_agreement = self.name
+				invoice_child.customer_tool = item.name
+				invoice.total_qty += item.qty
+				invoice.total += item.monthly_fee
 
-	if not getattr(stock_entry,'items',None):
+	for item in getattr(self,'resourses',[]):
+		if item.status == 'Active':
+			# untransferred_qty = item.qty - item.transferred_qty
+			# if untransferred_qty > 0 :
+				employee_number = frappe.db.get_value('Employee',item.employee , 'employee_number') or ''
+				key = 'item-' + str(employee_number)+ '-' + item.employee_name
+				res = frappe.db.sql (""" select item_code , item_name from tabItem where item_name  like '%{}%'
+					order by creation desc limit 1 """.format(key))
+				if res :
+					item.item_code = res[0][0]
+					item.item_name = res[0][1]
+					invoice_child = invoice.append('items')
+					invoice_child.item = item.item_code
+					invoice_child.item_name = item.item_name
+					invoice_child.price = item.total_monthly_fee
+					invoice_child.qty = 1
+					invoice_child.total = item.total_monthly_fee
+					invoice_child.customer_agreement = self.name
+					invoice_child.customer_resource = item.name
+					invoice.total_qty += 1
+					invoice.total += item.total_monthly_fee
+
+	invoice.base_grand_total = invoice.total
+	invoice.grand_total = invoice.total
+	invoice.rounded_total = round(invoice.grand_total, 0)
+	invoice.base_rounded_total = round(invoice.grand_total, 0)
+
+	if not getattr(invoice,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
-	stock_entry.insert()
-	return stock_entry
+	invoice.insert()
+	return invoice
 
 
 @frappe.whitelist()
