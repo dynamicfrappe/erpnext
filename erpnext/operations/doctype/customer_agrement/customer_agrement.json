@@ -6,10 +6,14 @@
  "field_order": [
   "cutomer",
   "cutomer_name",
+  "account_template",
   "column_break_3",
   "project",
   "project_status",
   "cost_center",
+  "warehouse",
+  "customer_installment_account",
+  "revenue_account",
   "dates_section_section",
   "start_date",
   "end_date",
@@ -31,14 +35,16 @@
    "fieldname": "cutomer",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Cutomer",
+   "label": "Customer",
    "options": "Customer",
    "reqd": 1
   },
   {
+   "fetch_from": "cutomer.customer_name",
    "fieldname": "cutomer_name",
    "fieldtype": "Data",
-   "label": "Cutomer Name"
+   "label": "Cutomer Name",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_3",
@@ -143,9 +149,43 @@
    "label": "Tools Qty",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "account_template",
+   "fieldtype": "Link",
+   "label": "Account Template",
+   "options": "Operation Account Template",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "account_template.warehouse",
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Custudy Warehouse",
+   "options": "Warehouse",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "account_template.customer_installment_account",
+   "fieldname": "customer_installment_account",
+   "fieldtype": "Link",
+   "label": "Customer Installment Account",
+   "options": "Account",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "account_template.revenue_account",
+   "fieldname": "revenue_account",
+   "fieldtype": "Link",
+   "label": "Revenue Account",
+   "options": "Account",
+   "read_only": 1,
+   "reqd": 1
   }
  ],
- "modified": "2021-04-08 11:48:43.128843",
+ "modified": "2021-04-12 14:25:43.308875",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
