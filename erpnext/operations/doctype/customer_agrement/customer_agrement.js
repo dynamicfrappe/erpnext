@@ -14,8 +14,8 @@ frappe.ui.form.on('Customer Agrement', {
 				};
 			});
             if (!frm.is_new()){
-                 frm.add_custom_button(__("Invoice"),function() {
-					frm.events.create_invoice (frm);
+                 frm.add_custom_button(__("Operation Invoice Due"),function() {
+					frm.events.create_Due (frm);
 				}, __("Create"));
                 frm.add_custom_button(__("Delivery Note"),function() {
                         frm.events.create_delivery_note (frm);
@@ -112,11 +112,11 @@ frm.events.get_duration(frm)
          }
 
     },
-    create_invoice:function(frm){
+    create_Due:function(frm){
 	     frm.save()
 	     frm.doc.company = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
-			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_invoice",
+			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_Due",
 			frm: frm
 
 		})

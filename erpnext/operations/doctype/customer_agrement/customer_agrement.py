@@ -98,7 +98,9 @@ def create_delivery_note(doc):
 	dn.posting_date =  nowdate()
 	dn.posting_time =  nowtime()
 	dn.set_posting_time = 1
-
+	dn.is_custdy = 1
+	dn.project = self.project
+	dn.customer_agreement = self.name
 	dn.customer = self.customer or "_Test Customer"
 	dn.is_return = 0
 	for i in getattr(self,'tools',[]):
@@ -132,10 +134,12 @@ def create_stock_entry(doc):
 
 	stock_entry = frappe.new_doc("Stock Entry")
 
-	stock_entry.stock_entry_type = "Material Issue"
-	stock_entry.from_warehouse = self.warehouse
+	stock_entry.stock_entry_type = "Material Transfer"
+	stock_entry.to_warehouse = self.warehouse
+	stock_entry.from_warehouse  = frappe.db.get_single_value("Stock Settings", "default_warehouse")
 	stock_entry.customer_agreement = self.name
 	stock_entry.is_custody = 1
+	stock_entry.project = self.project
 	for item in getattr(self,'tools',[]):
 		if item.status == 'Active':
 			untransferred_qty = item.qty - item.transferred_qty
@@ -146,7 +150,8 @@ def create_stock_entry(doc):
 				se_child.uom = item.uom
 				se_child.stock_uom = item.stock_uom
 				se_child.qty = untransferred_qty
-				se_child.s_warehouse = self.warehouse
+				se_child.t_warehouse = self.warehouse
+				se_child.s_warehouse = stock_entry.from_warehouse
 				# in stock uom
 				se_child.transfer_qty = flt(untransferred_qty)
 				se_child.conversion_factor = flt(item.conversion_rate)
@@ -157,50 +162,51 @@ def create_stock_entry(doc):
 
 	if not getattr(stock_entry,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
+	
 	stock_entry.insert()
 	return stock_entry
 
 
 
 @frappe.whitelist()
-def create_invoice(doc):
+def create_Due(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
 
-	invoice = frappe.new_doc("Operation Sales Invoice")
-	invoice.customer = self.customer
-	# invoice.company =  self.company
-	invoice.customer_agreement = self.name
-	invoice.posting_date = nowdate()
-	invoice.payment_date = nowdate()
-	invoice.posting_time = nowtime()
-	invoice.project = self.project
-	invoice.cost_center = self.cost_center
+	invoice = frappe.new_doc("Operations Invoice Dues")
+	invoice.agreement = self.name
+	invoice.date = self.start_date
+	invoice.invoiced = 0
+	invoice.total_resources = 0
+	invoice.total_tools = 0
+	invoice.total_resources_fee = 0
+	invoice.total_equipments_fee = 0
+	invoice.total_fee = 0
 	invoice.total_qty = 0
-	invoice.total = 0
-	invoice.base_grand_total = 0
-	invoice.grand_total = 0
-	invoice.status = 'Draft'
-	invoice.customer_agreement = self.name
+	invoice.total_invoiced = 0
+	invoice.total_remaining = 0
 
 	for item in getattr(self,'tools',[]):
-		if item.status == 'Active':
+
 			# untransferred_qty = item.qty - item.transferred_qty
 			# if untransferred_qty > 0 :
+			if item.status != 'Finished':
 				invoice_child = invoice.append('items')
+				invoice_child.status = item.status
 				invoice_child.item = item.item_code
 				invoice_child.item_name = item.item_name
-				invoice_child.price = item.monthly_fee / item.qty
+				invoice_child.rate = item.monthly_fee / item.qty
 				invoice_child.qty =item.qty
 				invoice_child.total = item.monthly_fee
-				invoice_child.customer_agreement = self.name
-				invoice_child.customer_tool = item.name
-				invoice.total_qty += item.qty
-				invoice.total += item.monthly_fee
+				invoice_child.cost_center = item.cost_center
+				invoice_child.account = item.account
+				invoice_child.tool = item.name
+				invoice.total_tools += item.qty
+				invoice.total_tools_fee += item.monthly_fee
 
 	for item in getattr(self,'resourses',[]):
-		if item.status == 'Active':
 			# untransferred_qty = item.qty - item.transferred_qty
 			# if untransferred_qty > 0 :
+			if item.status != 'Finished':
 				employee_number = frappe.db.get_value('Employee',item.employee , 'employee_number') or ''
 				key = 'item-' + str(employee_number)+ '-' + item.employee_name
 				res = frappe.db.sql (""" select item_code , item_name from tabItem where item_name  like '%{}%'
@@ -209,20 +215,22 @@ def create_invoice(doc):
 					item.item_code = res[0][0]
 					item.item_name = res[0][1]
 					invoice_child = invoice.append('items')
-					invoice_child.item = item.item_code
+
+					invoice_child.status = item.status
+					invoice_child.item_code = item.item_code
 					invoice_child.item_name = item.item_name
-					invoice_child.price = item.total_monthly_fee
+					invoice_child.rate =  item.total_monthly_fee
 					invoice_child.qty = 1
 					invoice_child.total = item.total_monthly_fee
-					invoice_child.customer_agreement = self.name
-					invoice_child.customer_resource = item.name
-					invoice.total_qty += 1
-					invoice.total += item.total_monthly_fee
+					invoice_child.cost_center = item.cost_center
+					invoice_child.account = item.account
+					invoice_child.resource = item.name
+					invoice.total_resources += 1
+					invoice.total_resources_fee += item.total_monthly_fee
 
-	invoice.base_grand_total = invoice.total
-	invoice.grand_total = invoice.total
-	invoice.rounded_total = round(invoice.grand_total, 0)
-	invoice.base_rounded_total = round(invoice.grand_total, 0)
+	invoice.total_fee = invoice.total_tools_fee + invoice.total_resources_fee
+	invoice.total_qty = invoice.total_tools + invoice.total_resources
+	invoice.total_remaining = invoice.total_qty
 
 	if not getattr(invoice,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
