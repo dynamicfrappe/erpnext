@@ -8,6 +8,7 @@
   "customer",
   "cutomer_name",
   "warehouse",
+  "status",
   "column_break_3",
   "project",
   "project_status",
@@ -59,8 +60,11 @@
   {
    "fetch_from": "project.status",
    "fieldname": "project_status",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
    "label": "Project Status",
+   "options": "Open\nCompleted\nCancelled",
    "read_only": 1
   },
   {
@@ -221,9 +225,18 @@
    "fieldname": "create_stock_entry",
    "fieldtype": "Button",
    "label": "Create Stock Entry"
+  },
+  {
+   "default": "Open",
+   "fetch_from": "project.status",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nCompleted\nCancelled",
+   "read_only": 1
   }
  ],
- "modified": "2021-04-12 09:54:46.367322",
+ "modified": "2021-04-14 11:33:31.102561",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
