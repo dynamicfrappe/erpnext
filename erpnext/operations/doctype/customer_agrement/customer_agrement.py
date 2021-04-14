@@ -99,6 +99,8 @@ def create_delivery_note(doc):
 	dn.posting_time =  nowtime()
 	dn.set_posting_time = 1
 	dn.is_custdy = 1
+	dn.project = self.project
+	dn.customer_agreement = self.name
 	dn.customer = self.customer or "_Test Customer"
 	dn.is_return = 0
 	for i in getattr(self,'tools',[]):
