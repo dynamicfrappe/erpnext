@@ -1,0 +1,59 @@
+{
+ "creation": "2021-04-14 14:49:59.540410",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "due",
+  "date",
+  "invoiced",
+  "create_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "due",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Due",
+   "options": "Operations Invoice Dues",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "due.date",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "due.invoiced",
+   "fieldname": "invoiced",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Invoiced",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "create_invoice",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "Create Invoice"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-04-14 14:51:47.949634",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Customer Agreement Dues",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

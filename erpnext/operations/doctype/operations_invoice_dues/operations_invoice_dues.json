@@ -17,8 +17,12 @@
   "cost_center",
   "section_break_15",
   "items",
+  "section_break_13",
   "total_invoiced",
   "total_remaining",
+  "column_break_15",
+  "total_active",
+  "total_hold",
   "totals_section",
   "total_resources",
   "total_tools",
@@ -176,10 +180,32 @@
    "fieldtype": "Float",
    "label": "Total QTY",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_active",
+   "fieldtype": "Int",
+   "label": "Total Active",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_hold",
+   "fieldtype": "Int",
+   "label": "Total Hold",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_13",
+   "fieldtype": "Section Break"
   }
  ],
  "in_create": 1,
- "modified": "2021-04-14 13:50:28.172595",
+ "modified": "2021-04-15 09:38:29.990880",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Operations Invoice Dues",

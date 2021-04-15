@@ -7,15 +7,9 @@
  "field_order": [
   "customer",
   "cutomer_name",
-  "col_break1",
-  "naming_series",
+  "warehouse",
   "status",
   "column_break_3",
-  "account_template",
-  "customer_installment_account",
-  "revenue_account",
-  "warehouse",
-  "column_break_9",
   "project",
   "project_status",
   "cost_center",
@@ -34,8 +28,11 @@
   "total_resources_fee",
   "total_equipments_fee",
   "grand_total_fee",
+  "naming_series",
   "section_break_24",
   "holds",
+  "section_break_33",
+  "dues",
   "invoice_section_section",
   "create_invoice",
   "column_break_28",
@@ -54,8 +51,7 @@
   },
   {
    "fieldname": "column_break_3",
-   "fieldtype": "Section Break",
-   "label": "Account Section"
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "project",
@@ -91,8 +87,7 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "label": "Start Date",
-   "reqd": 1
+   "label": "Start Date"
   },
   {
    "fieldname": "end_date",
@@ -172,8 +167,7 @@
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
-   "options": "CUSTOMER-AGREEMENT-.#####",
-   "read_only": 1
+   "options": "CUSTOMER-AGREEMENT-.#####"
   },
   {
    "fieldname": "total_duration_in_monthes",
@@ -182,10 +176,9 @@
    "read_only": 1
   },
   {
-   "fetch_from": "account_template.warehouse",
    "fieldname": "warehouse",
    "fieldtype": "Link",
-   "label": "Custudy Warehouse",
+   "label": "Warehouse",
    "options": "Warehouse",
    "reqd": 1
   },
@@ -236,51 +229,28 @@
    "label": "Create Stock Entry"
   },
   {
-   "fieldname": "account_template",
-   "fieldtype": "Link",
-   "label": "Account Template",
-   "options": "Operation Account Template",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "account_template.customer_installment_account",
-   "fieldname": "customer_installment_account",
-   "fieldtype": "Link",
-   "label": "Customer Installment Account",
-   "options": "Account",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
-   "fetch_from": "account_template.revenue_account",
-   "fieldname": "revenue_account",
-   "fieldtype": "Link",
-   "label": "Revenue Account",
-   "options": "Account",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_9",
-   "fieldtype": "Column Break"
-  },
-  {
    "default": "Open",
    "fetch_from": "project.status",
    "fieldname": "status",
    "fieldtype": "Select",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Status",
    "options": "Open\nCompleted\nCancelled",
    "read_only": 1
   },
   {
-   "fieldname": "col_break1",
-   "fieldtype": "Column Break"
+   "fieldname": "section_break_33",
+   "fieldtype": "Section Break",
+   "label": "Operations Invoice Dues"
+  },
+  {
+   "fieldname": "dues",
+   "fieldtype": "Table",
+   "label": "Operations Invoice Dues",
+   "options": "Customer Agreement Dues",
+   "read_only": 1
   }
  ],
- "modified": "2021-04-14 14:22:39.077943",
+ "modified": "2021-04-14 14:51:03.400637",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",

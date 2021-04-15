@@ -24,9 +24,11 @@
    "in_list_view": 1,
    "label": "Item",
    "options": "Item",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
+   "columns": 1,
    "default": "0",
    "fieldname": "qty",
    "fieldtype": "Float",
@@ -93,7 +95,7 @@
    "read_only": 1
   },
   {
-   "default": "item_code.item_name",
+   "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item Name",
@@ -101,7 +103,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-04-14 13:51:06.002220",
+ "modified": "2021-04-15 10:05:31.158688",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Operations Invoice Dues Items",

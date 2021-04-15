@@ -8,6 +8,7 @@ from frappe import _
 from datetime import datetime ,time , timedelta
 from frappe.model.document import Document
 from frappe.utils import flt, cint, getdate, now, date_diff , nowdate , nowtime
+from dateutil.relativedelta import relativedelta
 
 from erpnext.accounts.doctype.pricing_rule.pricing_rule import get_pricing_rule_for_item, set_transaction_type
 import json
@@ -53,9 +54,9 @@ class CustomerAgrement(Document):
 			i.qty = i.qty or 0
 			i.rate = i.rate or 0
 			i.total_amount = (i.qty * i.rate) or 0
-			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year/100) or 0
+			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year or 0 )
 			i.monthly_installment = i.monthly_installment or 1
-			percent = (i.intersest_precentagefor_year  * i.monthly_installment) /12
+			percent = ((i.intersest_precentagefor_year /100) * i.monthly_installment) /12
 			i.grand_total = i.total_amount
 			if i.monthly_installment > 1:
 				i.grand_total+= (i.total_amount * percent)
@@ -175,6 +176,16 @@ def create_Due(doc):
 	invoice = frappe.new_doc("Operations Invoice Dues")
 	invoice.agreement = self.name
 	invoice.date = self.start_date
+	res = frappe.db.sql("""select MAX(date) from `tabOperations Invoice Dues` where agreement = '{}' and docstatus < 2 
+	""".format(self.name))
+	if res and len(res) > 0:
+		date = res[0][0]
+		if date:
+			invoice.date = date + relativedelta(months=1)
+	if self.end_date:
+		if invoice.date >  self.end_date :
+			frappe.throw(_("""All Operations Invoice Dues Was Created"""))
+
 	invoice.invoiced = 0
 	invoice.total_resources = 0
 	invoice.total_tools = 0
@@ -192,7 +203,7 @@ def create_Due(doc):
 			if item.status != 'Finished':
 				invoice_child = invoice.append('items')
 				invoice_child.status = item.status
-				invoice_child.item = item.item_code
+				invoice_child.item_code = item.item_code
 				invoice_child.item_name = item.item_name
 				invoice_child.rate = item.monthly_fee / item.qty
 				invoice_child.qty =item.qty
@@ -235,6 +246,12 @@ def create_Due(doc):
 	if not getattr(invoice,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
 	invoice.insert()
+	self.append('dues',{
+		'due':invoice.name,
+		'date':invoice.date,
+		'invoiced': invoice.invoiced,
+	})
+	self.save()
 	return invoice
 
 
@@ -285,6 +302,28 @@ def get_item_conversion_factor(item,uom):
 	if res :
 		return res [0].conversion_factor
 	return 1
+
+
+
+@frappe.whitelist()
+def create_invoice_from_due(doc_name=None):
+	names = []
+	if doc_name :
+		names.append(doc_name)
+	else :
+		names = frappe.db.sql_list (""" select name from `tabOperations Invoice Dues`
+		 where  invoiced <>1 """.format())
+	if names or len(names) > 0 :
+		for name in names :
+			try :
+				doc = frappe.get_doc("Operations Invoice Dues", name)
+				doc.create_invoice()
+			except Exception as e:
+				frappe.msgprint(_("Error while Creating Operations Sales Invoice for  Operations Invoice Dues {} \n{}".format(name,str(e))))
+		frappe.db.sql("""update `tabCustomer Agreement Dues` set invoiced = (select t.invoiced from `tabOperations Invoice Dues` t where  t.name= due) where invoiced <>1""")
+		frappe.db.commit()
+
+
 
 
 

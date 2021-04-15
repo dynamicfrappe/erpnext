@@ -113,7 +113,7 @@ frm.events.get_duration(frm)
 
     },
     create_Due:function(frm){
-	     frm.save()
+	     // frm.save()
 	     frm.doc.company = frappe.defaults.get_default("company")
 	     frappe.model.open_mapped_doc({
 			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_Due",
@@ -252,3 +252,22 @@ frappe.ui.form.on('Customer Agrement Tools', {
 
 });
 
+frappe.ui.form.on('Customer Agreement Dues', {
+    create_invoice :function (frm,cdt,cdn) {
+        var row = locals [cdt] [cdn]
+        if (!row.invoiced) {
+            frappe.call(
+                {
+                    method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_invoice_from_due",
+                    args: {
+                        "doc_name":row.due
+                    },
+                    callback: function (r) {
+                        frappe.msgprint(__('Done'))
+                        frm.refresh()
+                    }
+                }
+            )
+        }
+    }
+});
