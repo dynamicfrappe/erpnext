@@ -74,8 +74,8 @@ def item_query(doctype, txt, searchfield, start, page_len, filters):
 				and filters.get("inspection_type") != "In Process":
 			cond = """and item_code in (select name from `tabItem` where
 				inspection_required_before_delivery = 1)"""
-		elif filters.get('from') == 'Stock Entry Detail':
-			cond = """and s_warehouse is null"""
+		# elif filters.get('from') == 'Stock Entry Detail':
+		# 	cond = """and s_warehouse is null"""
 
 		if filters.get('from') in ['Supplier Quotation Item']:
 			qi_condition = ""
