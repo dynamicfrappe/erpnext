@@ -14,7 +14,8 @@
   "account",
   "tool",
   "resource",
-  "invoiced"
+  "invoiced",
+  "stock_rate"
  ],
  "fields": [
   {
@@ -24,11 +25,9 @@
    "in_list_view": 1,
    "label": "Item",
    "options": "Item",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
-   "columns": 1,
    "default": "0",
    "fieldname": "qty",
    "fieldtype": "Float",
@@ -95,15 +94,21 @@
    "read_only": 1
   },
   {
-   "fetch_from": "item_code.item_name",
+   "default": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "stock_rate",
+   "fieldtype": "Float",
+   "label": "Stock Rate",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-15 10:05:31.158688",
+ "modified": "2021-04-18 10:32:46.391039",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Operations Invoice Dues Items",
