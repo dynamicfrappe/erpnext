@@ -160,7 +160,7 @@ class StockEntry(StockController):
 		self.validate_reserved_serial_no_consumption()
 		self.update_transferred_qty()
 		self.update_quality_inspection()
-		frappe.throw("run")
+		#frappe.throw("run")
 		if self.work_order and self.purpose == "Manufacture":
 			self.update_so_in_serial_number()
 		try:
