@@ -66,3 +66,12 @@ class EmployeeTransfer(Document):
 			if item.fieldname == "user_id" and item.new != item.current:
 				return True
 		return False
+
+
+
+
+try:
+	from dynamicerp.dynamic_hr.doctype.employee_transfer.employee_transfer import before_submit
+	EmployeeTransfer.before_submit = before_submit
+except:
+	pass
