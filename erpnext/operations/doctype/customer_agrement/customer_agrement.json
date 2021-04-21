@@ -38,6 +38,8 @@
   "grand_total_fee",
   "section_break_24",
   "holds",
+  "section_break_33",
+  "dues",
   "invoice_section_section",
   "create_invoice",
   "column_break_28",
@@ -297,9 +299,20 @@
    "options": "Account",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_33",
+   "fieldtype": "Section Break",
+   "label": "Operations Invoice Dues"
+  },
+  {
+   "fieldname": "dues",
+   "fieldtype": "Table",
+   "label": "Operations Invoice Dues",
+   "options": "Customer Agreement Dues"
   }
  ],
- "modified": "2021-04-18 12:34:57.236674",
+ "modified": "2021-04-18 14:32:32.794857",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",

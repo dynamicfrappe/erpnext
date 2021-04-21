@@ -31,6 +31,7 @@
   "hold",
   "delivered_qty",
   "transferred_qty",
+  "un_transfear_tools",
   "valuation_rate",
   "itemproejct"
  ],
@@ -228,10 +229,16 @@
    "fieldtype": "Float",
    "label": "monthl Valuation Rate ",
    "read_only": 1
+  },
+  {
+   "fieldname": "un_transfear_tools",
+   "fieldtype": "Int",
+   "label": "Un transfear Tools",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2021-04-18 13:26:06.615211",
+ "modified": "2021-04-20 12:47:00.391155",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

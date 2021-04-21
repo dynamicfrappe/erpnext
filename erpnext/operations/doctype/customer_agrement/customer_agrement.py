@@ -19,6 +19,7 @@ class CustomerAgrement(Document):
 		self.calculate_tools_totals()
 		self.set_resources_cost_center_and_account()
 		self.set_tools_cost_center_project_account()
+		self.calculate_un_delevered()
 
 	def set_resources_cost_center_and_account(self):
 		for resource in self.resourses :
@@ -27,7 +28,9 @@ class CustomerAgrement(Document):
 			if not resource.account:
 				resource.account = self.resourses_income_account
 
-
+	def calculate_un_delevered(self):
+		for item in self.tools :
+			item.un_transfear_tools = float(item.qty or 0) - (float(item.transferred_qty or 0) + float(item.delivered_qty or 0))
 
 	def set_tools_cost_center_project_account(self):
 		for item in self.tools :
@@ -278,12 +281,12 @@ def create_Due(doc):
 	if not getattr(invoice,'items',None):
 		frappe.throw(_('There is no Items To Transfer'))
 	invoice.insert()
-	# self.append('dues',{
-	# 	'due':invoice.name,
-	# 	'date':invoice.date,
-	# 	'invoiced': invoice.invoiced,
-	# })
-	# self.save()
+	self.append('dues',{
+		'due':invoice.name,
+		'date':invoice.date,
+		'invoiced': invoice.invoiced,
+	})
+	self.save()
 	return invoice
 
 
