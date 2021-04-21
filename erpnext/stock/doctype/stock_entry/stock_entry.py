@@ -396,7 +396,7 @@ class StockEntry(StockController):
 						if not d.s_warehouse:
 							frappe.throw(_("Source warehouse is mandatory for row {0}").format(d.idx))
 
-			if cstr(d.s_warehouse) == cstr(d.t_warehouse) and not self.purpose == "Material Transfer for Manufacture":
+			if cstr(d.s_warehouse) == cstr(d.t_warehouse) and not self.purpose == "Material Transfer for Manufacture" and self.is_custody == 0:
 				frappe.throw(_("Source and target warehouse cannot be same for row {0}").format(d.idx))
 
 	def validate_work_order(self):

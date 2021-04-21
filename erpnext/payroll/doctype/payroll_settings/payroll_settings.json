@@ -11,13 +11,16 @@
   "include_holidays_in_total_working_days",
   "disable_rounded_total",
   "advance_salary_component",
-  "medical_insurance_salary_component",
   "loan_salary_component",
+  "social_insurance_salary_component",
   "column_break_11",
   "daily_wages_fraction_for_half_day",
   "email_salary_slip_to_employee",
   "encrypt_salary_slips_in_emails",
   "password_policy",
+  "medical_insurance_setting_section",
+  "medical_based_on",
+  "medical_insurance_salary_component",
   "employee_income_tax_configuration_section",
   "income_tax_salary_component",
   "personal_exemption_value",
@@ -149,11 +152,30 @@
    "fieldtype": "Link",
    "label": "Loan Salary Component",
    "options": "Salary Component"
+  },
+  {
+   "fieldname": "social_insurance_salary_component",
+   "fieldtype": "Link",
+   "label": "Social Insurance Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "medical_insurance_setting_section",
+   "fieldtype": "Section Break",
+   "label": "Medical Insurance Setting"
+  },
+  {
+   "default": "Month",
+   "fieldname": "medical_based_on",
+   "fieldtype": "Select",
+   "label": "Calculate Medical Insurance Based ON",
+   "options": "Month\nDay",
+   "translatable": 1
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
- "modified": "2021-03-28 09:41:32.416556",
+ "modified": "2021-04-20 11:38:47.696101",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Payroll Settings",
