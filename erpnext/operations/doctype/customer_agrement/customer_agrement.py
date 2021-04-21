@@ -12,9 +12,35 @@ from dateutil.relativedelta import relativedelta
 
 from erpnext.accounts.doctype.pricing_rule.pricing_rule import get_pricing_rule_for_item, set_transaction_type
 import json
-
+from dynamicerp.sky.doctype.operation_sales_invoice.operation_sales_invoice import get_item_valuation_rate
 
 class CustomerAgrement(Document):
+	def validate(self):
+		self.calculate_tools_totals()
+		self.set_resources_cost_center_and_account()
+		self.set_tools_cost_center_project_account()
+		self.calculate_un_delevered()
+
+	def set_resources_cost_center_and_account(self):
+		for resource in self.resourses :
+			if not resource.cost_center :
+				resource.cost_center = self.cost_center
+			if not resource.account:
+				resource.account = self.resourses_income_account
+
+	def calculate_un_delevered(self):
+		for item in self.tools :
+			item.un_transfear_tools = float(item.qty or 0) - (float(item.transferred_qty or 0) + float(item.delivered_qty or 0))
+
+	def set_tools_cost_center_project_account(self):
+		for item in self.tools :
+			if self.project and not item.proejct :
+				item.proejct = self.project
+			if not item.cost_center :
+				item.cost_center = self.cost_center
+			if not item.account :
+				item.account= self.customer_installment_account
+
 	def get_total_durations(self):
 		duration = 0
 
@@ -56,6 +82,11 @@ class CustomerAgrement(Document):
 			i.total_amount = (i.qty * i.rate) or 0
 			i.intersest_precentagefor_year = flt(i.intersest_precentagefor_year or 0 )
 			i.monthly_installment = i.monthly_installment or 1
+			i.valuation_rate = get_item_valuation_rate(i.item_code , self.sorce_warehouse)
+			if i.valuation_rate > 0 and   i.monthly_installment > 1 :
+				i.itemproejct= float( i.valuation_rate) / float(i.monthly_installment)
+			else :
+				i.monthl_valuation_rate =  float( i.valuation_rate)
 			percent = ((i.intersest_precentagefor_year /100) * i.monthly_installment) /12
 			i.grand_total = i.total_amount
 			if i.monthly_installment > 1:
@@ -213,6 +244,8 @@ def create_Due(doc):
 				invoice_child.tool = item.name
 				invoice.total_tools += item.qty
 				invoice.total_tools_fee += item.monthly_fee
+				invoice_child.stock_rate = item.itemproejct
+
 
 	for item in getattr(self,'resourses',[]):
 			# untransferred_qty = item.qty - item.transferred_qty
@@ -238,6 +271,8 @@ def create_Due(doc):
 					invoice_child.resource = item.name
 					invoice.total_resources += 1
 					invoice.total_resources_fee += item.total_monthly_fee
+					invoice_child.stock_rate = float(item.salary or 0 ) + float(item.other_ereanings or 0)
+
 
 	invoice.total_fee = invoice.total_tools_fee + invoice.total_resources_fee
 	invoice.total_qty = invoice.total_tools + invoice.total_resources

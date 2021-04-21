@@ -79,6 +79,8 @@ class OperationsInvoiceDues(Document):
 					invoice_child.customer_resource = item.resource
 					invoice.total_qty += item.qty
 					invoice.total += item.total
+					invoice_child.valuation_rate = item.stock_rate
+					invoice_child.account = item.account
 					item.invoiced = 1
 
 
