@@ -15,6 +15,7 @@ import json
 from dynamicerp.sky.doctype.operation_sales_invoice.operation_sales_invoice import get_item_valuation_rate
 
 class CustomerAgrement(Document):
+
 	def validate(self):
 		self.calculate_tools_totals()
 		self.set_resources_cost_center_and_account()
@@ -157,6 +158,39 @@ class CustomerAgrement(Document):
 		})
 		doc.save()
 
+
+@frappe.whitelist()
+
+def deliver_to_customer(doc):
+	doc = frappe.get_doc("Customer Agrement",doc)
+	if getattr(doc,'tools',None):
+		stock_entry = frappe.new_doc("Stock Entry")
+		stock_entry.stock_entry_type = "Material Issue"
+		stock_entry.from_warehouse = doc.warehouse
+		stock_entry.from_customer_agreement = doc.name
+		for item in getattr(doc, 'tools', []):
+			if (item.qty-item.delivered_qty) > 0:  # and not item.delivered and item.delivered_qty < item.qty:
+				se_child = stock_entry.append('items')
+				se_child.item_code = item.item_code
+				se_child.item_name = item.item_name
+				se_child.qty = item.qty-item.delivered_qty
+				se_child.s_warehouse = doc.warehouse
+				# in stock uom
+
+				se_child.expense_account = doc.customer_installment_account
+				se_child.conversion_factor = 1
+				se_child.uom = item.stock_uom
+				se_child.stock_uom = item.stock_uom
+		if len(getattr(stock_entry, 'items', [])) == 0:
+			frappe.throw(_('All items have been delivered before'))
+		try:
+			stock_entry.insert()
+		except Exception as e:
+			frappe.msgprint(str(e))
+		# l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(stock_entry.doctype, stock_entry.name)
+		# msg = _("A {} {} is Created for Company {}").format(stock_entry.doctype, l, stock_entry.company)
+
+		return stock_entry
 
 
 @frappe.whitelist()

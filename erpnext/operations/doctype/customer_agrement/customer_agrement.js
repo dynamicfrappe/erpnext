@@ -17,6 +17,9 @@ frappe.ui.form.on('Customer Agrement', {
                  frm.add_custom_button(__("Operation Invoice Due"),function() {
 					frm.events.create_Due (frm);
 				}, __("Create"));
+                 frm.add_custom_button(__('Deliver To Customer'), function() {
+			        	frm.events.deliver_to_customer(frm)
+		        	}, __('Create'));
                 frm.add_custom_button(__("Delivery Note"),function() {
                         frm.events.create_delivery_note (frm);
                     }, __("Create"));
@@ -121,6 +124,36 @@ frappe.ui.form.on('Customer Agrement', {
      end_date:function (frm) {
 frm.events.get_duration(frm)
     },
+
+deliver_to_customer:function(frm){
+	   var selected_rows = [];
+  		// frm.doc.tools.forEach((row) => {
+        //
+  		// 	if(row.__checked && row.item_code){
+  		// 		selected_rows.push(row.reference);
+  		// 	}
+  		// });
+  		// console.log(selected_rows)
+        // if (selected_rows.length <= 0)
+        //     frappe.throw(__("No Tools Selected"))
+ frappe.model.open_mapped_doc({
+			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
+			frm: frm,
+
+		})
+        //
+        // frappe.call({
+        //     method:"deliver_to_customer",
+        //     doc:frm.doc,
+        //     args:{
+        //         selected : selected_rows
+        //     },
+        //     callback:function (r) {
+        //
+        //     }
+        // })
+    },
+
     get_duration:function (frm) {
         if (frm.doc.start_date && frm.doc.end_date)
         {
