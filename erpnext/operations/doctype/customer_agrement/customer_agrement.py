@@ -137,6 +137,21 @@ class CustomerAgrement(Document):
 				})
 		doc.save()
 
+	def create_stock_entry_backend_return(self,employee,item,qty):
+		doc = frappe.new_doc("Stock Entry")
+		doc.stock_entry_type = "Custody Return"
+		doc.employee = employee
+		doc.from_warehouse = self.sorce_warehouse
+		doc.to_warehouse = self.warehouse
+		doc.customer_agreement = self.name
+		doc.is_custody = 1
+		doc.append('items', {
+			'item_code': item,
+			'qty': qty,
+			's_warehouse': self.sorce_warehouse,
+			't_warehouse': self.warehouse
+		})
+		doc.save()
 
 
 
