@@ -129,6 +129,8 @@ class CustomerAgrement(Document):
 		doc.customer_agreement=self.name
 		doc.is_custody=1
 		for item in self.tools:
+			if item.un_transfear_tools==0:
+				frappe.throw("un transfered tools equal 0")
 			doc.append('items',{
 				'item_code':item.item_code,
 				'qty':item.un_transfear_tools,
