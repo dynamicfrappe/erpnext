@@ -20,8 +20,97 @@ frappe.ui.form.on('Customer Agrement', {
                 frm.add_custom_button(__("Delivery Note"),function() {
                         frm.events.create_delivery_note (frm);
                     }, __("Create"));
-                frm.add_custom_button(__("Stock Entry"),function() {
-                        frm.events.create_stock_entry (frm);
+                frm.add_custom_button(__("Spent Asset"),function() {
+                     var emploee_list=[]
+                     for(let i=0;i<frm.doc.resourses.length;i++){
+                        emploee_list.push(frm.doc.resourses[i]["employee"])
+                     }
+                        let d = new frappe.ui.Dialog({
+                    title: 'select employee',
+                     fields: [
+                    {
+                        label:__("Employee"),
+                        fieldname: 'employee',
+                        fieldtype: 'Select',
+                        options:emploee_list,
+                        req:1
+                    }
+                ],primary_action:function(){
+                    var args = d.get_values();
+                    d.hide()
+                    frappe.call({
+                        'method':"create_stock_entry_backend",
+                        'doc':frm.doc,
+                        args:{
+                            employee:args.employee
+                        }
+                    })
+                }
+                 });
+                        d.show()
+                        //frm.events.create_stock_entry (frm);
+                    }, __("Create"));
+                frm.add_custom_button(__("Custody Return"),function() {
+
+                    var qty=0;
+                     var emploee_list=[]
+                    var item_list=[]
+                     for(let i=0;i<frm.doc.resourses.length;i++){
+                        emploee_list.push(frm.doc.resourses[i]["employee"])
+                     }
+                     for(let i=0;i<frm.doc.tools.length;i++){
+                        item_list.push(frm.doc.tools[i]["item_code"])
+                     }
+                        let d = new frappe.ui.Dialog({
+                    title: 'select employee',
+                     fields: [
+                    {
+                        label:__("Employee"),
+                        fieldname: 'employee',
+                        fieldtype: 'Select',
+                        options:emploee_list,
+                        req:1
+                    },
+                    {
+                        label:__("Item"),
+                        fieldname: 'item',
+                        fieldtype: 'Select',
+                        options:item_list,
+                        req:1,
+                        onchange:function (){
+                            // d.fields_dict.qty.set_value(5);
+                            //         d.fields_dict.qty.refresh();
+                            for(let i=0;i<frm.doc.tools.length;i++){
+
+                                if(d.get_value("item")==frm.doc.tools[0]["item_code"]){
+                                     // console.log("hello from g")
+                                    d.fields_dict.qty.set_value(frm.doc.tools[i]["delivered_qty"] || 0);
+                                    d.fields_dict.qty.refresh();
+                                }
+                            }
+                        }
+                    }, {
+                        label:__("Qty"),
+                        fieldname: 'qty',
+                        fieldtype: 'Int',
+                             readonly:1
+                    }
+                ],primary_action:function(){
+                    var args = d.get_values();
+                    d.hide()
+                    frappe.call({
+                        'method':"create_stock_entry_backend_return",
+                        'doc':frm.doc,
+                        args:{
+                            employee:args.employee,
+                            item:args.item,
+                            qty:args.qty
+                        }
+                    })
+                }
+                 });
+                        d.show()
+                        //frm.events.create_stock_entry (frm);
                     }, __("Create"));
             }
 
