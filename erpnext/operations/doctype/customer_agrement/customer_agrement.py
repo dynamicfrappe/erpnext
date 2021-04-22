@@ -141,9 +141,11 @@ class CustomerAgrement(Document):
 		doc = frappe.new_doc("Stock Entry")
 		doc.stock_entry_type = "Custody Return"
 		doc.employee = employee
+		doc.from_employee=employee
 		doc.from_warehouse = self.sorce_warehouse
 		doc.to_warehouse = self.warehouse
 		doc.customer_agreement = self.name
+		doc.from_customer_agreement=self.name
 		doc.is_custody = 1
 		doc.append('items', {
 			'item_code': item,
