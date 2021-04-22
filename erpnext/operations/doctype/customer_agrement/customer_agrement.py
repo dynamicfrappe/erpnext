@@ -132,7 +132,7 @@ class CustomerAgrement(Document):
 			doc.append('items',{
 				'item_code':item.item_code,
 				'qty':item.un_transfear_tools,
-				's_warehouse':self.sorce_warehouse,
+				's_warehouse': self.sorce_warehouse,
 				't_warehouse':self.warehouse
 				})
 		doc.save()
@@ -141,15 +141,17 @@ class CustomerAgrement(Document):
 		doc = frappe.new_doc("Stock Entry")
 		doc.stock_entry_type = "Custody Return"
 		doc.employee = employee
-		doc.from_warehouse = self.sorce_warehouse
-		doc.to_warehouse = self.warehouse
+		doc.from_employee=employee
+		doc.from_warehouse = self.warehouse
+		doc.to_warehouse =  self.sorce_warehouse
 		doc.customer_agreement = self.name
+		doc.from_customer_agreement=self.name
 		doc.is_custody = 1
 		doc.append('items', {
 			'item_code': item,
 			'qty': qty,
-			's_warehouse': self.sorce_warehouse,
-			't_warehouse': self.warehouse
+			's_warehouse':  self.warehouse,
+			't_warehouse': self.sorce_warehouse
 		})
 		doc.save()
 

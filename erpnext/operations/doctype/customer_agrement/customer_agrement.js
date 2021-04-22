@@ -93,7 +93,7 @@ frappe.ui.form.on('Customer Agrement', {
                         label:__("Qty"),
                         fieldname: 'qty',
                         fieldtype: 'Int',
-                             readonly:1
+                        readonly:1
                     }
                 ],primary_action:function(){
                     var args = d.get_values();
