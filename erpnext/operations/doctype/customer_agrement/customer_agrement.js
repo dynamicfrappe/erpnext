@@ -20,8 +20,34 @@ frappe.ui.form.on('Customer Agrement', {
                 frm.add_custom_button(__("Delivery Note"),function() {
                         frm.events.create_delivery_note (frm);
                     }, __("Create"));
-                frm.add_custom_button(__("Stock Entry"),function() {
-                        frm.events.create_stock_entry (frm);
+                frm.add_custom_button(__("Spent Asset"),function() {
+                     var emploee_list=[]
+                     for(let i=0;i<frm.doc.resourses.length;i++){
+                        emploee_list.push(frm.doc.resourses[i]["employee"])
+                     }
+                        let d = new frappe.ui.Dialog({
+                    title: 'select employee',
+                     fields: [
+                    {
+                        fieldname: 'employee',
+                        fieldtype: 'Select',
+                        options:emploee_list,
+                        req:1
+                    }
+                ],primary_action:function(){
+                    var args = d.get_values();
+                    d.hide()
+                    frappe.call({
+                        'method':"create_stock_entry_backend",
+                        'doc':frm.doc,
+                        args:{
+                            employee:args.employee
+                        }
+                    })
+                }
+                 });
+                        d.show()
+                        //frm.events.create_stock_entry (frm);
                     }, __("Create"));
             }
 
