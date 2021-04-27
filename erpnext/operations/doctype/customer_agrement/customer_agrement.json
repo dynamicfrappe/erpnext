@@ -204,6 +204,7 @@
   {
    "fieldname": "invoice_section_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Actions"
   },
   {
@@ -312,7 +313,7 @@
    "options": "Customer Agreement Dues"
   }
  ],
- "modified": "2021-04-22 11:09:11.550065",
+ "modified": "2021-04-27 16:36:39.971147",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",

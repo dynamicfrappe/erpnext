@@ -135,6 +135,35 @@ frappe.ui.form.on('Custody Movement', {
 
 
         }
+        if ( frm.doc.type == 'Deliver from Customer Custody Warehouse'){
+            frm.set_df_property('to_customer_agreement','hidden',0)
+            frm.set_df_property('to_customer_agreement','reqd',1)
+
+            frm.set_df_property('from_employee','hidden',1)
+            frm.set_df_property('from_employee','reqd',0)
+
+
+            frm.set_df_property('target_warehouse','hidden',0)
+            frm.set_df_property('target_warehouse','reqd',1)
+
+
+
+
+            frm.set_df_property('source_warehouse','hidden',1)
+            frm.set_df_property('source_warehouse','reqd',0)
+
+
+             frm.set_df_property('from_customer_agreement','hidden',1)
+            frm.set_df_property('from_customer_agreement','reqd',0)
+
+            frm.set_df_property('to_employee','hidden',0)
+            frm.set_df_property('to_employee','reqd',1)
+              frm.set_df_property('custody_warehouse','hidden',0)
+            frm.set_df_property('custody_warehouse','reqd',1)
+
+
+
+        }
 
     },
     set_fields_query:function(frm){
@@ -156,7 +185,7 @@ frappe.ui.form.on('Custody Movement', {
             };
 
 
-	     if (frm.doc.type == 'Send' ){
+	     if (frm.doc.type == 'Send' || frm.doc.type =='Deliver from Customer Custody Warehouse'){
 
             frm.fields_dict['items'].grid.get_field('item_code').get_query = function(doc, cdt, cdn){
 

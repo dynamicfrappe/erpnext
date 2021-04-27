@@ -54,6 +54,9 @@ class CustomerAgrement(Document):
 			duration = (self.end_date - self.start_date).days +1
 
 		self.total_duration_in_monthes =  duration
+
+	# calculate Resources Totals
+
 	def calculate_employee_totals(self):
 		self.resourses = getattr(self,'resourses',[])
 		self.total_resources_fee = 0
@@ -71,7 +74,7 @@ class CustomerAgrement(Document):
 			self.total_resources_fee += i.total_monthly_fee
 		self.total_resources_monthly_fee = self.total_resources_fee
 		self.grand_total_fee = self.total_resources_fee + getattr(self,'total_equipments_fee',0)
-
+# calculate Tools Totals
 	def calculate_tools_totals(self):
 		self.tools = getattr(self, 'tools', [])
 		self.tools_qty = 0
@@ -97,6 +100,7 @@ class CustomerAgrement(Document):
 			self.total_equipments_fee += i.grand_total
 
 		self.grand_total_fee = self.total_equipments_fee + getattr(self,'total_resources_fee',0)
+# Hold/Unhold Items based on js status
 	def hold (self):
 		self.save()
 		self.set('holds',[])
@@ -160,7 +164,7 @@ class CustomerAgrement(Document):
 
 
 @frappe.whitelist()
-
+# Create Custody Movement with type Deliver
 def deliver_to_customer(doc):
 		doc = frappe.get_doc("Customer Agrement",doc)
 		# Validate Warehouse
@@ -244,6 +248,7 @@ def create_delivery_note(doc):
 	dn.insert()
 
 	return dn
+# Not Used
 @frappe.whitelist()
 def create_stock_entry(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
@@ -283,7 +288,7 @@ def create_stock_entry(doc):
 	return stock_entry
 
 
-
+# Create Due from Create Button on Cutomer Agreement
 @frappe.whitelist()
 def create_Due(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
@@ -374,7 +379,7 @@ def create_Due(doc):
 	frappe.msgprint(_('Done'))
 	# return invoice
 
-
+# fetch item price when add item to tools
 @frappe.whitelist()
 def get_item_price(args):
 	rate = 0
@@ -424,13 +429,17 @@ def get_item_conversion_factor(item,uom):
 	return 1
 
 
+# Convert Due to invoice where not invoiced
+# Run Daily in hooks.py to create Invoice from uninvoiced Dues
 
 @frappe.whitelist()
 def create_invoice_from_due(doc_name=None):
 	names = []
 	if doc_name :
+		# called from Create Button
 		names.append(doc_name)
 	else :
+		# called from hooks
 		names = frappe.db.sql_list (""" select name from `tabOperations Invoice Dues`
 		 where  invoiced <>1 """.format())
 	if names or len(names) > 0 :
@@ -443,7 +452,23 @@ def create_invoice_from_due(doc_name=None):
 		frappe.db.sql("""update `tabCustomer Agreement Dues` set invoiced = (select t.invoiced from `tabOperations Invoice Dues` t where  t.name= due) where invoiced <>1""")
 		frappe.db.commit()
 
+# Run Daily in hooks.py to create Auto Dues
+@frappe.whitelist()
+def create_Todays_due():
+	active_docs = frappe.db.sql("""
+	select t1.name from `tabCustomer Agrement` t1
+	where curdate() between t1.start_date and t1.end_date
+  	and t1.status = 'Open'
+    and  curdate() >= date_add( ifnull((select MAX(t2.date)  from `tabCustomer Agreement Dues` t2 where t2.parent = t1.name),t1.start_date) , interval 1 MONTH)
 
+	""")
+	if active_docs :
+		for doc in active_docs :
+			try:
+				# Create Due
+				create_Due(doc)
+			except:
+				pass
 
 
 
