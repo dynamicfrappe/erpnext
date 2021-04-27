@@ -134,10 +134,9 @@ frappe.ui.form.on('Custody Movement', {
               to_custody_warehouse = 0
              from_custody_warehouse = 1
             frm.fields_dict['items'].grid.get_field('item_code').get_query = function(doc, cdt, cdn){
-
                 return {
                     query:"dynamicerp.dynamic_erp.doctype.stock_entry.stock_entry.get_items_query",
-                    filters: {'customer_agreement': frm.doc.from_customer_agreement}
+                    filters: {'customer_agreement': cur_frm.doc.from_customer_agreement}
                 }
             };
 

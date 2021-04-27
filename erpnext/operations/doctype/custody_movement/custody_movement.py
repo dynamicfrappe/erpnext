@@ -87,7 +87,7 @@ class CustodyMovement(Document):
 		if len(getattr(stock_entry, 'items', [])) == 0:
 			frappe.throw(_('All items have been delivered before'))
 		stock_entry.insert()
-		# stock_entry.submit()
+		stock_entry.submit()
 		self.stock_entry = stock_entry.name
 		self.save()
 
