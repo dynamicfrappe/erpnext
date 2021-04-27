@@ -209,7 +209,7 @@ class PaymentEntry(AccountsController):
 				for field, value in iteritems(ref_details):
 					if field == 'exchange_rate' or not d.get(field) or force:
 						d.set(field, value)
-
+			
 	def validate_payment_type(self):
 		if self.payment_type not in ("Receive", "Pay", "Internal Transfer"):
 			frappe.throw(_("Payment Type must be one of Receive, Pay and Internal Transfer"))
@@ -716,7 +716,7 @@ def get_outstanding_reference_documents(args):
 	for d in outstanding_invoices:
 		d["exchange_rate"] = 1
 		if party_account_currency != company_currency:
-			if d.voucher_type in ("Sales Invoice", "Purchase Invoice", "Expense Claim"):
+			if d.voucher_type in ("Sales Invoice", "Purchase Invoice", "Expense Claim" , "Operation Sales Invoice"):
 				d["exchange_rate"] = frappe.db.get_value(d.voucher_type, d.voucher_no, "conversion_rate")
 			elif d.voucher_type == "Journal Entry":
 				d["exchange_rate"] = get_exchange_rate(
@@ -957,7 +957,7 @@ def get_reference_details(reference_doctype, reference_name, party_account_curre
 			exchange_rate = ref_doc.get("conversion_rate") or \
 				get_exchange_rate(party_account_currency, company_currency, ref_doc.posting_date)
 
-		if reference_doctype in ("Sales Invoice", "Purchase Invoice"):
+		if reference_doctype in ("Sales Invoice", "Purchase Invoice" , "Operation Sales Invoice"):
 			outstanding_amount = ref_doc.get("outstanding_amount")
 			bill_no = ref_doc.get("bill_no")
 		elif reference_doctype == "Expense Claim":
@@ -1209,3 +1209,7 @@ def make_payment_order(source_name, target_doc=None):
 	}, target_doc, set_missing_values)
 
 	return doclist
+
+if "sky" in  frappe.get_active_domains()  :
+	from dynamicerp.sky.doctype.payment_entry.payment_entry import validate_reference_documents
+	PaymentEntry.validate_reference_documents = validate_reference_documents
