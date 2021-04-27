@@ -38,9 +38,9 @@ frappe.ui.form.on('Customer Agrement', {
                  frm.add_custom_button(__('Deliver To Customer'), function() {
 			        	frm.events.deliver_to_customer(frm)
 		        	}, __('Create'));
-                frm.add_custom_button(__("Delivery Note"),function() {
-                        frm.events.create_delivery_note (frm);
-                    }, __("Create"));
+                // frm.add_custom_button(__("Delivery Note"),function() {
+                //         frm.events.create_delivery_note (frm);
+                //     }, __("Create"));
                 frm.add_custom_button(__("Spent Asset"),function() {
                      var emploee_list=[]
                      for(let i=0;i<frm.doc.resourses.length;i++){
@@ -169,14 +169,17 @@ deliver_to_customer:function(frm){
                 ],primary_action:function(){
                     var args = d.get_values();
                     d.hide()
-                    var is_custody =  args.type == 'Deliver From Custody'
-
-                    frappe.model.open_mapped_doc({
+                    if (args.type == 'Deliver From Stock') {
+                        frappe.model.open_mapped_doc({
+                            method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_delivery_note",
+                            frm: frm,
+                        })
+                    }else {
+                         frappe.model.open_mapped_doc({
                             method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
                             frm: frm,
-                            is_custody:is_custody
-
                         })
+                    }
                 }
                  });
                         d.show()
