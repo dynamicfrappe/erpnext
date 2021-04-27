@@ -233,7 +233,7 @@
   {
    "fieldname": "itemproejct",
    "fieldtype": "Float",
-   "label": "monthl Valuation Rate ",
+   "label": "Monthly Valuation Rate ",
    "read_only": 1
   },
   {
@@ -244,7 +244,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-04-22 10:26:29.598334",
+ "modified": "2021-04-27 13:27:02.591362",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Tools",

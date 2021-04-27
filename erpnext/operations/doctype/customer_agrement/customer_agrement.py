@@ -371,7 +371,8 @@ def create_Due(doc):
 		'invoiced': invoice.invoiced,
 	})
 	self.save()
-	return invoice
+	frappe.msgprint(_('Done'))
+	# return invoice
 
 
 @frappe.whitelist()
@@ -441,6 +442,7 @@ def create_invoice_from_due(doc_name=None):
 				frappe.msgprint(_("Error while Creating Operations Sales Invoice for  Operations Invoice Dues {} \n{}".format(name,str(e))))
 		frappe.db.sql("""update `tabCustomer Agreement Dues` set invoiced = (select t.invoiced from `tabOperations Invoice Dues` t where  t.name= due) where invoiced <>1""")
 		frappe.db.commit()
+
 
 
 

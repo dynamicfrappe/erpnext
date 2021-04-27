@@ -93,5 +93,8 @@ class OperationsInvoiceDues(Document):
 				frappe.msgprint(_('There is no Items To Transfer'),indicator='red')
 			else :
 				invoice.insert()
+				l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(invoice.doctype, invoice.name)
+				msg = _("A {} {} is Created for Company {}").format(invoice.doctype, l, invoice.company)
+				frappe.msgprint(msg)
 				self.invoiced = all([i.invoiced for i in self.items])
 				self.save()

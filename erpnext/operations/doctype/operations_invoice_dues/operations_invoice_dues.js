@@ -4,10 +4,22 @@
 frappe.ui.form.on('Operations Invoice Dues', {
     onload: function(frm) {
         frm.get_field("items").grid.cannot_add_rows = true;
+       
 
 	},
 	refresh: function(frm) {
-
+        if (!frm.doc.invoiced)
+        {
+             frm.add_custom_button(__('Operations Invoice'),function (frm) {
+                 frappe.call({
+                     method: "create_invoice",
+                     doc:cur_frm.doc,
+                     callback: function(r){
+                         frm.refresh()
+                     }
+                 })
+             },__('Create'))
+        }
 	}
 });
 
