@@ -21,10 +21,10 @@ class CustodyMovement(Document):
 			else :
 				sql = """
 					select DISTINCT item_code from `tabCustomer Agrement Tools`
-					where parent in ('{}','{}')
+					where parent in ('{from_customer_agreement}','{to_customer_agreement}')
 					group by item_code
-					HAVING COUNT(item_code) > 1
-  					  """.format(self.from_customer_agreement,self.to_customer_agreement)
+					HAVING COUNT(item_code) > 1 or '{from_customer_agreement}' = '{to_customer_agreement}' 
+  					  """.format(from_customer_agreement=self.from_customer_agreement,to_customer_agreement=self.to_customer_agreement)
 			valid_items = frappe.db.sql_list (sql)
 			if i.item_code not in valid_items:
 				frappe.throw(_("Item {} not Valid in row {}".format(i.item_code,i.idx)))

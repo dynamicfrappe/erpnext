@@ -10,17 +10,23 @@ frappe.ui.form.on('Custody Movement', {
     type: function(frm) {
         frm.events.set_fields_status(frm)
         frm.events.set_fields_query(frm)
+         frm.clear_table("items")
+        refresh_field('items')
 
 	},
     to_customer_agreement: function(frm) {
 
         frm.events.set_fields_status(frm)
         frm.events.set_fields_query(frm)
+         frm.clear_table("items")
+        refresh_field('items')
 
 	},
     from_customer_agreement: function(frm) {
         frm.events.set_fields_status(frm)
         frm.events.set_fields_query(frm)
+         frm.clear_table("items")
+        refresh_field('items')
 
 	},
     is_custody: function(frm) {
@@ -193,8 +199,7 @@ frappe.ui.form.on('Custody Movement', {
 
 
 
-        frm.clear_table("items")
-        refresh_field('items')
+
 
         frm.set_query("custody_warehouse" , function(frm){
                  return {
