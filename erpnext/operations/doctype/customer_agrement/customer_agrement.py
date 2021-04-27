@@ -15,6 +15,7 @@ import json
 from dynamicerp.sky.doctype.operation_sales_invoice.operation_sales_invoice import get_item_valuation_rate
 
 class CustomerAgrement(Document):
+
 	def validate(self):
 		self.calculate_tools_totals()
 		self.set_resources_cost_center_and_account()
@@ -53,6 +54,9 @@ class CustomerAgrement(Document):
 			duration = (self.end_date - self.start_date).days +1
 
 		self.total_duration_in_monthes =  duration
+
+	# calculate Resources Totals
+
 	def calculate_employee_totals(self):
 		self.resourses = getattr(self,'resourses',[])
 		self.total_resources_fee = 0
@@ -70,7 +74,7 @@ class CustomerAgrement(Document):
 			self.total_resources_fee += i.total_monthly_fee
 		self.total_resources_monthly_fee = self.total_resources_fee
 		self.grand_total_fee = self.total_resources_fee + getattr(self,'total_equipments_fee',0)
-
+# calculate Tools Totals
 	def calculate_tools_totals(self):
 		self.tools = getattr(self, 'tools', [])
 		self.tools_qty = 0
@@ -96,6 +100,7 @@ class CustomerAgrement(Document):
 			self.total_equipments_fee += i.grand_total
 
 		self.grand_total_fee = self.total_equipments_fee + getattr(self,'total_resources_fee',0)
+# Hold/Unhold Items based on js status
 	def hold (self):
 		self.save()
 		self.set('holds',[])
@@ -158,6 +163,52 @@ class CustomerAgrement(Document):
 		doc.save()
 
 
+@frappe.whitelist()
+# Create Custody Movement with type Deliver
+def deliver_to_customer(doc):
+		doc = frappe.get_doc("Customer Agrement",doc)
+		# Validate Warehouse
+		# if getattr(doc,'sorce_warehouse',None):
+		# 	custody_warehouse , customer_custody_warehouse = frappe.db.get_value ('Warehouse',doc.sorce_warehouse , ['custody_warehouse','customer_custody_warehouse'])
+		# 	if not  custody_warehouse and not customer_custody_warehouse :
+		# 		return create_delivery_note(doc.name)
+
+		if getattr(doc,'tools',None):
+			custody_movement = frappe.new_doc("Custody Movement")
+			custody_movement.type = 'Deliver'
+			custody_movement.from_customer_agreement = doc.name
+			custody_movement.source_warehouse = doc.sorce_warehouse
+			# stock_entry = frappe.new_doc("Stock Entry")
+			# stock_entry.stock_entry_type = "Material Issue"
+			# stock_entry.from_warehouse = doc.warehouse
+			# stock_entry.from_customer_agreement = doc.name
+			# stock_entry.is_custody= is_custody
+			# # for item in getattr(doc, 'tools', []):
+			# # 	if item.status != 'Hold':
+			# # 		if (item.qty-item.delivered_qty) > 0:  # and not item.delivered and item.delivered_qty < item.qty:
+			# # 			se_child = stock_entry.append('items')
+			# # 			se_child.item_code = item.item_code
+			# # 			se_child.item_name = item.item_name
+			# # 			se_child.qty = item.qty-item.delivered_qty
+			# # 			se_child.s_warehouse = doc.warehouse
+			# # 			# in stock uom
+			# #
+			# # 			se_child.expense_account = doc.customer_installment_account
+			# # 			se_child.conversion_factor = 1
+			# # 			se_child.uom = item.stock_uom
+			# # 			se_child.stock_uom = item.stock_uom
+			# # if len(getattr(stock_entry, 'items', [])) == 0:
+			# # 	frappe.throw(_('All items have been delivered before'))
+			# # try:
+			# # 	stock_entry.insert()
+			# # except Exception as e:
+			# # 	frappe.msgprint(str(e))
+			# # l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(stock_entry.doctype, stock_entry.name)
+			# # msg = _("A {} {} is Created for Company {}").format(stock_entry.doctype, l, stock_entry.company)
+			#
+			# return stock_entry
+			return custody_movement
+
 
 @frappe.whitelist()
 def create_delivery_note(doc):
@@ -173,7 +224,7 @@ def create_delivery_note(doc):
 	dn.customer = self.customer or "_Test Customer"
 	dn.is_return = 0
 	for i in getattr(self,'tools',[]):
-		if i.status == 'Active':
+		if i.status != 'Hold':
 			undeliverd_qty = (i.qty - i.delivered_qty) or 0
 			if undeliverd_qty > 0:
 				dn.append("items", {
@@ -197,6 +248,7 @@ def create_delivery_note(doc):
 	dn.insert()
 
 	return dn
+# Not Used
 @frappe.whitelist()
 def create_stock_entry(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
@@ -210,7 +262,7 @@ def create_stock_entry(doc):
 	stock_entry.is_custody = 1
 	stock_entry.project = self.project
 	for item in getattr(self,'tools',[]):
-		if item.status == 'Active':
+		if  i.status != 'Hold':
 			untransferred_qty = item.qty - item.transferred_qty
 			if untransferred_qty > 0 :
 				se_child = stock_entry.append('items')
@@ -236,7 +288,7 @@ def create_stock_entry(doc):
 	return stock_entry
 
 
-
+# Create Due from Create Button on Cutomer Agreement
 @frappe.whitelist()
 def create_Due(doc):
 	self = frappe.get_doc('Customer Agrement', doc)
@@ -324,9 +376,10 @@ def create_Due(doc):
 		'invoiced': invoice.invoiced,
 	})
 	self.save()
-	return invoice
+	frappe.msgprint(_('Done'))
+	# return invoice
 
-
+# fetch item price when add item to tools
 @frappe.whitelist()
 def get_item_price(args):
 	rate = 0
@@ -376,13 +429,17 @@ def get_item_conversion_factor(item,uom):
 	return 1
 
 
+# Convert Due to invoice where not invoiced
+# Run Daily in hooks.py to create Invoice from uninvoiced Dues
 
 @frappe.whitelist()
 def create_invoice_from_due(doc_name=None):
 	names = []
 	if doc_name :
+		# called from Create Button
 		names.append(doc_name)
 	else :
+		# called from hooks
 		names = frappe.db.sql_list (""" select name from `tabOperations Invoice Dues`
 		 where  invoiced <>1 """.format())
 	if names or len(names) > 0 :
@@ -395,6 +452,23 @@ def create_invoice_from_due(doc_name=None):
 		frappe.db.sql("""update `tabCustomer Agreement Dues` set invoiced = (select t.invoiced from `tabOperations Invoice Dues` t where  t.name= due) where invoiced <>1""")
 		frappe.db.commit()
 
+# Run Daily in hooks.py to create Auto Dues
+@frappe.whitelist()
+def create_Todays_due():
+	active_docs = frappe.db.sql("""
+	select t1.name from `tabCustomer Agrement` t1
+	where curdate() between t1.start_date and t1.end_date
+  	and t1.status = 'Open'
+    and  curdate() >= date_add( ifnull((select MAX(t2.date)  from `tabCustomer Agreement Dues` t2 where t2.parent = t1.name),t1.start_date) , interval 1 MONTH)
+
+	""")
+	if active_docs :
+		for doc in active_docs :
+			try:
+				# Create Due
+				create_Due(doc)
+			except:
+				pass
 
 
 

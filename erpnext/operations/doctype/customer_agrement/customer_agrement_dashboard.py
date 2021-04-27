@@ -3,12 +3,15 @@ from frappe import _
 
 def get_data():
 	return {
-        'fieldname': 'agreement',
-
+        'fieldname': 'customer_agreement',
+		'non_standard_fieldnames': {
+				'Operations Invoice Dues': 'agreement',
+				'Operation Sales Invoice': 'customer_agreement',
+			},
         'transactions': [
 			{
-				'label': _('Operations Invoice Dues'),
-				'items': ['Operations Invoice Dues']
+				'label': _('Operations Invoice'),
+				'items': ['Operations Invoice Dues','Operation Sales Invoice']
 			}
 		]
 	}

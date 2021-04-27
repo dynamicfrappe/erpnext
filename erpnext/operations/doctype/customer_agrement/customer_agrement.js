@@ -2,8 +2,19 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Customer Agrement', {
+    onload:function (frm) {
+        if (frm.is_new()){
+                frm.clear_table('dues')
+                frm.clear_table('holds')
+                refresh_field('holds')
+               refresh_field('dues')
+            }
+    },
 	 refresh:function (frm){
 	     cur_frm.fields_dict["holds"].grid.wrapper.find('.grid-add-row').hide();
+         frm.get_field("holds").grid.cannot_add_rows = true;
+         frm.get_field("dues").grid.cannot_add_rows = true;
+	     cur_frm.fields_dict["dues"].grid.wrapper.find('.grid-add-row').hide();
             frm.set_query("employee" ,"resourses" ,function(doc){
 				return {
 					filters: {
@@ -13,106 +24,128 @@ frappe.ui.form.on('Customer Agrement', {
 			    	}
 				};
 			});
+
+            frm.set_query("warehouse"  ,function(doc){
+				return {
+					filters: {
+					    custody_warehouse: 1
+
+			    	}
+				};
+			});
+            frm.set_query("sorce_warehouse"  ,function(doc){
+				return {
+					filters: {
+					    custody_warehouse: 0,
+                        customer_custody_warehouse:0
+
+			    	}
+				};
+			});
             if (!frm.is_new()){
                  frm.add_custom_button(__("Operation Invoice Due"),function() {
 					frm.events.create_Due (frm);
 				}, __("Create"));
-                frm.add_custom_button(__("Delivery Note"),function() {
-                        frm.events.create_delivery_note (frm);
-                    }, __("Create"));
-                frm.add_custom_button(__("Spent Asset"),function() {
-                     var emploee_list=[]
-                     for(let i=0;i<frm.doc.resourses.length;i++){
-                        emploee_list.push(frm.doc.resourses[i]["employee"])
-                     }
-                        let d = new frappe.ui.Dialog({
-                    title: 'select employee',
-                     fields: [
-                    {
-                        label:__("Employee"),
-                        fieldname: 'employee',
-                        fieldtype: 'Select',
-                        options:emploee_list,
-                        req:1
-                    }
-                ],primary_action:function(){
-                    var args = d.get_values();
-                    d.hide()
-                    frappe.call({
-                        'method':"create_stock_entry_backend",
-                        'doc':frm.doc,
-                        args:{
-                            employee:args.employee
-                        }
-                    })
-                }
-                 });
-                        d.show()
-                        //frm.events.create_stock_entry (frm);
-                    }, __("Create"));
-                frm.add_custom_button(__("Custody Return"),function() {
-
-                    var qty=0;
-                     var emploee_list=[]
-                    var item_list=[]
-                     for(let i=0;i<frm.doc.resourses.length;i++){
-                        emploee_list.push(frm.doc.resourses[i]["employee"])
-                     }
-                     for(let i=0;i<frm.doc.tools.length;i++){
-                        item_list.push(frm.doc.tools[i]["item_code"])
-                     }
-                        let d = new frappe.ui.Dialog({
-                    title: 'select employee',
-                     fields: [
-                    {
-                        label:__("Employee"),
-                        fieldname: 'employee',
-                        fieldtype: 'Select',
-                        options:emploee_list,
-                        req:1
-                    },
-                    {
-                        label:__("Item"),
-                        fieldname: 'item',
-                        fieldtype: 'Select',
-                        options:item_list,
-                        req:1,
-                        onchange:function (){
-                            // d.fields_dict.qty.set_value(5);
-                            //         d.fields_dict.qty.refresh();
-                            for(let i=0;i<frm.doc.tools.length;i++){
-
-                                if(d.get_value("item")==frm.doc.tools[0]["item_code"]){
-                                     // console.log("hello from g")
-                                    d.fields_dict.qty.set_value(frm.doc.tools[i]["delivered_qty"] || 0);
-                                    d.fields_dict.qty.refresh();
-                                }
-                            }
-                        }
-                    }, {
-                        label:__("Qty"),
-                        fieldname: 'qty',
-                        fieldtype: 'Int',
-                        readonly:1
-                    }
-                ],primary_action:function(){
-                    var args = d.get_values();
-                    d.hide()
-                    frappe.call({
-                        'method':"create_stock_entry_backend_return",
-                        'doc':frm.doc,
-                        args:{
-                            employee:args.employee,
-                            item:args.item,
-                            qty:args.qty
-                        }
-                    })
-                }
-                 });
-                        d.show()
-                        //frm.events.create_stock_entry (frm);
-                    }, __("Create"));
+                 frm.add_custom_button(__('Deliver To Customer'), function() {
+			        	frm.events.deliver_to_customer(frm)
+		        	}, __('Create'));
+                // frm.add_custom_button(__("Delivery Note"),function() {
+                //         frm.events.create_delivery_note (frm);
+                //     }, __("Create"));
+                // frm.add_custom_button(__("Spent Asset"),function() {
+                //      var emploee_list=[]
+                //      for(let i=0;i<frm.doc.resourses.length;i++){
+                //         emploee_list.push(frm.doc.resourses[i]["employee"])
+                //      }
+                //         let d = new frappe.ui.Dialog({
+                //      title: 'select employee',
+                //      fields: [
+                //     {
+                //         label:__("Employee"),
+                //         fieldname: 'employee',
+                //         fieldtype: 'Select',
+                //         options:emploee_list,
+                //         req:1
+                //     }
+                // ],primary_action:function(){
+                //     var args = d.get_values();
+                //     d.hide()
+                //     frappe.call({
+                //         'method':"create_stock_entry_backend",
+                //         'doc':frm.doc,
+                //         args:{
+                //             employee:args.employee
+                //         }
+                //     })
+                // }
+                //  });
+                //         d.show()
+                //         //frm.events.create_stock_entry (frm);
+                //     }, __("Create"));
+                // frm.add_custom_button(__("Custody Return"),function() {
+                //
+                //     var qty=0;
+                //      var emploee_list=[]
+                //     var item_list=[]
+                //      for(let i=0;i<frm.doc.resourses.length;i++){
+                //         emploee_list.push(frm.doc.resourses[i]["employee"])
+                //      }
+                //      for(let i=0;i<frm.doc.tools.length;i++){
+                //         item_list.push(frm.doc.tools[i]["item_code"])
+                //      }
+                //         let d = new frappe.ui.Dialog({
+                //     title: 'select employee',
+                //      fields: [
+                //     {
+                //         label:__("Employee"),
+                //         fieldname: 'employee',
+                //         fieldtype: 'Select',
+                //         options:emploee_list,
+                //         req:1
+                //     },
+                //     {
+                //         label:__("Item"),
+                //         fieldname: 'item',
+                //         fieldtype: 'Select',
+                //         options:item_list,
+                //         req:1,
+                //         onchange:function (){
+                //             // d.fields_dict.qty.set_value(5);
+                //             //         d.fields_dict.qty.refresh();
+                //             for(let i=0;i<frm.doc.tools.length;i++){
+                //
+                //                 if(d.get_value("item")==frm.doc.tools[0]["item_code"]){
+                //                      // console.log("hello from g")
+                //                     d.fields_dict.qty.set_value(frm.doc.tools[i]["delivered_qty"] || 0);
+                //                     d.fields_dict.qty.refresh();
+                //                 }
+                //             }
+                //         }
+                //     }, {
+                //         label:__("Qty"),
+                //         fieldname: 'qty',
+                //         fieldtype: 'Int',
+                //         readonly:1
+                //     }
+                // ],primary_action:function(){
+                //     var args = d.get_values();
+                //     d.hide()
+                //     frappe.call({
+                //         'method':"create_stock_entry_backend_return",
+                //         'doc':frm.doc,
+                //         args:{
+                //             employee:args.employee,
+                //             item:args.item,
+                //             qty:args.qty
+                //         }
+                //     })
+                // }
+                //  });
+                //         d.show()
+                //         //frm.events.create_stock_entry (frm);
+                //     }, __("Create"));
             }
+
 
         },
     start_date:function (frm) {
@@ -121,6 +154,61 @@ frappe.ui.form.on('Customer Agrement', {
      end_date:function (frm) {
 frm.events.get_duration(frm)
     },
+
+deliver_to_customer:function(frm){
+	   var selected_rows = [];
+  		// frm.doc.tools.forEach((row) => {
+        //
+  		// 	if(row.__checked && row.item_code){
+  		// 		selected_rows.push(row.reference);
+  		// 	}
+  		// });
+  		// console.log(selected_rows)
+        // if (selected_rows.length <= 0)
+        //     frappe.throw(__("No Tools Selected"))
+    let d = new frappe.ui.Dialog({
+                     title: 'Select Delivery Type',
+                     fields: [
+                    {
+                        label:__("Type"),
+                        fieldname: 'type',
+                        fieldtype: 'Select',
+                        options:['Deliver From Custody','Deliver From Stock'],
+                        default :'Deliver From Custody' ,
+                        translatable: 1,
+                        req:1
+                    }
+                ],primary_action:function(){
+                    var args = d.get_values();
+                    d.hide()
+                    if (args.type == 'Deliver From Stock') {
+                        frappe.model.open_mapped_doc({
+                            method: "erpnext.operations.doctype.customer_agrement.customer_agrement.create_delivery_note",
+                            frm: frm,
+                        })
+                    }else {
+                         frappe.model.open_mapped_doc({
+                            method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
+                            frm: frm,
+                        })
+                    }
+                }
+                 });
+                        d.show()
+
+        //
+        // frappe.call({
+        //     method:"deliver_to_customer",
+        //     doc:frm.doc,
+        //     args:{
+        //         selected : selected_rows
+        //     },
+        //     callback:function (r) {
+        //
+        //     }
+        // })
+    },
+
     get_duration:function (frm) {
         if (frm.doc.start_date && frm.doc.end_date)
         {

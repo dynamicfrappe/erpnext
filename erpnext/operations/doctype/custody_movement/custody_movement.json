@@ -1,0 +1,178 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2021-04-26 12:46:01.159153",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "type",
+  "stock_entry",
+  "column_break_2",
+  "naming_series",
+  "movement_transaction_section",
+  "is_custody",
+  "custody_warehouse",
+  "from_customer_agreement",
+  "source_warehouse",
+  "from_employee",
+  "from_employee_name",
+  "column_break_5",
+  "to_customer_agreement",
+  "target_warehouse",
+  "to_employee",
+  "to_employee_name",
+  "section_break_1",
+  "items",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "items",
+   "options": "Custody Movement items",
+   "reqd": 1
+  },
+  {
+   "default": "CUSTODY-MOVE-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "CUSTODY-MOVE-.#####",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_customer_agreement",
+   "fieldtype": "Link",
+   "label": "From Customer Agreement",
+   "options": "Customer Agrement"
+  },
+  {
+   "fieldname": "from_employee",
+   "fieldtype": "Link",
+   "label": "From Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "from_employee.employee_name",
+   "fieldname": "from_employee_name",
+   "fieldtype": "Data",
+   "label": "From Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_customer_agreement",
+   "fieldtype": "Link",
+   "label": "To Customer Agreement",
+   "options": "Customer Agrement"
+  },
+  {
+   "fieldname": "to_employee",
+   "fieldtype": "Link",
+   "label": "To Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "to_employee.employee_name",
+   "fieldname": "to_employee_name",
+   "fieldtype": "Data",
+   "label": "To Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "movement_transaction_section",
+   "fieldtype": "Section Break",
+   "label": "Movement Transaction"
+  },
+  {
+   "fetch_from": "from_customer_agreement.sorce_warehouse",
+   "fieldname": "source_warehouse",
+   "fieldtype": "Link",
+   "label": "Source Warehouse",
+   "options": "Warehouse",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "to_customer_agreement.warehouse",
+   "fieldname": "target_warehouse",
+   "fieldtype": "Link",
+   "label": "Target Warehouse",
+   "options": "Warehouse",
+   "read_only": 1
+  },
+  {
+   "default": "Send",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "Send\nTransfer\nDeliver\nReturn\nReceipt from Customer\nDeliver from Customer Custody Warehouse",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Custody Movement",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "stock_entry",
+   "fieldtype": "Link",
+   "label": "Stock Entry",
+   "options": "Stock Entry",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.type=='Receipt from Customer'",
+   "fieldname": "is_custody",
+   "fieldtype": "Check",
+   "label": "Is Custody"
+  },
+  {
+   "fieldname": "custody_warehouse",
+   "fieldtype": "Link",
+   "label": "Customer Custody Warehouse",
+   "options": "Warehouse"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2021-04-27 17:17:37.503051",
+ "modified_by": "Administrator",
+ "module": "Operations",
+ "name": "Custody Movement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
