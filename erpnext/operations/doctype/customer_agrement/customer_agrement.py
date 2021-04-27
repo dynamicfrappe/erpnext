@@ -161,32 +161,42 @@ class CustomerAgrement(Document):
 
 @frappe.whitelist()
 
-def deliver_to_customer(doc):
+def deliver_to_customer(doc,is_custody = 0):
+	frappe.msgprint(is_custody)
 	doc = frappe.get_doc("Customer Agrement",doc)
+	# Validate Warehouse
+	# if getattr(doc,'sorce_warehouse',None):
+	# 	custody_warehouse , customer_custody_warehouse = frappe.db.get_value ('Warehouse',doc.sorce_warehouse , ['custody_warehouse','customer_custody_warehouse'])
+	# 	if not  custody_warehouse and not customer_custody_warehouse :
+	# 		return create_delivery_note(doc.name)
+
+
 	if getattr(doc,'tools',None):
 		stock_entry = frappe.new_doc("Stock Entry")
 		stock_entry.stock_entry_type = "Material Issue"
 		stock_entry.from_warehouse = doc.warehouse
 		stock_entry.from_customer_agreement = doc.name
-		for item in getattr(doc, 'tools', []):
-			if (item.qty-item.delivered_qty) > 0:  # and not item.delivered and item.delivered_qty < item.qty:
-				se_child = stock_entry.append('items')
-				se_child.item_code = item.item_code
-				se_child.item_name = item.item_name
-				se_child.qty = item.qty-item.delivered_qty
-				se_child.s_warehouse = doc.warehouse
-				# in stock uom
-
-				se_child.expense_account = doc.customer_installment_account
-				se_child.conversion_factor = 1
-				se_child.uom = item.stock_uom
-				se_child.stock_uom = item.stock_uom
-		if len(getattr(stock_entry, 'items', [])) == 0:
-			frappe.throw(_('All items have been delivered before'))
-		try:
-			stock_entry.insert()
-		except Exception as e:
-			frappe.msgprint(str(e))
+		stock_entry.is_custody= is_custody
+		# for item in getattr(doc, 'tools', []):
+		# 	if item.status != 'Hold':
+		# 		if (item.qty-item.delivered_qty) > 0:  # and not item.delivered and item.delivered_qty < item.qty:
+		# 			se_child = stock_entry.append('items')
+		# 			se_child.item_code = item.item_code
+		# 			se_child.item_name = item.item_name
+		# 			se_child.qty = item.qty-item.delivered_qty
+		# 			se_child.s_warehouse = doc.warehouse
+		# 			# in stock uom
+		#
+		# 			se_child.expense_account = doc.customer_installment_account
+		# 			se_child.conversion_factor = 1
+		# 			se_child.uom = item.stock_uom
+		# 			se_child.stock_uom = item.stock_uom
+		# if len(getattr(stock_entry, 'items', [])) == 0:
+		# 	frappe.throw(_('All items have been delivered before'))
+		# try:
+		# 	stock_entry.insert()
+		# except Exception as e:
+		# 	frappe.msgprint(str(e))
 		# l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(stock_entry.doctype, stock_entry.name)
 		# msg = _("A {} {} is Created for Company {}").format(stock_entry.doctype, l, stock_entry.company)
 
@@ -207,7 +217,7 @@ def create_delivery_note(doc):
 	dn.customer = self.customer or "_Test Customer"
 	dn.is_return = 0
 	for i in getattr(self,'tools',[]):
-		if i.status == 'Active':
+		if i.status != 'Hold':
 			undeliverd_qty = (i.qty - i.delivered_qty) or 0
 			if undeliverd_qty > 0:
 				dn.append("items", {
@@ -244,7 +254,7 @@ def create_stock_entry(doc):
 	stock_entry.is_custody = 1
 	stock_entry.project = self.project
 	for item in getattr(self,'tools',[]):
-		if item.status == 'Active':
+		if  i.status != 'Hold':
 			untransferred_qty = item.qty - item.transferred_qty
 			if untransferred_qty > 0 :
 				se_child = stock_entry.append('items')

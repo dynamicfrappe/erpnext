@@ -13,6 +13,24 @@ frappe.ui.form.on('Customer Agrement', {
 			    	}
 				};
 			});
+
+            frm.set_query("warehouse"  ,function(doc){
+				return {
+					filters: {
+					    custody_warehouse: 1
+
+			    	}
+				};
+			});
+            frm.set_query("sorce_warehouse"  ,function(doc){
+				return {
+					filters: {
+					    custody_warehouse: 0,
+                        customer_custody_warehouse:0
+
+			    	}
+				};
+			});
             if (!frm.is_new()){
                  frm.add_custom_button(__("Operation Invoice Due"),function() {
 					frm.events.create_Due (frm);
@@ -29,7 +47,7 @@ frappe.ui.form.on('Customer Agrement', {
                         emploee_list.push(frm.doc.resourses[i]["employee"])
                      }
                         let d = new frappe.ui.Dialog({
-                    title: 'select employee',
+                     title: 'select employee',
                      fields: [
                     {
                         label:__("Employee"),
@@ -136,11 +154,33 @@ deliver_to_customer:function(frm){
   		// console.log(selected_rows)
         // if (selected_rows.length <= 0)
         //     frappe.throw(__("No Tools Selected"))
- frappe.model.open_mapped_doc({
-			method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
-			frm: frm,
+    let d = new frappe.ui.Dialog({
+                     title: 'Select Delivery Type',
+                     fields: [
+                    {
+                        label:__("Type"),
+                        fieldname: 'type',
+                        fieldtype: 'Select',
+                        options:['Deliver From Custody','Deliver From Stock'],
+                        default :'Deliver From Custody' ,
+                        translatable: 1,
+                        req:1
+                    }
+                ],primary_action:function(){
+                    var args = d.get_values();
+                    d.hide()
+                    var is_custody =  args.type == 'Deliver From Custody'
 
-		})
+                    frappe.model.open_mapped_doc({
+                            method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
+                            frm: frm,
+                            is_custody:is_custody
+
+                        })
+                }
+                 });
+                        d.show()
+
         //
         // frappe.call({
         //     method:"deliver_to_customer",
