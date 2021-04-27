@@ -120,6 +120,43 @@ class CustomerAgrement(Document):
 
 		self.save()
 
+	def create_stock_entry_backend(self,employee,*args,**kwargs):
+		doc=frappe.new_doc("Stock Entry")
+		doc.stock_entry_type="Custody Send"
+		doc.employee=employee
+		doc.from_warehouse=self.sorce_warehouse
+		doc.to_warehouse=self.warehouse
+		doc.customer_agreement=self.name
+		doc.is_custody=1
+		for item in self.tools:
+			if item.un_transfear_tools==0:
+				frappe.throw("un transfered tools equal 0")
+			doc.append('items',{
+				'item_code':item.item_code,
+				'qty':item.un_transfear_tools,
+				's_warehouse': self.sorce_warehouse,
+				't_warehouse':self.warehouse
+				})
+		doc.save()
+
+	def create_stock_entry_backend_return(self,employee,item,qty):
+		doc = frappe.new_doc("Stock Entry")
+		doc.stock_entry_type = "Custody Return"
+		doc.employee = employee
+		doc.from_employee=employee
+		doc.from_warehouse = self.warehouse
+		doc.to_warehouse =  self.sorce_warehouse
+		doc.customer_agreement = self.name
+		doc.from_customer_agreement=self.name
+		doc.is_custody = 1
+		doc.append('items', {
+			'item_code': item,
+			'qty': qty,
+			's_warehouse':  self.warehouse,
+			't_warehouse': self.sorce_warehouse
+		})
+		doc.save()
+
 
 
 @frappe.whitelist()
