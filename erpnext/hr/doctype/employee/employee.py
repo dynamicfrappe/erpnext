@@ -34,7 +34,8 @@ class Employee(NestedSet):
 				self.name = self.employee_name
 
 		self.employee = self.name
-
+	def createEmployeeDocument(self):
+		pass
 	def validate(self):
 
 		from erpnext.controllers.status_updater import validate_status
