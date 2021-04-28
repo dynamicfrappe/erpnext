@@ -34,8 +34,21 @@ class Employee(NestedSet):
 				self.name = self.employee_name
 
 		self.employee = self.name
-	def createEmployeeDocument(self):
-		pass
+	def createEmployeeDocument(self,startDate,attach,type,doc_number,period):
+		self.save()
+		sdate=datetime.datetime.strptime(startDate, '%Y-%m-%d')
+		doc = frappe.new_doc('Employee Document')
+		doc.employee = self.name
+		doc.employeename = str(self.first_name) + str(self.last_name)
+		doc.document_type = type
+		doc.is_recived=1
+		doc.document=attach
+		doc.doc_number=doc_number
+		doc.start_date=startDate
+		doc.end_date=str(sdate+relativedelta(months=+int(period)))
+
+		doc.save()
+
 	def validate(self):
 
 		from erpnext.controllers.status_updater import validate_status
