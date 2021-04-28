@@ -51,8 +51,8 @@ class CustomerAgrement(Document):
 			if (self.start_date > self.end_date):
 				frappe.msgprint(_("Start Date Cann't be after End Date"),indicator='red')
 				self.start_date = self.end_date
-			duration = (12 * self.end_date.year + self.end_date.month) - (12 * self.start_date.year + self.start_date.month) +1
-			self.end_date = self.start_date +  relativedelta(months=duration) - timedelta(days=1)
+			duration = (12 * self.end_date.year + self.end_date.month) - (12 * self.start_date.year + self.start_date.month)
+			self.end_date = self.start_date +  relativedelta(months=duration)
 
 		self.total_duration_in_monthes =  duration
 
