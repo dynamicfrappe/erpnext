@@ -25,7 +25,7 @@ def get_columns(filters):
         {
             "label": _("Employee Name"),
             "fieldname": "employee_name",
-            "fieldtype": "Date",
+            "fieldtype": "Data",
             "width": 150
         },
         {
