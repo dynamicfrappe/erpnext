@@ -142,7 +142,7 @@ def get_additional_salary_component(employee, start_date, end_date, component_ty
 
 	component_fields = ["depends_on_payment_days", "salary_component_abbr", "is_tax_applicable", "variable_based_on_taxable_salary", 'type']
 	for d in additional_salaries:
-		frappe.msgprint(str(d))
+		# frappe.msgprint(str(d))
 		if d.salary_component not in existing_salary_components:
 			component = frappe.get_all("Salary Component", filters={'name': d.salary_component}, fields=component_fields)
 			struct_row = frappe._dict({'salary_component': d.salary_component})

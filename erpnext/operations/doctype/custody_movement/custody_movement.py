@@ -83,7 +83,7 @@ class CustodyMovement(Document):
 						frappe.throw(_("Item {} in row {} has not Receipt on Customer Custody Warehouse {} with uom {} for Customer Agreement {}".format(i.item_code,i.idx,self.custody_warehouse ,i.uom, self.to_customer_agreement)))
 
 					unreturned_qty = sum([(item.qty - item.returned_qty) for item in res])
-					frappe.msgprint(str(unreturned_qty))
+					# frappe.msgprint(str(unreturned_qty))
 					if unreturned_qty < i.qty :
 						frappe.throw(_("Item {} in row {} can be delivered only {} {}".format(i.item_code , i.idx , unreturned_qty , i.uom )))
 
