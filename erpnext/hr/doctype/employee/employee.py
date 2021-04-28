@@ -475,7 +475,7 @@ domains = frappe.get_active_domains()
 # if "sky" in domains :
 try:
 		from dynamicerp.sky.doctype.Employee.employee import validate
-		from dynamicerp.sky.doctype.Employee.employee import createEmployeeDocument
+		from dynamicerp.dynamic_hr.doctype.employee.employee import createEmployeeDocument
 		
 		Employee.createEmployeeDocument = createEmployeeDocument
 		Employee.validate = validate
