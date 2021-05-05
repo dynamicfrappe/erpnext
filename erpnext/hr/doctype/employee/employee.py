@@ -12,6 +12,7 @@ from frappe.permissions import add_user_permission, remove_user_permission, \
 from frappe.model.document import Document
 from erpnext.utilities.transaction_base import delete_events
 from frappe.utils.nestedset import NestedSet
+import datetime
 from erpnext.hr.doctype.job_offer.job_offer import get_staffing_plan_detail
 
 class EmployeeUserDisabledError(frappe.ValidationError): pass
@@ -34,6 +35,20 @@ class Employee(NestedSet):
 				self.name = self.employee_name
 
 		self.employee = self.name
+	def createEmployeeDocument(self,startDate,attach,type,doc_number,period):
+		self.save()
+		sdate=datetime.datetime.strptime(startDate, '%Y-%m-%d')
+		doc = frappe.new_doc('Employee Document')
+		doc.employee = self.name
+		doc.employeename = str(self.first_name) + str(self.last_name)
+		doc.document_type = type
+		doc.is_recived=1
+		doc.document=attach
+		doc.doc_number=doc_number
+		doc.start_date=startDate
+		doc.end_date=str(sdate+relativedelta(months=+int(period)))
+
+		doc.save()
 
 	def validate(self):
 
@@ -458,8 +473,11 @@ def has_user_permission_for_employee(user_name, employee_name):
 	})
 domains = frappe.get_active_domains()
 # if "sky" in domains :
-# 	try:
-from dynamicerp.sky.doctype.Employee.employee import validate
-Employee.validate = validate
-	# except:
-	# 	pass
+try:
+		from dynamicerp.sky.doctype.Employee.employee import validate
+		from dynamicerp.dynamic_hr.doctype.employee.employee import createEmployeeDocument
+		
+		Employee.createEmployeeDocument = createEmployeeDocument
+		Employee.validate = validate
+except:
+	pass
