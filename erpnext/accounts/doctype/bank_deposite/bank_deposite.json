@@ -1,36 +1,34 @@
 {
- "creation": "2020-12-07 08:49:28.344063",
+ "creation": "2021-05-04 15:05:37.337525",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "laondate",
+  "date",
   "due_date",
   "liabilities",
   "no_of_days",
+  "transaction",
+  "cost_center",
+  "column_break_7",
+  "bank_name",
   "description",
-  "column_break_6",
-  "in",
-  "corridor_rate",
-  "interest_rate",
-  "hdb",
-  "total"
+  "bank__currency",
+  "out",
+  "rate"
  ],
  "fields": [
   {
-   "allow_in_quick_entry": 1,
-   "bold": 1,
-   "fieldname": "laondate",
+   "fieldname": "date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Date",
    "reqd": 1
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Due Date",
    "reqd": 1
   },
@@ -41,8 +39,25 @@
   },
   {
    "fieldname": "no_of_days",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "No Of Days"
+  },
+  {
+   "fieldname": "transaction",
+   "fieldtype": "Data",
+   "label": "Transaction"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank"
   },
   {
    "fieldname": "description",
@@ -50,39 +65,29 @@
    "label": "Description"
   },
   {
-   "fieldname": "in",
+   "fieldname": "bank__currency",
+   "fieldtype": "Data",
+   "label": "Bank  Currency"
+  },
+  {
+   "fieldname": "out",
    "fieldtype": "Currency",
-   "label": "IN"
+   "label": "Out"
   },
   {
-   "fieldname": "corridor_rate",
+   "fieldname": "rate",
    "fieldtype": "Float",
-   "label": "Corridor Rate"
+   "label": "rate"
   },
   {
-   "fieldname": "interest_rate",
-   "fieldtype": "Float",
-   "label": "Interest Rate"
-  },
-  {
-   "fieldname": "hdb",
-   "fieldtype": "Float",
-   "label": "HDB"
-  },
-  {
-   "fieldname": "total",
-   "fieldtype": "Currency",
-   "label": "Total"
-  },
-  {
-   "fieldname": "column_break_6",
+   "fieldname": "column_break_7",
    "fieldtype": "Column Break"
   }
  ],
- "modified": "2021-05-04 14:47:08.488462",
+ "modified": "2021-05-04 15:11:25.065980",
  "modified_by": "Administrator",
  "module": "Accounts",
- "name": "Bank Loan",
+ "name": "Bank Deposite",
  "owner": "Administrator",
  "permissions": [
   {
