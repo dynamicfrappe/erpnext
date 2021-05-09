@@ -1,0 +1,99 @@
+{
+ "creation": "2021-05-05 09:51:50.574349",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "end_date",
+  "bank_name",
+  "client",
+  "lg_type",
+  "column_break_6",
+  "number_of_lg",
+  "cash_cover",
+  "facility",
+  "total",
+  "cost_center"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank"
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Data",
+   "label": "Client"
+  },
+  {
+   "fieldname": "lg_type",
+   "fieldtype": "Data",
+   "label": "LG Type"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "number_of_lg",
+   "fieldtype": "Data",
+   "label": "Number Of LG"
+  },
+  {
+   "fieldname": "cash_cover",
+   "fieldtype": "Currency",
+   "label": "Cash Cover"
+  },
+  {
+   "fieldname": "facility",
+   "fieldtype": "Currency",
+   "label": "Facility"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Data",
+   "label": "Total"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center"
+  }
+ ],
+ "modified": "2021-05-05 09:52:07.849333",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Letter of Guarantee",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
