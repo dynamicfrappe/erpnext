@@ -168,7 +168,6 @@
   {
    "fieldname": "company_logo",
    "fieldtype": "Attach Image",
-   "hidden": 1,
    "label": "Company Logo"
   },
   {
@@ -756,7 +755,7 @@
  "idx": 1,
  "image_field": "company_logo",
  "is_tree": 1,
- "modified": "2020-12-09 12:07:30.936242",
+ "modified": "2021-05-06 13:18:29.507379",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Company",
