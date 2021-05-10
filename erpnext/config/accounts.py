@@ -237,6 +237,10 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Letter of Guarantee"
+				},
+				{
+					"type": "doctype",
 					"name": "Cheque Print Template",
 					"description": _("Setup cheque dimensions for printing")
 				},
