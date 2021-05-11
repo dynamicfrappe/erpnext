@@ -269,6 +269,9 @@ doc_events = {
 	"Email Unsubscribe": {
 		"after_insert": "erpnext.crm.doctype.email_campaign.email_campaign.unsubscribe_recipient"
 	}
+	# "Letter of Guarantee":{
+	# 	'validate':"erpnext.accounts.doctype.letter_of_guarantee.letter_of_guarantee.check_letter_of_grantee_date"
+	# }
 }
 
 scheduler_events = {
@@ -313,7 +316,8 @@ scheduler_events = {
 		"erpnext.support.doctype.service_level_agreement.service_level_agreement.check_agreement_status",
 		"erpnext.crm.doctype.email_campaign.email_campaign.send_email_to_leads_or_contacts",
 		"erpnext.crm.doctype.email_campaign.email_campaign.set_email_campaign_status",
-		"erpnext.selling.doctype.quotation.quotation.set_expired_status"
+		"erpnext.selling.doctype.quotation.quotation.set_expired_status",
+		"erpnext.accounts.doctype.letter_of_guarantee.letter_of_guarantee.check_letter_of_grantee_date",
 	],
 	"daily_long": [
 		"erpnext.setup.doctype.email_digest.email_digest.send",
