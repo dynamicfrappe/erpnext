@@ -122,7 +122,8 @@ class CustodyMovement(Document):
 					se_child.s_warehouse = source_warehouse
 					se_child.t_warehouse = target_warehouse
 					# in stock uom
-
+					if item.serial_no :
+						se_child.serial_no = item.serial_no
 					# se_child.expense_account = self.customer_installment_account
 					se_child.conversion_factor = 1
 					se_child.uom = item.stock_uom
