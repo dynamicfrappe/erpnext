@@ -101,7 +101,8 @@
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End Date"
+   "label": "End Date",
+   "read_only": 1
   },
   {
    "fieldname": "total_monthel_fees_section",
@@ -182,8 +183,7 @@
   {
    "fieldname": "total_duration_in_monthes",
    "fieldtype": "Int",
-   "label": "Total Duration(In monthes)",
-   "read_only": 1
+   "label": "Total Duration(In monthes)"
   },
   {
    "fetch_from": "account_template.warehouse",
@@ -313,7 +313,7 @@
    "options": "Customer Agreement Dues"
   }
  ],
- "modified": "2021-04-27 16:36:39.971147",
+ "modified": "2021-05-17 10:44:20.529345",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",
