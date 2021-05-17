@@ -10,6 +10,7 @@ from frappe.model.document import Document
 class CustodyMovement(Document):
 	def validate(self):
 		self.validate_items()
+
 	def validate_items(self):
 		for i in self.items:
 			sql = ''
@@ -28,8 +29,6 @@ class CustodyMovement(Document):
 			valid_items = frappe.db.sql_list (sql)
 			if i.item_code not in valid_items:
 				frappe.throw(_("Item {} not Valid in row {}".format(i.item_code,i.idx)))
-
-
 	def on_submit (self):
 		self.create_stock_entry()
 

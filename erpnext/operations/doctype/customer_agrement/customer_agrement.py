@@ -21,7 +21,7 @@ class CustomerAgrement(Document):
 		self.set_resources_cost_center_and_account()
 		self.set_tools_cost_center_project_account()
 		self.calculate_un_delevered()
-
+		self.validate_installment_data()
 	def set_resources_cost_center_and_account(self):
 		for resource in self.resourses :
 			if not resource.cost_center :
@@ -32,6 +32,14 @@ class CustomerAgrement(Document):
 	def calculate_un_delevered(self):
 		for item in self.tools :
 			item.un_transfear_tools = float(item.qty or 0) - (float(item.transferred_qty or 0) + float(item.delivered_qty or 0))
+
+
+	def validate_installment_data(self):
+		for item in self.tools :
+			if int(self.total_duration_in_monthes > 0 ) :
+				if int(item.monthly_installment or 0 ) > int(self.total_duration_in_monthes > 0 ) :
+					frappe.throw(""" Customer agreement Duration is : %s Months And you try to Add %s installment Monthes for item %s"""%(str(self.total_duration_in_monthes) , str(item.monthly_installment) , str(item.item_code)) )
+	
 
 	def set_tools_cost_center_project_account(self):
 		for item in self.tools :
