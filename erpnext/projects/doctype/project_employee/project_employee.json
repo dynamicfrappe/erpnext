@@ -16,6 +16,7 @@
   {
    "fieldname": "employee",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "in_list_view": 1,
    "label": "Employee",
    "options": "Employee",
@@ -59,7 +60,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-01-03 14:35:00.112711",
+ "modified": "2021-05-10 13:45:09.507651",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project Employee",

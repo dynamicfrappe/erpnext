@@ -13,7 +13,7 @@ def get_data():
 					"name": "Sales Invoice",
 					"description": _("Bills raised to Customers."),
 					"onboard": 1,
-				},\
+				},
 				{
 					"type": "doctype",
 					"label": _("Update Bank Transaction Dates"),
@@ -226,6 +226,18 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "Bank Guarantee"
+				},
+				{
+					"type": "doctype",
+					"name": "Bank Deposite"
+				},
+				{
+					"type": "doctype",
+					"name": "Bank Loan"
+				},
+				{
+					"type": "doctype",
+					"name": "Letter of Guarantee"
 				},
 				{
 					"type": "doctype",
@@ -567,6 +579,24 @@ def get_data():
 					"is_query_report": True,
 					"name": "Purchase Comparison",
 					"doctype": "Purchase Invoice"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Letter of Guarantee Report",
+					"doctype": "Letter of Guarantee"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Bank Deposite Report",
+					"doctype": "Bank Deposite"
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Bank Loan Report",
+					"doctype": "Bank Loan"
 				}
 			]
 		},
