@@ -85,6 +85,14 @@ class PurchaseReceipt(BuyingController):
 		self.validate_cwip_accounts()
 
 		self.check_on_hold_or_closed_status()
+		for item in self.items :
+			exist_item = frappe.get_doc("Item", item.item_code)
+			if exist_item.has_serial_no == 1 :
+				serials = []
+				if item.serial_no :
+					serials = item.serial_no.splitlines() 
+				if len(serials) != item.qty :
+					  			frappe.throw(""" You try to add %s items With %s Serial Numbers"""%(item.qty , len(serials) ) )
 
 		if getdate(self.posting_date) > getdate(nowdate()):
 			throw(_("Posting Date cannot be future date"))
