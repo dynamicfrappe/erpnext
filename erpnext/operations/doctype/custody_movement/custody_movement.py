@@ -9,8 +9,15 @@ from frappe.model.document import Document
 
 class CustodyMovement(Document):
 	def validate(self):
-		self.validate_items()
+		if self.type =='Transfer' :
+			self.validate_wh_in_transfair()
 
+		self.validate_items()
+	def validate_wh_in_transfair(self):
+		form_ca = frappe.get_doc("Customer Agrement" ,self.from_customer_agreement)
+		to_ca = frappe.get_doc("Customer Agrement" ,self.to_customer_agreement)
+		self.source_warehouse = form_ca.warehouse
+		self.target_warehouse = to_ca.warehouse
 	def validate_items(self):
 		for i in self.items:
 			sql = ''
