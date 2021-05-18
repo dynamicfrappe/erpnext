@@ -37,9 +37,10 @@ class CustomerAgrement(Document):
 	def validate_installment_data(self):
 		for item in self.tools :
 			if int(self.total_duration_in_monthes > 0 ) :
-				if int(item.monthly_installment or 0 ) > int(self.total_duration_in_monthes > 0 ) :
+				if (int(item.monthly_installment or 0 ) > int(self.total_duration_in_monthes  ) ):
 					frappe.throw(""" Customer agreement Duration is : %s Months And you try to Add %s installment Monthes for item %s"""%(str(self.total_duration_in_monthes) , str(item.monthly_installment) , str(item.item_code)) )
-	
+				else:
+					pass
 
 	def set_tools_cost_center_project_account(self):
 		for item in self.tools :
