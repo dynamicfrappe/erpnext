@@ -135,6 +135,7 @@ class CustodyMovement(Document):
 					se_child.conversion_factor = 1
 					se_child.uom = item.stock_uom
 					se_child.stock_uom = item.stock_uom
+					se_child.expense_account = item.account
 		if len(getattr(stock_entry, 'items', [])) == 0:
 			frappe.throw(_('All items have been delivered before'))
 		stock_entry.insert()
@@ -201,6 +202,7 @@ class CustodyMovement(Document):
 
 		l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(stock_entry.doctype, stock_entry.name)
 		msg = _("A {} {} is Created for Company {}").format(stock_entry.doctype, l, stock_entry.company)
+
 
 
 
