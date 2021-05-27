@@ -5,10 +5,25 @@
  "engine": "InnoDB",
  "field_order": [
   "employee",
+  "client_code",
+  "column_break_2",
   "employee_name",
   "column_break_3",
   "salary",
+  "gross_salary",
+  "social_insurance",
+  "mobile_package",
+  "ohs_courses",
   "other_ereanings",
+  "total",
+  "column_break_10",
+  "tax",
+  "medical_insurance",
+  "life_insurance",
+  "laptop",
+  "mobile_allowance",
+  "ohs_tools",
+  "po_value",
   "section_break_6",
   "company_revenue",
   "total_monthly_fee",
@@ -49,7 +64,8 @@
    "fieldname": "other_ereanings",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Other Ereanings"
+   "label": "Other Ereanings",
+   "read_only": 1
   },
   {
    "columns": 2,
@@ -71,7 +87,8 @@
   },
   {
    "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break",
+   "label": "Employee Earnings"
   },
   {
    "fieldname": "section_break_6",
@@ -111,10 +128,98 @@
    "label": "Status",
    "options": "Active\nHold\nFinished",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "gross_salary",
+   "fieldtype": "Currency",
+   "label": "Gross Salary",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "social_insurance",
+   "fieldtype": "Currency",
+   "label": "Social Insurance"
+  },
+  {
+   "default": "0",
+   "fieldname": "medical_insurance",
+   "fieldtype": "Currency",
+   "label": "Medical Insurance"
+  },
+  {
+   "default": "0",
+   "fieldname": "life_insurance",
+   "fieldtype": "Currency",
+   "label": "Life Insurance"
+  },
+  {
+   "default": "0",
+   "fieldname": "laptop",
+   "fieldtype": "Currency",
+   "label": "Laptop"
+  },
+  {
+   "default": "0",
+   "fieldname": "mobile_package",
+   "fieldtype": "Currency",
+   "label": "Mobile Package"
+  },
+  {
+   "default": "0",
+   "fieldname": "ohs_courses",
+   "fieldtype": "Currency",
+   "label": "OHS Courses"
+  },
+  {
+   "default": "0",
+   "fieldname": "ohs_tools",
+   "fieldtype": "Currency",
+   "label": "OHS Tools"
+  },
+  {
+   "default": "0",
+   "fieldname": "mobile_allowance",
+   "fieldtype": "Currency",
+   "label": "Mobile Allowance"
+  },
+  {
+   "default": "0",
+   "fieldname": "po_value",
+   "fieldtype": "Currency",
+   "label": "PO Value"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "tax",
+   "fieldtype": "Currency",
+   "label": "Tax"
+  },
+  {
+   "fieldname": "client_code",
+   "fieldtype": "Data",
+   "label": "Client Code"
   }
  ],
  "istable": 1,
- "modified": "2021-04-11 15:51:34.859518",
+ "modified": "2021-05-27 11:48:09.720376",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement Resources",
