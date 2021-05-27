@@ -9,15 +9,7 @@ from frappe.model.document import Document
 
 class CustodyMovement(Document):
 	def validate(self):
-		if self.type =='Transfer' :
-			self.validate_wh_in_transfair()
-
 		self.validate_items()
-	def validate_wh_in_transfair(self):
-		form_ca = frappe.get_doc("Customer Agrement" ,self.from_customer_agreement)
-		to_ca = frappe.get_doc("Customer Agrement" ,self.to_customer_agreement)
-		self.source_warehouse = form_ca.warehouse
-		self.target_warehouse = to_ca.warehouse
 	def validate_items(self):
 		for i in self.items:
 			sql = ''
@@ -36,6 +28,8 @@ class CustodyMovement(Document):
 			valid_items = frappe.db.sql_list (sql)
 			if i.item_code not in valid_items:
 				frappe.throw(_("Item {} not Valid in row {}".format(i.item_code,i.idx)))
+
+
 	def on_submit (self):
 		self.create_stock_entry()
 
@@ -43,7 +37,7 @@ class CustodyMovement(Document):
 		types = {
 			'Deliver': 'Material Issue',
 			'Transfer': 'Custody Transfer',
-			'Send': 'Custody Send',
+			'Release': 'Custody Send',
 			'Receipt from Customer': 'Material Receipt',
 			'Deliver from Customer Custody Warehouse': 'Material Issue',
 			'Return': 'Custody Return'
@@ -55,7 +49,7 @@ class CustodyMovement(Document):
 		stock_entry.is_custody = 1
 		# IN Case Send
 		agreement = None
-		if self.type == 'Send':
+		if self.type == 'Release':
 			source_warehouse , target_warehouse = frappe.db.get_value('Customer Agrement',self.to_customer_agreement , ['sorce_warehouse','warehouse'])
 
 		# IN Case Return  And Deliver
@@ -129,13 +123,11 @@ class CustodyMovement(Document):
 					se_child.s_warehouse = source_warehouse
 					se_child.t_warehouse = target_warehouse
 					# in stock uom
-					if item.serial_no :
-						se_child.serial_no = item.serial_no
+
 					# se_child.expense_account = self.customer_installment_account
 					se_child.conversion_factor = 1
 					se_child.uom = item.stock_uom
 					se_child.stock_uom = item.stock_uom
-					se_child.expense_account = item.account
 		if len(getattr(stock_entry, 'items', [])) == 0:
 			frappe.throw(_('All items have been delivered before'))
 		stock_entry.insert()
@@ -202,7 +194,6 @@ class CustodyMovement(Document):
 
 		l = """ <b><a href="#Form/{0}/{1}">{1}</a></b>""".format(stock_entry.doctype, stock_entry.name)
 		msg = _("A {} {} is Created for Company {}").format(stock_entry.doctype, l, stock_entry.company)
-
 
 
 

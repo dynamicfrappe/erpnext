@@ -109,12 +109,12 @@
    "read_only": 1
   },
   {
-   "default": "Send",
+   "default": "Release",
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "Send\nTransfer\nDeliver\nReturn\nReceipt from Customer\nDeliver from Customer Custody Warehouse",
+   "options": "Release\nTransfer\nReturn\nReceipt from Customer\nDeliver from Customer Custody Warehouse",
    "reqd": 1
   },
   {
@@ -153,7 +153,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2021-04-27 17:17:37.503051",
+ "modified": "2021-05-26 13:05:00.822618",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Custody Movement",

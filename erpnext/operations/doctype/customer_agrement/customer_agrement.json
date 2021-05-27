@@ -11,6 +11,9 @@
   "col_break1",
   "naming_series",
   "status",
+  "po_details_section",
+  "po_no",
+  "po_description",
   "column_break_3",
   "account_template",
   "customer_installment_account",
@@ -101,8 +104,7 @@
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End Date",
-   "read_only": 1
+   "label": "End Date"
   },
   {
    "fieldname": "total_monthel_fees_section",
@@ -183,7 +185,8 @@
   {
    "fieldname": "total_duration_in_monthes",
    "fieldtype": "Int",
-   "label": "Total Duration(In monthes)"
+   "label": "Total Duration(In monthes)",
+   "read_only": 1
   },
   {
    "fetch_from": "account_template.warehouse",
@@ -311,9 +314,25 @@
    "fieldtype": "Table",
    "label": "Operations Invoice Dues",
    "options": "Customer Agreement Dues"
+  },
+  {
+   "fieldname": "po_no",
+   "fieldtype": "Data",
+   "label": "PO No."
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "po_details_section",
+   "fieldtype": "Section Break",
+   "label": "PO Details"
+  },
+  {
+   "fieldname": "po_description",
+   "fieldtype": "Text",
+   "label": "PO Description"
   }
  ],
- "modified": "2021-05-17 10:44:20.529345",
+ "modified": "2021-05-26 12:26:07.321186",
  "modified_by": "Administrator",
  "module": "Operations",
  "name": "Customer Agrement",

@@ -46,9 +46,9 @@ frappe.ui.form.on('Customer Agrement', {
                  frm.add_custom_button(__("Operation Invoice Due"),function() {
 					frm.events.create_Due (frm);
 				}, __("Create"));
-                 frm.add_custom_button(__('Deliver To Customer'), function() {
-			        	frm.events.deliver_to_customer(frm)
-		        	}, __('Create'));
+                //  frm.add_custom_button(__('Deliver To Customer'), function() {
+			    //     	frm.events.deliver_to_customer(frm)
+		        // 	}, __('Create'));
                 // frm.add_custom_button(__("Delivery Note"),function() {
                 //         frm.events.create_delivery_note (frm);
                 //     }, __("Create"));
@@ -173,8 +173,9 @@ deliver_to_customer:function(frm){
                         label:__("Type"),
                         fieldname: 'type',
                         fieldtype: 'Select',
-                        options:['Deliver From Custody','Deliver From Stock'],
-                        default :'Deliver From Custody' ,
+                        // options:['Deliver From Custody','Deliver From Stock'],
+                        options:['Deliver From Stock'],
+                        default :'Deliver From Stock' ,
                         translatable: 1,
                         req:1
                     }
@@ -187,10 +188,10 @@ deliver_to_customer:function(frm){
                             frm: frm,
                         })
                     }else {
-                         frappe.model.open_mapped_doc({
-                            method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
-                            frm: frm,
-                        })
+                        //  frappe.model.open_mapped_doc({
+                        //     method: "erpnext.operations.doctype.customer_agrement.customer_agrement.deliver_to_customer",
+                        //     frm: frm,
+                        // })
                     }
                 }
                  });
@@ -360,11 +361,49 @@ frappe.ui.form.on('Customer Agrement Resources', {
      salary:function(frm,cdt,cdn)
     {
         frm.events.calculate_employee_totals(frm)
-    },
-     other_ereanings:function(frm,cdt,cdn)
+    },tax:function(frm,cdt,cdn)
     {
         frm.events.calculate_employee_totals(frm)
     },
+    // gross_salary:function(frm,cdt,cdn)
+    // {
+    //     frm.events.calculate_employee_totals(frm)
+    // },
+    social_insurance:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+    life_insurance:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+    mobile_package:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+    ohs_courses:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+
+    medical_insurance:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+    laptop:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    }, mobile_allowance:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    }, ohs_tools:function(frm,cdt,cdn)
+    {
+        frm.events.calculate_employee_totals(frm)
+    },
+    //  other_ereanings:function(frm,cdt,cdn)
+    // {
+    //     frm.events.calculate_employee_totals(frm)
+    // },
      company_revenue:function(frm,cdt,cdn)
     {
         frm.events.calculate_employee_totals(frm)

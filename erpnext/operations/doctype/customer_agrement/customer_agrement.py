@@ -21,7 +21,7 @@ class CustomerAgrement(Document):
 		self.set_resources_cost_center_and_account()
 		self.set_tools_cost_center_project_account()
 		self.calculate_un_delevered()
-		self.validate_installment_data()
+
 	def set_resources_cost_center_and_account(self):
 		for resource in self.resourses :
 			if not resource.cost_center :
@@ -32,15 +32,6 @@ class CustomerAgrement(Document):
 	def calculate_un_delevered(self):
 		for item in self.tools :
 			item.un_transfear_tools = float(item.qty or 0) - (float(item.transferred_qty or 0) + float(item.delivered_qty or 0))
-
-
-	def validate_installment_data(self):
-		for item in self.tools :
-			if int(self.total_duration_in_monthes > 0 ) :
-				if (int(item.monthly_installment or 0 ) > int(self.total_duration_in_monthes  ) ):
-					frappe.throw(""" Customer agreement Duration is : %s Months And you try to Add %s installment Monthes for item %s"""%(str(self.total_duration_in_monthes) , str(item.monthly_installment) , str(item.item_code)) )
-				else:
-					pass
 
 	def set_tools_cost_center_project_account(self):
 		for item in self.tools :
@@ -81,12 +72,23 @@ class CustomerAgrement(Document):
 		self.grand_total_fee = 0
 		for i in self.resourses:
 			i.salary = i.salary if i.salary else 0
-			i.other_ereanings = i.other_ereanings if i.other_ereanings else 0
+			i.tax = i.tax or 0
+			i.gross_salary = i.salary + i.tax
+			i.social_insurance = i.social_insurance or 0
+			i.life_insurance = i.life_insurance or 0
+			i.mobile_package = i.mobile_package or 0
+			i.ohs_courses = i.ohs_courses or 0
+			i.medical_insurance = i.medical_insurance or 0
+			i.laptop = i.laptop or 0
+			i.mobile_allowance = i.mobile_allowance or 0
+			i.ohs_tools = i.ohs_tools or 0
+			i.other_ereanings = i.medical_insurance + i.laptop + i.mobile_allowance + i.ohs_tools +i.social_insurance + i.life_insurance + i.mobile_package +i.ohs_courses
+			i.total = (i.gross_salary + i.other_ereanings) or 0
 			i.company_revenue = flt(i.company_revenue) if i.company_revenue else 1
 			percent = i.company_revenue if i.company_revenue > 1 else 0
 
 
-			i.total_monthly_fee = ((i.salary + i.other_ereanings)+((i.salary + i.other_ereanings)*percent/100) ) or 0
+			i.total_monthly_fee = (i.total+ (i.total*percent/100) ) or 0
 			self.total_resources_fee += i.total_monthly_fee
 		self.total_resources_monthly_fee = self.total_resources_fee
 		self.grand_total_fee = self.total_resources_fee + getattr(self,'total_equipments_fee',0)
@@ -376,7 +378,7 @@ def create_Due(doc):
 					invoice_child.resource = item.name
 					invoice.total_resources += 1
 					invoice.total_resources_fee += item.total_monthly_fee
-					invoice_child.stock_rate = float(item.salary or 0 ) + float(item.other_ereanings or 0)
+					invoice_child.stock_rate = item.total
 
 
 	invoice.total_fee = invoice.total_tools_fee + invoice.total_resources_fee
