@@ -182,7 +182,8 @@ class LandedCostVoucher(Document):
 																			 str(available) , str(total)))
 				else :
 					i.allocated =total
-
+	def set_applicable_charges_for_item(self):
+		pass
 
 	# def recaculate_all_values(self):
 	# 	if self.landed_cost_details == 1:
@@ -291,3 +292,8 @@ def complete_data(refre , typ,*args, **kwargs):
 
 
 
+try :
+	from dynamicerp.dynamic_erp.doctype.landed_cost_voucher.landed_cost_voucher import set_applicable_charges_for_item
+	LandedCostVoucher.set_applicable_charges_for_item = set_applicable_charges_for_item
+except:
+	pass

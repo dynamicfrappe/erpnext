@@ -291,8 +291,9 @@ erpnext.stock.LandedCostVoucher = erpnext.stock.StockController.extend({
 
 frappe.ui.form.on('Landed Cost Voucher',{
 	onload:function(frm){
-		frm.clear_table("taxes");
-		frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,1)
+		// frm.clear_table("taxes");
+		// alert('2')
+		// frm.set_df_property("landed_cost_voucher_expenses",'hidden' ,1)
 		// frm.events.show_general_ledger(frm)
 
 	},
