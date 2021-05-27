@@ -35,7 +35,7 @@ def get_period_list(from_fiscal_year, to_fiscal_year, periodicity, accumulated_v
 		"Yearly": 12,
 		"Half-Yearly": 6,
 		"Quarterly": 3,
-		"Monthly": 1
+		"Monthly": 1 
 	}[periodicity]
 
 	period_list = []
