@@ -74,7 +74,7 @@ class LeaveApplication(Document):
 					holidays = 0
 					if not frappe.db.get_value("Leave Type", self.leave_type, "include_holiday"):
 						holidays = get_holidays(self.employee, date_of_joining, self.from_date)
-					number_of_days = number_of_days - leave_days - holidays
+					# number_of_days = number_of_days - leave_days - holidays
 					if number_of_days < leave_type.applicable_after:
 						frappe.throw(_("{0} applicable after {1} working days").format(self.leave_type, leave_type.applicable_after))
 
