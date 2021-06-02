@@ -231,6 +231,10 @@ erpnext.taxes_and_totals = erpnext.payments.extend({
 		this.frm.doc.total_qty = this.frm.doc.total = this.frm.doc.base_total = this.frm.doc.net_total = this.frm.doc.base_net_total = 0.0;
 
 		$.each(this.frm.doc["items"] || [], function(i, item) {
+			if (me.frm.doc.is_fleet)
+			{
+				item.amount = ( item.qty * item.rate ) -( item.discount_amount || 0 )
+			}
 			me.frm.doc.total += item.amount;
 			me.frm.doc.total_qty += item.qty;
 			me.frm.doc.base_total += item.base_amount;
