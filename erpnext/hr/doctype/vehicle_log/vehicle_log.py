@@ -35,11 +35,18 @@ class VehicleLog(Document):
 			doc.save()
 
 
-		if flt(self.odometer) < flt(self.last_odometer):
-			frappe.throw(_("Current Odometer Value should be greater than Last Odometer Value {0}").format(self.last_odometer))
+		# if flt(self.odometer) < flt(self.last_odometer):
+		# 	frappe.throw(_("Current Odometer Value should be greater than Last Odometer Value {0}").format(self.last_odometer))
 
 	def on_submit(self):
 		frappe.db.set_value("Vehicle", self.license_plate, "last_odometer", self.odometer)
+		for mainten in self.service_detail:
+			if not mainten.odometer_reading:
+				frappe.throw("You must enter Odometer Reading")
+			if not mainten.expense_amount:
+				frappe.throw("You must enter expense amount")
+			if not mainten.price:
+				frappe.throw("You must enter price")
 
 	def on_cancel(self):
 		distance_travelled = self.odometer - self.last_odometer

@@ -46,8 +46,7 @@
    "fieldname": "expense_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Expense",
-   "reqd": 1
+   "label": "Expense"
   },
   {
    "columns": 3,
@@ -61,10 +60,10 @@
    "fieldname": "price",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Price",
-   "reqd": 1
+   "label": "Price"
   },
   {
+   "default": "0.0",
    "fieldname": "odometer_reading",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -72,7 +71,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-03-24 16:10:12.372119",
+ "modified": "2021-06-01 17:01:53.287623",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle Service",

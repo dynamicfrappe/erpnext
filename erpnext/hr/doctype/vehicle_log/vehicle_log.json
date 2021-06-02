@@ -64,8 +64,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Driver",
-   "options": "Driver",
-   "reqd": 1
+   "options": "Driver"
   },
   {
    "fieldname": "column_break_4",
@@ -187,7 +186,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2021-03-30 16:03:58.564373",
+ "modified": "2021-06-02 09:51:43.978559",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Vehicle Log",
