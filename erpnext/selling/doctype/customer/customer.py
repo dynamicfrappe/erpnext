@@ -13,6 +13,8 @@ from erpnext.accounts.party import validate_party_accounts, get_dashboard_info, 
 from frappe.contacts.address_and_contact import load_address_and_contact, delete_contact_and_address
 from frappe.model.rename_doc import update_linked_doctypes
 from frappe.model.mapper import get_mapped_doc
+import json
+import http
 
 class Customer(TransactionBase):
 	def get_feed(self):
