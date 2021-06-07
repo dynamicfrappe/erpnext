@@ -284,6 +284,10 @@ frappe.ui.form.on("Expense Claim", {
 			}
 		});
 	},
+	driver :function(frm){
+		frm.events.get_advances_driver(frm)
+	
+	},
 
 	is_paid: function(frm) {
 		frm.trigger("toggle_fields");
@@ -340,6 +344,33 @@ frappe.ui.form.on("Expense Claim", {
 				method: "erpnext.hr.doctype.expense_claim.expense_claim.get_advances",
 				args: {
 					employee: frm.doc.employee
+				},
+				callback: function(r, rt) {
+
+					if(r.message) {
+						$.each(r.message, function(i, d) {
+							var row = frappe.model.add_child(frm.doc, "Expense Claim Advance", "advances");
+							row.employee_advance = d.name;
+							row.posting_date = d.posting_date;
+							row.advance_account = d.advance_account;
+							row.advance_paid = d.paid_amount;
+							row.unclaimed_amount = flt(d.paid_amount) - flt(d.claimed_amount);
+							row.allocated_amount = 0;
+						});
+						refresh_field("advances");
+					}
+				}
+			});
+		}
+	} ,
+
+	get_advances_driver: function(frm) {
+		frappe.model.clear_table(frm.doc, "advances");
+		if (frm.doc.employee) {
+			return frappe.call({
+				method: "erpnext.hr.doctype.expense_claim.expense_claim.get_advances_driver",
+				args: {
+					employee: frm.doc.driver
 				},
 				callback: function(r, rt) {
 
