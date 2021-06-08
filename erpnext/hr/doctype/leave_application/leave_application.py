@@ -127,10 +127,11 @@ class LeaveApplication(Document):
 				.format(formatdate(future_allocation[0].from_date), future_allocation[0].name))
 
 	def update_attendance(self):
+		return
 		if self.status == "Approved":
 			for dt in daterange(getdate(self.from_date), getdate(self.to_date)):
 				date = dt.strftime("%Y-%m-%d")
-				status = "Half Day" if self.half_day_date and getdate(date) == getdate(self.half_day_date) else "On Leave"
+				status = "On Leave" if self.half_day_date and getdate(date) == getdate(self.half_day_date) else "On Leave"
 				attendance_name = frappe.db.exists('Attendance', dict(employee = self.employee,
 					attendance_date = date, docstatus = ('!=', 2)))
 
@@ -156,6 +157,7 @@ class LeaveApplication(Document):
 					doc.submit()
 
 	def cancel_attendance(self):
+		return
 		if self.docstatus == 2:
 			attendance = frappe.db.sql("""select name from `tabAttendance` where employee = %s\
 				and (attendance_date between %s and %s) and docstatus < 2 and status in ('On Leave', 'Half Day')""",(self.employee, self.from_date, self.to_date), as_dict=1)

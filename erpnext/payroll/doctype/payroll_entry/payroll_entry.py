@@ -634,12 +634,14 @@ try:
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_emp_list
 
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import get_salary_component_total
+	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import payroll_entry_has_bank_entries
 	from dynamicerp.dynamic_payroll.doctype.payroll_entry.payroll_entry import create_salary_slips_for_employees
 	PayrollEntry.make_payment_entry = make_payment_entry
 	PayrollEntry.create_journal_entry = create_journal_entry
 	PayrollEntry.make_accrual_jv_entry = make_accrual_jv_entry
 	create_salary_slips_for_employees = create_salary_slips_for_employees
+	PayrollEntry.create_salary_slips = create_salary_slips
 	PayrollEntry.get_sal_slip_list = get_sal_slip_list
 	payroll_entry_has_bank_entries = payroll_entry_has_bank_entries
 	PayrollEntry.get_filter_condition = get_filter_condition
