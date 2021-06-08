@@ -357,6 +357,20 @@ def get_advances(employee, advance_id=None):
 		where {0}
 	""".format(condition), as_dict=1)
 
+@frappe.whitelist()
+def get_advances_driver(employee, advance_id=None):
+	if not advance_id:
+		condition = 'docstatus=1 and driver={0} and paid_amount > 0 and paid_amount > claimed_amount + return_amount'.format(frappe.db.escape(employee))
+	else:
+		condition = 'name={0}'.format(frappe.db.escape(advance_id))
+
+	return frappe.db.sql("""
+		select
+			name, posting_date, paid_amount, claimed_amount, advance_account
+		from
+			`tabEmployee Advance`
+		where {0}
+	""".format(condition), as_dict=1)
 
 @frappe.whitelist()
 def get_expense_claim(
