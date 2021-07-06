@@ -78,7 +78,7 @@ class EmployeeBoardingController(Document):
 	def assign_task_to_users(self, task, users):
 		for user in users:
 			args = {
-				'assign_to': [user],
+				'assign_to': user,
 				'doctype': task.doctype,
 				'name': task.name,
 				'description': task.description or task.subject,

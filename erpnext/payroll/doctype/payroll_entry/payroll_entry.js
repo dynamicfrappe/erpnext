@@ -261,8 +261,11 @@ frappe.ui.form.on('Payroll Entry', {
 	},
 
 	clear_employee_table: function (frm) {
-		frm.clear_table('employees');
-		frm.refresh();
+		if (frm.doc.docstatus == 0){
+			frm.clear_table('employees');
+			frm.refresh();
+		}
+
 	},
 });
 
