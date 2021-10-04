@@ -6,6 +6,7 @@
  "field_order": [
   "item",
   "qty",
+  "price",
   "note"
  ],
  "fields": [
@@ -28,10 +29,17 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Note"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Price"
   }
  ],
  "istable": 1,
- "modified": "2020-10-25 11:52:34.009076",
+ "modified": "2021-10-04 10:39:49.863145",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Customer Request For Quotation Item",
