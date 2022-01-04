@@ -7,8 +7,7 @@
  "doctype": "Report",
  "idx": 0,
  "is_standard": "Yes",
- "letter_head": "test",
- "modified": "2020-11-08 23:52:49.924590",
+ "modified": "2021-10-14 12:40:13.185010",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Request for Quotation Analytics",
@@ -20,6 +19,9 @@
  "roles": [
   {
    "role": "All"
+  },
+  {
+   "role": "Administrator"
   }
  ]
 }

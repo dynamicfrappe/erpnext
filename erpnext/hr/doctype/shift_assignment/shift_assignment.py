@@ -43,6 +43,7 @@ class ShiftAssignment(Document):
 			where
 				employee=%(employee)s and docstatus = 1
 				and name != %(name)s
+				and shift_type = %(shift_type)s
 				and status = "Active"
 				{0}
 		""".format(condition), {
