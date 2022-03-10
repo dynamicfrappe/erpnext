@@ -431,8 +431,10 @@ erpnext/accounts/page/bank_reconciliation/__init__.py
 erpnext/accounts/page/bank_reconciliation/bank_reconciliation.py
 erpnext/accounts/page/pos/__init__.py
 erpnext/accounts/print_format/__init__.py
+erpnext/accounts/print_format/alnagdy/__init__.py
 erpnext/accounts/print_format/bank_and_cash_payment_voucher/__init__.py
 erpnext/accounts/print_format/cheque_printing_format/__init__.py
+erpnext/accounts/print_format/compu_gate/__init__.py
 erpnext/accounts/print_format/credit_invoice/__init__.py
 erpnext/accounts/print_format/credit_note/__init__.py
 erpnext/accounts/print_format/gst_pos_invoice/__init__.py
@@ -2956,6 +2958,8 @@ erpnext/regional/report/electronic_invoice_register/__init__.py
 erpnext/regional/report/electronic_invoice_register/electronic_invoice_register.py
 erpnext/regional/report/eway_bill/__init__.py
 erpnext/regional/report/eway_bill/eway_bill.py
+erpnext/regional/report/fichier_des_ecritures_comptables_[fec]/__init__.py
+erpnext/regional/report/fichier_des_ecritures_comptables_[fec]/fichier_des_ecritures_comptables_[fec].py
 erpnext/regional/report/gst_itemised_purchase_register/__init__.py
 erpnext/regional/report/gst_itemised_purchase_register/gst_itemised_purchase_register.py
 erpnext/regional/report/gst_itemised_sales_register/__init__.py
@@ -3017,9 +3021,6 @@ erpnext/selling/doctype/customer/customer_dashboard.py
 erpnext/selling/doctype/customer/test_customer.py
 erpnext/selling/doctype/customer_credit_limit/__init__.py
 erpnext/selling/doctype/customer_credit_limit/customer_credit_limit.py
-erpnext/selling/doctype/customer_request_for_quotation/__init__.py
-erpnext/selling/doctype/customer_request_for_quotation/customer_request_for_quotation.py
-erpnext/selling/doctype/customer_request_for_quotation/test_customer_request_for_quotation.py
 erpnext/selling/doctype/customer_request_for_quotation_item/__init__.py
 erpnext/selling/doctype/customer_request_for_quotation_item/customer_request_for_quotation_item.py
 erpnext/selling/doctype/industry_type/__init__.py
