@@ -133,3 +133,23 @@ def create_leave_encashment(leave_allocation):
 			encashment_date=allocation.to_date
 		))
 		leave_encashment.insert(ignore_permissions=True)
+
+
+
+
+try:
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import get_leave_details_for_encashment
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import validate
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import on_submit
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import on_cancel
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import create_leave_ledger_entry2
+	from dynamicerp.dynamic_hr.doctype.leave_encashment.leave_encashment import get_leave_allocation
+ 
+	LeaveEncashment.get_leave_details_for_encashment = get_leave_details_for_encashment
+	LeaveEncashment.validate = validate
+	LeaveEncashment.on_submit = on_submit
+	LeaveEncashment.on_cancel = on_cancel
+	LeaveEncashment.create_leave_ledger_entry = create_leave_ledger_entry2
+	LeaveEncashment.get_leave_allocation = get_leave_allocation
+except:
+	pass
