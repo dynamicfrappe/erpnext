@@ -103,28 +103,4 @@ def get_data():
 				},
 			]
 		},
-		{
-			"label":_("Custody"),
-			"icon": "fa fa-table",
-			"items":[
-				{
-					"type": "doctype",
-					"name": "Assets Return",
-					"onboard": 1
-				},
-				{
-					"type": "doctype",
-					"name": "Custody request",
-					"onboard": 1
-				},
-				{
-                                        "type": "report",
-                                        "name": "Assts Movement Report",
-					"label" : "Asset Move",
-                                        "doctype": "Asset",
-                                        "is_query_report": True,
-                                },
-
-			]
-		}
 	]
