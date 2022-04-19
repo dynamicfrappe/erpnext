@@ -12,8 +12,15 @@ class RetentionBonus(Document):
 	def validate(self):
 		if frappe.get_value('Employee', self.employee, 'status') == 'Left':
 			frappe.throw(_('Cannot create Retention Bonus for left Employees'))
-		if getdate(self.bonus_payment_date) < getdate():
-			frappe.throw(_('Bonus Payment Date cannot be a past date'))
+		# if getdate(self.bonus_payment_date) < getdate():
+		# 	frappe.throw(_('Bonus Payment Date cannot be a past date'))
+		sql = f"""
+		select name  from `tabPayroll Period` 
+		 where date('{self.bonus_payment_date}') BETWEEN start_date  and end_date  and docstatus <2 and is_closed = 1
+		"""
+		result = frappe.db.sql_list(sql)
+		if len(result) > 0 :
+			frappe.throw(_('{} Period is Closed').format(result[0]))
 
 	def on_submit(self):
 		company = frappe.db.get_value('Employee', self.employee, 'company')
