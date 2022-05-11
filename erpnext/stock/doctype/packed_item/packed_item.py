@@ -46,13 +46,13 @@ def update_packing_list_item(doc, packing_item_code, qty, main_item_row, descrip
 
 	if not exists:
 		pi = doc.append('packed_items', {})
-
+	pi.qty = pi.qty or 0
 	pi.parent_item = main_item_row.item_code
 	pi.item_code = packing_item_code
 	pi.item_name = item.item_name
 	pi.parent_detail_docname = main_item_row.name
 	pi.uom = item.stock_uom
-	pi.qty = flt(qty)
+	pi.qty += flt(qty)
 	if description and not pi.description:
 		pi.description = description
 	if not pi.warehouse and not doc.amended_from:
