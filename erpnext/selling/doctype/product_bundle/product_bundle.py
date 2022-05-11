@@ -14,7 +14,7 @@ class ProductBundle(Document):
 
 	def validate(self):
 		self.validate_main_item()
-		self.validate_child_items()
+		# self.validate_child_items()
 		from erpnext.utilities.transaction_base import validate_uom_is_integer
 		validate_uom_is_integer(self, "uom", "qty")
 
