@@ -39,7 +39,6 @@ frappe.query_reports["Supplier Quotation Price List Comparison"] = {
 					},
 					callback: function(r) {
 						if(r.message) {
-							debugger;
 							items = [] 
 							r.message.forEach(element => {
 								items.push(element.item_code)

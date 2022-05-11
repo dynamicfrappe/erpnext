@@ -51,7 +51,6 @@ onload: function(listview) {
 	// 	frappe.route_options = {"status":["in", ["Pending" ,"Draft" , "Submitted"],false]};
 	// 	listview.page.add_action_item(__('Make Action'), function() {
 	// 		const selected = listview.get_checked_items();
-	// 		debugger;
 	// 					alert(selected);
 
 	// 	});
