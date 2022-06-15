@@ -18,12 +18,11 @@ class OnHold(Document):
 			""".format(item_code = item.item_code , warehouse = item.warehouse) , as_dict=1)
 			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse , self.name)
 			#frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty_in_warehouse) ,int(data[0].qty_after_transaction) , int (item.qty) ))
-			if not data[0].qty_after_transaction:
-				data[0].qty_after_transaction = 0
+			
+			if not data or  not data[0].qty_after_transaction:
+				data = [frappe._dict({'qty_after_transaction':0})]
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :
-					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
-					frappe.validated=false;
-					return false
+					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)))
 
 
 	def on_cancel(self):
