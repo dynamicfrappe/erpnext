@@ -204,14 +204,22 @@ class update_entries_after(object):
 		try:
 		# if 1 :
 			if flt(sle.actual_qty) < 0 :
-				total_hold = get_holding_qty_in_warehouse(self.item_code,self.warehouse) or 0
-			# frappe.msgprint(self.warehouse)
+				# frappe.msgprint(str(sle.voucher_type+" Item"))
+				# frappe.msgprint(str(sle.voucher_no))
+				# frappe.msgprint(str(sle.voucher_detail_no))
+				sales_order = ""
+				if sle.voucher_type in ["Sales Invoice" , "Delivery Note"] :
+					fieldname = "against_sales_order" if sle.voucher_type == "Delivery Note" else  "sales_order"
+					sales_order = frappe.db.get_value(sle.voucher_type+" Item",sle.voucher_detail_no,fieldname)
+				total_hold = get_holding_qty_in_warehouse(self.item_code,self.warehouse,sales_order=sales_order or '') or 0
+				
 		except:
 			pass
 		# frappe.msgprint('here')
 		# frappe.msgprint(str(total_hold))
+		# frappe.msgprint(str(sales_order))
 		diff = self.qty_after_transaction + flt(sle.actual_qty) - flt(total_hold)
-		frappe.msgprint(str(diff))
+		# frappe.msgprint(str(diff))
 		if diff < 0 and abs(diff) > 0.0001:
 			# negative stock!
 			exc = sle.copy().update({"diff": diff})

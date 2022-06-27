@@ -142,7 +142,7 @@ def get_Multiple_qty_from_warehouses(item  , qty,name):
 
 
 @frappe.whitelist()
-def get_holding_qty_in_warehouse( item , warehouse , name = '#'):
+def get_holding_qty_in_warehouse( item , warehouse , name = '#' , sales_order = ''):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
 												SELECT
@@ -153,12 +153,14 @@ def get_holding_qty_in_warehouse( item , warehouse , name = '#'):
 													`tabOn Hold` HR
 												ON 
 													HR.`name` = HRI.parent
-													WHERE HR.`status` = 'Open' and HR.docstatus =1 and HRI.`parent` != '{name}'
+													WHERE HR.`status` = 'Open' and HR.docstatus =1
+																and HRI.`parent` != '{name}'
+																and HR.`sales_order` != '{sales_order}'
 													GROUP BY HRI.item_code , HRI.warehouse
 													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
 
 											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse , name = name),as_dict=1)
+												""".format(item_code = item , warehouse = warehouse , name = name,sales_order=sales_order),as_dict=1)
 				if not total_hold_qty_result:
 					total_hold_qty = 0
 				else :
