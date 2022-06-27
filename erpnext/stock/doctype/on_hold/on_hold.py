@@ -76,6 +76,12 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 
 	return items
 
+
+
+
+
+
+
 def get_Multiple_qty_from_warehouses(item  , qty,name):
 			items = []
 			chech_all_available_stock = frappe.db.sql("""  			SELECT   Sum(qty_after_transaction) as total_qty
@@ -134,6 +140,8 @@ def get_Multiple_qty_from_warehouses(item  , qty,name):
 							items = []
 			return items
 
+
+@frappe.whitelist()
 def get_holding_qty_in_warehouse( item , warehouse , name = '#'):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""

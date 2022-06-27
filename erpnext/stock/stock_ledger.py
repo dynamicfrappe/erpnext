@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: GNU General Public License v3. See license.txt
 from __future__ import unicode_literals
+from erpnext.stock.doctype.on_hold.on_hold import get_holding_qty_in_warehouse
 
 import frappe, erpnext
 from frappe import _
@@ -199,8 +200,18 @@ class update_entries_after(object):
 			validate negative stock for entries current datetime onwards
 			will not consider cancelled entries
 		"""
-		diff = self.qty_after_transaction + flt(sle.actual_qty)
-
+		total_hold = 0 
+		try:
+		# if 1 :
+			if flt(sle.actual_qty) < 0 :
+				total_hold = get_holding_qty_in_warehouse(self.item_code,self.warehouse) or 0
+			# frappe.msgprint(self.warehouse)
+		except:
+			pass
+		# frappe.msgprint('here')
+		# frappe.msgprint(str(total_hold))
+		diff = self.qty_after_transaction + flt(sle.actual_qty) - flt(total_hold)
+		frappe.msgprint(str(diff))
 		if diff < 0 and abs(diff) > 0.0001:
 			# negative stock!
 			exc = sle.copy().update({"diff": diff})

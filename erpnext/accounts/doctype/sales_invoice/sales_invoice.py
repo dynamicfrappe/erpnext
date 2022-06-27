@@ -174,8 +174,8 @@ class SalesInvoice(SellingController):
 
 				if item.qty > (qty_warehouse-total_hold_qty):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
-					frappe.validated=false;
-					return false
+					frappe.validated=False;
+					return False
 	def  get_holding_qty_in_warehouse(self, item , warehouse , name = '#'):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
