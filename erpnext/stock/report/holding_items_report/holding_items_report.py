@@ -43,8 +43,20 @@ def getColumns (filters):
 		{
 			'fieldname': "qty",
 			'label': _("Qty"),
-			'fieldtype': "float",
+			'fieldtype': "Float",
 			"width": 50
+		},
+		{
+			'fieldname': "delivered_qty",
+			'label': _("Delivered Qty"),
+			'fieldtype': "Float",
+			"width": 100
+		},
+		{
+			'fieldname': "pending_qty",
+			'label': _("Pending Qty"),
+			'fieldtype': "Float",
+			"width": 100
 		},
 		{
 			'fieldname': "status",
@@ -95,6 +107,8 @@ def getdata (filters):
 					`tabOn Hold`.`name` as Hold_request, 
 					`tabOb Hold Items`.item_code as Item_code, 
 					`tabOb Hold Items`.qty as qty, 
+					`tabOb Hold Items`.pending_qty as pending_qty, 
+					`tabOb Hold Items`.delivered_qty as delivered_qty, 
 					`tabOb Hold Items`.warehouse as warehouse, 
 					`tabOn Hold`.sales_order, 
 					`tabOn Hold`.end_date, 
