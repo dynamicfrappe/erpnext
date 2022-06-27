@@ -24,7 +24,12 @@ class OnHold(Document):
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)))
 
-
+			item.pending_qty = item.qty
+			item.delivered_qty = 0
+	# def on_submit(self):
+	# 	for item in self.items:
+	# 		item.pending_qty = item.qty
+	# 		item.delivered_qty = 0		
 	def on_cancel(self):
 		self.status = 'Canceled'
 		frappe.db.sql("""	update `tabOn Hold`
@@ -146,7 +151,7 @@ def get_holding_qty_in_warehouse( item , warehouse , name = '#' , sales_order = 
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
 												SELECT
-												IFNULL(SUM(HRI.qty),0) as total_hold_qty
+												IFNULL(SUM(HRI.pending_qty),0) as total_hold_qty
 												FROM
 												`tabOb Hold Items` HRI
 												INNER JOIN
