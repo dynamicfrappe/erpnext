@@ -171,8 +171,9 @@ class SalesInvoice(SellingController):
 
 				total_hold_qty = self.get_holding_qty_in_warehouse(item=item.item_code ,  warehouse = warehouse )
 
-
-				if item.qty > (qty_warehouse-total_hold_qty):
+				## new update by kazem
+				item_doc = frappe.get_doc("Item",item.item_code)
+				if item.qty > (qty_warehouse-total_hold_qty) and item_doc.is_stock_item:
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
 					frappe.validated=False;
 					return False
@@ -239,7 +240,7 @@ class SalesInvoice(SellingController):
 		
 
 	def on_submit(self):
-		
+		print("hello from base function -----------------------------------------")
 		self.validate_pos_paid_amount()
 
 		if not self.auto_repeat:
@@ -262,7 +263,7 @@ class SalesInvoice(SellingController):
 		if self.update_stock == 1:
 			self.update_stock_ledger()
 			try:
-				self.validate_holding_qty()
+				self.validate_holding_qty() 
 			except Exception as e:
 				pass
 
