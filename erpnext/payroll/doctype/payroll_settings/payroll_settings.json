@@ -21,6 +21,8 @@
   "medical_insurance_setting_section",
   "medical_based_on",
   "medical_insurance_salary_component",
+  "new_hiring_section",
+  "new_hiring_component",
   "employee_income_tax_configuration_section",
   "income_tax_salary_component",
   "personal_exemption_value",
@@ -171,11 +173,22 @@
    "label": "Calculate Medical Insurance Based ON",
    "options": "Month\nDay",
    "translatable": 1
+  },
+  {
+   "fieldname": "new_hiring_section",
+   "fieldtype": "Section Break",
+   "label": "New Hiring"
+  },
+  {
+   "fieldname": "new_hiring_component",
+   "fieldtype": "Link",
+   "label": "New Hiring Component",
+   "options": "Salary Component"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
- "modified": "2021-04-20 11:38:47.696101",
+ "modified": "2022-08-22 16:47:24.529454",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Payroll Settings",
