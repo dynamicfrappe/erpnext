@@ -238,6 +238,8 @@ class LoanRepayment(AccountsController):
 					"against_voucher": self.against_loan,
 					"remarks": _("Penalty against loan:") + self.against_loan,
 					"cost_center": self.cost_center,
+					"party_type": self.applicant_type,
+					"party": self.applicant,
 					"posting_date": getdate(self.posting_date)
 				})
 			)
