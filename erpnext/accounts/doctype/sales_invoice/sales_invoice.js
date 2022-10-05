@@ -1164,18 +1164,18 @@ var add_to_item_line = function(frm, checked_values, invoice_healthcare_services
 		frm.refresh_fields();
 	}
 };
-frappe.ui.form.on("Sales Invoice Item", "items_add", function(frm){
-        	if(project){
-        		frappe.call({
-        	'doc':frm.doc,
-			'method':"update_cost_center",
-			args: {
+// frappe.ui.form.on("Sales Invoice Item", "items_add", function(frm){
+//         	if(project){
+//         		frappe.call({
+//         	'doc':frm.doc,
+// 			'method':"update_cost_center",
+// 			args: {
 
-			},
-			callback: function(r){
-				console.log("hello")
-			}
+// 			},
+// 			callback: function(r){
+// 				console.log("hello")
+// 			}
 		
-		})
-        	}
-});
+// 		})
+//         	}
+// });

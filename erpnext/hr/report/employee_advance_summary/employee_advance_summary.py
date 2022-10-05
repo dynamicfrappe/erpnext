@@ -72,6 +72,12 @@ def get_columns():
 			"width": 120
 		},
 		{
+			"label": _("Difference Amount"),
+			"fieldname": "diff_amount",
+			"fieldtype": "Currency",
+			"width": 120
+		},
+		{
 			"label": _("Status"),
 			"fieldname": "status",
 			"fieldtype": "Data",
@@ -98,7 +104,7 @@ def get_conditions(filters):
 def get_advances(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""select name, employee, paid_amount, status, advance_amount, claimed_amount, company,
-		posting_date, purpose
+		posting_date, purpose,(paid_amount-claimed_amount) as diff_amount
 		from `tabEmployee Advance`
 		where docstatus<2 %s order by posting_date, name desc""" %
 		conditions, filters, as_dict=1)

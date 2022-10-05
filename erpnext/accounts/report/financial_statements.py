@@ -19,8 +19,14 @@ from frappe.utils import (flt, getdate, get_first_day, add_months, add_days, for
 from six import itervalues
 from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import get_accounting_dimensions, get_dimension_with_children
 
-def get_period_list(from_fiscal_year, to_fiscal_year, periodicity, accumulated_values=False,
-	company=None, reset_period_on_fy_change=True):
+def get_period_list(
+	from_fiscal_year,
+ 	to_fiscal_year,
+  	periodicity,
+  	accumulated_values=False,
+	company=None, 
+	reset_period_on_fy_change=True
+	):
 	"""Get a list of dict {"from_date": from_date, "to_date": to_date, "key": key, "label": label}
 		Periodicity can be (Yearly, Quarterly, Monthly)"""
 
@@ -474,3 +480,11 @@ def get_columns(periodicity, period_list, accumulated_values=1, company=None):
 			})
 
 	return columns
+
+
+def get_filtered_list_for_consolidated_report(filters, period_list):
+	filtered_summary_list = []
+	for period in period_list:
+		if period == filters.get("company"):
+			filtered_summary_list.append(period)
+	return filtered_summary_list

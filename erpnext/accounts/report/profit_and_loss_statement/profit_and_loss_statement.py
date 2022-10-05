@@ -8,8 +8,13 @@ from frappe.utils import flt
 from erpnext.accounts.report.financial_statements import (get_period_list, get_columns, get_data)
 
 def execute(filters=None):
-	period_list = get_period_list(filters.from_fiscal_year, filters.to_fiscal_year,
-		filters.periodicity, filters.accumulated_values, filters.company)
+	period_list = get_period_list(
+		filters.from_fiscal_year, 
+		filters.to_fiscal_year,
+		filters.periodicity, 
+		filters.accumulated_values, 
+		filters.company
+		)
 
 	income = get_data(filters.company, "Income", "Credit", period_list, filters = filters,
 		accumulated_values=filters.accumulated_values,

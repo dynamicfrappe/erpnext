@@ -440,6 +440,7 @@ erpnext/accounts/print_format/credit_note/__init__.py
 erpnext/accounts/print_format/gst_pos_invoice/__init__.py
 erpnext/accounts/print_format/gst_purchase_invoice/__init__.py
 erpnext/accounts/print_format/infinity/__init__.py
+erpnext/accounts/print_format/invoice_items/__init__.py
 erpnext/accounts/print_format/journal_auditing_voucher/__init__.py
 erpnext/accounts/print_format/payment_receipt_voucher/__init__.py
 erpnext/accounts/print_format/point_of_sale/__init__.py
