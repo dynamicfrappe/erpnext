@@ -8,27 +8,36 @@ from frappe import msgprint, _
 def execute(filters=None):
 	if not filters: filters = {}
 
-	advances_list = get_advances(filters)
+	# advances_list = get_advances(filters)
+	data = get_advances(filters)
 	columns = get_columns()
 
-	if not advances_list:
-		msgprint(_("No record found"))
-		return columns, advances_list
+	# if not advances_list:
+	# 	msgprint(_("No record found"))
+	# 	return columns, advances_list
 
-	data = []
-	for advance in advances_list:
-		row = [advance.name, advance.employee, advance.company, advance.posting_date,
-		advance.advance_amount, advance.paid_amount,  advance.claimed_amount, advance.status]
-		data.append(row)
+	# data = []
+	# for advance in advances_list:
+	# 	row = [advance.name, advance.employee, advance.company, advance.posting_date,
+	# 	advance.advance_amount, advance.paid_amount,  advance.claimed_amount, advance.status]
+	# 	data.append(row)
 
 	return columns, data
 
 
 def get_columns():
 	return [
+		# {
+		# 	"label": _("Title"),
+		# 	"fieldname": "title",
+		# 	"fieldtype": "Link",
+		# 	"options": "Employee Advance",
+		# 	"width": 120
+		# },
+
 		{
 			"label": _("Title"),
-			"fieldname": "title",
+			"fieldname": "name",
 			"fieldtype": "Link",
 			"options": "Employee Advance",
 			"width": 120
@@ -72,10 +81,10 @@ def get_columns():
 			"width": 120
 		},
 		{
-			"label": _("Difference Amount"),
-			"fieldname": "diff_amount",
+			"label": _("Outstanding Amount"),
+			"fieldname": "outstanding_amount",
 			"fieldtype": "Currency",
-			"width": 120
+			"width": 150
 		},
 		{
 			"label": _("Status"),
@@ -103,8 +112,9 @@ def get_conditions(filters):
 
 def get_advances(filters):
 	conditions = get_conditions(filters)
-	return frappe.db.sql("""select name, employee, paid_amount, status, advance_amount, claimed_amount, company,
-		posting_date, purpose,(paid_amount-claimed_amount) as diff_amount
+	return frappe.db.sql("""select name, employee, paid_amount,
+	 status, advance_amount, claimed_amount, company,
+		posting_date, purpose , (advance_amount - claimed_amount) as outstanding_amount
 		from `tabEmployee Advance`
 		where docstatus<2 %s order by posting_date, name desc""" %
 		conditions, filters, as_dict=1)
