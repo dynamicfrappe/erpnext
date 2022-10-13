@@ -18,14 +18,18 @@ class OnHold(Document):
 			""".format(item_code = item.item_code , warehouse = item.warehouse) , as_dict=1)
 			total_hold_qty_in_warehouse = get_holding_qty_in_warehouse (item.item_code , item.warehouse , self.name)
 			#frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty_in_warehouse) ,int(data[0].qty_after_transaction) , int (item.qty) ))
-			if not data[0].qty_after_transaction:
-				data[0].qty_after_transaction = 0
+			
+			if not data or  not data[0].qty_after_transaction:
+				data = [frappe._dict({'qty_after_transaction':0})]
 			if item.qty > (data[0].qty_after_transaction - total_hold_qty_in_warehouse) :
-					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)));
-					frappe.validated=false;
-					return false
+					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse} " .format(item_code = item.item_code , warehouse = item.warehouse)))
 
-
+			item.pending_qty = item.qty
+			item.delivered_qty = 0
+	# def on_submit(self):
+	# 	for item in self.items:
+	# 		item.pending_qty = item.qty
+	# 		item.delivered_qty = 0		
 	def on_cancel(self):
 		self.status = 'Canceled'
 		frappe.db.sql("""	update `tabOn Hold`
@@ -76,6 +80,12 @@ def get_item_wharehouse(item,qtyy,name,*args,**kwargs):
 
 
 	return items
+
+
+
+
+
+
 
 def get_Multiple_qty_from_warehouses(item  , qty,name):
 			items = []
@@ -135,23 +145,27 @@ def get_Multiple_qty_from_warehouses(item  , qty,name):
 							items = []
 			return items
 
-def get_holding_qty_in_warehouse( item , warehouse , name = '#'):
+
+@frappe.whitelist()
+def get_holding_qty_in_warehouse( item , warehouse , name = '#' , sales_order = ''):
 				total_hold_qty = 0
 				total_hold_qty_result = frappe.db.sql("""
 												SELECT
-												IFNULL(SUM(HRI.qty),0) as total_hold_qty
+												IFNULL(SUM(HRI.pending_qty),0) as total_hold_qty
 												FROM
 												`tabOb Hold Items` HRI
 												INNER JOIN
 													`tabOn Hold` HR
 												ON 
 													HR.`name` = HRI.parent
-													WHERE HR.`status` = 'Open' and HR.docstatus =1 and HRI.`parent` != '{name}'
+													WHERE HR.`status` = 'Open' and HR.docstatus =1
+																and HRI.`parent` != '{name}'
+																and HR.`sales_order` != '{sales_order}'
 													GROUP BY HRI.item_code , HRI.warehouse
 													HAVING 	 HRI.item_code = '{item_code}' AND HRI.warehouse = '{warehouse}'
 
 											     LIMIT 1
-												""".format(item_code = item , warehouse = warehouse , name = name),as_dict=1)
+												""".format(item_code = item , warehouse = warehouse , name = name,sales_order=sales_order),as_dict=1)
 				if not total_hold_qty_result:
 					total_hold_qty = 0
 				else :

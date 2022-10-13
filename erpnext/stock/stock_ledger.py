@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: GNU General Public License v3. See license.txt
 from __future__ import unicode_literals
+from erpnext.stock.doctype.on_hold.on_hold import get_holding_qty_in_warehouse
 
 import frappe, erpnext
 from frappe import _
@@ -199,8 +200,26 @@ class update_entries_after(object):
 			validate negative stock for entries current datetime onwards
 			will not consider cancelled entries
 		"""
-		diff = self.qty_after_transaction + flt(sle.actual_qty)
-
+		total_hold = 0 
+		try:
+		# if 1 :
+			if flt(sle.actual_qty) < 0 :
+				# frappe.msgprint(str(sle.voucher_type+" Item"))
+				# frappe.msgprint(str(sle.voucher_no))
+				# frappe.msgprint(str(sle.voucher_detail_no))
+				sales_order = ""
+				if sle.voucher_type in ["Sales Invoice" , "Delivery Note"] :
+					fieldname = "against_sales_order" if sle.voucher_type == "Delivery Note" else  "sales_order"
+					sales_order = frappe.db.get_value(sle.voucher_type+" Item",sle.voucher_detail_no,fieldname)
+				total_hold = get_holding_qty_in_warehouse(self.item_code,self.warehouse,sales_order=sales_order or '') or 0
+				
+		except:
+			pass
+		# frappe.msgprint('here')
+		# frappe.msgprint(str(total_hold))
+		# frappe.msgprint(str(sales_order))
+		diff = self.qty_after_transaction + flt(sle.actual_qty) - flt(total_hold)
+		# frappe.msgprint(str(diff))
 		if diff < 0 and abs(diff) > 0.0001:
 			# negative stock!
 			exc = sle.copy().update({"diff": diff})

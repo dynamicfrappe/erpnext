@@ -208,6 +208,8 @@ class LoanRepayment(AccountsController):
 			self.principal_amount_paid += interest_paid
 
 	def make_gl_entries(self, cancel=0, adv_adj=0):
+		if self.from_salary_slip :
+			return
 		gle_map = []
 		loan_details = frappe.get_doc("Loan", self.against_loan)
 
@@ -222,8 +224,8 @@ class LoanRepayment(AccountsController):
 					"against_voucher": self.against_loan,
 					"remarks": _("Penalty against loan:") + self.against_loan,
 					"cost_center": self.cost_center,
-					"party_type": self.applicant_type,
-					"party": self.applicant,
+					# "party_type": self.applicant_type,
+					# "party": self.applicant,
 					"posting_date": getdate(self.posting_date)
 				})
 			)
@@ -238,6 +240,8 @@ class LoanRepayment(AccountsController):
 					"against_voucher": self.against_loan,
 					"remarks": _("Penalty against loan:") + self.against_loan,
 					"cost_center": self.cost_center,
+					"party_type": self.applicant_type,
+					"party": self.applicant,
 					"posting_date": getdate(self.posting_date)
 				})
 			)

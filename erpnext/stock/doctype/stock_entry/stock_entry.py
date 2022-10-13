@@ -145,8 +145,8 @@ class StockEntry(StockController):
 
 				if item.qty > (qty_warehouse-total_hold_qty):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}  Qty : {qty} " .format(item_code = item.item_code , warehouse = item.s_warehouse ,qty = qty_warehouse)));
-					frappe.validated=false;
-					return false
+					frappe.validated=False;
+					return False
 
 	def on_submit(self):
 		self.update_stock_ledger()

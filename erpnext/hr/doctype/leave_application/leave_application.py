@@ -594,7 +594,7 @@ def get_leaves_for_period(employee, leave_type, from_date, to_date, do_not_skip_
 			and (do_not_skip_expired_leaves or not skip_expiry_leaves(leave_entry, to_date)):
 			leave_days += leave_entry.leaves
 
-		elif leave_entry.transaction_type == 'Leave Application':
+		elif leave_entry.transaction_type in ['Leave Application' , 'Attendance Calculation'] :
 			if leave_entry.from_date < getdate(from_date):
 				leave_entry.from_date = from_date
 			if leave_entry.to_date > getdate(to_date):

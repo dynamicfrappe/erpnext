@@ -116,9 +116,9 @@ class DeliveryNote(SellingController):
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_with_previous_doc()
 		try:
-		 	self.validate_holding_qty()
+			self.validate_holding_qty()
 		except Exception as e:
-		 	pass
+			pass
 		#self.validate_holding_qty()
 
 
@@ -204,8 +204,8 @@ class DeliveryNote(SellingController):
 				#frappe.msgprint("total_hold_qty_in_warehouse %s  qty_after_transaction %s item qty %s "%(str(total_hold_qty) ,int(qty_warehouse) , int (item.qty) ))
 				if item.qty > (qty_warehouse-total_hold_qty):
 					frappe.throw(_(" Item {item_code} don't have the required qty in stock {warehouse}   {qty} " .format(item_code = item.item_code , warehouse = warehouse ,qty = qty_warehouse)));
-					frappe.validated=false;
-					return false
+					frappe.validated=False;
+					return False
 	def update_current_stock(self):
 		if self.get("_action") and self._action != "update_after_submit":
 			for d in self.get('items'):
