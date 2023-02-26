@@ -527,7 +527,7 @@ class PaymentEntry(AccountsController):
 		self.add_party_gl_entries(gl_entries)
 		self.add_bank_gl_entries(gl_entries)
 		self.add_deductions_gl_entries(gl_entries)
-
+	
 		make_gl_entries(gl_entries, cancel=cancel, adv_adj=adv_adj)
 
 	def add_party_gl_entries(self, gl_entries):
@@ -545,8 +545,15 @@ class PaymentEntry(AccountsController):
 				"account_currency": self.party_account_currency,
 				"cost_center": self.cost_center
 			}, item=self)
+			if self.party_type != "Employee" :
+					dr_or_cr = "credit" if erpnext.get_party_account_type(self.party_type) == 'Receivable' else "debit"
+			if self.party_type == "Employee" :
+				if self.payment_type  == "Receive" :
+					dr_or_cr = "credit"
+				if self.payment_type  == "Pay" :
+					dr_or_cr = "debit"
 
-			dr_or_cr = "credit" if erpnext.get_party_account_type(self.party_type) == 'Receivable' else "debit"
+			# dr_or_cr = "credit" if erpnext.get_party_account_type(self.party_type) == 'Receivable' else "debit"
 
 			for d in self.get("references"):
 				gle = party_gl_dict.copy()
