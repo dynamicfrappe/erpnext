@@ -1501,6 +1501,8 @@ def make_maintenance_schedule(source_name, target_doc=None):
 
 @frappe.whitelist()
 def make_delivery_note(source_name, target_doc=None):
+	print('\n\n\n\n********2222')
+
 	def set_missing_values(source, target):
 		target.ignore_pricing_rule = 1
 		target.run_method("set_missing_values")

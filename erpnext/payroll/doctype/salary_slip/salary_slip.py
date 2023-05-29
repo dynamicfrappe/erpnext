@@ -1087,7 +1087,7 @@ class SalarySlip(TransactionBase):
 
 		if not self.get('loans'):
 			for loan in self.get_loan_details():
-
+				frappe.throw("ACCC" , self.end_date)
 				amounts = calculate_amounts(loan.name, self.posting_date, "Regular Payment")
 
 				if amounts['interest_amount'] or amounts['payable_principal_amount']:
@@ -1102,7 +1102,8 @@ class SalarySlip(TransactionBase):
 					})
 
 		for payment in self.get('loans'):
-			amounts = calculate_amounts(payment.loan, self.posting_date, "Regular Payment")
+			frappe.throw("ACCC" , self.end_date)
+			amounts = calculate_amounts(payment.loan, self.end_date, "Regular Payment")
 			total_amount = amounts['interest_amount'] + amounts['payable_principal_amount']
 			if payment.total_payment > total_amount:
 				frappe.throw(_("""Row {0}: Paid amount {1} is greater than pending accrued amount {2} against loan {3}""")

@@ -507,6 +507,7 @@ def update_billed_amount_based_on_po(po_detail, update_modified=True):
 
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None):
+	domains = frappe.get_active_domains()
 	from frappe.model.mapper import get_mapped_doc
 	doc = frappe.get_doc('Purchase Receipt', source_name)
 	returned_qty_map = get_returned_qty_map(source_name)
@@ -537,9 +538,78 @@ def make_purchase_invoice(source_name, target_doc=None):
 				pending_qty -= returned_qty
 				returned_qty = 0
 		return pending_qty, returned_qty
+	doclist = ''
+	if "Allam Auto" in domains :
+		doclist = get_mapped_doc("Purchase Receipt", source_name,	{
+			"Purchase Receipt": {
+				"doctype": "Purchase Invoice",
+				"field_map": {
+					"supplier_warehouse":"supplier_warehouse",
+					"is_return": "is_return"
+				},
+				"validation": {
+					"docstatus": ["=", 1],
+				},
+			},
+			"Purchase Receipt Item": { 
+				"doctype": "Purchase Invoice Item",
+				"field_map": {
+					"name": "pr_detail",
+					"parent": "purchase_receipt",
+					"purchase_order_item": "po_detail",
+					"purchase_order": "purchase_order",
+					"is_fixed_asset": "is_fixed_asset",
+					"asset_location": "asset_location",
+					"asset_category": 'asset_category',
+					"serial_no":"serial" 
+				},
+				"postprocess": update_item,
+				"filter": lambda d: get_pending_qty(d)[0] <= 0 if not doc.get("is_return") else get_pending_qty(d)[0] > 0
+			},
+			"Purchase Taxes and Charges": {
+				"doctype": "Purchase Taxes and Charges",
+				"add_if_empty": True
+			}
+		}, target_doc, set_missing_values)
 
+	if "Allam Auto" not in domains :
+		doclist = get_mapped_doc("Purchase Receipt", source_name,	{
+			"Purchase Receipt": {
+				"doctype": "Purchase Invoice",
+				"field_map": {
+					"supplier_warehouse":"supplier_warehouse",
+					"is_return": "is_return"
+				},
+				"validation": {
+					"docstatus": ["=", 1],
+				},
+			},
+			"Purchase Receipt Item": { 
+				"doctype": "Purchase Invoice Item",
+				"field_map": {
+					"name": "pr_detail",
+					"parent": "purchase_receipt",
+					"purchase_order_item": "po_detail",
+					"purchase_order": "purchase_order",
+					"is_fixed_asset": "is_fixed_asset",
+					"asset_location": "asset_location",
+					"asset_category": 'asset_category',
+				},
+				"postprocess": update_item,
+				"filter": lambda d: get_pending_qty(d)[0] <= 0 if not doc.get("is_return") else get_pending_qty(d)[0] > 0
+			},
+			"Purchase Taxes and Charges": {
+				"doctype": "Purchase Taxes and Charges",
+				"add_if_empty": True
+			}
+		}, target_doc, set_missing_values)
 
-	doclist = get_mapped_doc("Purchase Receipt", source_name,	{
+	return doclist
+
+def allam_auto_domain():
+	...
+def maped_default():
+	get_mapped_doc("Purchase Receipt", source_name,	{
 		"Purchase Receipt": {
 			"doctype": "Purchase Invoice",
 			"field_map": {
@@ -550,7 +620,7 @@ def make_purchase_invoice(source_name, target_doc=None):
 				"docstatus": ["=", 1],
 			},
 		},
-		"Purchase Receipt Item": {
+		"Purchase Receipt Item": { 
 			"doctype": "Purchase Invoice Item",
 			"field_map": {
 				"name": "pr_detail",
@@ -559,7 +629,7 @@ def make_purchase_invoice(source_name, target_doc=None):
 				"purchase_order": "purchase_order",
 				"is_fixed_asset": "is_fixed_asset",
 				"asset_location": "asset_location",
-				"asset_category": 'asset_category'
+				"asset_category": 'asset_category',
 			},
 			"postprocess": update_item,
 			"filter": lambda d: get_pending_qty(d)[0] <= 0 if not doc.get("is_return") else get_pending_qty(d)[0] > 0
@@ -569,9 +639,6 @@ def make_purchase_invoice(source_name, target_doc=None):
 			"add_if_empty": True
 		}
 	}, target_doc, set_missing_values)
-
-	return doclist
-
 def get_invoiced_qty_map(purchase_receipt):
 	"""returns a map: {pr_detail: invoiced_qty}"""
 	invoiced_qty_map = {}

@@ -486,7 +486,7 @@ def update_reference_in_payment_entry(d, payment_entry, do_not_save=False):
 def unlink_ref_doc_from_payment_entries(ref_doc):
 	remove_ref_doc_link_from_jv(ref_doc.doctype, ref_doc.name)
 	remove_ref_doc_link_from_pe(ref_doc.doctype, ref_doc.name)
-
+	# frappe.errprint('in cacncel test')
 	frappe.db.sql("""update `tabGL Entry`
 		set against_voucher_type=null, against_voucher=null,
 		modified=%s, modified_by=%s
@@ -503,7 +503,9 @@ def unlink_ref_doc_from_payment_entries(ref_doc):
 def remove_ref_doc_link_from_jv(ref_type, ref_no):
 	linked_jv = frappe.db.sql_list("""select parent from `tabJournal Entry Account`
 		where reference_type=%s and reference_name=%s and docstatus < 2""", (ref_type, ref_no))
-
+	from frappe.model.dynamic_links import get_dynamic_link_map
+	# test = get_dynamic_link_map().get(ref_type, [])
+	# frappe.errprint(f'test--->{test}')
 	if linked_jv:
 		frappe.db.sql("""update `tabJournal Entry Account`
 			set reference_type=null, reference_name = null,

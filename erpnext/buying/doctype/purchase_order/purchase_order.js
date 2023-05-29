@@ -6,7 +6,7 @@ frappe.provide("erpnext.buying");
 {% include 'erpnext/public/js/controllers/buying.js' %};
 
 frappe.ui.form.on("Purchase Order", {
-
+   
 	currency:function(frm){
 	       frappe.call({
                 method: "erpnext.buying.doctype.purchase_order.purchase_order.check_currency",
@@ -22,7 +22,7 @@ frappe.ui.form.on("Purchase Order", {
                 	}else{
                 		
                 		frm.set_df_property('naming_series', 'options', ['PUR-ORD-.YYYY.-']); 
-                		 frm.refresh_field('naming_series'); 
+                		frm.refresh_field('naming_series'); 
                 	}
                 }
             });
