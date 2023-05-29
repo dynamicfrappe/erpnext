@@ -62,24 +62,24 @@ def get_data():
 			"type": "module",
 			"description": "Employees, attendance, payroll, leaves and shifts."
 		},
-		{
-			"module_name": "Operations",
-			"category": "Modules",
-			"label": _("Operations"),
-			"color": "#3498db",
-			"icon": "icon projects-blue",
-			"type": "module",
-			"description": "Accounts, billing, payments, cost center and budgeting."
-		},
-		{
-			"module_name": "Projects",
-			"category": "Modules",
-			"label": _("Projects"),
-			"color": "#3498db",
-			"icon": "icon projects-blue",
-			"type": "module",
-			"description": "Projects."
-		},
+		#{
+		#	"module_name": "Operations",
+		#	"category": "Modules",
+		#	"label": _("Operations"),
+		#	"color": "#3498db",
+		#	"icon": "icon projects-blue",
+		#	"type": "module",
+		#	"description": "Accounts, billing, payments, cost center and budgeting."
+		#},
+		#{
+		#	"module_name": "Projects",
+		#	"category": "Modules",
+		#	"label": _("Projects"),
+		#	"color": "#3498db",
+		#	"icon": "icon projects-blue",
+		#	"type": "module",
+		#	"description": "Projects."
+		#},
 		{
 			"module_name": "CRM",
 			"category": "Modules",
