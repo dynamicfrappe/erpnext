@@ -213,7 +213,6 @@
    "label": "Date",
    "oldfieldname": "transaction_date",
    "oldfieldtype": "Date",
-   "read_only": 1,
    "reqd": 1,
    "search_index": 1
   },
@@ -1063,7 +1062,7 @@
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
- "modified": "2020-12-24 11:53:50.096565",
+ "modified": "2024-03-05 15:31:13.102333",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Purchase Order",
